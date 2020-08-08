@@ -17,7 +17,7 @@ public class Engine : MonoBehaviour
 	public Image fader;
 	public CanvasGroup uiControl;
 
-	bool debug = true;
+	bool debug = false;
 
 	void Awake()
 	{

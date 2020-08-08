@@ -63,20 +63,20 @@ public class TitleManager : MonoBehaviour
 
 	public void LoadGame()
 	{
-		newButton.DOLocalMoveX( -1135, .5f ).SetEase( Ease.InOutQuad );
-		loadButton.DOLocalMoveX( -1135, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () =>
-		{
-			//animator.Play( "bgFadeIn" );
-		} );
-		;
-		nextButton.interactable = false;
-		cancelButton.interactable = true;
-		for ( int i = 0; i < fileItemButtons.Count; i++ )
-			fileItemButtons[i].ResetColor();
-		nameText.text = "";
-		fileText.text = "";
-		versionText.text = "";
-		selectHeroesCG.gameObject.SetActive( false );
+		//newButton.DOLocalMoveX( -1135, .5f ).SetEase( Ease.InOutQuad );
+		//loadButton.DOLocalMoveX( -1135, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () =>
+		//{
+		//	//animator.Play( "bgFadeIn" );
+		//} );
+		//;
+		//nextButton.interactable = false;
+		//cancelButton.interactable = true;
+		//for ( int i = 0; i < fileItemButtons.Count; i++ )
+		//	fileItemButtons[i].ResetColor();
+		//nameText.text = "";
+		//fileText.text = "";
+		//versionText.text = "";
+		//selectHeroesCG.gameObject.SetActive( false );
 	}
 
 	public void Cancel()

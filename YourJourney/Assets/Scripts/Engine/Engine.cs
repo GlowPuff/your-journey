@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Engine : MonoBehaviour
 {
@@ -16,11 +18,23 @@ public class Engine : MonoBehaviour
 	public ChapterManager chapterManager;
 	public Image fader;
 	public CanvasGroup uiControl;
+	public SettingsDialog settingsDialog;
+	public AudioSource music;
+	public PostProcessVolume volume;
 
-	bool debug = false;
+	bool debug = true;
 
 	void Awake()
 	{
+		var settings = Bootstrap.LoadSettings();
+		Vignette v;
+		ColorGrading cg;
+		if ( volume.profile.TryGetSettings( out v ) )
+			v.active = settings.Item2 == 1;
+		if ( volume.profile.TryGetSettings( out cg ) )
+			cg.active = settings.Item3 == 1;
+		music.enabled = settings.Item1 == 1;
+
 		if ( debug )
 			scenario = Bootstrap.DEBUGLoadLevel();
 		else
@@ -114,5 +128,20 @@ public class Engine : MonoBehaviour
 		{
 			//tileManager.RemoveAllTiles();
 		}
+	}
+
+	public void OnShowSettings()
+	{
+		settingsDialog.Show( "Quit to Title", OnQuit );
+	}
+
+	public void OnQuit()
+	{
+		fader.gameObject.SetActive( true );
+		fader.DOFade( 1, 2 ).OnComplete( () =>
+		{
+			SceneManager.LoadScene( "title" );
+		} );
+
 	}
 }

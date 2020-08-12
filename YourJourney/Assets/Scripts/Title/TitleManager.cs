@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 public class TitleManager : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class TitleManager : MonoBehaviour
 	public Button[] heroButtons;
 	public Image finalFader;
 	public AudioSource music;
+	public PostProcessVolume volume;
+	public SettingsDialog settings;
 
 	ProjectItem[] projectItems;
 	ProjectItem selectedJourney;
@@ -26,6 +29,15 @@ public class TitleManager : MonoBehaviour
 
 	private void Start()
 	{
+		var settings = Bootstrap.LoadSettings();
+		Vignette v;
+		ColorGrading cg;
+		if ( volume.profile.TryGetSettings( out v ) )
+			v.active = settings.Item2 == 1;
+		if ( volume.profile.TryGetSettings( out cg ) )
+			cg.active = settings.Item3 == 1;
+		music.enabled = settings.Item1 == 1;
+
 		projectItems = FileManager.GetProjects().ToArray();
 		for ( int i = 0; i < projectItems.Length; i++ )
 		{
@@ -138,6 +150,11 @@ public class TitleManager : MonoBehaviour
 		DOTween.To( () => music.volume, setter => music.volume = setter, 0f, .5f );
 		finalFader.gameObject.SetActive( true );
 		finalFader.DOFade( 1, .5f ).OnComplete( () => SceneManager.LoadScene( "gameboard" ) );
+	}
+
+	public void OnSettings()
+	{
+		settings.Show( "Quit App" );
 	}
 
 	public void OnHeroSelect( int index )

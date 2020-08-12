@@ -44,4 +44,20 @@ public class Bootstrap
 		Bootstrap.heroes = heroes;
 		Bootstrap.projectItem = projectItem;
 	}
+
+	public static System.Tuple<int, int, int> LoadSettings()
+	{
+		int music = PlayerPrefs.GetInt( "music", 1 );
+		int vignette = PlayerPrefs.GetInt( "vignette", 1 );
+		int color = PlayerPrefs.GetInt( "color", 1 );
+
+		return new System.Tuple<int, int, int>( music, vignette, color );
+	}
+
+	public static void SaveSettings( System.Tuple<int, int, int> prefs )
+	{
+		PlayerPrefs.SetInt( "music", prefs.Item1 );
+		PlayerPrefs.SetInt( "vignette", prefs.Item2 );
+		PlayerPrefs.SetInt( "color", prefs.Item3 );
+	}
 }

@@ -40,6 +40,8 @@ public class Engine : MonoBehaviour
 		else
 			scenario = Bootstrap.LoadLevel();
 
+		endTurnButton.InitialSet( scenario );
+
 		if ( Bootstrap.isNewGame )
 		{
 			fader.gameObject.SetActive( true );
@@ -55,7 +57,7 @@ public class Engine : MonoBehaviour
 
 	public void StartNewGame()
 	{
-		//first objective/interactioni/trigger are DUMMIES (None), remove them
+		//first objective/interaction/trigger are DUMMIES (None), remove them
 		scenario.objectiveObserver.RemoveAt( 0 );
 		scenario.interactionObserver.RemoveAt( 0 );
 		scenario.triggersObserver.RemoveAt( 0 );
@@ -69,7 +71,7 @@ public class Engine : MonoBehaviour
 			interactionManager.GetNewTextPanel().ShowOkContinue( scenario.introBookData.pages[0], ButtonIcon.Continue, () =>
 				{
 					uiControl.interactable = true;
-					endTurnButton.InitialSet( scenario );
+					//endTurnButton.InitialSet( scenario );
 
 					if ( objectiveManager.Exists( scenario.objectiveName ) )
 						objectiveManager.TrySetObjective( scenario.objectiveName, () =>
@@ -83,6 +85,7 @@ public class Engine : MonoBehaviour
 		else
 		{
 			//debug quickstart a chapter:
+			objectiveManager.DebugSetObjective( scenario.objectiveName );
 			uiControl.interactable = true;
 			endTurnButton.InitialSet( scenario );
 			chapterManager.TryTriggerChapter( "Start", true );

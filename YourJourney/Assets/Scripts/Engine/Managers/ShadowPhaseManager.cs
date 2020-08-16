@@ -174,7 +174,8 @@ public class ShadowPhaseManager : MonoBehaviour
 
 		Threat t = endTurnButton.AddThreat( hc + ut + tt );
 		//wait for animation
-		yield return new WaitForSeconds( 2 );
+		if ( t != null )
+			yield return new WaitForSeconds( 2 );
 
 		if ( t != null )
 		{

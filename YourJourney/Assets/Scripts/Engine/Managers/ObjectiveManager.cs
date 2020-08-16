@@ -46,6 +46,19 @@ public class ObjectiveManager : MonoBehaviour
 		return false;
 	}
 
+	/// <summary>
+	/// Quick debug - silently sets objective without showing dialog
+	/// </summary>
+	public void DebugSetObjective( string name )
+	{
+		if ( objectiveList.Any( x => x.dataName == name ) )
+		{
+			currentObjective = objectiveList.Where( x => x.dataName == name ).First();
+			//set reminder text
+			objectiveText.text = currentObjective.objectiveReminder;
+		}
+	}
+
 	public bool Exists( string name )
 	{
 		return objectiveList.Any( x => x.dataName == name );
@@ -64,6 +77,7 @@ public class ObjectiveManager : MonoBehaviour
 		if ( currentObjective == null )
 			return false;
 
+		Debug.Log( "Completed Objective" );
 		//objective is complete, remove it and fire any on complete trigger
 		//TODO - show completion textbox?  show lore earned?
 		if ( currentObjective.triggerName == triggername )

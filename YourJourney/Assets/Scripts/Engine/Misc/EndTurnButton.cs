@@ -10,6 +10,7 @@ public class EndTurnButton : MonoBehaviour
 	public GameObject tickPrefab;
 	public Text threatText;
 	public Image meter;
+	public GameObject numberArea;
 
 	[HideInInspector]
 	public float currentThreat, threatMax;
@@ -27,7 +28,10 @@ public class EndTurnButton : MonoBehaviour
 		threatStack = new Queue<Threat>();
 
 		if ( s.threatNotUsed || s.threatObserver.Count() == 0 )
+		{
+			numberArea.SetActive( false );
 			return;
+		}
 
 		int i = 0;
 		foreach ( Threat t in s.threatObserver )
@@ -44,6 +48,9 @@ public class EndTurnButton : MonoBehaviour
 
 	public Threat AddThreat( float amount )
 	{
+		if ( FindObjectOfType<Engine>().scenario.threatNotUsed || FindObjectOfType<Engine>().scenario.threatObserver.Count() == 0 )
+			return null;
+
 		currentThreat = Mathf.Min( currentThreat + amount, threatMax );
 		DOTween.To( () => currentThreatAnimated, x => currentThreatAnimated = x, currentThreat, 2 ).SetEase( Ease.InOutQuad );
 		if ( threatStack.Count > 0 )

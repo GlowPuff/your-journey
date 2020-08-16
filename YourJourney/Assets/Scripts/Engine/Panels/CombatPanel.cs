@@ -14,6 +14,7 @@ public class CombatPanel : MonoBehaviour
 	public MonsterItem[] monsterItems;
 	public Button applyButton;
 	public Button[] modifierButtons;
+	public GameObject[] monsterImages;
 
 	CombatModify modifier;
 	Monster monster = null;
@@ -44,6 +45,11 @@ public class CombatPanel : MonoBehaviour
 			if ( ob.name.Contains( "SPAWNMARKER" ) )
 				Destroy( ob.gameObject );
 		}
+
+		//set the appropriate monster image
+		for ( int i = 0; i < monsterImages.Length; i++ )
+			monsterImages[i].SetActive( false );
+		monsterImages[(int)monster.monsterType].SetActive( true );
 
 		if ( monsterGUID == monster.GUID )
 		{

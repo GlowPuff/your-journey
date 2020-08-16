@@ -8,6 +8,9 @@ public class Scenario
 	public bool scenarioTypeJourney { get; set; }
 	public string fileName { get; set; }
 	public string scenarioName { get; set; }
+	/// <summary>
+	/// First Objective, if set in the editor
+	/// </summary>
 	public string objectiveName { get; set; }
 	public int threatMax { get; set; }
 	public bool threatNotUsed { get; set; }

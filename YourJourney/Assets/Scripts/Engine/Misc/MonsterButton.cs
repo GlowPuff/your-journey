@@ -8,6 +8,8 @@ public class MonsterButton : MonoBehaviour
 	public GameObject standard, elite, selected;
 	public GameObject[] monsters;//all the monster picture objects
 
+	public bool markRemove = false;
+
 	public void Show( bool isElite )
 	{
 		standard.SetActive( !isElite );
@@ -16,10 +18,13 @@ public class MonsterButton : MonoBehaviour
 		for ( int i = 0; i < monsters.Length; i++ )
 			monsters[i].SetActive( (int)monster.monsterType == i );
 
-		float x = transform.localPosition.x;
-		transform.localPosition = new Vector3( transform.localPosition.x - 25, 0, 0 );
-		transform.DOLocalMoveX( x, .5f );
-		cg.DOFade( 1, .5f );
+		bool hidden = transform.position.x < 130 || transform.position.x > 402;
+		if ( !hidden )
+		{
+			transform.localPosition = new Vector3( transform.localPosition.x, 0, 0 );
+			transform.DOLocalMoveY( 25, .5f );
+			cg.DOFade( 1, .5f );
+		}
 	}
 
 	//after a monster is removed on the lineup, animate the remainder into their new positions to fill the gap
@@ -66,5 +71,25 @@ public class MonsterButton : MonoBehaviour
 		}
 		else
 			cg.alpha = .25f;
+	}
+
+	void ToggleVisible( bool visible )
+	{
+		cg.alpha = visible ? ( monster.isExhausted ? .25f : 1 ) : 0;
+		cg.interactable = visible ? true : false;
+		cg.blocksRaycasts = visible ? true : false;
+	}
+
+	private void Update()
+	{
+		if ( markRemove )
+		{
+			cg.blocksRaycasts = false;
+			cg.interactable = false;
+			return;
+		}
+
+		bool hidden = transform.position.x < 130 || transform.position.x > 402;
+		ToggleVisible( !hidden );
 	}
 }

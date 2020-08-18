@@ -48,7 +48,7 @@ public class Engine : MonoBehaviour
 			fader.DOFade( 0, 2 ).OnComplete( () =>
 			{
 				fader.gameObject.SetActive( false );
-				StartNewGame();
+				//StartNewGame();
 			} );
 		}
 		else

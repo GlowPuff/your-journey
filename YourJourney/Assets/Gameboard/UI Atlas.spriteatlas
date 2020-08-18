@@ -35,7 +35,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 8d242c989899e954eaaf392790d9ad1c, type: 3}
     - {fileID: 102900000, guid: c80935fd8efbc4b4abb7edc027a64235, type: 3}
     - {fileID: 102900000, guid: ddca5c03c60fd6145b5dcad61a41bf74, type: 3}
-    totalSpriteSurfaceArea: 3701885
+    totalSpriteSurfaceArea: 3826355
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -52,7 +52,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 89c9019136d29ed47aa983b7d57eefc3, type: 3}
   - {fileID: 21300000, guid: 404168b12fe803e4c8f0b2379c5d02e3, type: 3}
   - {fileID: 21300000, guid: aa7296c1c0817344c8e6bd6870f0e204, type: 3}
+  - {fileID: 21300000, guid: e09d08c14e45dff46bd860933d88a220, type: 3}
   - {fileID: 21300000, guid: d3a228d19bf0e1e4ea9b417f7aba6f92, type: 3}
+  - {fileID: 21300000, guid: bf6bfee15e25e664da7655e910bd6f33, type: 3}
   - {fileID: 21300000, guid: 32742ef111436aa45b431d63bc69820c, type: 3}
   - {fileID: 21300000, guid: dedb85128a1be82488d76062e24bc6ca, type: 3}
   - {fileID: 21300000, guid: ee6b1322385914c4da809b2109bc1eb9, type: 3}
@@ -121,6 +123,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 191ef14cfff0cde4f9acd9bfdfe4fdfc, type: 3}
   - {fileID: 21300000, guid: f4d8719cec4023044bd0d0e318284312, type: 3}
   - {fileID: 21300000, guid: b886649cc43d1014ebd2d769086e1540, type: 3}
+  - {fileID: 21300000, guid: c054deacfc75bca4087d1eb0ee1e48fd, type: 3}
   - {fileID: 21300000, guid: e627f6bc710d76a4da025cc19bb7b898, type: 3}
   - {fileID: 21300000, guid: 54a20ebcca9bc8d4cbceeaa4b01e1144, type: 3}
   - {fileID: 21300000, guid: 193bf8cc4f7f2644a846d0a5f832cbca, type: 3}
@@ -130,6 +133,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 5c19600e842d33b4d8dcaf6eb76fc660, type: 3}
   - {fileID: 21300000, guid: f4da8c0e945df4c4fa372c87bea4e44f, type: 3}
   - {fileID: 21300000, guid: 2377c43e90fb0044e905a217b4f8b940, type: 3}
+  - {fileID: 21300000, guid: c7c8a44e4546eb8459e33bf2f2becb9b, type: 3}
   - {fileID: 21300000, guid: f53d3dae6273b6a4bbe1c656e1e833d0, type: 3}
   - {fileID: 21300000, guid: c9af46ee267daaa449270efadccdae67, type: 3}
   - {fileID: 21300000, guid: fd59f97f66700eb4e8036e02b455c8db, type: 3}
@@ -149,7 +153,9 @@ SpriteAtlas:
   - marker-start
   - frame_21_delay-0.11s
   - action icon
+  - monster scroll arrow
   - frame_07_delay-0.1s
+  - monster scroll arrow - pressed
   - frame_18_delay-0.1s
   - frame_09_delay-0.11s
   - frame_30_delay-0.11s
@@ -218,6 +224,7 @@ SpriteAtlas:
   - frame_20_delay-0.1s
   - frame_00_delay-0.1s
   - skullnbones
+  - monsterbar
   - hero panel
   - frame_24_delay-0.11s
   - frame_17_delay-0.1s
@@ -227,6 +234,7 @@ SpriteAtlas:
   - frame_17_delay-0.11s
   - m-wraith
   - frame_11_delay-0.1s
+  - monster scroll arrow - disabled
   - selected
   - frame_01_delay-0.1s
   - frame_06_delay-0.1s

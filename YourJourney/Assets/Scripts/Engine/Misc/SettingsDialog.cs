@@ -58,6 +58,11 @@ public class SettingsDialog : MonoBehaviour
 
 	public void OnQuit()
 	{
+		//save settings
+		Bootstrap.SaveSettings( new System.Tuple<int, int, int>(
+			musicToggle.isOn ? 1 : 0,
+			vignetteToggle.isOn ? 1 : 0,
+			colorToggle.isOn ? 1 : 0 ) );
 
 		if ( quitAction != null )
 		{

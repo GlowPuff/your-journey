@@ -22,7 +22,7 @@ public class Engine : MonoBehaviour
 	public AudioSource music;
 	public PostProcessVolume volume;
 
-	bool debug = true;
+	bool debug = false;
 
 	void Awake()
 	{
@@ -48,7 +48,7 @@ public class Engine : MonoBehaviour
 			fader.DOFade( 0, 2 ).OnComplete( () =>
 			{
 				fader.gameObject.SetActive( false );
-				//StartNewGame();
+				StartNewGame();
 			} );
 		}
 		else

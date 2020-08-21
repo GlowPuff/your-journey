@@ -2,16 +2,12 @@
 The companion playback app for my Journeys in Middle Earth Scenario Editor.
 
 #### Download the zip
-[Download here](https://github.com/GlowPuff/your-journey/releases/download/v0.1-alpha/YourJourney_v0.1-alpha.zip)
+[Download here](https://github.com/GlowPuff/your-journey/releases/download/v0.2-alpha/YourJourney_v0.2-alpha.zip)
 
 Hit "New Game" at the title and load your level on the next screen.
 
 ## LIMITATIONS:
 -no saving of game state
-
--if you add too many monsters they will stack right off the screen
-
--no Settings panel - the Settings button does nothing, **so use ALT+F4 to quit**
 
 -no Party management panel - the Party button does nothing
 

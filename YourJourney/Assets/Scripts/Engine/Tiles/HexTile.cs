@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using UnityEngine;
 
 public class HexTile : ITile
@@ -14,7 +15,10 @@ public class HexTile : ITile
 		set
 		{
 			string[] s = value.Split( ',' );
-			vposition = new Vector3( float.Parse( s[0] ), 0, float.Parse( s[1] ) );
+			vposition = new Vector3(
+				float.Parse( s[0], CultureInfo.InvariantCulture ),
+				0,
+				float.Parse( s[1], CultureInfo.InvariantCulture ) );
 		}
 	}
 	public TileType tileType { get; set; }

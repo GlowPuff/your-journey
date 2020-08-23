@@ -26,6 +26,13 @@ public class Engine : MonoBehaviour
 
 	void Awake()
 	{
+		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+		System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+		System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
+		//System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo( "de-DE" );
+		//System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo( "de-DE" );
+		//System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo( "de-DE" );
+
 		var settings = Bootstrap.LoadSettings();
 		Vignette v;
 		ColorGrading cg;

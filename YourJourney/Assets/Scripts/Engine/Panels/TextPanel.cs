@@ -101,6 +101,9 @@ public class TextPanel : MonoBehaviour
 		Show( it.textBookData.pages[0], "Cancel", btnName, ButtonIcon.Action, actions );
 	}
 
+	/// <summary>
+	/// ask whether to explore the tile after clicking Explore token
+	/// </summary>
 	public void ShowQueryExploration( Action<InteractionResult> actions )
 	{
 		Show( "Explore this tile?", "Yes", "No", ButtonIcon.None, actions );
@@ -142,7 +145,7 @@ public class TextPanel : MonoBehaviour
 		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
 		float height = textGen.GetPreferredHeight( t, generationSettings );
 
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 80 );
+		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 90 );
 	}
 
 	public void OnBtn1()

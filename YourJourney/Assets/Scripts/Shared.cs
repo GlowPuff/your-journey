@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public enum ScenarioType { Journey, Battle }
-public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness }
+public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional }
 public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, Warg, HillTroll, Wight }
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle }

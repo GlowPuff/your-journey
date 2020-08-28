@@ -15,19 +15,19 @@ public class TextInteraction : IInteraction
 
 	public InteractionType interactionType { get { return InteractionType.Text; } set { } }
 
-	public static TextInteraction Create( TextInteraction interaction )
-	{
-		TextInteraction ti = new TextInteraction()
-		{
-			GUID = interaction.GUID,
-			dataName = interaction.dataName,
-			isEmpty = interaction.isEmpty,
-			triggerName = interaction.triggerName,
-			triggerAfterName = interaction.triggerAfterName,
-			textBookData = interaction.textBookData,
-			eventBookData = interaction.eventBookData,
-		};
-		return ti;
-	}
+	//public static TextInteraction Create( TextInteraction interaction )
+	//{
+	//	TextInteraction ti = new TextInteraction()
+	//	{
+	//		GUID = interaction.GUID,
+	//		dataName = interaction.dataName,
+	//		isEmpty = interaction.isEmpty,
+	//		triggerName = interaction.triggerName,
+	//		triggerAfterName = interaction.triggerAfterName,
+	//		textBookData = interaction.textBookData,
+	//		eventBookData = interaction.eventBookData,
+	//	};
+	//	return ti;
+	//}
 }
 

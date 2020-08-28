@@ -5,11 +5,11 @@ using System;
 
 public class StatTestPanel : MonoBehaviour
 {
-	public Text mainText, abilityText, counterText;
+	public Text mainText, abilityText, counterText, damageText, fearText;
 	public Image abilityIcon;
 	public GameObject btn1, btn2, continueBtn;
 	public CanvasGroup overlay;
-	public GameObject progressRoot;
+	public GameObject progressRoot, combatRoot;
 	public Sprite[] icons;
 
 	CanvasGroup group;
@@ -39,6 +39,7 @@ public class StatTestPanel : MonoBehaviour
 		btn1.SetActive( testInteraction.passFail || !testInteraction.isCumulative );
 		btn2.SetActive( testInteraction.passFail || !testInteraction.isCumulative );
 		progressRoot.SetActive( !testInteraction.passFail && testInteraction.isCumulative );
+		combatRoot.SetActive( false );
 		continueBtn.SetActive( false );
 
 		overlay.alpha = 0;
@@ -81,7 +82,35 @@ public class StatTestPanel : MonoBehaviour
 		btn1.SetActive( false );
 		btn2.SetActive( false );
 		progressRoot.SetActive( false );
+		combatRoot.SetActive( true );
 		continueBtn.SetActive( true );
+
+		//calculate total and split it between damage and fear
+		int total = m.damage + UnityEngine.Random.Range( -1, 2 );
+		int d = UnityEngine.Random.Range( 0, total + 1 );
+		int f = total - d;
+		if ( d == 0 && f == 0 )
+			d = 1;
+		if ( m.specialAbility != "Fear Bias" )
+		{
+			int temp = d;
+			if ( f > d )
+			{
+				d = f;
+				f = temp;
+			}
+		}
+		else
+		{
+			int temp = f;
+			if ( d > f )
+			{
+				f = d;
+				d = temp;
+			}
+		}
+		damageText.text = d.ToString();
+		fearText.text = f.ToString();
 
 		overlay.alpha = 0;
 		overlay.gameObject.SetActive( true );

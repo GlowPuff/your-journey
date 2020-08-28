@@ -35,7 +35,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 8d242c989899e954eaaf392790d9ad1c, type: 3}
     - {fileID: 102900000, guid: c80935fd8efbc4b4abb7edc027a64235, type: 3}
     - {fileID: 102900000, guid: ddca5c03c60fd6145b5dcad61a41bf74, type: 3}
-    totalSpriteSurfaceArea: 3826355
+    totalSpriteSurfaceArea: 3865555
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -70,6 +70,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a70894e30447d7147ad0dbd0139b0a61, type: 3}
   - {fileID: 21300000, guid: bed30d1456eaf6d43b6fb1098268d2ac, type: 3}
   - {fileID: 21300000, guid: a720bd3400f257545a72ce73bb6b934c, type: 3}
+  - {fileID: 21300000, guid: f0a06a05db457674aa9e8b293aa78be8, type: 3}
   - {fileID: 21300000, guid: a68663456c83c144a96832acc13fb108, type: 3}
   - {fileID: 21300000, guid: 0a6bb0657c1ae7b4b8c87990d72061a4, type: 3}
   - {fileID: 21300000, guid: dbd88995ab933ac498aaa8c3e8d4ba13, type: 3}
@@ -119,6 +120,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d85250cbf3bf5d04a88456d6f5517a9c, type: 3}
   - {fileID: 21300000, guid: b3b003dbd62981c409733b7caa72e163, type: 3}
   - {fileID: 21300000, guid: 8e98982cf64b8494cb3eba12632628c0, type: 3}
+  - {fileID: 21300000, guid: c9af0b2ca29fddb42add166a2b2b9412, type: 3}
   - {fileID: 21300000, guid: 27138e3c1f9aba74a8f9d6451002efff, type: 3}
   - {fileID: 21300000, guid: 191ef14cfff0cde4f9acd9bfdfe4fdfc, type: 3}
   - {fileID: 21300000, guid: f4d8719cec4023044bd0d0e318284312, type: 3}
@@ -171,6 +173,7 @@ SpriteAtlas:
   - frame_04_delay-0.1s
   - frame_12_delay-0.11s
   - end turn tick
+  - damage icon
   - standard
   - frame_19_delay-0.1s
   - end turn number area
@@ -220,6 +223,7 @@ SpriteAtlas:
   - sphere
   - frame_05_delay-0.11s
   - frame_13_delay-0.1s
+  - fear icon
   - selected monster
   - frame_20_delay-0.1s
   - frame_00_delay-0.1s

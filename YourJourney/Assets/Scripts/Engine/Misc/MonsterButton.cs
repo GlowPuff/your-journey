@@ -8,17 +8,26 @@ public class MonsterButton : MonoBehaviour
 	public GameObject standard, elite, selected;
 	public GameObject[] monsters;//all the monster picture objects
 
+	[HideInInspector]
 	public bool markRemove = false;
 
-	public void Show( bool isElite )
+	bool hidden;
+	MonsterManager manager;
+
+	public void Show( bool isElite, MonsterManager m )
 	{
 		standard.SetActive( !isElite );
 		elite.SetActive( isElite );
+		manager = m;
 
 		for ( int i = 0; i < monsters.Length; i++ )
 			monsters[i].SetActive( (int)monster.monsterType == i );
 
-		bool hidden = transform.position.x < 130 || transform.position.x > 402;
+		hidden = transform.position.x < manager.sbRect.position.x || transform.position.x > manager.sbRect.position.x + ( 1000f * manager.scalar );
+
+		//Debug.Log( "RECT WIDTH X:" + ( manager.attachRect.rect.width * manager.scalar ) );
+		//Debug.Log( "button world X:" + transform.position.x );
+
 		if ( !hidden )
 		{
 			transform.localPosition = new Vector3( transform.localPosition.x, 0, 0 );
@@ -42,6 +51,8 @@ public class MonsterButton : MonoBehaviour
 	{
 		var spanel = FindObjectOfType<ShadowPhaseManager>();
 		if ( spanel.doingShadowPhase && ( !spanel.allowAttacks || spanel.allowedMonsterGUID != monster.GUID ) )
+			return;
+		else if ( !spanel.doingShadowPhase && FindObjectOfType<InteractionManager>().PanelShowing )
 			return;
 
 		if ( FindObjectOfType<MonsterManager>().ShowCombatPanel( monster ) )
@@ -89,7 +100,7 @@ public class MonsterButton : MonoBehaviour
 			return;
 		}
 
-		bool hidden = transform.position.x < 130 || transform.position.x > 402;
+		hidden = transform.position.x < manager.sbRect.position.x || transform.position.x > manager.sbRect.position.x + ( 1000f * manager.scalar );
 		ToggleVisible( !hidden );
 	}
 }

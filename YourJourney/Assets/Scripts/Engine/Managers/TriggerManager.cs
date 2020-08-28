@@ -1,60 +1,118 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 public class TriggerManager : MonoBehaviour
 {
-	public Dictionary<string, bool> triggerList = new Dictionary<string, bool>();
+	public Dictionary<string, bool> firedTriggersList = new Dictionary<string, bool>();
 
+	Queue<string> queue = new Queue<string>();
+
+	/// <summary>
+	/// Takes a trigger name or event name to fire
+	/// </summary>
 	public void FireTrigger( string name )
 	{
 		if ( !string.IsNullOrEmpty( name )
 			&& name.ToLower() != "none"
-			&& !triggerList.ContainsKey( name ) )
-			StartCoroutine( TriggerChain( name ) );
+			&& !firedTriggersList.ContainsKey( name ) )
+		{
+
+			if ( queue.Count == 0 )
+			{
+				queue.Enqueue( name );
+				StartCoroutine( TriggerChain() );
+			}
+			else
+			{
+				Debug.Log( "ENQUEUE: " + name );
+				queue.Enqueue( name );
+			}
+		}
 		else
 			Debug.Log( "FireTrigger::NO TRIGGER/NONE" );
 	}
 
-	IEnumerator TriggerChain( string name )
+	IEnumerator TriggerChain()
 	{
-		//if ( !string.IsNullOrEmpty( name )
-		//	&& name.ToLower() != "none"
-		//	&& !triggerList.ContainsKey( name ) )
-		//{
-		Debug.Log( "FireTrigger::" + name );
-		triggerList.Add( name, true );
+		Debug.Log( "*******************TriggerChain STARTED" );
 
-		//trigger Token
-		if ( FindObjectOfType<TileManager>().TryTriggerToken( name ) )
-			yield break;
-		yield return WaitUntilFinished();
+		while ( queue.Count > 0 )
+		{
+			yield return WaitUntilFinished();
+			string name = queue.Peek();
+			Debug.Log( "FireTrigger::" + name );
+			firedTriggersList.Add( name, true );
 
-		//trigger Objective
-		if ( FindObjectOfType<ObjectiveManager>().TrySetObjective( name ) )
-			yield break;
-		yield return WaitUntilFinished();
+			//first, check conditional events listening for triggers to fire
+			foreach ( ConditionalInteraction con in FindObjectOfType<InteractionManager>().interactions.Where( x => x.interactionType == InteractionType.Conditional ) )
+			{
+				bool containsAll = con.triggerList.All( x => firedTriggersList.Keys.Contains( x ) );
+				if ( containsAll )
+					FireTrigger( con.finishedTrigger );
+			}
 
-		//trigger Objective complete
-		if ( FindObjectOfType<ObjectiveManager>().TryCompleteObjective( name ) )
-			yield break;
-		yield return WaitUntilFinished();
+			//trigger Token
+			if ( FindObjectOfType<TileManager>().TryTriggerToken( name ) )
+			{
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
 
-		//trigger Interactions
-		if ( FindObjectOfType<InteractionManager>().TryFireInteraction( name ) )
-			yield break;
-		yield return WaitUntilFinished();
+			//trigger Objective
+			if ( FindObjectOfType<ObjectiveManager>().TrySetObjective( name ) )
+			{
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
 
-		//trigger Chapter
-		if ( FindObjectOfType<ChapterManager>().TriggerChapterByTrigger( name ) )
-			yield break;
-		yield return WaitUntilFinished();
+			//trigger Objective complete
+			if ( FindObjectOfType<ObjectiveManager>().TryCompleteObjective( name ) )
+			{
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
 
-		//trigger end scenario
-		if ( FindObjectOfType<InteractionManager>().TryFireEndScenario( name ) )
-			yield break;
-		yield return WaitUntilFinished();
+			//trigger Event by trigger
+			if ( FindObjectOfType<InteractionManager>().TryFireEventByTrigger( name ) )
+			{
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
+
+			//trigger Event by event name
+			if ( FindObjectOfType<InteractionManager>().TryFireEventByName( name ) )
+			{
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
+
+			//trigger Chapter
+			if ( FindObjectOfType<ChapterManager>().TriggerChapterByTrigger( name ) )
+			{
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
+
+			//trigger end scenario
+			if ( FindObjectOfType<InteractionManager>().TryFireEndScenario( name ) )
+			{
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
+
+			string n = queue.Dequeue();
+			Debug.Log( "Nothing listening to: " + n );
+		}
+		Debug.Log( "******************TriggerChain ENDED" );
 
 		//}
 		//else
@@ -69,11 +127,21 @@ public class TriggerManager : MonoBehaviour
 		//poll IManager uiRoot for children (panels)
 		while ( im.PanelShowing )
 			yield return null;
+
+		if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase )
+		{
+			Debug.Log( "Waiting for Shadow Phase to finish..." );
+			while ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase )
+				yield return null;
+		}
 		//Debug.Log( "***DONE WAITING..." );
 	}
 
+	/// <summary>
+	/// returns whether or not the given Trigger has fired
+	/// </summary>
 	public bool IsTriggered( string name )
 	{
-		return triggerList.TryGetValue( name, out bool v ) ? v : false;
+		return firedTriggersList.TryGetValue( name, out bool v ) ? v : false;
 	}
 }

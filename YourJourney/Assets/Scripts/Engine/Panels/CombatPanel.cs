@@ -51,7 +51,7 @@ public class CombatPanel : MonoBehaviour
 			monsterImages[i].SetActive( false );
 		monsterImages[(int)monster.monsterType].SetActive( true );
 
-		if ( monsterGUID == monster.GUID )
+		if ( monsterGUID == monster.GUID && gameObject.activeSelf )
 		{
 			Hide();
 			return false;
@@ -89,10 +89,11 @@ public class CombatPanel : MonoBehaviour
 		return true;
 	}
 
-	public void Hide()
+	public void Hide( bool unselect = false )
 	{
-		//monster = null;
-		monsterGUID = Guid.NewGuid();
+		if ( unselect )
+
+			monsterGUID = Guid.NewGuid();
 		foreach ( var m in monsterItems )
 			m.Hide();
 		canvasGroup.DOFade( 0, .5f ).OnComplete( () =>
@@ -186,7 +187,7 @@ public class CombatPanel : MonoBehaviour
 
 		Monster theMonster = this.monster;
 
-		Hide();
+		Hide( true );
 
 		if ( deadCount > 0 )
 		{

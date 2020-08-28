@@ -45,6 +45,17 @@ public class InteractionConverter : JsonConverter
 				case 5:
 					interaction = item.ToObject<DarknessInteraction>();
 					break;
+				case 6:
+					interaction = item.ToObject<MultiEventInteraction>();
+					break;
+				case 7:
+					interaction = item.ToObject<PersistentInteraction>();
+					break;
+				case 8:
+					interaction = item.ToObject<ConditionalInteraction>();
+					break;
+				default:
+					throw new Exception( "Interaction Type not supported: " + item["interactionType"].Value<int>() );
 			}
 			interactionList.Add( interaction );
 		}

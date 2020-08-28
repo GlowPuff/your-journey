@@ -28,13 +28,14 @@ public class HexTile : ITile
 	public string hexRoot { get; set; }
 	public Vector3 vposition { get; set; }
 	public bool isStartTile { get; set; }
+	public string triggerName { get; set; }
 
 	public HexTile()
 	{
 
 	}
 
-	public HexTile( int n, Vector position, float angle )
+	public HexTile( int n, Vector position, float angle )//provide OnExplore trigger for random tile?
 	{
 		tileType = TileType.Hex;
 		idNumber = n;
@@ -46,5 +47,6 @@ public class HexTile : ITile
 		tokenList = new ObservableCollection<Token>();
 		flavorBookData = new TextBookData() { pages = new System.Collections.Generic.List<string>() { "" } };
 		isStartTile = false;
+		triggerName = "None";
 	}
 }

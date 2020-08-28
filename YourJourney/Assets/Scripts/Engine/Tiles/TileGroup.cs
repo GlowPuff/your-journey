@@ -72,6 +72,7 @@ public class TileGroup
 			//create dummy hextile
 			//HexTile hexroot = new HexTile( chapter.randomTilePool[randomTileIndices[i]], new Vector(), RandomAngle() );
 			HexTile hexroot = new HexTile( randomTiles[i], new Vector(), RandomAngle() );
+			//provide OnExplore trigger for random tile?
 			//HexTile hexroot = new HexTile();
 			//create parent object for prefab tile
 			GameObject go = new GameObject();
@@ -194,7 +195,19 @@ public class TileGroup
 				//Debug.Log( "ROOT::" + tileList[0].transform.parent.transform.position );
 			}
 			else
+			{
+				//fix tile positions that don't have editor root hex at 0,1
+				Vector3 tilefix = Vector3.zero;
+				//convert the string to vector2
+				string[] s = tile.hexTile.hexRoot.Split( ',' );
+				Vector2 p = new Vector2( float.Parse( s[0] ), float.Parse( s[1] ) );
+				if ( p.y != 1 )
+					tilefix = new Vector3( 0, 0, -.4330127f * ( p.y - 1f ) );
+				if ( p.x != 0 )
+					tilefix = new Vector3( p.x * .75f, 0, 0 );
 				tile.SetPosition( Vector3.zero, h.angle );
+				tile.transform.position += tilefix;
+			}
 
 			tileList.Add( tile );
 			//set parent of goc 

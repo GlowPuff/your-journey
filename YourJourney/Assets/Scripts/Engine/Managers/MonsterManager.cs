@@ -9,13 +9,25 @@ public class MonsterManager : MonoBehaviour
 	public GameObject monsterButtonPrefab;
 	public Transform bar, buttonAttach;
 	public Button leftB, rightB;
+	public Canvas canvas;
 
 	//Monster selectedMonster;
 	int scrollOffset = -517;
 	bool scrollReady = true;
+	[HideInInspector]
+	public RectTransform attachRect, sbRect;
+	public GameObject sizebar;
+	[HideInInspector]
+	public float scalar;
 
 	[HideInInspector]
 	public List<Monster> monsterList = new List<Monster>();
+
+	private void Start()
+	{
+		attachRect = buttonAttach.GetComponent<RectTransform>();
+		scalar = canvas.scaleFactor;
+	}
 
 	/// <summary>
 	/// Add from saved game
@@ -28,54 +40,59 @@ public class MonsterManager : MonoBehaviour
 		GameObject go = Instantiate( monsterButtonPrefab, buttonAttach );
 		go.transform.localPosition = new Vector3( ( 175 * monsterList.Count ), 25, 0 );
 		go.GetComponent<MonsterButton>().monster = m;
-		go.GetComponent<MonsterButton>().Show( m.isElite );
+		go.GetComponent<MonsterButton>().Show( m.isElite, this );
 
 		monsterList.Add( m );
 	}
 
 	private void Update()
 	{
-		leftB.interactable = GetFirstButtonPos() < 130;
-		rightB.interactable = GetLastButtonPos() > 402;
+		scalar = canvas.scaleFactor;
+		attachRect = buttonAttach.GetComponent<RectTransform>();
+		sbRect = sizebar.GetComponent<RectTransform>();
+		float maxX = sbRect.position.x + ( 1000f * scalar );
+
+		leftB.interactable = GetFirstButtonPos() < sbRect.position.x;//130;
+		rightB.interactable = GetLastButtonPos() > maxX;//402;
 	}
 
 	public void OnScrollLeft()
 	{
-		leftB.interactable = GetLastButtonPos() != -517;
+		//leftB.interactable = GetLastButtonPos() != -517;
 
 		if ( scrollOffset == -517 )
 			return;
-		scrollOffset += 175;
 
 		if ( scrollReady )
 		{
+			scrollReady = false;
+			scrollOffset += 175;
 			Debug.Log( "left" );
-			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad );
+			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
 		}
 	}
 
 	public void OnScrollRight()
 	{
-		rightB.interactable = GetLastButtonPos() > 402;
+		//rightB.interactable = GetLastButtonPos() > 402;
 
-		if ( GetLastButtonPos() <= 402 )
+		if ( GetLastButtonPos() <= buttonAttach.position.x + ( 1000f * scalar ) ) //402 )
 			return;
-		scrollOffset -= 175;
 
 		if ( scrollReady )
 		{
-			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad );
+			scrollReady = false;
+			scrollOffset -= 175;
+			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
 		}
 	}
 
 	float GetFirstButtonPos()
 	{
-		List<MonsterButton> buttons = new List<MonsterButton>();
-
 		foreach ( Transform child in buttonAttach )
 			return child.transform.position.x;
 
-		return -517;
+		return 10000;//-517;
 	}
 
 	float GetLastButtonPos()
@@ -86,7 +103,7 @@ public class MonsterManager : MonoBehaviour
 			buttons.Add( child.GetComponent<MonsterButton>() );
 
 		if ( buttons.Count == 0 )
-			return -517;
+			return 0;//-517;
 
 		return buttons[buttons.Count - 1].transform.position.x;
 	}
@@ -102,10 +119,10 @@ public class MonsterManager : MonoBehaviour
 		{
 			m.interaction = interaction;
 			m.currentHealth = new int[3] { m.health, m.health, m.health };
-			GameObject go = Instantiate( monsterButtonPrefab, transform );
+			GameObject go = Instantiate( monsterButtonPrefab, buttonAttach );
 			go.transform.localPosition = new Vector3( ( 175 * monsterList.Count ), 25, 0 );
 			go.GetComponent<MonsterButton>().monster = m;
-			go.GetComponent<MonsterButton>().Show( m.isElite );
+			go.GetComponent<MonsterButton>().Show( m.isElite, this );
 
 			monsterList.Add( m );
 		}
@@ -144,20 +161,26 @@ public class MonsterManager : MonoBehaviour
 
 		if ( monsterList.Count == 0 )
 			bar.DOLocalMoveY( -45, .5f ).SetEase( Ease.InOutCubic );
+		else
+		{
+			scrollReady = false;
+			scrollOffset = -517;
+			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
+		}
 
-		//fire After Event trigger for monster group
+		//fire Defeated trigger for monster group
 		if ( m.interaction != null )
-			FindObjectOfType<TriggerManager>().FireTrigger( m.interaction.triggerAfterName );
+		{
+			string trigger = ( (ThreatInteraction)m.interaction ).triggerDefeatedName;
+			FindObjectOfType<TriggerManager>().FireTrigger( trigger );
+		}
 	}
 
 	public bool ShowCombatPanel( Monster m )
 	{
 		foreach ( Transform child in buttonAttach )
 		{
-			//if ( child.name.Contains( "MonsterButton" ) )
-			{
-				child.GetComponent<MonsterButton>().ToggleSelect( false );
-			}
+			child.GetComponent<MonsterButton>().ToggleSelect( false );
 		}
 		//selectedMonster = m;
 		return combatPanel.Show( m );

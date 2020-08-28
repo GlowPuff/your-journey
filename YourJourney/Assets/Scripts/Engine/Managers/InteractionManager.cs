@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 /// <summary>
@@ -54,7 +55,7 @@ public class InteractionManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Create cast to specific Interaction TYPE based on the type
+	/// Cast to specific Interaction based on the type
 	/// </summary>
 	IInteraction CreateInteraction( IInteraction interaction )
 	{
@@ -70,6 +71,12 @@ public class InteractionManager : MonoBehaviour
 			return (BranchInteraction)interaction;
 		else if ( interaction.interactionType == InteractionType.Darkness )
 			return (DarknessInteraction)interaction;
+		else if ( interaction.interactionType == InteractionType.MultiEvent )
+			return (MultiEventInteraction)interaction;
+		else if ( interaction.interactionType == InteractionType.Persistent )
+			return (PersistentInteraction)interaction;
+		else if ( interaction.interactionType == InteractionType.Conditional )
+			return (ConditionalInteraction)interaction;
 
 		throw new Exception( "Couldn't create Interaction from: " + interaction.dataName );
 	}
@@ -111,16 +118,25 @@ public class InteractionManager : MonoBehaviour
 			if ( tokenInteractions.Any( x => x.dataName == name ) )
 			{
 				IInteraction it = tokenInteractions.Where( x => x.dataName == name ).First();
-				GetNewTextPanel().ShowQueryInteraction( it, btnText, ( res ) =>
-				{
-					res.interaction = it;
-					res.removeToken = true;
 
-					//DO NOT remove the token if it's a test
-					if ( it is StatTestInteraction )
-						res.removeToken = false;
-					callback?.Invoke( res );
-				} );
+				//special case for persistent events
+				if ( it.interactionType == InteractionType.Persistent && FindObjectOfType<TriggerManager>().IsTriggered( ( (PersistentInteraction)it ).alternativeTextTrigger ) )
+				{
+					GetNewTextPanel().ShowOkContinue( ( (PersistentInteraction)it ).alternativeBookData.pages[0], ButtonIcon.Continue );
+				}
+				else
+				{
+					GetNewTextPanel().ShowQueryInteraction( it, btnText, ( res ) =>
+					{
+						res.interaction = it;
+						res.removeToken = true;
+
+						//DO NOT remove the token if it's a test
+						if ( it is StatTestInteraction || it is PersistentInteraction )
+							res.removeToken = false;
+						callback?.Invoke( res );
+					} );
+				}
 			}
 			else
 				GetNewTextPanel().ShowOkContinue( $"Data Error (QueryTokenInteraction)\r\nCould not find Interaction with name '{name}'.", ButtonIcon.Continue );
@@ -128,19 +144,42 @@ public class InteractionManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Try to fire NON-RANDOM, NON-TOKEN interaction based on name
+	/// Try to fire NON-RANDOM, NON-TOKEN Event based on EVENT NAME
 	/// </summary>
-	public bool TryFireInteraction( string name )
+	public bool TryFireEventByName( string name )
 	{
-		Debug.Log( "TryFireInteraction: " + name );
+		Debug.Log( "TryFireEventByName: " + name );
 		if ( interactions.Any( x => x.dataName == name ) )
 		{
-			Debug.Log( "Found Interaction: " + name );
+			Debug.Log( "Found Event: " + name );
 			ShowInteraction( interactions.Where( x => x.dataName == name ).First() );
 			return true;
 		}
-		//else
-		//	Debug.Log( "COULDN'T FIRE INTERACTION: " + name );
+		else
+			Debug.Log( "Couldn't find Event with name: " + name );
+		return false;
+	}
+
+	public bool TryFireEventByTrigger( string triggername )
+	{
+		Debug.Log( "TryFireEventByTrigger: " + triggername );
+		if ( interactions.Any( x => x.triggerName == triggername ) )
+		{
+			int count = interactions.Count( x => x.triggerName == triggername );
+			Debug.Log( "Found " + count + " Event(s): " + triggername );
+			if ( count == 1 )
+			{
+				ShowInteraction( interactions.Where( x => x.triggerName == triggername ).First() );
+			}
+			else
+			{
+				var inters = interactions.Where( x => x.triggerName == triggername ).ToArray();
+				ShowInteraction( inters[UnityEngine.Random.Range( 0, count )] );
+			}
+			return true;
+		}
+		else
+			Debug.Log( "Couldn't find Event listening to Trigger: " + triggername );
 		return false;
 	}
 
@@ -178,6 +217,18 @@ public class InteractionManager : MonoBehaviour
 		else if ( it.interactionType == InteractionType.StatTest )
 		{
 			HandleStatTest( it, action );
+		}
+		else if ( it.interactionType == InteractionType.MultiEvent )
+		{
+			HandleMultiEvent( it );
+		}
+		else if ( it.interactionType == InteractionType.Persistent )
+		{
+			HandlePersistent( it );
+		}
+		else if ( it.interactionType == InteractionType.Conditional )
+		{
+			HandleConditional( it );
 		}
 		else
 			GetNewTextPanel().ShowOkContinue( $"Data Error (ShowInteraction)\r\nCould not find Interaction with type '{it.interactionType}'.", ButtonIcon.Continue );
@@ -259,5 +310,53 @@ public class InteractionManager : MonoBehaviour
 				}
 			}
 		} );
+	}
+
+	void HandleMultiEvent( IInteraction it )
+	{
+		if ( ( (MultiEventInteraction)it ).isSilent )
+		{
+			if ( ( (MultiEventInteraction)it ).usingTriggers )
+			{
+				foreach ( string t in ( (MultiEventInteraction)it ).triggerList )
+					engine.triggerManager.FireTrigger( t );
+			}
+			else
+			{
+				foreach ( string t in ( (MultiEventInteraction)it ).eventList )
+					engine.triggerManager.FireTrigger( t );
+			}
+			engine.triggerManager.FireTrigger( it.triggerAfterName );
+		}
+		else
+		{
+			GetNewTextPanel().ShowTextInteraction( it, () =>
+			{
+				if ( ( (MultiEventInteraction)it ).usingTriggers )
+				{
+					foreach ( string t in ( (MultiEventInteraction)it ).triggerList )
+						engine.triggerManager.FireTrigger( t );
+				}
+				else
+				{
+					foreach ( string t in ( (MultiEventInteraction)it ).eventList )
+						engine.triggerManager.FireTrigger( t );
+				}
+				engine.triggerManager.FireTrigger( it.triggerAfterName );
+			} );
+		}
+	}
+
+	void HandlePersistent( IInteraction it )
+	{
+		//persistent events are only delegates for activating a "real" event
+		//persistent events don't have Event Text or fire "triggerAfterName"
+	}
+
+	void HandleConditional( IInteraction it )
+	{
+		//conditional events don't have a "triggerAfterName"
+		//conditional events aren't "triggeredBy" - they only listen
+		//conditional events cannot be token interactions - they work silently
 	}
 }

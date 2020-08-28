@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap
 {
-	public static string AppVersion = "0.1";
-	public static string EngineVersion = "1.0";
+	public static string AppVersion = "0.4";
+	public static string FormatVersion = "1.1";
 
 	public static bool isNewGame = true;
 	public static string[] heroes;

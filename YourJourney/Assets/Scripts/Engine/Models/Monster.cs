@@ -24,6 +24,9 @@ public class Monster
 	public int movementValue;
 	public int maxMovementValue;
 	public int loreReward;
+	public bool defaultStats;
+	public string specialAbility { get; set; }
+
 	public IInteraction interaction;//the interaction that spawned this
 
 	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Warg", "Hill Troll", "Wight" };

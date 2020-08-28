@@ -47,15 +47,15 @@ public class BranchInteraction : IInteraction
 
 	public void Resolve( InteractionManager im )
 	{
-		if ( branchTestEvent )//if it's an EVENT
+		if ( branchTestEvent )//if it's an EVENT to activate
 		{
 			//if the trigger test HAS BEEN FIRED...
 			if ( im.engine.triggerManager.IsTriggered( triggerTest ) )
-				im.TryFireInteraction( triggerIsSet );
+				im.TryFireEventByName( triggerIsSet );
 			else//otherwise...
-				im.TryFireInteraction( triggerNotSet );
+				im.TryFireEventByName( triggerNotSet );
 		}
-		else//otherwise it's a TRIGGER
+		else//otherwise it's a TRIGGER, so fire it
 		{
 			//if the trigger test HAS BEEN FIRED...
 			if ( im.engine.triggerManager.IsTriggered( triggerTest ) )

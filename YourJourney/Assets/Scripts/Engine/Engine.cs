@@ -29,9 +29,6 @@ public class Engine : MonoBehaviour
 		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 		System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 		System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
-		//System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo( "de-DE" );
-		//System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo( "de-DE" );
-		//System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo( "de-DE" );
 
 		var settings = Bootstrap.LoadSettings();
 		Vignette v;
@@ -81,7 +78,7 @@ public class Engine : MonoBehaviour
 					//endTurnButton.InitialSet( scenario );
 
 					if ( objectiveManager.Exists( scenario.objectiveName ) )
-						objectiveManager.TrySetObjective( scenario.objectiveName, () =>
+						objectiveManager.TrySetFirstObjective( scenario.objectiveName, () =>
 						 {
 							 chapterManager.TryTriggerChapter( "Start", true );
 						 } );
@@ -120,7 +117,8 @@ public class Engine : MonoBehaviour
 				maxMovementValue = 4,
 				GUID = System.Guid.NewGuid(),
 				monsterType = MonsterType.OrcHunter,
-				dataName = "Orc Hunter"
+				dataName = "Orc Hunter",
+				damage = 2
 			} );
 		}
 		else if ( Input.GetKeyDown( KeyCode.Alpha2 ) )

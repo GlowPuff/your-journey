@@ -403,8 +403,10 @@ public class Tile : MonoBehaviour
 							 objectHit.parent.GetComponent<Tile>().RemoveExplorationToken();
 							 objectHit.parent.GetComponent<Tile>().Colorize();
 							 objectHit.parent.GetComponent<Tile>().RevealInteractiveTokens();
-							 //fire trigger on exploration
+							 //fire trigger on chapter exploration
 							 FindObjectOfType<TriggerManager>().FireTrigger( objectHit.parent.GetComponent<Tile>().chapter.exploreTrigger );
+							 //fire trigger on tile exploration
+							 FindObjectOfType<TriggerManager>().FireTrigger( objectHit.parent.GetComponent<Tile>().hexTile.triggerName );
 							 //objectHit.parent.GetComponent<Tile>().tileGroup.ExploreTile();
 						 } );
 					}
@@ -443,7 +445,7 @@ public class Tile : MonoBehaviour
 			{
 				Debug.Log( "INTERACT::" + res.interaction.dataName );
 				DoTokenAction( res.interaction, objectHit );
-				if ( res.removeToken )
+				if ( res.removeToken && res.interaction.interactionType != InteractionType.Persistent )
 					RemoveInteractivetoken( objectHit );
 			}
 		} );
@@ -452,10 +454,18 @@ public class Tile : MonoBehaviour
 	void DoTokenAction( IInteraction interaction, Transform objectHit )
 	{
 		Debug.Log( "do interaction::" + interaction.dataName );
-		interactionManager.ShowInteraction( interaction, objectHit, ( a ) =>
-		 {
-			 if ( a.removeToken )
-				 RemoveInteractivetoken( objectHit );
-		 } );
+		if ( interaction.interactionType == InteractionType.Persistent )
+		{
+			Debug.Log( "event to activate: " + ( (PersistentInteraction)interaction ).eventToActivate );
+			FindObjectOfType<TriggerManager>().FireTrigger( ( (PersistentInteraction)interaction ).eventToActivate );
+		}
+		else
+		{
+			interactionManager.ShowInteraction( interaction, objectHit, ( a ) =>
+			 {
+				 if ( a.removeToken )
+					 RemoveInteractivetoken( objectHit );
+			 } );
+		}
 	}
 }

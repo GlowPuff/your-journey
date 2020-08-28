@@ -12,7 +12,7 @@ public class TitleManager : MonoBehaviour
 	public RectTransform itemContainer;
 	public Animator animator;
 	public List<FileItemButton> fileItemButtons = new List<FileItemButton>();
-	public GameObject fileItemPrefab;
+	public GameObject fileItemPrefab, warningPanel;
 	public Button beginButton, nextButton, cancelButton;
 	public Text nameText, versionText, fileText, appVersion, engineVersion, headingText;
 	public CanvasGroup selectJourneyCG, selectHeroesCG;
@@ -52,7 +52,7 @@ public class TitleManager : MonoBehaviour
 		itemContainer.sizeDelta = new Vector2( 772, fileItemButtons.Count * 110 );
 
 		appVersion.text = "App Version: " + Bootstrap.AppVersion;
-		engineVersion.text = "Engine Version: " + Bootstrap.EngineVersion;
+		engineVersion.text = "Scenario Format Version: " + Bootstrap.FormatVersion;
 	}
 
 	public void NewGame()
@@ -201,6 +201,8 @@ public class TitleManager : MonoBehaviour
 	public void OnSelectQuest( int index )
 	{
 		Debug.Log( "QUEST:" + index );
+		warningPanel.SetActive( false );
+
 		for ( int i = 0; i < fileItemButtons.Count; i++ )
 		{
 			if ( i != index )
@@ -210,6 +212,10 @@ public class TitleManager : MonoBehaviour
 		nameText.text = projectItems[index].Title;
 		fileText.text = projectItems[index].fileName;
 		versionText.text = "File Version: " + projectItems[index].fileVersion;
+
+		//check version
+		if ( projectItems[index].fileVersion != Bootstrap.FormatVersion )
+			warningPanel.SetActive( true );
 
 		nextButton.interactable = true;
 		selectedJourney = projectItems[index];

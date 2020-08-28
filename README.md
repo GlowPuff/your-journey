@@ -1,8 +1,8 @@
 # Your Journey - Early ALPHA release
 The companion playback app for my Journeys in Middle Earth Scenario Editor.
 
-#### Download the zip
-[Download here](https://github.com/GlowPuff/your-journey/releases/download/v0.2-alpha/YourJourney_v0.2-alpha.zip)
+#### Download the latest release
+[Releases](https://github.com/GlowPuff/your-journey/releases)
 
 Hit "New Game" at the title and load your level on the next screen.
 

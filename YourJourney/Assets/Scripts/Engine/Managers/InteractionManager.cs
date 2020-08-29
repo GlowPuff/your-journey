@@ -14,6 +14,7 @@ public class InteractionManager : MonoBehaviour
 	public List<IInteraction> randomInteractions { get; set; }
 	public List<IInteraction> tokenInteractions { get; set; }
 	public List<IInteraction> randomTokenInteractions { get; set; }
+	public List<IInteraction> allInteractions { get; set; }
 	public bool PanelShowing
 	{
 		get => uiRoot.childCount > 0;
@@ -34,6 +35,8 @@ public class InteractionManager : MonoBehaviour
 
 		//filter into separate lists
 
+		//ALL interactions
+		allInteractions = s.interactionObserver.ToList();
 		//NOT random, NOT token
 		var ints = s.interactionObserver.Where( x => !x.dataName.Contains( "GRP" ) && !x.isTokenInteraction );
 		//IS random, NOT token
@@ -79,6 +82,14 @@ public class InteractionManager : MonoBehaviour
 			return (ConditionalInteraction)interaction;
 
 		throw new Exception( "Couldn't create Interaction from: " + interaction.dataName );
+	}
+
+	public IInteraction GetInteractionByName( string name )
+	{
+		if ( allInteractions.Any( x => x.dataName == name ) )
+			return allInteractions.Where( x => x.dataName == name ).First();
+		else
+			throw new Exception( "Couldn't find Interaction: " + name );//this condition should never happen
 	}
 
 	public TextPanel GetNewTextPanel()
@@ -246,8 +257,8 @@ public class InteractionManager : MonoBehaviour
 	{
 		GetNewTextPanel().ShowTextInteraction( it, () =>
 		{
-			engine.triggerManager.FireTrigger( it.triggerAfterName );
 			GetNewTextPanel().ShowOkContinue( "Place the enemy figures in the indicated position.", ButtonIcon.Continue );
+			engine.triggerManager.FireTrigger( it.triggerAfterName );
 		} );
 		FindObjectOfType<MonsterManager>().AddNewMonsterGroup( ( (ThreatInteraction)it ).monsterCollection.ToArray(), it );
 		if ( position.x != -1000 )
@@ -284,13 +295,13 @@ public class InteractionManager : MonoBehaviour
 
 			if ( b.success )//show success textbox
 			{
-				GetNewTextPanel().ShowOkContinue( sti.passBookData.pages[0], ButtonIcon.Continue, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); } );
+				GetNewTextPanel().ShowOkContinue( sti.passBookData.pages[0], ButtonIcon.Continue/*, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); }*/ );
 				engine.triggerManager.FireTrigger( sti.successTrigger );
 				action?.Invoke( new InteractionResult() { removeToken = true } );
 			}
 			else if ( !b.btn4 && !b.success )//show fail textbox
 			{
-				GetNewTextPanel().ShowOkContinue( sti.failBookData.pages[0], ButtonIcon.Continue, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); } );
+				GetNewTextPanel().ShowOkContinue( sti.failBookData.pages[0], ButtonIcon.Continue/*, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); }*/ );
 				engine.triggerManager.FireTrigger( sti.failTrigger );
 				action?.Invoke( new InteractionResult() { removeToken = true } );
 			}
@@ -299,13 +310,13 @@ public class InteractionManager : MonoBehaviour
 				bool success = ( (StatTestInteraction)it ).ResolveCumulative( b.value, engine );
 				if ( success )
 				{
-					GetNewTextPanel().ShowOkContinue( sti.passBookData.pages[0], ButtonIcon.Continue, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); } );
+					GetNewTextPanel().ShowOkContinue( sti.passBookData.pages[0], ButtonIcon.Continue/*, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); }*/ );
 					engine.triggerManager.FireTrigger( sti.successTrigger );
 					action?.Invoke( new InteractionResult() { removeToken = true } );
 				}
 				else
 				{
-					GetNewTextPanel().ShowOkContinue( sti.progressBookData.pages[0], ButtonIcon.Continue, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); } );
+					GetNewTextPanel().ShowOkContinue( sti.progressBookData.pages[0], ButtonIcon.Continue/*, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); }*/ );
 					action?.Invoke( new InteractionResult() { removeToken = false } );
 				}
 			}

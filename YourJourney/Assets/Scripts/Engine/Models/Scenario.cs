@@ -6,7 +6,7 @@ public class Scenario
 	public string fileVersion { get; set; }
 	public string saveDate { get; set; }
 	public bool scenarioTypeJourney { get; set; }
-	public string fileName { get; set; }
+	//public string fileName { get; set; }
 	public string scenarioName { get; set; }
 	/// <summary>
 	/// First Objective, if set in the editor
@@ -33,7 +33,7 @@ public class Scenario
 		Scenario s = new Scenario();
 		s.scenarioName = fm.scenarioName;
 		s.fileVersion = fm.fileVersion;
-		s.fileName = fm.fileName;
+		//s.fileName = fm.fileName;
 		s.saveDate = fm.saveDate;
 		s.projectType = fm.projectType;
 		s.objectiveName = fm.objectiveName;
@@ -44,7 +44,7 @@ public class Scenario
 		s.threatObserver = new ObservableCollection<Threat>( fm.threats );
 		s.chapterObserver = new ObservableCollection<Chapter>( fm.chapters );
 		s.globalTilePool = new ObservableCollection<int>( fm.globalTiles );
-		s.fileName = fm.fileName;
+		//s.fileName = fm.fileName;
 		s.introBookData = fm.introBookData;
 		s.threatMax = fm.threatMax;
 		s.threatNotUsed = fm.threatNotUsed;

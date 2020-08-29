@@ -439,7 +439,23 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	void QueryTokenInteraction( Transform objectHit )
 	{
-		interactionManager.QueryTokenInteraction( objectHit.GetComponent<MetaData>().interactionName, objectHit.GetComponent<MetaData>().tokenType.ToString(), ( res ) =>
+		string objectEventName = objectHit.GetComponent<MetaData>().interactionName;
+		string objectEventToken = objectHit.GetComponent<MetaData>().tokenType.ToString();
+
+		IInteraction inter = interactionManager.GetInteractionByName( objectHit.GetComponent<MetaData>().interactionName );
+		if ( inter is PersistentInteraction )
+		{
+			//ONLY swap in delegate event if the pers event hasn't had its alt text triggered
+			if ( !FindObjectOfType<TriggerManager>().IsTriggered( ( (PersistentInteraction)inter ).alternativeTextTrigger ) )
+			{
+				objectEventName = ( (PersistentInteraction)inter ).eventToActivate;
+				IInteraction delegateInteraction = interactionManager.GetInteractionByName( objectEventName );
+				//delegate action to this event
+				objectEventToken = delegateInteraction.tokenType.ToString();
+			}
+		}
+
+		interactionManager.QueryTokenInteraction( objectEventName, objectEventToken, ( res ) =>
 		{
 			if ( res.btn2 )
 			{
@@ -456,14 +472,21 @@ public class Tile : MonoBehaviour
 		Debug.Log( "do interaction::" + interaction.dataName );
 		if ( interaction.interactionType == InteractionType.Persistent )
 		{
-			Debug.Log( "event to activate: " + ( (PersistentInteraction)interaction ).eventToActivate );
-			FindObjectOfType<TriggerManager>().FireTrigger( ( (PersistentInteraction)interaction ).eventToActivate );
+			//this block should never even be run
+			//DO NOTHING, action already delegated and alt text already triggered
+			Debug.Log( "Persistent Event, doing nothing" );
+
+			//Debug.Log( "event to activate: " + ( (PersistentInteraction)interaction ).eventToActivate );
+			//FindObjectOfType<TriggerManager>().FireTrigger( ( (PersistentInteraction)interaction ).eventToActivate );
 		}
 		else
 		{
 			interactionManager.ShowInteraction( interaction, objectHit, ( a ) =>
 			 {
-				 if ( a.removeToken )
+				 string objectEventName = objectHit.GetComponent<MetaData>().interactionName;
+				 IInteraction inter = interactionManager.GetInteractionByName( objectEventName );
+
+				 if ( !( inter is PersistentInteraction ) && a.removeToken )
 					 RemoveInteractivetoken( objectHit );
 			 } );
 		}

@@ -64,7 +64,7 @@ public class StatTestInteraction : IInteraction
 
 		if ( accumulatedValue >= successValue )
 		{
-			engine.triggerManager.FireTrigger( successTrigger );
+			//engine.triggerManager.FireTrigger( successTrigger );
 			return true;
 		}
 		else

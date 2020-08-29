@@ -26,8 +26,8 @@ public class ObjectiveManager : MonoBehaviour
 		Debug.Log( $"TrySetObjective: {name}" );
 		if ( objectiveList.Any( x => x.triggeredByName == name ) )
 		{
-			Debug.Log( "Found Objective" );
 			currentObjective = objectiveList.Where( x => x.triggeredByName == name ).First();
+			Debug.Log( "Found Objective: " + currentObjective.dataName );
 			//set reminder text
 			objectiveText.text = currentObjective.objectiveReminder;
 

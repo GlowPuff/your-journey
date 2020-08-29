@@ -18,9 +18,9 @@ public class TriggerManager : MonoBehaviour
 			&& name.ToLower() != "none"
 			&& !firedTriggersList.ContainsKey( name ) )
 		{
-
 			if ( queue.Count == 0 )
 			{
+				Debug.Log( "FIRST ENQUEUE: " + name );
 				queue.Enqueue( name );
 				StartCoroutine( TriggerChain() );
 			}
@@ -43,6 +43,12 @@ public class TriggerManager : MonoBehaviour
 			yield return WaitUntilFinished();
 			string name = queue.Peek();
 			Debug.Log( "FireTrigger::" + name );
+			if ( firedTriggersList.ContainsKey( name ) )
+			{
+				Debug.Log( "WARNING: Trigger has already been fired: " + name );
+				queue.Dequeue();
+				continue;
+			}
 			firedTriggersList.Add( name, true );
 
 			//first, check conditional events listening for triggers to fire

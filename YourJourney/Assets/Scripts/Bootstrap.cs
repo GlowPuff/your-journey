@@ -8,18 +8,21 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap
 {
-	public static string AppVersion = "0.4";
+	public static string AppVersion = "0.6";
 	public static string FormatVersion = "1.1";
 
 	public static bool isNewGame = true;
 	public static string[] heroes;
 
-	static ProjectItem projectItem;
+	static ProjectItem projectItem { get; set; }
 
+	/// <summary>
+	/// loads scenario using file info previously set with "SetNewGame" at the title screen
+	/// </summary>
 	public static Scenario LoadLevel()
 	{
 		Scenario scenario = FileManager.Load( FileManager.GetFullPath( projectItem.fileName ) );
-		Debug.Log( "Loaded: " + scenario.fileName );
+		Debug.Log( "LoadLevel()::Loaded: " + projectItem.fileName );
 		foreach ( string s in heroes )
 			Debug.Log( "Hero:" + s );
 		return scenario;
@@ -30,6 +33,7 @@ public class Bootstrap
 		heroes = new string[2] { "Aragorn", "Gimli" };
 
 		ProjectItem item = FileManager.GetProjects().First();
+		Debug.Log( "DEBUGLoadLevel()::Loaded: " + projectItem.fileName );
 		Scenario scenario = FileManager.Load( FileManager.GetFullPath( item.fileName ) );
 		return scenario;
 	}

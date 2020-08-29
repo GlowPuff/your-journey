@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 public class FileManager
 {
 	public string fileVersion { get; set; }
-	public string fileName { get; set; }
+	//public string fileName { get; set; }
 	public string saveDate { get; set; }
 
 	[JsonConverter( typeof( InteractionConverter ) )]
@@ -36,7 +36,7 @@ public class FileManager
 
 	public FileManager( Scenario source )
 	{
-		fileName = source.fileName;
+		//fileName = source.fileName;
 		fileVersion = source.fileVersion;
 		saveDate = source.saveDate;
 
@@ -96,7 +96,7 @@ public class FileManager
 					Title = s.scenarioName,
 					projectType = s.projectType,
 					Date = s.saveDate,
-					fileName = s.fileName,
+					fileName = fi.Name,//s.fileName,
 					fileVersion = s.fileVersion
 				} );
 		}

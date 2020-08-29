@@ -21,6 +21,7 @@ public class ChapterManager : MonoBehaviour
 		if ( chapterList.Any( x => x.triggeredBy == triggername ) )
 		{
 			Chapter c = chapterList.Where( x => x.triggeredBy == triggername ).First();
+			Debug.Log( "Found Chapter: " + c.dataName );
 			TryTriggerChapter( c.dataName, false );
 			return true;
 		}
@@ -36,7 +37,7 @@ public class ChapterManager : MonoBehaviour
 		if ( chapterList.Any( x => x.dataName == chname ) )
 		{
 			Chapter c = chapterList.Where( x => x.dataName == chname ).First();
-
+			Debug.Log( "Found Chapter: " + c.dataName );
 			//show flavor text
 			if ( !c.noFlavorText )
 			{

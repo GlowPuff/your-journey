@@ -30,12 +30,13 @@ public class HexTile : ITile
 	public bool isStartTile { get; set; }
 	public string triggerName { get; set; }
 
+	public bool isExplored { get; set; } = false;
+
 	public HexTile()
 	{
-
 	}
 
-	public HexTile( int n, Vector position, float angle )//provide OnExplore trigger for random tile?
+	public HexTile( int n, Vector position, float angle )
 	{
 		tileType = TileType.Hex;
 		idNumber = n;

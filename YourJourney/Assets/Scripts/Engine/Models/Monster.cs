@@ -1,6 +1,10 @@
 ﻿using System;
-using System.Linq;
+using System.Dynamic;
+using UnityEngine;
 
+/// <summary>
+/// Models one GROUP of enemies (up to 3 enemies in a group)
+/// </summary>
 public class Monster
 {
 	public Guid GUID;
@@ -22,7 +26,7 @@ public class Monster
 	public MonsterType monsterType { get; set; }
 	public int count;
 	public int movementValue;
-	public int maxMovementValue;
+	//public int maxMovementValue;
 	public int loreReward;
 	public bool defaultStats;
 	public string specialAbility { get; set; }
@@ -31,7 +35,7 @@ public class Monster
 
 	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Warg", "Hill Troll", "Wight" };
 
-	public int[] currentHealth = new int[3];
+	public int[] currentHealth { get; set; } = new int[3];
 	public bool isDead;
 	public bool isExhausted;
 	public bool isStunned;
@@ -49,7 +53,9 @@ public class Monster
 			int c = 0;
 			for ( int i = 0; i < count; i++ )
 			{
-				c += currentHealth[i];
+				if ( currentHealth[i] > 0 )
+					c++;
+				//	c += currentHealth[i];
 			}
 			return c;
 		}
@@ -67,10 +73,47 @@ public class Monster
 		fear = 1;
 		health = 5;
 		movementValue = 2;
-		maxMovementValue = 4;
+		//maxMovementValue = 4;
 		triggerName = "None";
 		negatedBy = Ability.None;
 		count = 1;
 		isExhausted = isStunned = false;
+	}
+
+	//returns Tuple<fear,damage>
+	public Tuple<int, int> CalculateDamage()
+	{
+		//calculate total and split it between damage and fear
+		//modifier adds damage if enemies in group > 1
+		//if it's a heavy hitter, limit the modifier to +1
+		int modifier = ActiveMonsterCount == 1 ? 0 : ( damage == 4 ? 1 : ActiveMonsterCount - 1 );
+		int total = damage + modifier + UnityEngine.Random.Range( -1, 2 );
+		Debug.Log( "ActiveMonsterCount: " + ActiveMonsterCount );
+		Debug.Log( "modified damage: " + modifier );
+		Debug.Log( "total damage: " + total );
+		int d = UnityEngine.Random.Range( 0, total + 1 );
+		int f = total - d;
+		if ( d == 0 && f == 0 )
+			d = 1;
+		if ( specialAbility != "Fear Bias" )
+		{
+			int temp = d;
+			if ( f > d )
+			{
+				d = f;
+				f = temp;
+			}
+		}
+		else
+		{
+			int temp = f;
+			if ( d > f )
+			{
+				f = d;
+				d = temp;
+			}
+		}
+
+		return new Tuple<int, int>( f, d );
 	}
 }

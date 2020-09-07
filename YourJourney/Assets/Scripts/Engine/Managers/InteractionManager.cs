@@ -20,7 +20,7 @@ public class InteractionManager : MonoBehaviour
 		get => uiRoot.childCount > 0;
 	}
 
-	public GameObject textPanelPrefab, decisionPanelPrefab, statPanelPrefab, spawnMarkerPrefab;
+	public GameObject textPanelPrefab, decisionPanelPrefab, statPanelPrefab, spawnMarkerPrefab, damagePanelPrefab;
 	public Transform uiRoot;
 
 	[HideInInspector]
@@ -32,6 +32,43 @@ public class InteractionManager : MonoBehaviour
 		engine = FindObjectOfType<Engine>();
 
 		interactions = new List<IInteraction>();
+
+		//first, create a multi-event out of each Trigger that is a multi-trigger
+		var multitriggers = engine.scenario.triggersObserver.Where( x => x.isMultiTrigger );
+		foreach ( var mt in multitriggers )
+		{
+			var multi = new MultiEventInteraction();
+			multi.GUID = Guid.NewGuid();
+			multi.dataName = "converted multievent";
+			multi.isEmpty = false;
+			multi.triggerName = mt.dataName;
+			multi.triggerAfterName = "None";
+			//multi.textBookData = new TextBookData();
+			//multi.textBookData.pages.Add( "" );
+			//multi.eventBookData = new TextBookData();
+			//multi.eventBookData.pages.Add( "" );
+			multi.isTokenInteraction = false;
+			multi.tokenType = TokenType.None;
+			multi.eventList = new List<string>();
+			multi.triggerList = new List<string>();
+			multi.usingTriggers = false;
+			multi.isSilent = true;
+			multi.interactionType = InteractionType.MultiEvent;
+
+			//add any events listening for this trigger to the eventlist
+			Debug.Log( "looking for: " + mt.dataName );
+			foreach ( var t in s.interactionObserver )
+				Debug.Log( t.triggerName );
+			var listeners = s.interactionObserver.Where( x => x.triggerName == mt.dataName );//.Select( y => y.dataName );
+			Debug.Log( "found: " + listeners.Count() );
+			foreach ( var ev in listeners )
+			{
+				ev.triggerName = "None";
+				multi.eventList.Add( ev.dataName );
+			}
+			engine.scenario.interactionObserver.Add( multi );
+			Debug.Log( "Created MultiEvent placeholder with Events:" + multi.eventList.Count );
+		}
 
 		//filter into separate lists
 
@@ -107,6 +144,11 @@ public class InteractionManager : MonoBehaviour
 		return Instantiate( statPanelPrefab, uiRoot ).transform.Find( "StatTestPanel" ).GetComponent<StatTestPanel>();
 	}
 
+	public DamagePanel GetNewDamagePanel()
+	{
+		return Instantiate( damagePanelPrefab, uiRoot ).transform.Find( "DamagePanel" ).GetComponent<DamagePanel>();
+	}
+
 	/// <summary>
 	/// Asks if want to use an action on a specified token interaction name.
 	/// This is fired when player clicks a token on a tile
@@ -120,7 +162,7 @@ public class InteractionManager : MonoBehaviour
 		{
 			if ( ob.name.Contains( "SPAWNMARKER" ) )
 				Destroy( ob.gameObject );
-			else if ( ob.name == "STARTMARKER" )
+			if ( ob.name == "STARTMARKER" )
 				ob.gameObject.SetActive( false );
 		}
 
@@ -171,6 +213,9 @@ public class InteractionManager : MonoBehaviour
 		return false;
 	}
 
+	/// <summary>
+	/// Try to fire NON-RANDOM, NON-TOKEN Event based on TRIGGER NAME
+	/// </summary>
 	public bool TryFireEventByTrigger( string triggername )
 	{
 		Debug.Log( "TryFireEventByTrigger: " + triggername );
@@ -255,6 +300,24 @@ public class InteractionManager : MonoBehaviour
 
 	void HandleThreat( IInteraction it, Vector3 position )
 	{
+		//if it's NOT a token interaction, figure out WHERE to spawn the group
+		if ( !it.isTokenInteraction )
+		{
+			Vector3[] opentf = FindObjectOfType<TileManager>().GetAvailableTokenPositions();
+
+			if ( opentf != null && opentf.Length > 0 )
+			{
+				int[] rnds = GlowEngine.GenerateRandomNumbers( opentf.Length );
+				position = opentf[rnds[0]];
+				Debug.Log( "HandleThreat::Using random location" );
+			}
+			else
+			{
+				Debug.Log( "HandleThreat::Could not find a random location" );
+				return;
+			}
+		}
+
 		GetNewTextPanel().ShowTextInteraction( it, () =>
 		{
 			GetNewTextPanel().ShowOkContinue( "Place the enemy figures in the indicated position.", ButtonIcon.Continue );

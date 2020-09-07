@@ -7,4 +7,5 @@ public class Trigger
 	public bool isEmpty;
 	public bool triggerValue;
 	public string triggerName;
+	public bool isMultiTrigger;
 }

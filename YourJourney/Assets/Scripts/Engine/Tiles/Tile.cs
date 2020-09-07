@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -27,6 +28,8 @@ public class Tile : MonoBehaviour
 	Transform exploreToken;
 	InteractionManager interactionManager;
 	float sepiaValue = 1;
+	//queue of tokens to fire because tile wasn't explored yet
+	List<string> tokenTriggerList = new List<string>();
 
 	void Awake()
 	{
@@ -46,7 +49,8 @@ public class Tile : MonoBehaviour
 			if ( child.name.Contains( "connector" ) )
 			{
 				//calculate LOCAL offsets to each connector
-				connectorOffset[c++] = child.localPosition - Vector3.zero;
+				//connectorOffset[c++] = child.localPosition - Vector3.zero;
+				connectorOffset[c++] = child.position - transform.position;
 			}
 		}
 
@@ -56,6 +60,13 @@ public class Tile : MonoBehaviour
 
 		meshRenderer.material.SetFloat( "_sepiaValue", 1 );
 		//StartCoroutine( Wait1Frame() );
+	}
+
+	public void EnqueueTokenTrigger( string name )
+	{
+		//Debug.Log( "Tile EnqueueTokenTrigger: " + name );
+		if ( !tokenTriggerList.Contains( name ) )
+			tokenTriggerList.Add( name );
 	}
 
 	public Vector3 GetExploretokenPosition()
@@ -166,8 +177,14 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	public void SetConnector( int idx )
 	{
+		Debug.Log( "SetConnector::" + gameObject.name );
+		Debug.Log( "SetConnector()::idx=" + idx );
+		Debug.Log( "SetConnector()::connectorCount=" + connectorCount );
 		if ( idx >= connectorCount )
+		{
+			Debug.Log( "SetConnector()::idx >= SetConnector" );
 			return;
+		}
 		currentConnectorID = idx;
 		transform.localPosition = Vector3.zero;
 		transform.localPosition -= connectorOffset[idx];
@@ -185,10 +202,18 @@ public class Tile : MonoBehaviour
 
 	public void SetAnchor( int idx )
 	{
+		Debug.Log( "SetAnchor::" + gameObject.name );
+		Debug.Log( "SetAnchor()::idx=" + idx );
+		Debug.Log( "SetAnchor()::anchorCount=" + anchorCount );
 		if ( idx >= anchorCount )
+		{
+			Debug.Log( "SetAnchor()::idx >= anchorCount" );
 			return;
+		}
 		Transform[] anchors = GetChildren( "anchor" );
 		currentAnchor = anchors[idx].position;
+		Debug.Log( "currentAnchor:" + anchors[idx].name );
+		Debug.Log( "currentAnchor=" + currentAnchor );
 	}
 
 	//public void SetRandomAnchor()
@@ -205,10 +230,12 @@ public class Tile : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Randomly attaches 2 tiles (random anchor/connector) within a given group
+	/// Randomly attaches 2 tiles (random anchor/connector) within a given group, tile=previous tile already on board
 	/// </summary>
 	public void AttachTo( Tile tile, TileGroup tg )
 	{
+		//anchors = white outer transforms
+		//connectors = red inner transforms
 		Transform[] anchorPoints = tile.GetChildren( "anchor" );
 		int[] ra = GlowEngine.GenerateRandomNumbers( anchorPoints.Length );
 		int[] rc = GlowEngine.GenerateRandomNumbers( connectorCount );
@@ -216,7 +243,7 @@ public class Tile : MonoBehaviour
 
 		for ( int c = 0; c < connectorCount; c++ )
 		{
-			for ( int a = 0; a < anchorPoints.Length; a++ )
+			for ( int a = 0; a < anchorPoints.Length; a++ )//white anchors on board
 			{
 				tile.SetAnchor( ra[a] );
 				SetConnector( rc[c] );
@@ -232,8 +259,8 @@ public class Tile : MonoBehaviour
 
 		if ( !success )
 		{
-			Debug.Log( "FAILED TO FIND SPOT" );
-			throw new System.Exception( "FAILED TO FIND SPOT" );
+			Debug.Log( "FAILED TO FIND OPEN TILE LOCATION" );
+			throw new System.Exception( "FAILED TO FIND OPEN TILE LOCATION" );
 		}
 	}
 
@@ -267,6 +294,7 @@ public class Tile : MonoBehaviour
 	public void RemoveExplorationToken()
 	{
 		isExplored = true;
+		hexTile.isExplored = true;
 		Sequence sequence = DOTween.Sequence();
 		sequence.Append( exploreToken.DOLocalMoveY( 1, 1 ).SetEase( Ease.InOutQuad ) );
 		sequence.Join( exploreToken.DOScale( 0, 1 ) );
@@ -284,7 +312,7 @@ public class Tile : MonoBehaviour
 	/// <summary>
 	/// Explore tile - colorize and optionally show tokens
 	/// </summary>
-	public void Colorize( bool revealTokens = false )
+	public void Colorize(/* bool revealTokens = false */)
 	{
 		//if ( revealTokens )
 		//{
@@ -294,6 +322,7 @@ public class Tile : MonoBehaviour
 		//	RevealToken( TokenType.Darkness );
 		//}
 		isExplored = true;
+		hexTile.isExplored = true;
 
 		DOTween.To( () => sepiaValue, x =>
 		{
@@ -318,7 +347,14 @@ public class Tile : MonoBehaviour
 				string tBy = tf[i].GetComponent<MetaData>().triggeredByName;
 				//skip if it's triggeredBy
 				if ( tBy != "None" )
-					continue;
+				{
+					//if it's not in the list, keep it hidden because it hasn't activated yet, move to next token in loop
+					if ( !tokenTriggerList.Contains( tBy ) )//( tBy != "None" )
+						continue;
+					//else//otherwise remove from list and drop it on tile
+					//	tokenTriggerList.Remove( tBy );
+				}
+
 				//offset to token in EDITOR coords
 				//Vector3 offset = tf[i].GetComponent<MetaData>().offset;
 				////Debug.Log( "EDITOR offset:" + offset );
@@ -369,6 +405,7 @@ public class Tile : MonoBehaviour
 			string tBy = tf[i].GetComponent<MetaData>().triggeredByName;
 			if ( tBy != tname )
 				continue;
+
 			//offset to token in EDITOR coords
 			Vector3 offset = tf[i].GetComponent<MetaData>().offset;
 			float scalar = Mathf.Max( size.x, size.z ) / 650f;
@@ -394,19 +431,30 @@ public class Tile : MonoBehaviour
 			Transform objectHit = hit.transform;
 			if ( objectHit.name == "Exploration Token" )
 			{
+				var objs = FindObjectsOfType<SpawnMarker>();
+				foreach ( var ob in objs )
+				{
+					if ( ob.name.Contains( "SPAWNMARKER" ) )
+						Destroy( ob.gameObject );
+					if ( ob.name == "STARTMARKER" )
+						ob.gameObject.SetActive( false );
+				}
+
 				interactionManager.GetNewTextPanel().ShowQueryExploration( ( res ) =>
 				{
 					if ( res.btn1 )
 					{
 						ShowExplorationText( objectHit.parent.GetComponent<Tile>(), () =>
 						 {
-							 objectHit.parent.GetComponent<Tile>().RemoveExplorationToken();
-							 objectHit.parent.GetComponent<Tile>().Colorize();
-							 objectHit.parent.GetComponent<Tile>().RevealInteractiveTokens();
+							 Tile tile = objectHit.parent.GetComponent<Tile>();
+
+							 tile.RemoveExplorationToken();
+							 tile.Colorize();
+							 tile.RevealInteractiveTokens();
 							 //fire trigger on chapter exploration
-							 FindObjectOfType<TriggerManager>().FireTrigger( objectHit.parent.GetComponent<Tile>().chapter.exploreTrigger );
+							 FindObjectOfType<TriggerManager>().FireTrigger( tile.chapter.exploreTrigger );
 							 //fire trigger on tile exploration
-							 FindObjectOfType<TriggerManager>().FireTrigger( objectHit.parent.GetComponent<Tile>().hexTile.triggerName );
+							 FindObjectOfType<TriggerManager>().FireTrigger( tile.hexTile.triggerName );
 							 //objectHit.parent.GetComponent<Tile>().tileGroup.ExploreTile();
 						 } );
 					}

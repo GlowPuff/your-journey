@@ -12,26 +12,6 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 
 	List<TileGroup> tileGroupList = new List<TileGroup>();
 
-	/// <summary>
-	/// IEnumerator, IEnumerable
-	/// </summary>
-	//public object Current
-	//{
-	//	get
-	//	{
-	//		try
-	//		{
-	//			return tileGroupList[itPosition];
-	//		}
-
-	//		catch ( IndexOutOfRangeException )
-	//		{
-	//			throw new InvalidOperationException();
-	//		}
-	//	}
-	//}
-	//int itPosition = -1;
-
 	public TileGroup this[int idx] => tileGroupList[idx];
 
 	//take an id (101) and return its prefab
@@ -152,11 +132,52 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 	}
 
 	/// <summary>
+	/// return Transform[] of all visible token positions that are "open", not near a used Token
+	/// </summary>
+	public Vector3[] GetAvailableTokenPositions()
+	{
+		//get explored tiles
+		var explored = from tg in tileGroupList from tile in tg.tileList where tile.isExplored select tile;
+		List<Transform> tkattach = new List<Transform>();
+		List<Transform> TKattach = new List<Transform>();
+		foreach ( Tile t in explored )
+		{
+			//get all "token attach" positions
+			foreach ( Transform child in t.transform )
+				if ( child.name.Contains( "token attach" ) )
+					tkattach.Add( child );
+			//get all Tokens on the tile
+			foreach ( Transform child in t.transform )
+				if ( child.name.Contains( "Token(Clone)" ) )
+					TKattach.Add( child );
+		}
+
+		//if there are tokens on the tile, we need to weed them out
+		if ( TKattach.Count > 0 )
+		{
+			//select token positions that aren't near each other - these will be open for use
+			//test shows ~1.1 units typical Token to tk attach distance
+			var found = from tktf in tkattach from TKtf in TKattach where Vector3.Distance( tktf.position, TKtf.position ) > 1.5f select tktf;
+			//results found - return new vector3[] where y = .3
+			if ( found.Count() > 0 )
+			{
+				var open = found.Select( x => new Vector3( x.position.x, .3f, x.position.z ) );
+				return open.ToArray();//return results
+			}
+			else
+				return null;//no open attach positions open
+		}
+		else//no tokens on board to exclude, just return all attach positions
+			return tkattach.Select( x => new Vector3( x.position.x, .3f, x.position.z ) ).ToArray();
+	}
+
+	/// <summary>
 	/// Creates a group and places all tiles in Chapter specified
 	/// </summary>
-	public TileGroup CreateGroupFromChapter( Chapter c, int[] tiles )
+	public TileGroup CreateGroupFromChapter( Chapter c )
 	{
-		TileGroup tg = c.isRandomTiles ? TileGroup.CreateRandomGroup( c, tiles ) : TileGroup.CreateGroup( c );
+		Debug.Log( "CreateGroupFromChapter: " + c.dataName );
+		TileGroup tg = c.isRandomTiles ? TileGroup.CreateRandomGroup( c ) : TileGroup.CreateGroup( c );
 		tileGroupList.Add( tg );
 		return tg;
 	}
@@ -232,27 +253,51 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 
 	public bool TryTriggerToken( string name )
 	{
-		var foo = from tg in tileGroupList from t in tg.tileList.Where( x => x.HasTriggeredToken( name ) ) select new { };
-		if ( foo.Count() == 0 )
-			return false;
+		//Debug.Log( "TryTriggerToken: " + name );
+		//this method acts on ALL tiles on ALL chapters on the board
 
-		TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
-		p.ShowOkContinue( "Place the indicated Token", ButtonIcon.Continue, () =>
+		//select tile(s) that have a token Triggered By 'name'
+		var tiles = from tg in tileGroupList from t in tg.tileList.Where( x => x.HasTriggeredToken( name ) ) select t;
+
+		//no tiles currently on the table have a token Triggered By this name, so enqueue it for later chapters to check when they get explored
+		FindObjectOfType<ChapterManager>().EnqueueTokenTrigger( name );
+
+		//there are tiles on the table with matching tokens, weed out explored tiles
+		var explored = tiles.Where( x => x.isExplored );
+		var unexplored = tiles.Where( x => !x.isExplored );
+
+		//Debug.Log( "Found " + explored.Count() + " matching EXPLORED tiles" );
+		//Debug.Log( "Found " + unexplored.Count() + " matching UNEXPLORED tiles" );
+
+		//iterate the tiles and either reveal the token or queue it to show when its tile gets explored
+		if ( explored.Count() > 0 )
+		{
+
+			TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
+			p.ShowOkContinue( "Place the indicated Token", ButtonIcon.Continue, () =>
 			{
 				Vector3 tpos = ( -12345f ).ToVector3();
-				foreach ( TileGroup tg in tileGroupList )
-					foreach ( Tile t in tg.tileList )
+				//Debug.Log( "explored count=" + explored.Count() );
+				foreach ( Tile t in explored )
+				{
+					//Debug.Log( "TILE ID:" + t.hexTile.idNumber );
+					tpos = t.RevealTriggeredToken( name );
+					if ( tpos.x != -12345f )
 					{
-						tpos = t.RevealTriggeredToken( name );
-						if ( tpos.x != -12345f )
-						{
-							Debug.Log( "MOVING" );
-							FindObjectOfType<CamControl>().MoveTo( tpos );
-							break;
-						}
+						//Debug.Log( "MOVING" );
+						FindObjectOfType<CamControl>().MoveTo( tpos );
 					}
+				}
 			} );
+		}
 
-		return true;
+		//mark the rest to trigger later when the tiles get explored
+		foreach ( Tile t in unexplored )
+			t.EnqueueTokenTrigger( name );
+
+		if ( tiles.Count() > 0 )
+			return true;
+		else
+			return false;
 	}
 }

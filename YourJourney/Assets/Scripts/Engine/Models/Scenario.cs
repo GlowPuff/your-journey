@@ -15,6 +15,8 @@ public class Scenario
 	public int threatMax { get; set; }
 	public bool threatNotUsed { get; set; }
 	public ProjectType projectType { get; set; }
+	public int shadowFear { get; set; }
+
 	public TextBookData introBookData { get; set; }
 
 	public List<IInteraction> interactionObserver { get; set; }
@@ -49,6 +51,7 @@ public class Scenario
 		s.threatMax = fm.threatMax;
 		s.threatNotUsed = fm.threatNotUsed;
 		s.scenarioTypeJourney = fm.scenarioTypeJourney;
+		s.shadowFear = fm.shadowFear;
 
 		return s;
 	}

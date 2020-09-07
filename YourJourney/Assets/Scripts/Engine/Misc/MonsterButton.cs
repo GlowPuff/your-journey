@@ -50,10 +50,23 @@ public class MonsterButton : MonoBehaviour
 	public void OnClick()
 	{
 		var spanel = FindObjectOfType<ShadowPhaseManager>();
+
 		if ( spanel.doingShadowPhase && ( !spanel.allowAttacks || spanel.allowedMonsterGUID != monster.GUID ) )
 			return;
 		else if ( !spanel.doingShadowPhase && FindObjectOfType<InteractionManager>().PanelShowing )
 			return;
+
+		//check if in provoke mode
+		if ( FindObjectOfType<ProvokeMessage>().provokeMode )
+		{
+			if ( !monster.isExhausted && !monster.isStunned )
+			{
+				selected.SetActive( true );
+				FindObjectOfType<FightManager>().Provoke( monster );
+				FindObjectOfType<ProvokeMessage>().OnCancel();
+			}
+			return;
+		}
 
 		if ( FindObjectOfType<MonsterManager>().ShowCombatPanel( monster ) )
 			selected.SetActive( true );

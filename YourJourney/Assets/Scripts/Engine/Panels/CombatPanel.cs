@@ -92,7 +92,6 @@ public class CombatPanel : MonoBehaviour
 	public void Hide( bool unselect = false )
 	{
 		if ( unselect )
-
 			monsterGUID = Guid.NewGuid();
 		foreach ( var m in monsterItems )
 			m.Hide();
@@ -176,6 +175,8 @@ public class CombatPanel : MonoBehaviour
 
 	public void OnApply()
 	{
+		var sp = FindObjectOfType<ShadowPhaseManager>();
+		var mm = FindObjectOfType<MonsterManager>();
 		applyButton.interactable = false;
 		int deadCount = monsterItems.Where( x => x.isDead ).Count() - monster.deathTally;
 
@@ -185,28 +186,26 @@ public class CombatPanel : MonoBehaviour
 		for ( int i = 0; i < monster.count; i++ )
 			monsterItems[i].Apply( stunSelected );
 
-		Monster theMonster = this.monster;
+		//elite enemies are able to perform counterattacks even	when they are exhausted
+		//stunning exhausts a group - if the group is elite it also cannot counterattack this attack
 
 		Hide( true );
 
 		if ( deadCount > 0 )
 		{
-			//if we're here from the shadow phase AND ALL monsters died, bug out and let shadow phase routine handle reward
-			if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase && monster.deathTally == theMonster.count )
-				FindObjectOfType<MonsterManager>().RemoveMonster( theMonster );
-			else
+			//if we're here from the shadow phase AND ALL monsters died, bug out and let shadow phase continue
+			if ( sp.doingShadowPhase && monster.deathTally == monster.count )
+				mm.RemoveMonster( monster );
+			else if ( !sp.doingShadowPhase )//otherwise not in SP, continue
 			{
-				FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( $"Remove {deadCount} {theMonster.dataName} from the board.\r\n\r\nYou or a nearby Hero gain {deadCount} Inspiration.", ButtonIcon.Continue, () =>
-				{
-					if ( monster.deathTally < theMonster.count )
-						QueryCounterAttack( theMonster );
-					else
-						FindObjectOfType<MonsterManager>().RemoveMonster( theMonster );
-				} );
+				if ( monster.deathTally < monster.count )
+					QueryCounterAttack( monster );
+				else
+					mm.RemoveMonster( monster );
 			}
 		}
-		else
-			QueryCounterAttack( theMonster );
+		else if ( !sp.doingShadowPhase )//only counterattack if NOT in sp
+			QueryCounterAttack( monster );
 	}
 
 	void QueryCounterAttack( Monster monster )
@@ -222,8 +221,9 @@ public class CombatPanel : MonoBehaviour
 		{
 			if ( res.btn1 )
 			{
-				FindObjectOfType<InteractionManager>().GetNewStatPanel().ShowCombatCounter( monster, r =>
+				FindObjectOfType<InteractionManager>().GetNewDamagePanel().ShowCombatCounter( monster, () =>
 				 {
+					 monster.isExhausted = true;
 					 FindObjectOfType<MonsterManager>().UnselectAll();
 				 } );
 			}
@@ -238,17 +238,18 @@ public class CombatPanel : MonoBehaviour
 					 {
 						 if ( r.btn1 )
 						 {
-							 FindObjectOfType<InteractionManager>().GetNewStatPanel().ShowCombatCounter( monster, x =>
-							 {
-								 FindObjectOfType<MonsterManager>().UnselectAll();
-							 } );
-						 }
-						 else
-						 {
-							 FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( "Move " + monster.maxMovementValue + " towards closest Hero", ButtonIcon.Continue, () =>
+							 monster.isExhausted = true;
+							 FindObjectOfType<InteractionManager>().GetNewDamagePanel().ShowCombatCounter( monster, () =>
 								{
 									FindObjectOfType<MonsterManager>().UnselectAll();
 								} );
+						 }
+						 else
+						 {
+							 FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( "Move " + monster.movementValue * 2 + " towards closest Hero", ButtonIcon.Continue, () =>
+									{
+										FindObjectOfType<MonsterManager>().UnselectAll();
+									} );
 						 }
 					 } );
 			}

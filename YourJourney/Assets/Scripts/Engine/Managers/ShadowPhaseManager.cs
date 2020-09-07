@@ -1,25 +1,66 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public class ShadowPhaseManager : MonoBehaviour
 {
 	public PhaseNotification phaseNotification;
 	public EndTurnButton endTurnButton;
+	public Transform shadowWisp;
 
 	[HideInInspector]
 	public bool doingShadowPhase = false;
 	[HideInInspector]
-	public bool allowAttacks = false;
+	public bool allowAttacks { get; set; } = false;//allow clicking button
 	[HideInInspector]
 	public Guid allowedMonsterGUID;
+	MeshRenderer wispRenderer;
+	float alphaValue;
+
+	private void Awake()
+	{
+		wispRenderer = shadowWisp.GetComponent<MeshRenderer>();
+	}
+
+	private void Update()
+	{
+		float ypos = GlowEngine.SineAnimation( -.2f, -.08f, .5f );
+		float zpos = GlowEngine.SineAnimation( .35f, .43f, .25f );
+		float zanim = GlowEngine.SineAnimation( -10f, 10f, .4f );
+		float xanim = GlowEngine.SineAnimation( 0f, 28f, .6f );
+		float sxanim = GlowEngine.SineAnimation( .73f, 1f, .3f );
+		float syanim = GlowEngine.SineAnimation( .32f, 0.45728f, .6f );
+		shadowWisp.localPosition = new Vector3( 0, ypos, zpos );
+		shadowWisp.localScale = new Vector3( sxanim, syanim, 1 );
+		shadowWisp.localRotation = Quaternion.Euler( xanim, 0, zanim );
+	}
 
 	public void EndTurn()
 	{
-		if ( doingShadowPhase )
+		//if in shadow phase, provoke mode, or other UI showing, we're busy, so bug out
+		if ( doingShadowPhase
+			|| FindObjectOfType<InteractionManager>().PanelShowing
+			|| FindObjectOfType<ProvokeMessage>().provokeMode )
 			return;
 
 		Debug.Log( "***STARTED SHADOW PHASE" );
+		var objs = FindObjectsOfType<SpawnMarker>();
+		foreach ( var ob in objs )
+		{
+			if ( ob.name.Contains( "SPAWNMARKER" ) )
+				Destroy( ob.gameObject );
+			if ( ob.name == "STARTMARKER" )
+				ob.gameObject.SetActive( false );
+		}
+
+		alphaValue = 0;
+		DOTween.To( () => alphaValue, x =>
+		{
+			alphaValue = x;
+			wispRenderer.material.SetColor( "_Color", new Color( 0, 0, 0, alphaValue ) );
+		}, 1, 4f );
+
 		allowAttacks = false;
 		doingShadowPhase = true;
 		//go thru each monster, ask if it can move+attack random hero
@@ -40,90 +81,7 @@ public class ShadowPhaseManager : MonoBehaviour
 		yield return new WaitForSeconds( 3 );
 
 		//ENEMY ACTIVATION STEP
-		Debug.Log( "***ENEMY ACTIVATION STEP" );
-		Monster[] monsters = FindObjectOfType<MonsterManager>().monsterList.ToArray();
-		var im = FindObjectOfType<InteractionManager>();
-		bool waiting = true;
-
-		//foreach ( var monster in monsters )
-		for ( int i = 0; i < monsters.Length; i++ )
-		{
-			FindObjectOfType<MonsterManager>().UnselectAll();
-
-			if ( monsters[i].isExhausted )
-				continue;
-
-			Debug.Log( "***MONSTER ACTIVATING" );
-			yield return new WaitForSeconds( 1 );
-
-			string heroName = Bootstrap.GetRandomHero();
-			InteractionResult iResult = null;
-			//select monster button group
-			FindObjectOfType<MonsterManager>().SelectMonster( monsters[i], true );
-			//ask if it can move and attack
-			waiting = true;
-			allowAttacks = true;
-			allowedMonsterGUID = monsters[i].GUID;
-			var tp = im.GetNewTextPanel();
-			tp.ShowYesNo( $"Move {monsters[i].movementValue}: Attack {heroName} or closest Hero.\r\n\r\nCan this enemy group attack?\r\n\r\nIf you have an ability to attack this enemy group, do it now.", res =>
-			{
-				waiting = false;
-				iResult = res;
-			} );
-			//wait
-			while ( waiting )
-			{
-				if ( monsters[i].ActiveMonsterCount == 0
-					|| ( !monsters[i].isElite && monsters[i].isExhausted )
-					|| ( monsters[i].isElite && monsters[i].isStunned ) )
-					waiting = false;
-				yield return null;
-			}
-
-			allowAttacks = false;
-
-			//check if monster group is dead/exhausted and abort this monter's attack if needed
-			if ( monsters[i].ActiveMonsterCount == 0
-				|| ( !monsters[i].isElite && monsters[i].isExhausted )
-				|| ( monsters[i].isElite && monsters[i].isStunned ) )
-			{
-				tp.RemoveBox();
-				waiting = true;
-				if ( monsters[i].ActiveMonsterCount == 0 )
-					im.GetNewTextPanel().ShowOkContinue( $"This enemy group's activation is canceled.\r\n\r\nRemove this enemy group from the board and gain {monsters[i].deadCount} Inspiration.", ButtonIcon.Continue, () => { waiting = false; } );
-				else
-					im.GetNewTextPanel().ShowOkContinue( "This enemy group has become exhausted.  Activation is canceled.", ButtonIcon.Continue, () => { waiting = false; } );
-				while ( waiting )
-					yield return null;
-			}
-			else
-			{
-				if ( iResult.btn1 )//yes, attack
-				{
-					Debug.Log( "***YES ATTACK" );
-					waiting = true;
-					FindObjectOfType<InteractionManager>().GetNewStatPanel().ShowCombatCounter( monsters[i], r => waiting = false );
-					//wait
-					while ( waiting )
-						yield return null;
-					//exhaust the enemy
-					FindObjectOfType<MonsterManager>().ExhaustMonster( monsters[i], true );
-				}
-				else //if ( iResult.btn2 )//no target, just move
-				{
-					Debug.Log( "***NO ATTACK" );
-					waiting = true;
-					im.GetNewTextPanel().ShowOkContinue( $"Move {monsters[i].dataName} group {monsters[i].maxMovementValue} spaces towards {heroName}.", ButtonIcon.Continue, () => waiting = false );
-					//wait
-					while ( waiting )
-						yield return null;
-					//exhaust the enemy
-					FindObjectOfType<MonsterManager>().ExhaustMonster( monsters[i], true );
-				}
-			}
-		}
-
-		FindObjectOfType<MonsterManager>().UnselectAll();
+		yield return EnemyStep();
 
 		//DARKNESS STEP
 		yield return DarknessStep();
@@ -154,10 +112,119 @@ public class ShadowPhaseManager : MonoBehaviour
 
 	}
 
+	IEnumerator EnemyStep()
+	{
+		Debug.Log( "***ENEMY ACTIVATION STEP" );
+		var im = FindObjectOfType<InteractionManager>();
+		var fm = FindObjectOfType<FightManager>();
+		var mm = FindObjectOfType<MonsterManager>();
+		Monster[] monsters = mm.monsterList.ToArray();
+		bool waiting = true;
+
+		//foreach ( var monster in monsters )
+		for ( int i = 0; i < monsters.Length; i++ )
+		{
+			mm.UnselectAll();
+
+			if ( monsters[i].isExhausted || monsters[i].isStunned )
+				continue;
+
+			Debug.Log( "***MONSTER ACTIVATING" );
+			yield return new WaitForSeconds( 1 );
+
+			//yield return fm.MonsterStep( monsters[i] );
+
+			//snip below
+			string heroName = Bootstrap.GetRandomHero();
+			InteractionResult iResult = null;
+			//select monster button group
+			mm.SelectMonster( monsters[i], true );
+			//ask if it can move and attack
+			waiting = true;
+			allowAttacks = true;
+			allowedMonsterGUID = monsters[i].GUID;
+			var tp = im.GetNewTextPanel();
+			tp.ShowYesNo( $"Move {monsters[i].movementValue}: Attack {heroName} or closest Hero.\r\n\r\nCan this enemy group attack a target?\r\n\r\nIf you have a skill to attack or apply damage to this enemy group, do it now by selecting its Enemy Button.", res =>
+			{
+				waiting = false;
+				iResult = res;
+			} );
+			//wait
+			while ( waiting )
+			{
+				if ( monsters[i].ActiveMonsterCount == 0
+					|| ( !monsters[i].isElite && monsters[i].isExhausted )
+					|| ( monsters[i].isElite && monsters[i].isStunned ) )
+				{
+					tp.RemoveBox();
+					waiting = false;
+				}
+				yield return null;
+			}
+
+			allowAttacks = false;
+
+			//if group was just removed from an interruption, wait until reward and any OnDefeated Events are complete
+			yield return new WaitForSeconds( 1 );
+			yield return WaitUntilFinished();
+
+			//check if monster group is dead/exhausted and abort this monter's attack if needed
+			if ( monsters[i].ActiveMonsterCount == 0
+				|| ( !monsters[i].isElite && monsters[i].isExhausted )
+				|| ( monsters[i].isElite && monsters[i].isStunned ) )
+			{
+				tp.RemoveBox();
+				waiting = true;
+				//if ( monsters[i].ActiveMonsterCount == 0 )
+				im.GetNewTextPanel().ShowOkContinue( $"This enemy group's activation is canceled.", ButtonIcon.Continue, () => { waiting = false; } );
+				//else
+				//	im.GetNewTextPanel().ShowOkContinue( "This enemy group has become exhausted.  Activation is canceled.", ButtonIcon.Continue, () => { waiting = false; } );
+				while ( waiting )
+					yield return null;
+			}
+			else
+			{
+				if ( iResult.btn1 )//yes, attack
+				{
+					Debug.Log( "***YES ATTACK" );
+					waiting = true;
+					//im.GetNewStatPanel().ShowCombatCounter( monsters[i], r => waiting = false );
+					im.GetNewDamagePanel().ShowCombatCounter( monsters[i], () => waiting = false );
+					//wait
+					while ( waiting )
+						yield return null;
+					//exhaust the enemy
+					mm.ExhaustMonster( monsters[i], true );
+				}
+				else //if ( iResult.btn2 )//no target, just move
+				{
+					Debug.Log( "***NO ATTACK" );
+					waiting = true;
+					im.GetNewTextPanel().ShowOkContinue( $"Move {monsters[i].dataName} group {monsters[i].movementValue * 2} spaces towards {heroName}.", ButtonIcon.Continue, () => waiting = false );
+					//wait
+					while ( waiting )
+						yield return null;
+					//exhaust the enemy
+					mm.ExhaustMonster( monsters[i], true );
+				}
+			}
+		}
+
+		mm.UnselectAll();
+	}
+
 	IEnumerator DarknessStep()
 	{
 		Debug.Log( "***DARKNESS STEP" );
-		yield return null;
+		if ( FindObjectOfType<ChapterManager>().IsDarknessVisible() )
+		{
+			var im = FindObjectOfType<InteractionManager>();
+			bool waiting = true;
+			im.GetNewDamagePanel().ShowShadowFear( () => waiting = false );
+
+			while ( waiting )
+				yield return null;
+		}
 	}
 
 	IEnumerator ThreatStep()
@@ -213,18 +280,29 @@ public class ShadowPhaseManager : MonoBehaviour
 		FindObjectOfType<MonsterManager>().ReadyAll();
 		//ACTION PHASE announcement
 		phaseNotification.Show( "Action Phase" );
+
+		DOTween.To( () => alphaValue, x =>
+		{
+			alphaValue = x;
+			wispRenderer.material.SetColor( "_Color", new Color( 0, 0, 0, alphaValue ) );
+		}, 0, 4f );
+
 		//wait for action phase animation
 		yield return new WaitForSeconds( 3 );
 		Debug.Log( "***FINISHED SHADOW PHASE" );
 	}
 
+	/// <summary>
+	/// Wait until all UI gone
+	/// </summary>
 	IEnumerator WaitUntilFinished()
 	{
 		Debug.Log( "***WAITING..." );
 		var im = FindObjectOfType<InteractionManager>();
+		var tm = FindObjectOfType<TriggerManager>();
 		//wait for all UI screens to go away - signifies all triggers finished
 		//poll IManager uiRoot for children (panels)
-		while ( im.PanelShowing )
+		while ( im.PanelShowing || tm.busyTriggering )
 			yield return null;
 		Debug.Log( "***DONE WAITING..." );
 

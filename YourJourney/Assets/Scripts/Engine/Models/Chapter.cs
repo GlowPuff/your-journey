@@ -16,7 +16,8 @@ public class Chapter
 
 	[JsonConverter( typeof( TileConverter ) )]
 	public List<ITile> tileObserver { get; set; }
-	public List<int> randomTilePool { get; set; }
 	public string randomInteractionGroup { get; set; }
 	public int randomInteractionGroupCount { get; set; }
+	public bool isPreExplored { get; set; }
+	public bool usesRandomGroups { get; set; }
 }

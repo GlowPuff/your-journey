@@ -2,6 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class MonsterManager : MonoBehaviour
 {
@@ -67,7 +68,6 @@ public class MonsterManager : MonoBehaviour
 		{
 			scrollReady = false;
 			scrollOffset += 175;
-			Debug.Log( "left" );
 			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
 		}
 	}
@@ -136,7 +136,7 @@ public class MonsterManager : MonoBehaviour
 	//}
 
 	/// <summary>
-	/// removes monster group AND fires its Trigger After Event
+	/// removes monster group, shows reward, and fires its Trigger After Event
 	/// </summary>
 	public void RemoveMonster( Monster m )
 	{
@@ -168,11 +168,21 @@ public class MonsterManager : MonoBehaviour
 			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
 		}
 
-		//fire Defeated trigger for monster group
+		//show reward on group defeated
+		//then fire Defeated trigger only if ALL groups in the Event are defeated
 		if ( m.interaction != null )
 		{
-			string trigger = ( (ThreatInteraction)m.interaction ).triggerDefeatedName;
-			FindObjectOfType<TriggerManager>().FireTrigger( trigger );
+			ThreatInteraction ti = (ThreatInteraction)m.interaction;
+			var foo = ( from mnstr in ti.monsterCollection from mbtn in monsterList where mnstr.GUID == mbtn.GUID select mnstr );
+
+			FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( $"Remove 1 {m.dataName} from the board.\r\n\r\nYou or a nearby Hero gain 1 Inspiration.", ButtonIcon.Continue, () =>
+			{
+				if ( foo.Count() == 0 )
+				{
+					string trigger = ti.triggerDefeatedName;
+					FindObjectOfType<TriggerManager>().FireTrigger( trigger );
+				}
+			} );
 		}
 	}
 
@@ -213,13 +223,10 @@ public class MonsterManager : MonoBehaviour
 	{
 		foreach ( Transform child in buttonAttach )
 		{
-			//if ( child.name.Contains( "MonsterButton" ) )
+			if ( child.GetComponent<MonsterButton>().monster.GUID == m.GUID )
 			{
-				if ( child.GetComponent<MonsterButton>().monster.GUID == m.GUID )
-				{
-					child.GetComponent<MonsterButton>().ToggleExhausted( exhaust );
-					return;
-				}
+				child.GetComponent<MonsterButton>().ToggleExhausted( exhaust );
+				return;
 			}
 		}
 		Debug.Log( "ExhaustMonster::no monster found with this GUID" );

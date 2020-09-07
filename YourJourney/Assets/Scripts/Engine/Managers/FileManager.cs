@@ -28,6 +28,7 @@ public class FileManager
 	public int threatMax { get; set; }
 	public bool threatNotUsed { get; set; }
 	public bool scenarioTypeJourney { get; set; }
+	public int shadowFear { get; set; }
 
 	public FileManager()
 	{
@@ -36,7 +37,6 @@ public class FileManager
 
 	public FileManager( Scenario source )
 	{
-		//fileName = source.fileName;
 		fileVersion = source.fileVersion;
 		saveDate = source.saveDate;
 
@@ -55,6 +55,7 @@ public class FileManager
 		threatMax = source.threatMax;
 		threatNotUsed = source.threatNotUsed;
 		scenarioTypeJourney = source.scenarioTypeJourney;
+		shadowFear = source.shadowFear;
 	}
 
 	/// <summary>

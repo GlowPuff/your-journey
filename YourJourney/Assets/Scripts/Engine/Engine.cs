@@ -114,7 +114,7 @@ public class Engine : MonoBehaviour
 				shieldValue = 0,
 				count = 2,
 				movementValue = 2,
-				maxMovementValue = 4,
+				//maxMovementValue = 4,
 				GUID = System.Guid.NewGuid(),
 				monsterType = MonsterType.OrcHunter,
 				dataName = "Orc Hunter",

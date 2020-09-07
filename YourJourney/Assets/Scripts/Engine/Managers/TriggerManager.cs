@@ -6,6 +6,7 @@ using UnityEngine;
 public class TriggerManager : MonoBehaviour
 {
 	public Dictionary<string, bool> firedTriggersList = new Dictionary<string, bool>();
+	public bool busyTriggering = false;
 
 	Queue<string> queue = new Queue<string>();
 
@@ -40,16 +41,26 @@ public class TriggerManager : MonoBehaviour
 
 		while ( queue.Count > 0 )
 		{
+			busyTriggering = true;
 			yield return WaitUntilFinished();
 			string name = queue.Peek();
+			Trigger trigger;
+			if ( FindObjectOfType<Engine>().scenario.triggersObserver.Any( x => x.dataName == name ) )
+				trigger = FindObjectOfType<Engine>().scenario.triggersObserver.Where( x => x.dataName == name ).First();
+			else
+				trigger = new Trigger() { isMultiTrigger = false };
+
 			Debug.Log( "FireTrigger::" + name );
-			if ( firedTriggersList.ContainsKey( name ) )
+			if ( !trigger.isMultiTrigger && firedTriggersList.ContainsKey( name ) )
 			{
 				Debug.Log( "WARNING: Trigger has already been fired: " + name );
 				queue.Dequeue();
 				continue;
 			}
-			firedTriggersList.Add( name, true );
+
+			//sanity check
+			if ( !firedTriggersList.ContainsKey( name ) )
+				firedTriggersList.Add( name, true );
 
 			//first, check conditional events listening for triggers to fire
 			foreach ( ConditionalInteraction con in FindObjectOfType<InteractionManager>().interactions.Where( x => x.interactionType == InteractionType.Conditional ) )
@@ -62,64 +73,85 @@ public class TriggerManager : MonoBehaviour
 			//trigger Token
 			if ( FindObjectOfType<TileManager>().TryTriggerToken( name ) )
 			{
-				queue.Dequeue();
-				continue;
+				if ( !trigger.isMultiTrigger )
+				{
+					queue.Dequeue();
+					continue;
+				}
 			}
 			yield return WaitUntilFinished();
 
 			//trigger Objective
 			if ( FindObjectOfType<ObjectiveManager>().TrySetObjective( name ) )
 			{
-				queue.Dequeue();
-				continue;
+				if ( !trigger.isMultiTrigger )
+				{
+					queue.Dequeue();
+					continue;
+				}
 			}
 			yield return WaitUntilFinished();
 
 			//trigger Objective complete
 			if ( FindObjectOfType<ObjectiveManager>().TryCompleteObjective( name ) )
 			{
-				queue.Dequeue();
-				continue;
+				if ( !trigger.isMultiTrigger )
+				{
+					queue.Dequeue();
+					continue;
+				}
 			}
 			yield return WaitUntilFinished();
 
 			//trigger Event by trigger
 			if ( FindObjectOfType<InteractionManager>().TryFireEventByTrigger( name ) )
 			{
-				queue.Dequeue();
-				continue;
+				if ( !trigger.isMultiTrigger )
+				{
+					queue.Dequeue();
+					continue;
+				}
 			}
 			yield return WaitUntilFinished();
 
 			//trigger Event by event name
 			if ( FindObjectOfType<InteractionManager>().TryFireEventByName( name ) )
 			{
-				queue.Dequeue();
-				continue;
+				if ( !trigger.isMultiTrigger )
+				{
+					queue.Dequeue();
+					continue;
+				}
 			}
 			yield return WaitUntilFinished();
 
 			//trigger Chapter
 			if ( FindObjectOfType<ChapterManager>().TriggerChapterByTrigger( name ) )
 			{
-				queue.Dequeue();
-				continue;
+				if ( !trigger.isMultiTrigger )
+				{
+					queue.Dequeue();
+					continue;
+				}
 			}
 			yield return WaitUntilFinished();
 
 			//trigger end scenario
 			if ( FindObjectOfType<InteractionManager>().TryFireEndScenario( name ) )
 			{
-				queue.Dequeue();
-				continue;
+				if ( !trigger.isMultiTrigger )
+				{
+					queue.Dequeue();
+					continue;
+				}
 			}
 			yield return WaitUntilFinished();
 
 			string n = queue.Dequeue();
-			Debug.Log( "Nothing listening to: " + n );
+			Debug.Log( "Multi done/Nothing listening to: " + n );
 		}
 		Debug.Log( "******************TriggerChain ENDED" );
-
+		busyTriggering = false;
 		//}
 		//else
 		//	Debug.Log( "FireTrigger::NO TRIGGER/NONE" );
@@ -134,12 +166,12 @@ public class TriggerManager : MonoBehaviour
 		while ( im.PanelShowing )
 			yield return null;
 
-		if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase )
-		{
-			Debug.Log( "Waiting for Shadow Phase to finish..." );
-			while ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase )
-				yield return null;
-		}
+		//if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase )
+		//{
+		//	Debug.Log( "Waiting for Shadow Phase to finish..." );
+		//	while ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase )
+		//		yield return null;
+		//}
 		//Debug.Log( "***DONE WAITING..." );
 	}
 

@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap
 {
-	public static string AppVersion = "0.6";
-	public static string FormatVersion = "1.1";
+	public static string AppVersion = "0.7";
+	public static string FormatVersion = "1.2";
 
 	public static bool isNewGame = true;
 	public static string[] heroes;
@@ -32,9 +32,9 @@ public class Bootstrap
 	{
 		heroes = new string[2] { "Aragorn", "Gimli" };
 
-		ProjectItem item = FileManager.GetProjects().First();
+		projectItem = FileManager.GetProjects().First();
 		Debug.Log( "DEBUGLoadLevel()::Loaded: " + projectItem.fileName );
-		Scenario scenario = FileManager.Load( FileManager.GetFullPath( item.fileName ) );
+		Scenario scenario = FileManager.Load( FileManager.GetFullPath( projectItem.fileName ) );
 		return scenario;
 	}
 

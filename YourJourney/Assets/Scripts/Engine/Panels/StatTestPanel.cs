@@ -5,11 +5,11 @@ using System;
 
 public class StatTestPanel : MonoBehaviour
 {
-	public Text mainText, abilityText, counterText, damageText, fearText;
+	public Text mainText, abilityText, counterText;
 	public Image abilityIcon;
 	public GameObject btn1, btn2, continueBtn;
 	public CanvasGroup overlay;
-	public GameObject progressRoot, combatRoot;
+	public GameObject progressRoot;
 	public Sprite[] icons;
 
 	CanvasGroup group;
@@ -39,7 +39,6 @@ public class StatTestPanel : MonoBehaviour
 		btn1.SetActive( testInteraction.passFail || !testInteraction.isCumulative );
 		btn2.SetActive( testInteraction.passFail || !testInteraction.isCumulative );
 		progressRoot.SetActive( !testInteraction.passFail && testInteraction.isCumulative );
-		combatRoot.SetActive( false );
 		continueBtn.SetActive( false );
 
 		overlay.alpha = 0;
@@ -63,6 +62,7 @@ public class StatTestPanel : MonoBehaviour
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
 
+		abilityIcon.gameObject.SetActive( true );
 		abilityIcon.sprite = icons[(int)testInteraction.testAttribute];
 
 		//acc value starts at -1, so set it to minimum of 0 to show the event has started
@@ -75,60 +75,38 @@ public class StatTestPanel : MonoBehaviour
 		group.DOFade( 1, .5f );
 	}
 
-	public void ShowCombatCounter( Monster m, Action<InteractionResult> actions = null )
-	{
-		FindObjectOfType<TileManager>().ToggleInput( true );
+	//public void ShowCombatCounter( Monster m, Action<InteractionResult> actions = null )
+	//{
+	//	FindObjectOfType<TileManager>().ToggleInput( true );
 
-		btn1.SetActive( false );
-		btn2.SetActive( false );
-		progressRoot.SetActive( false );
-		combatRoot.SetActive( true );
-		continueBtn.SetActive( true );
+	//	btn1.SetActive( false );
+	//	btn2.SetActive( false );
+	//	progressRoot.SetActive( false );
+	//	combatRoot.SetActive( true );
+	//	continueBtn.SetActive( true );
 
-		//calculate total and split it between damage and fear
-		int total = m.damage + UnityEngine.Random.Range( -1, 2 );
-		int d = UnityEngine.Random.Range( 0, total + 1 );
-		int f = total - d;
-		if ( d == 0 && f == 0 )
-			d = 1;
-		if ( m.specialAbility != "Fear Bias" )
-		{
-			int temp = d;
-			if ( f > d )
-			{
-				d = f;
-				f = temp;
-			}
-		}
-		else
-		{
-			int temp = f;
-			if ( d > f )
-			{
-				f = d;
-				d = temp;
-			}
-		}
-		damageText.text = d.ToString();
-		fearText.text = f.ToString();
+	//	Tuple<int, int> damage = m.CalculateDamage();
+	//	fearText.text = damage.Item1.ToString();
+	//	damageText.text = damage.Item2.ToString();
 
-		overlay.alpha = 0;
-		overlay.gameObject.SetActive( true );
-		overlay.DOFade( 1, .5f );
+	//	overlay.alpha = 0;
+	//	overlay.gameObject.SetActive( true );
+	//	overlay.DOFade( 1, .5f );
 
-		gameObject.SetActive( true );
-		buttonActions = actions;
+	//	gameObject.SetActive( true );
+	//	buttonActions = actions;
 
-		abilityText.text = m.negatedBy.ToString() + " negates.";
+	//	abilityText.text = m.negatedBy.ToString() + " negates.";
 
-		SetText( $"A {m.dataName} attacks!" );
+	//	SetText( $"A {m.dataName} attacks!" );
 
-		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
-		transform.DOMoveY( sp.y, .75f );
+	//	rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
+	//	transform.DOMoveY( sp.y, .75f );
 
-		abilityIcon.sprite = icons[(int)m.negatedBy];
-		group.DOFade( 1, .5f );
-	}
+	//	abilityIcon.gameObject.SetActive( true );
+	//	abilityIcon.sprite = icons[(int)m.negatedBy];
+	//	group.DOFade( 1, .5f );
+	//}
 
 	public void Hide()
 	{

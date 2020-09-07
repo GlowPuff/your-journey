@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap
 {
-	public static string AppVersion = "0.7";
+	public static string AppVersion = "0.8";
 	public static string FormatVersion = "1.2";
 
 	public static bool isNewGame = true;

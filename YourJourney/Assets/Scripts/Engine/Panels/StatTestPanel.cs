@@ -13,7 +13,7 @@ public class StatTestPanel : MonoBehaviour
 	public Sprite[] icons;
 
 	CanvasGroup group;
-
+	Color[] testColors;
 	RectTransform rect;
 	Vector3 sp;
 	Vector2 ap;
@@ -30,6 +30,13 @@ public class StatTestPanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
+		testColors = new Color[5];
+		//mit/agi/wis/spi/wit
+		testColors[0] = Color.red;
+		testColors[1] = Color.green;
+		testColors[2] = Color.HSVToRGB( 300f / 360f, 1, .5f );
+		testColors[3] = Color.HSVToRGB( 207f / 360f, .61f, .71f );
+		testColors[4] = Color.yellow;
 	}
 
 	public void Show( StatTestInteraction testInteraction, Action<InteractionResult> actions )
@@ -64,6 +71,7 @@ public class StatTestPanel : MonoBehaviour
 
 		abilityIcon.gameObject.SetActive( true );
 		abilityIcon.sprite = icons[(int)testInteraction.testAttribute];
+		abilityIcon.color = testColors[(int)testInteraction.testAttribute];
 
 		//acc value starts at -1, so set it to minimum of 0 to show the event has started
 		testInteraction.accumulatedValue = Math.Max( 0, testInteraction.accumulatedValue );

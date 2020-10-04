@@ -4,6 +4,8 @@ using System;
 
 public class ProvokeMessage : MonoBehaviour
 {
+	bool done = false;
+
 	public Transform panel;
 	[HideInInspector]
 	public bool provokeMode { get; set; } = false;
@@ -19,6 +21,7 @@ public class ProvokeMessage : MonoBehaviour
 
 	public void Show( Action cb = null )
 	{
+		done = false;
 		FindObjectOfType<TileManager>().ToggleInput( true );
 
 		provokeMode = true;
@@ -43,6 +46,10 @@ public class ProvokeMessage : MonoBehaviour
 
 	public void OnCancel()
 	{
+		if ( done )
+			return;
+
+		done = true;
 		Hide();
 		callback?.Invoke();
 	}

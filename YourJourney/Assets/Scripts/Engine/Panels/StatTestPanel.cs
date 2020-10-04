@@ -5,12 +5,13 @@ using System;
 
 public class StatTestPanel : MonoBehaviour
 {
-	public Text mainText, abilityText, counterText;
+	public Text mainText, abilityText, counterText, dummy;
 	public Image abilityIcon;
 	public GameObject btn1, btn2, continueBtn;
 	public CanvasGroup overlay;
 	public GameObject progressRoot;
 	public Sprite[] icons;
+	public RectTransform content;
 
 	CanvasGroup group;
 	Color[] testColors;
@@ -42,6 +43,8 @@ public class StatTestPanel : MonoBehaviour
 	public void Show( StatTestInteraction testInteraction, Action<InteractionResult> actions )
 	{
 		FindObjectOfType<TileManager>().ToggleInput( true );
+
+		statTestInteraction = testInteraction;
 
 		btn1.SetActive( testInteraction.passFail || !testInteraction.isCumulative );
 		btn2.SetActive( testInteraction.passFail || !testInteraction.isCumulative );
@@ -78,43 +81,8 @@ public class StatTestPanel : MonoBehaviour
 
 		counterText.text = value.ToString();
 
-		statTestInteraction = testInteraction;
-
 		group.DOFade( 1, .5f );
 	}
-
-	//public void ShowCombatCounter( Monster m, Action<InteractionResult> actions = null )
-	//{
-	//	FindObjectOfType<TileManager>().ToggleInput( true );
-
-	//	btn1.SetActive( false );
-	//	btn2.SetActive( false );
-	//	progressRoot.SetActive( false );
-	//	combatRoot.SetActive( true );
-	//	continueBtn.SetActive( true );
-
-	//	Tuple<int, int> damage = m.CalculateDamage();
-	//	fearText.text = damage.Item1.ToString();
-	//	damageText.text = damage.Item2.ToString();
-
-	//	overlay.alpha = 0;
-	//	overlay.gameObject.SetActive( true );
-	//	overlay.DOFade( 1, .5f );
-
-	//	gameObject.SetActive( true );
-	//	buttonActions = actions;
-
-	//	abilityText.text = m.negatedBy.ToString() + " negates.";
-
-	//	SetText( $"A {m.dataName} attacks!" );
-
-	//	rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
-	//	transform.DOMoveY( sp.y, .75f );
-
-	//	abilityIcon.gameObject.SetActive( true );
-	//	abilityIcon.sprite = icons[(int)m.negatedBy];
-	//	group.DOFade( 1, .5f );
-	//}
 
 	public void Hide()
 	{
@@ -128,12 +96,25 @@ public class StatTestPanel : MonoBehaviour
 
 	void SetText( string t )
 	{
+		mainText.alignment = TextAnchor.UpperCenter;
 		mainText.text = t;
+		dummy.text = t;
+		int hmax = 525;
+		if ( statTestInteraction.isCumulative && !statTestInteraction.passFail )
+			hmax = 410;
+
 		TextGenerator textGen = new TextGenerator();
 		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
 		float height = textGen.GetPreferredHeight( t, generationSettings );
+		var windowH = Math.Min( hmax, height + 80 + 80 );
 
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 80 + 80 );
+		if ( height + 80 + 80 > hmax )
+			mainText.alignment = TextAnchor.UpperCenter;
+		else
+			mainText.alignment = TextAnchor.MiddleCenter;
+
+		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, windowH ); /*height + 80 + 80*/
+		content.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 80 );
 	}
 
 	public void OnAdd()
@@ -150,6 +131,10 @@ public class StatTestPanel : MonoBehaviour
 
 	public void OnSubmit()
 	{
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		continueBtn.SetActive( false );
+
 		//use btn4 = true to signify this as a cumulative result
 		buttonActions?.Invoke( new InteractionResult() { btn4 = statTestInteraction.isCumulative, value = value } );
 		Hide();
@@ -157,18 +142,38 @@ public class StatTestPanel : MonoBehaviour
 
 	public void OnSuccess()
 	{
-		buttonActions?.Invoke( new InteractionResult() { btn4 = statTestInteraction.isCumulative, success = true, value = value } );
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		continueBtn.SetActive( false );
+
+		int v = value;
+		if ( statTestInteraction.passFail )
+			v = 1;
+
+		buttonActions?.Invoke( new InteractionResult() { btn4 = statTestInteraction.isCumulative, success = true, value = v } );
 		Hide();
 	}
 
 	public void OnFail()
 	{
-		buttonActions?.Invoke( new InteractionResult() { btn4 = statTestInteraction.isCumulative, success = false, value = value } );
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		continueBtn.SetActive( false );
+
+		int v = value;
+		if ( statTestInteraction.passFail )
+			v = -1;
+
+		buttonActions?.Invoke( new InteractionResult() { btn4 = statTestInteraction.isCumulative, success = false, value = v } );
 		Hide();
 	}
 
 	public void OnContinue()
 	{
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		continueBtn.SetActive( false );
+
 		buttonActions?.Invoke( new InteractionResult() { } );
 		Hide();
 	}

@@ -12,6 +12,7 @@ public class ConditionalInteraction : IInteraction
 	public TextBookData eventBookData { get; set; }
 	public bool isTokenInteraction { get; set; }
 	public TokenType tokenType { get; set; }
+	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
 	public List<string> triggerList { get; set; }
 	public string finishedTrigger { get; set; }

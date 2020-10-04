@@ -20,4 +20,7 @@ public class Chapter
 	public int randomInteractionGroupCount { get; set; }
 	public bool isPreExplored { get; set; }
 	public bool usesRandomGroups { get; set; }
+	public bool isDynamic { get; set; }
+	public string attachHint { get; set; }
+	public TileGroup tileGroup { get; set; }
 }

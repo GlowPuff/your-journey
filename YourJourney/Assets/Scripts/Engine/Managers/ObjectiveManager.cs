@@ -103,12 +103,13 @@ public class ObjectiveManager : MonoBehaviour
 	{
 		if ( currentObjective == null )
 			return false;
+		Debug.Log( "TryCompleteObjective: " + name );
 
-		Debug.Log( "Completed Objective: " + currentObjective.dataName );
 		//objective is complete, remove it and fire any on complete trigger
 		//TODO - show completion textbox?  show lore earned?
 		if ( currentObjective.triggerName == triggername )
 		{
+			Debug.Log( "Completed Objective: " + currentObjective.dataName );
 			string t = currentObjective.nextTrigger;
 			currentObjective = null;
 			objectiveText.text = "No Objective";

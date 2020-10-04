@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
+using System.Collections;
 
 public class Engine : MonoBehaviour
 {
@@ -44,7 +45,17 @@ public class Engine : MonoBehaviour
 		else
 			scenario = Bootstrap.LoadLevel();
 
-		endTurnButton.InitialSet( scenario );
+		//first objective/interaction/trigger are DUMMIES (None), remove them
+		scenario.objectiveObserver.RemoveAt( 0 );
+		scenario.interactionObserver.RemoveAt( 0 );
+		scenario.triggersObserver.RemoveAt( 0 );
+
+		interactionManager.Init( scenario );
+		objectiveManager.Init( scenario );
+		chapterManager.Init( scenario );
+		endTurnButton.Init( scenario );
+
+		StartCoroutine( BuildScenario() );
 
 		if ( Bootstrap.isNewGame )
 		{
@@ -61,21 +72,11 @@ public class Engine : MonoBehaviour
 
 	public void StartNewGame()
 	{
-		//first objective/interaction/trigger are DUMMIES (None), remove them
-		scenario.objectiveObserver.RemoveAt( 0 );
-		scenario.interactionObserver.RemoveAt( 0 );
-		scenario.triggersObserver.RemoveAt( 0 );
-
-		interactionManager.Init( scenario );
-		objectiveManager.Init( scenario );
-		chapterManager.Init( scenario );
-
 		if ( !debug )
 		{
 			interactionManager.GetNewTextPanel().ShowOkContinue( scenario.introBookData.pages[0], ButtonIcon.Continue, () =>
 				{
 					uiControl.interactable = true;
-					//endTurnButton.InitialSet( scenario );
 
 					if ( objectiveManager.Exists( scenario.objectiveName ) )
 						objectiveManager.TrySetFirstObjective( scenario.objectiveName, () =>
@@ -91,7 +92,6 @@ public class Engine : MonoBehaviour
 			//debug quickstart a chapter:
 			objectiveManager.DebugSetObjective( scenario.objectiveName );
 			uiControl.interactable = true;
-			endTurnButton.InitialSet( scenario );
 			chapterManager.TryTriggerChapter( "Start", true );
 		}
 	}
@@ -99,6 +99,12 @@ public class Engine : MonoBehaviour
 	public void ContinueGame()
 	{
 		//restore data
+	}
+
+	IEnumerator BuildScenario()
+	{
+		tileManager.BuildScenario();
+		yield return null;
 	}
 
 	void Update()
@@ -114,7 +120,7 @@ public class Engine : MonoBehaviour
 				shieldValue = 0,
 				count = 2,
 				movementValue = 2,
-				//maxMovementValue = 4,
+				specialAbility = "",
 				GUID = System.Guid.NewGuid(),
 				monsterType = MonsterType.OrcHunter,
 				dataName = "Orc Hunter",
@@ -123,6 +129,7 @@ public class Engine : MonoBehaviour
 		}
 		else if ( Input.GetKeyDown( KeyCode.Alpha2 ) )
 		{
+			FindObjectOfType<LorePanel>().AddLore( 4 );
 			//FindObjectOfType<MonsterManager>().RemoveMonster( 0 );
 			//tg2 = tileManager.CreateGroupFromChapter( scenario.chapterObserver[0] );
 			//tg2.AttachTo( tg1 );
@@ -150,6 +157,15 @@ public class Engine : MonoBehaviour
 		{
 			SceneManager.LoadScene( "title" );
 		} );
+	}
 
+	public void RemoveFog( string chName )
+	{
+		foreach ( Transform child in transform )
+		{
+			FogData fg = child.GetComponent<FogData>();
+			if ( fg != null && fg.chapterName == chName )
+				GameObject.Destroy( child.gameObject );
+		}
 	}
 }

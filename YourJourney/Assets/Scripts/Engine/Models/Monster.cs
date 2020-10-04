@@ -1,5 +1,8 @@
 ﻿using System;
-using System.Dynamic;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 
 /// <summary>
@@ -26,10 +29,21 @@ public class Monster
 	public MonsterType monsterType { get; set; }
 	public int count;
 	public int movementValue;
-	//public int maxMovementValue;
 	public int loreReward;
 	public bool defaultStats;
+	[DefaultValue( "" )]
+	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
 	public string specialAbility { get; set; }
+
+	[DefaultValue( true )]
+	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
+	public bool isEasy { get; set; }
+	[DefaultValue( true )]
+	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
+	public bool isNormal { get; set; }
+	[DefaultValue( true )]
+	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
+	public bool isHard { get; set; }
 
 	public IInteraction interaction;//the interaction that spawned this
 
@@ -66,25 +80,107 @@ public class Monster
 
 	}
 
-	public Monster( string name )
+	//returns true if this monster can appear in current difficulty
+	public bool IsValid()
 	{
-		dataName = name;
-		damage = 1;
-		fear = 1;
-		health = 5;
-		movementValue = 2;
-		//maxMovementValue = 4;
-		triggerName = "None";
-		negatedBy = Ability.None;
-		count = 1;
-		isExhausted = isStunned = false;
+		if ( Bootstrap.difficulty == Difficulty.Easy && isEasy )
+			return true;
+		else if ( Bootstrap.difficulty == Difficulty.Normal && isNormal )
+			return true;
+		else if ( Bootstrap.difficulty == Difficulty.Hard && isHard )
+			return true;
+
+		return false;
 	}
+
+	public void AdjustPlayerCountDifficulty()
+	{
+		if ( Bootstrap.PlayerCount == 1 )
+		{
+			Debug.Log( "AdjustPlayerCountDifficulty::1" );
+			//reduce enemy count
+			count = Math.Max( 1, count - 1 );
+			//attributes, -1 to shield/sorc with a minimum of 1 if value exists
+			shieldValue = shieldValue > 0 ? Math.Max( 1, shieldValue - 1 ) : 0;
+			sorceryValue = sorceryValue > 0 ? Math.Max( 1, sorceryValue - 1 ) : 0;
+		}
+		else if ( Bootstrap.PlayerCount > 2 )
+		{
+			Debug.Log( "AdjustPlayerCountDifficulty::>2" );
+
+			int attAmount = Bootstrap.PlayerCount - 2;
+			//health
+			health++;
+			//increase enemy count if it's NOT uniquely named
+			if ( monsterNames.Any( x => dataName == x ) )
+				count = Math.Min( 3, count + 1 );
+			//attributes, +attAmount to shield/sorc
+			shieldValue = shieldValue > 0 ? Math.Min( shieldValue + attAmount, health ) : 0;
+			sorceryValue = sorceryValue > 0 ? Math.Min( sorceryValue + attAmount, health ) : 0;
+		}
+	}
+
+	public void AdjustDifficulty()
+	{
+		if ( Bootstrap.difficulty == Difficulty.Easy )
+		{
+			Debug.Log( "AdjustDifficulty::Easy" );
+			//health
+			health = Math.Max( 1, health - 1 );
+			//attributes
+			shieldValue = sorceryValue = 0;
+		}
+		else if ( Bootstrap.difficulty == Difficulty.Hard )
+		{
+			Debug.Log( "AdjustDifficulty::Hard" );
+			//health
+			health++;
+			//attributes
+			if ( shieldValue == 0 && sorceryValue == 0 )
+				shieldValue = 1;
+			else
+			{
+				//make sure shield/sorc aren't more than health
+				shieldValue = shieldValue > 0 ? shieldValue + 1 : 0;
+				shieldValue = Math.Min( shieldValue, health );
+				sorceryValue = sorceryValue > 0 ? sorceryValue + 1 : 0;
+				sorceryValue = Math.Min( sorceryValue, health );
+			}
+			//elite bonus
+			if ( isElite )
+			{
+				List<int> existing = new List<int>();
+				if ( isLarge )
+					existing.Add( 0 );
+				if ( isBloodThirsty )
+					existing.Add( 1 );
+				if ( isArmored )
+					existing.Add( 2 );
+
+				int[] ebonuses = new int[3] { 0, 1, 2 };
+				//filter out existing bonuses
+				ebonuses = ebonuses.Where( x => !existing.Contains( x ) ).Select( x => x ).ToArray();
+				if ( ebonuses.Length > 0 )
+				{
+					//assign a new, random elite bonus
+					int rnd = UnityEngine.Random.Range( 0, ebonuses.Length );
+					if ( ebonuses[rnd] == 0 )
+						isLarge = true;
+					else if ( ebonuses[rnd] == 1 )
+						isBloodThirsty = true;
+					else if ( ebonuses[rnd] == 2 )
+						isArmored = true;
+				}
+			}
+		}
+	}
+
 
 	//returns Tuple<fear,damage>
 	public Tuple<int, int> CalculateDamage()
 	{
 		//calculate total and split it between damage and fear
-		//modifier adds damage if enemies in group > 1
+		//modifier adds damage if active enemies in group > 1
 		//if it's a heavy hitter, limit the modifier to +1
 		int modifier = ActiveMonsterCount == 1 ? 0 : ( damage == 4 ? 1 : ActiveMonsterCount - 1 );
 		int total = damage + modifier + UnityEngine.Random.Range( -1, 2 );
@@ -95,7 +191,7 @@ public class Monster
 		int f = total - d;
 		if ( d == 0 && f == 0 )
 			d = 1;
-		if ( specialAbility != "Fear Bias" )
+		if ( specialAbility != null && specialAbility != "Fear Bias" )
 		{
 			int temp = d;
 			if ( f > d )

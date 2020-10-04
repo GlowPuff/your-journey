@@ -5,11 +5,12 @@ using System;
 
 public class TextPanel : MonoBehaviour
 {
-	public Text mainText, btn1Text, btn2Text, btnSingleText;
+	public Text mainText, btn1Text, btn2Text, btnSingleText, dummy;
 	public GameObject btn1, btn2;
 	public GameObject buttonSingle;
 	public GameObject actionIcon;
 	public CanvasGroup overlay;
+	public RectTransform content;
 
 	CanvasGroup group;
 
@@ -140,28 +141,51 @@ public class TextPanel : MonoBehaviour
 
 	void SetText( string t )
 	{
+		mainText.alignment = TextAnchor.UpperCenter;
 		mainText.text = t;
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
-		float height = textGen.GetPreferredHeight( t, generationSettings );
+		dummy.text = t;
 
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 90 );
+		TextGenerator textGen = new TextGenerator();
+		TextGenerationSettings generationSettings = dummy.GetGenerationSettings( dummy.rectTransform.rect.size );
+		float height = textGen.GetPreferredHeight( t, generationSettings );
+		//Debug.Log( height );
+		var windowH = Math.Min( 525, height + 80 );
+
+		if ( height + 80 > 525 )
+			mainText.alignment = TextAnchor.UpperCenter;
+		else
+			mainText.alignment = TextAnchor.MiddleCenter;
+
+		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, windowH );
+		content.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
 	}
 
 	public void OnBtn1()
 	{
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		buttonSingle.SetActive( false );
+
 		buttonActions?.Invoke( new InteractionResult() { btn1 = true } );
 		Hide();
 	}
 
 	public void OnBtn2()
 	{
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		buttonSingle.SetActive( false );
+
 		buttonActions?.Invoke( new InteractionResult() { btn2 = true } );
 		Hide();
 	}
 
 	public void OnBtnSingle()
 	{
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		buttonSingle.SetActive( false );
+
 		btnSingleAction?.Invoke();
 		Hide();
 	}

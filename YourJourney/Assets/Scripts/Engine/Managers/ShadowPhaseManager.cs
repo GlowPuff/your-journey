@@ -17,6 +17,7 @@ public class ShadowPhaseManager : MonoBehaviour
 	public Guid allowedMonsterGUID;
 	MeshRenderer wispRenderer;
 	float alphaValue;
+	bool doInterrupt = false;
 
 	private void Awake()
 	{
@@ -36,6 +37,11 @@ public class ShadowPhaseManager : MonoBehaviour
 		shadowWisp.localRotation = Quaternion.Euler( xanim, 0, zanim );
 	}
 
+	public void NotifyInterrupt()
+	{
+		doInterrupt = true;
+	}
+
 	public void EndTurn()
 	{
 		//if in shadow phase, provoke mode, or other UI showing, we're busy, so bug out
@@ -44,7 +50,17 @@ public class ShadowPhaseManager : MonoBehaviour
 			|| FindObjectOfType<ProvokeMessage>().provokeMode )
 			return;
 
+		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowYesNo( "End your turn and begin the Shadow Phase?", result =>
+		{
+			if ( result.btn1 )
+				DoEndTurn();
+		} );
+	}
+
+	void DoEndTurn()
+	{
 		Debug.Log( "***STARTED SHADOW PHASE" );
+		doInterrupt = false;
 		var objs = FindObjectsOfType<SpawnMarker>();
 		foreach ( var ob in objs )
 		{
@@ -76,6 +92,7 @@ public class ShadowPhaseManager : MonoBehaviour
 	IEnumerator EndTurnSequence()
 	{
 		Debug.Log( "***STARTED COROUTINE" );
+		FindObjectOfType<TileManager>().ToggleInput( true );
 		//SHADOW PHASE announcement
 		phaseNotification.Show( "Shadow Phase" );
 		yield return new WaitForSeconds( 3 );
@@ -91,18 +108,6 @@ public class ShadowPhaseManager : MonoBehaviour
 
 		//FINISH UP
 		yield return FinishShadowPhase();
-
-		//yield return new WaitForSeconds( 3 );
-		//waiting = true;
-		//im.GetNewTextPanel().ShowOkContinue( "Each Hero resets their deck and Scouts 2.", ButtonIcon.Continue, () => waiting = false );
-		////wait
-		//while ( waiting )
-		//	yield return null;
-
-		//FindObjectOfType<MonsterManager>().ReadyAll();
-		////ACTION PHASE announcement
-		//phaseNotification.Show( "Action Phase" );
-		//yield return new WaitForSeconds( 3 );
 
 		//finally end shadow phase
 		doingShadowPhase = false;
@@ -144,17 +149,24 @@ public class ShadowPhaseManager : MonoBehaviour
 			allowAttacks = true;
 			allowedMonsterGUID = monsters[i].GUID;
 			var tp = im.GetNewTextPanel();
+
+			//Move X: Attack NAME (or closest Hero)
+			//buttons: Attack/No Target
+			doInterrupt = false;
 			tp.ShowYesNo( $"Move {monsters[i].movementValue}: Attack {heroName} or closest Hero.\r\n\r\nCan this enemy group attack a target?\r\n\r\nIf you have a skill to attack or apply damage to this enemy group, do it now by selecting its Enemy Button.", res =>
 			{
 				waiting = false;
 				iResult = res;
 			} );
 			//wait
+			//int startingActive = monsters[i].ActiveMonsterCount;
 			while ( waiting )
 			{
 				if ( monsters[i].ActiveMonsterCount == 0
 					|| ( !monsters[i].isElite && monsters[i].isExhausted )
-					|| ( monsters[i].isElite && monsters[i].isStunned ) )
+					|| ( monsters[i].isElite && monsters[i].isStunned
+					|| doInterrupt )
+					/*|| monsters[i].ActiveMonsterCount < startingActive*/ )//something died
 				{
 					tp.RemoveBox();
 					waiting = false;
@@ -171,14 +183,12 @@ public class ShadowPhaseManager : MonoBehaviour
 			//check if monster group is dead/exhausted and abort this monter's attack if needed
 			if ( monsters[i].ActiveMonsterCount == 0
 				|| ( !monsters[i].isElite && monsters[i].isExhausted )
-				|| ( monsters[i].isElite && monsters[i].isStunned ) )
+				|| ( monsters[i].isElite && monsters[i].isStunned )
+				|| doInterrupt )
 			{
 				tp.RemoveBox();
 				waiting = true;
-				//if ( monsters[i].ActiveMonsterCount == 0 )
 				im.GetNewTextPanel().ShowOkContinue( $"This enemy group's activation is canceled.", ButtonIcon.Continue, () => { waiting = false; } );
-				//else
-				//	im.GetNewTextPanel().ShowOkContinue( "This enemy group has become exhausted.  Activation is canceled.", ButtonIcon.Continue, () => { waiting = false; } );
 				while ( waiting )
 					yield return null;
 			}
@@ -188,7 +198,6 @@ public class ShadowPhaseManager : MonoBehaviour
 				{
 					Debug.Log( "***YES ATTACK" );
 					waiting = true;
-					//im.GetNewStatPanel().ShowCombatCounter( monsters[i], r => waiting = false );
 					im.GetNewDamagePanel().ShowCombatCounter( monsters[i], () => waiting = false );
 					//wait
 					while ( waiting )
@@ -196,7 +205,7 @@ public class ShadowPhaseManager : MonoBehaviour
 					//exhaust the enemy
 					mm.ExhaustMonster( monsters[i], true );
 				}
-				else //if ( iResult.btn2 )//no target, just move
+				else
 				{
 					Debug.Log( "***NO ATTACK" );
 					waiting = true;
@@ -238,23 +247,33 @@ public class ShadowPhaseManager : MonoBehaviour
 		Debug.Log( "***hero threat: " + hc );
 		Debug.Log( "***unexplored threat: " + ut );
 		Debug.Log( "***threat token threat: " + tt );
+		int threat = hc + ut + tt;
 
-		Threat t = endTurnButton.AddThreat( hc + ut + tt );
+		Threat[] t = endTurnButton.AddThreat( threat );
 		//wait for animation
-		if ( t != null )
-			yield return new WaitForSeconds( 2 );
+		//if ( t != null )
+		//	yield return new WaitForSeconds( 2 );
 
-		if ( t != null )
+		bool waiting = true;
+		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( $"Threat increases by {threat}.", ButtonIcon.Continue, () => waiting = false );
+
+		while ( waiting )
+			yield return null;
+
+		if ( t.Length > 0 )
 		{
+			Debug.Log( "THREATS FOUND: " + t.Length );
 			Debug.Log( "***FIRING THREAT TRIGGERS" );
-			FindObjectOfType<TriggerManager>().FireTrigger( t.triggerName );
-			//wait until all triggers finished
-			yield return WaitUntilFinished();
+			for ( int i = 0; i < t.Length; i++ )
+			{
+				FindObjectOfType<TriggerManager>().FireTrigger( t[i].triggerName );
+				//wait until all triggers finished
+				yield return WaitUntilFinished();
+			}
 		}
 		else
 		{
 			Debug.Log( "***NO THREAT TRIGGERS FOUND" );
-			//yield return FinishShadowPhase();
 		}
 	}
 
@@ -289,6 +308,7 @@ public class ShadowPhaseManager : MonoBehaviour
 
 		//wait for action phase animation
 		yield return new WaitForSeconds( 3 );
+		FindObjectOfType<TileManager>().ToggleInput( false );
 		Debug.Log( "***FINISHED SHADOW PHASE" );
 	}
 

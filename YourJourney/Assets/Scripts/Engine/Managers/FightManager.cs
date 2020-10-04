@@ -22,7 +22,6 @@ public class FightManager : MonoBehaviour
 
 		im.GetNewDamagePanel().ShowCombatCounter( monster, () =>
 		{
-			monster.isExhausted = true;
 			mm.UnselectAll();
 		} );
 	}

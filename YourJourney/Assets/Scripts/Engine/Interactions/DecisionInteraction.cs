@@ -11,6 +11,7 @@ public class DecisionInteraction : IInteraction
 	public TextBookData textBookData { get; set; }
 	public TextBookData eventBookData { get; set; }
 	public TokenType tokenType { get; set; }
+	public PersonType personType { get; set; }
 	public bool isTokenInteraction { get; set; }
 	public int loreReward { get; set; }
 

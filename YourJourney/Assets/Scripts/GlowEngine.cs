@@ -514,6 +514,23 @@ public class GlowEngine : MonoBehaviour
 			return Mathf.Abs( value1 - value2 ) <= Mathf.Abs( tolerance );
 	}
 
+	public static bool WithinTolerance( Vector3 v1, Vector3 v2, float tolerance )
+	{
+		bool b1x = WithinToleranceV2( v1.x, v2.x, tolerance );
+		bool b1y = WithinToleranceV2( v1.y, v2.y, tolerance );
+		bool b1z = WithinToleranceV2( v1.z, v2.z, tolerance );
+
+		bool b2x = WithinToleranceV2( v1.x, v2.x, tolerance );
+		bool b2y = WithinToleranceV2( v1.y, v2.y, tolerance );
+		bool b2z = WithinToleranceV2( v1.z, v2.z, tolerance );
+
+		bool b3x = WithinToleranceV2( v1.x, v2.x, tolerance );
+		bool b3y = WithinToleranceV2( v1.y, v2.y, tolerance );
+		bool b3z = WithinToleranceV2( v1.z, v2.z, tolerance );
+
+		return ( b1x = true ) && ( b1y = true ) && ( b1z = true ) && ( b2x = true ) && ( b2y = true ) && ( b2z = true ) && ( b3x = true ) && ( b3y = true ) && ( b3z = true );
+	}
+
 	/// <summary>
 	/// Calculates the speed in pixels per second
 	/// </summary>
@@ -585,7 +602,7 @@ public class GlowEngine : MonoBehaviour
 	/// <summary>
 	/// Finds objects even if they are not active
 	/// </summary>
-	public static List<T> FindObjectsOfTypeAll<T>()
+	public static List<T> FindObjectsOfTypeAll<T>() where T : Component
 	{
 		List<T> results = new List<T>();
 		for ( int i = 0; i < SceneManager.sceneCount; i++ )
@@ -607,7 +624,7 @@ public class GlowEngine : MonoBehaviour
 	/// <summary>
 	/// Finds a single object even if it is not active
 	/// </summary>
-	public static T FindObjectsOfTypeSingle<T>()
+	public static T FindObjectsOfTypeSingle<T>() where T : Component
 	{
 		List<T> results = new List<T>();
 		for ( int i = 0; i < SceneManager.sceneCount; i++ )

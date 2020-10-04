@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 public class BranchInteraction : IInteraction
 {
@@ -12,6 +11,7 @@ public class BranchInteraction : IInteraction
 	public TextBookData eventBookData { get; set; }
 	public bool isTokenInteraction { get; set; }
 	public TokenType tokenType { get; set; }
+	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
 
 	public string triggerTest;

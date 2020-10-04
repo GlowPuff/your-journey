@@ -1,12 +1,17 @@
 ﻿using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MonsterButton : MonoBehaviour
 {
 	public Monster monster;
+	public Text countText;
 	public CanvasGroup cg;
-	public GameObject standard, elite, selected;
+	public GameObject standard, elite, selected, rangedIcon;
 	public GameObject[] monsters;//all the monster picture objects
+	public Image bannerIcon;
+
+	int lastCount;
 
 	[HideInInspector]
 	public bool markRemove = false;
@@ -14,7 +19,7 @@ public class MonsterButton : MonoBehaviour
 	bool hidden;
 	MonsterManager manager;
 
-	public void Show( bool isElite, MonsterManager m )
+	public void AddToBar( bool isElite, MonsterManager m )
 	{
 		standard.SetActive( !isElite );
 		elite.SetActive( isElite );
@@ -22,6 +27,11 @@ public class MonsterButton : MonoBehaviour
 
 		for ( int i = 0; i < monsters.Length; i++ )
 			monsters[i].SetActive( (int)monster.monsterType == i );
+
+		countText.text = monster.count.ToString();
+		lastCount = monster.count;
+		if ( monster.specialAbility != null && monster.specialAbility.Contains( "Ranged" ) )
+			rangedIcon.SetActive( true );
 
 		hidden = transform.position.x < manager.sbRect.position.x || transform.position.x > manager.sbRect.position.x + ( 1000f * manager.scalar );
 
@@ -42,9 +52,13 @@ public class MonsterButton : MonoBehaviour
 		transform.DOLocalMoveX( newX, .5f );
 	}
 
-	public void Remove()
+	public Sprite Remove()
 	{
 		cg.DOFade( 0, .5f ).OnComplete( () => { Destroy( gameObject ); } );
+		if ( bannerIcon.gameObject.activeInHierarchy )
+			return bannerIcon.sprite;
+		else
+			return null;
 	}
 
 	public void OnClick()
@@ -104,6 +118,15 @@ public class MonsterButton : MonoBehaviour
 		cg.blocksRaycasts = visible ? true : false;
 	}
 
+	public void SetBanner( Sprite sprite )
+	{
+		if ( sprite != null )
+		{
+			bannerIcon.sprite = sprite;
+			bannerIcon.gameObject.SetActive( true );
+		}
+	}
+
 	private void Update()
 	{
 		if ( markRemove )
@@ -111,6 +134,12 @@ public class MonsterButton : MonoBehaviour
 			cg.blocksRaycasts = false;
 			cg.interactable = false;
 			return;
+		}
+
+		if ( monster.count - monster.deathTally != lastCount )
+		{
+			countText.text = ( monster.count - monster.deathTally ).ToString();
+			lastCount = monster.count - monster.deathTally;
 		}
 
 		hidden = transform.position.x < manager.sbRect.position.x || transform.position.x > manager.sbRect.position.x + ( 1000f * manager.scalar );

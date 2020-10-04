@@ -8,24 +8,29 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class TitleManager : MonoBehaviour
 {
-	public Transform newButton, loadButton;
+	public Button newButton, loadButton;
 	public RectTransform itemContainer;
 	public Animator animator;
 	public List<FileItemButton> fileItemButtons = new List<FileItemButton>();
 	public GameObject fileItemPrefab, warningPanel;
 	public Button beginButton, nextButton, cancelButton;
-	public Text nameText, versionText, fileText, appVersion, engineVersion, headingText;
+	public Text nameText, versionText, fileText, appVersion, engineVersion, headingText, diffText;
 	public CanvasGroup selectJourneyCG, selectHeroesCG;
 	public Button[] heroButtons;
 	public Image finalFader;
 	public AudioSource music;
 	public PostProcessVolume volume;
 	public SettingsDialog settings;
+	public Text[] heroNameText;
 
 	ProjectItem[] projectItems;
 	ProjectItem selectedJourney;
 	bool[] selectedHeroes;
-	string[] heroes = new string[6] { "Aragorn", "Berevor", "Bilbo", "Elena", "Gimli", "Legolas" };
+	//string[] heroes = new string[6] { "Aragorn", "Beravor", "Bilbo", "Elena", "Gimli", "Legolas" };
+	CanvasGroup newBcg, loadBcg;
+	string tempName;
+	bool isChangingName = false;
+	int nameIndex = -1;
 
 	private void Start()
 	{
@@ -53,15 +58,35 @@ public class TitleManager : MonoBehaviour
 
 		appVersion.text = "App Version: " + Bootstrap.AppVersion;
 		engineVersion.text = "Scenario Format Version: " + Bootstrap.FormatVersion;
+
+		newBcg = newButton.GetComponent<CanvasGroup>();
+		loadBcg = loadButton.GetComponent<CanvasGroup>();
+
+		GlowTimer.SetTimer( 5, () =>
+		{
+			newButton.transform.DOLocalMoveX( -700, .75f );
+			loadButton.transform.DOLocalMoveX( -700, .75f );
+			newBcg.interactable = true;
+			loadBcg.interactable = true;
+		} );
 	}
 
 	public void NewGame()
 	{
-		newButton.DOLocalMoveX( -1135, 1 ).SetEase( Ease.InOutQuad );
-		loadButton.DOLocalMoveX( -1135, 1 ).SetEase( Ease.InOutQuad ).OnComplete( () =>
-		{
-			animator.Play( "bgFadeIn" );
-		} );
+		//newButton.DOLocalMoveX( -1135, 1 ).SetEase( Ease.InOutQuad );
+		//loadButton.DOLocalMoveX( -1135, 1 ).SetEase( Ease.InOutQuad ).OnComplete( () =>
+		//{
+		//	animator.Play( "bgFadeIn" );
+		//} );
+		newBcg.DOFade( 0, .25f );
+		loadBcg.DOFade( 0, .25f );
+		newBcg.blocksRaycasts = false;
+		loadBcg.blocksRaycasts = false;
+
+		newButton.interactable = false;
+		loadButton.interactable = false;
+		animator.Play( "bgFadeIn" );
+
 		nextButton.interactable = false;
 		cancelButton.interactable = true;
 		for ( int i = 0; i < fileItemButtons.Count; i++ )
@@ -81,6 +106,11 @@ public class TitleManager : MonoBehaviour
 		//	//animator.Play( "bgFadeIn" );
 		//} );
 		//;
+
+		//newButton.interactable = false;
+		//loadButton.interactable = false;
+		//animator.Play( "bgFadeIn" );
+
 		//nextButton.interactable = false;
 		//cancelButton.interactable = true;
 		//for ( int i = 0; i < fileItemButtons.Count; i++ )
@@ -93,19 +123,43 @@ public class TitleManager : MonoBehaviour
 
 	public void Cancel()
 	{
-		newButton.DOLocalMoveX( -700, .5f );
-		loadButton.DOLocalMoveX( -700, .5f );
+		//newButton.DOLocalMoveX( -700, .5f );
+		//loadButton.DOLocalMoveX( -700, .5f );
+		newBcg.DOFade( 1, .25f );
+		loadBcg.DOFade( 1, .25f );
+		newBcg.blocksRaycasts = true;
+		loadBcg.blocksRaycasts = true;
+
+		newButton.interactable = true;
+		loadButton.interactable = true;
 		animator.Play( "bgFadeOut" );
 		beginButton.interactable = false;
 		cancelButton.interactable = false;
 	}
 
+	public void OnDifficulty()
+	{
+		if ( Bootstrap.difficulty == Difficulty.Easy )
+			Bootstrap.difficulty = Difficulty.Normal;
+		else if ( Bootstrap.difficulty == Difficulty.Normal )
+			Bootstrap.difficulty = Difficulty.Hard;
+		else if ( Bootstrap.difficulty == Difficulty.Hard )
+			Bootstrap.difficulty = Difficulty.Easy;
+		diffText.text = Bootstrap.difficulty.ToString();
+	}
+
 	public void OnNext()
 	{
+		//go to hero selection
+		warningPanel.SetActive( false );
 		selectJourneyCG.interactable = false;
 
+		//reset game vars
+		beginButton.interactable = false;
+		Bootstrap.difficulty = Difficulty.Normal;
+		diffText.text = "Normal";
 		selectedHeroes = new bool[6].Fill( false );
-		ResetHeroColors();
+		ResetHeros();
 
 		selectJourneyCG.DOFade( 0, .5f ).OnComplete( () =>
 		{
@@ -117,6 +171,8 @@ public class TitleManager : MonoBehaviour
 
 	public void OnBack()
 	{
+		//back to journey select screen
+		isChangingName = false;
 		selectHeroesCG.interactable = false;
 		nextButton.interactable = false;
 		nameText.text = "";
@@ -140,7 +196,7 @@ public class TitleManager : MonoBehaviour
 		for ( int i = 0; i < 6; i++ )
 		{
 			if ( selectedHeroes[i] )
-				sh[i] = heroes[i];
+				sh[i] = heroNameText[i].text;
 		}
 		sh = sh.Where( s => !string.IsNullOrEmpty( s ) ).ToArray();
 		Bootstrap.SetNewGame( sh, selectedJourney );
@@ -172,15 +228,16 @@ public class TitleManager : MonoBehaviour
 		};
 		selectedHeroes[index] = !selectedHeroes[index];
 
-		ResetHeroColors();
+		ResetHeros();
 
 		beginButton.interactable = selectedHeroes.Any( b => b );
 	}
 
-	void ResetHeroColors()
+	void ResetHeros()
 	{
 		for ( int i = 0; i < 6; i++ )
 		{
+			heroNameText[i].text = Bootstrap.GetHeroName( i );
 			ColorBlock cb = heroButtons[i].colors;
 			if ( !selectedHeroes[i] )
 			{
@@ -219,5 +276,52 @@ public class TitleManager : MonoBehaviour
 
 		nextButton.interactable = true;
 		selectedJourney = projectItems[index];
+	}
+
+	public void OnChangeNameClick( int index )
+	{
+		isChangingName = true;
+		nameIndex = index;
+		heroNameText[index].color = Color.green;
+		tempName = heroNameText[nameIndex].text;
+		heroNameText[nameIndex].text = "";
+	}
+
+	private void Update()
+	{
+		if ( isChangingName )
+		{
+			if ( Input.GetKeyDown( KeyCode.Escape ) )
+			{
+				isChangingName = false;
+				heroNameText[nameIndex].color = Color.white;
+				heroNameText[nameIndex].text = tempName;
+				return;
+			}
+
+			foreach ( char c in Input.inputString )
+			{
+				if ( c == '\b' ) // has backspace/delete been pressed?
+				{
+					if ( heroNameText[nameIndex].text.Length != 0 )
+					{
+						heroNameText[nameIndex].text = heroNameText[nameIndex].text.Substring( 0, heroNameText[nameIndex].text.Length - 1 );
+					}
+				}
+				else if ( ( c == '\n' ) || ( c == '\r' ) ) // enter/return
+				{
+					isChangingName = false;
+					heroNameText[nameIndex].color = Color.white;
+					if ( string.IsNullOrEmpty( heroNameText[nameIndex].text ) )
+						heroNameText[nameIndex].text = tempName;
+					else
+						Bootstrap.SaveHeroName( nameIndex, heroNameText[nameIndex].text );
+				}
+				else
+				{
+					heroNameText[nameIndex].text += c;
+				}
+			}
+		}
 	}
 }

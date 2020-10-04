@@ -18,6 +18,7 @@ public class Interaction
 	//Attribute Test
 	public Ability testAttribute;
 	public bool isCumulative;
+	public bool passFail;
 	public int successValue;
 	public string successTrigger;
 	public string failTrigger;

@@ -31,7 +31,10 @@ public class Tile : MonoBehaviour
 	//queue of tokens to fire because tile wasn't explored yet
 	List<string> tokenTriggerList = new List<string>();
 
-	void Awake()
+	TriggerManager triggerManager;
+	CamControl camControl;
+
+	public void Awake()
 	{
 		interactionManager = FindObjectOfType<InteractionManager>();
 
@@ -59,12 +62,15 @@ public class Tile : MonoBehaviour
 		exploreToken.gameObject.SetActive( false );
 
 		meshRenderer.material.SetFloat( "_sepiaValue", 1 );
+
+		triggerManager = FindObjectOfType<TriggerManager>();
+		camControl = FindObjectOfType<CamControl>();
 		//StartCoroutine( Wait1Frame() );
 	}
 
 	public void EnqueueTokenTrigger( string name )
 	{
-		//Debug.Log( "Tile EnqueueTokenTrigger: " + name );
+		Debug.Log( "Tile EnqueueTokenTrigger: " + name );
 		if ( !tokenTriggerList.Contains( name ) )
 			tokenTriggerList.Add( name );
 	}
@@ -90,6 +96,9 @@ public class Tile : MonoBehaviour
 		return c;
 	}
 
+	/// <summary>
+	/// gets all children whose name CONTAINS given string
+	/// </summary>
 	public Transform[] GetChildren( string name )
 	{
 		Transform[] t = new Transform[GetCount( name )];
@@ -101,6 +110,18 @@ public class Tile : MonoBehaviour
 		}
 
 		return t;
+	}
+
+	public bool IsDarknessTokenActive()
+	{
+		Transform[] dark = GetChildren( "Darkness Token" );
+
+		foreach ( Transform child in dark )
+		{
+			if ( child.gameObject.activeInHierarchy )
+				return true;
+		}
+		return false;
 	}
 
 	//public bool CheckCollision2()
@@ -177,9 +198,9 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	public void SetConnector( int idx )
 	{
-		Debug.Log( "SetConnector::" + gameObject.name );
-		Debug.Log( "SetConnector()::idx=" + idx );
-		Debug.Log( "SetConnector()::connectorCount=" + connectorCount );
+		//Debug.Log( "SetConnector::" + gameObject.name );
+		//Debug.Log( "SetConnector()::idx=" + idx );
+		//Debug.Log( "SetConnector()::connectorCount=" + connectorCount );
 		if ( idx >= connectorCount )
 		{
 			Debug.Log( "SetConnector()::idx >= SetConnector" );
@@ -202,9 +223,9 @@ public class Tile : MonoBehaviour
 
 	public void SetAnchor( int idx )
 	{
-		Debug.Log( "SetAnchor::" + gameObject.name );
-		Debug.Log( "SetAnchor()::idx=" + idx );
-		Debug.Log( "SetAnchor()::anchorCount=" + anchorCount );
+		//Debug.Log( "SetAnchor::" + gameObject.name );
+		//Debug.Log( "SetAnchor()::idx=" + idx );
+		//Debug.Log( "SetAnchor()::anchorCount=" + anchorCount );
 		if ( idx >= anchorCount )
 		{
 			Debug.Log( "SetAnchor()::idx >= anchorCount" );
@@ -212,8 +233,8 @@ public class Tile : MonoBehaviour
 		}
 		Transform[] anchors = GetChildren( "anchor" );
 		currentAnchor = anchors[idx].position;
-		Debug.Log( "currentAnchor:" + anchors[idx].name );
-		Debug.Log( "currentAnchor=" + currentAnchor );
+		//Debug.Log( "currentAnchor:" + anchors[idx].name );
+		//Debug.Log( "currentAnchor=" + currentAnchor );
 	}
 
 	//public void SetRandomAnchor()
@@ -310,17 +331,10 @@ public class Tile : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Explore tile - colorize and optionally show tokens
+	/// Explore tile - colorize only
 	/// </summary>
-	public void Colorize(/* bool revealTokens = false */)
+	public void Colorize()
 	{
-		//if ( revealTokens )
-		//{
-		//	RevealToken( TokenType.Search );
-		//	RevealToken( TokenType.Person );
-		//	RevealToken( TokenType.Threat );
-		//	RevealToken( TokenType.Darkness );
-		//}
 		isExplored = true;
 		hexTile.isExplored = true;
 
@@ -393,12 +407,16 @@ public class Tile : MonoBehaviour
 		return found;
 	}
 
-	public Vector3 RevealTriggeredToken( string tname )
+	/// <summary>
+	/// Reveals ALL triggered tokens on this tile
+	/// </summary>
+	public Vector3[] RevealTriggeredTokens( string tname )
 	{
 		var size = tilemesh.GetComponent<MeshRenderer>().bounds.size;
 		var center = tilemesh.GetComponent<MeshRenderer>().bounds.center;
 		Transform[] tf = GetChildren( "Token" );
-		Vector3 tpos = ( -12345f ).ToVector3();
+		//Vector3 tpos = ( -12345f ).ToVector3();
+		List<Vector3> tpos = new List<Vector3>();
 
 		for ( int i = 0; i < tf.Length; i++ )
 		{
@@ -415,10 +433,10 @@ public class Tile : MonoBehaviour
 			tf[i].position = new Vector3( center.x + offset.x, 2, center.z + offset.z );
 			tf[i].RotateAround( center, Vector3.up, hexTile.angle );
 			tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
-			tpos = tf[i].position;
+			tpos.Add( tf[i].position );
 		}
 
-		return tpos;
+		return tpos.ToArray();
 	}
 
 	/// <summary>
@@ -426,6 +444,9 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	public bool InputUpdate( Ray ray )
 	{
+		if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase )
+			return false;
+
 		if ( Physics.Raycast( ray, out RaycastHit hit ) )
 		{
 			Transform objectHit = hit.transform;
@@ -440,32 +461,33 @@ public class Tile : MonoBehaviour
 						ob.gameObject.SetActive( false );
 				}
 
+				Tile tile = objectHit.parent.GetComponent<Tile>();
+
 				interactionManager.GetNewTextPanel().ShowQueryExploration( ( res ) =>
 				{
 					if ( res.btn1 )
 					{
-						ShowExplorationText( objectHit.parent.GetComponent<Tile>(), () =>
+						ShowExplorationText( tile, () =>
 						 {
-							 Tile tile = objectHit.parent.GetComponent<Tile>();
 
 							 tile.RemoveExplorationToken();
 							 tile.Colorize();
 							 tile.RevealInteractiveTokens();
 							 //fire trigger on chapter exploration
-							 FindObjectOfType<TriggerManager>().FireTrigger( tile.chapter.exploreTrigger );
+							 triggerManager.FireTrigger( tile.chapter.exploreTrigger );
 							 //fire trigger on tile exploration
-							 FindObjectOfType<TriggerManager>().FireTrigger( tile.hexTile.triggerName );
+							 triggerManager.FireTrigger( tile.hexTile.triggerName );
 							 //objectHit.parent.GetComponent<Tile>().tileGroup.ExploreTile();
 						 } );
 					}
 				} );
 
-				FindObjectOfType<CamControl>().MoveTo( objectHit.parent.GetComponent<Tile>().centerPosition, .2f );
+				camControl.MoveTo( tile.centerPosition, .2f );
 				return true;
 			}
 			else if ( objectHit.name.Contains( "Token" ) )
 			{
-				FindObjectOfType<CamControl>().MoveTo( objectHit.parent.GetComponent<Tile>().centerPosition, .2f );
+				camControl.MoveTo( objectHit.parent.GetComponent<Tile>().centerPosition, .2f );
 				QueryTokenInteraction( objectHit );
 				return true;
 			}

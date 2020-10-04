@@ -8,10 +8,13 @@ public class TitleCam : MonoBehaviour
 	bool gotime = false;
 	float yval = 0;
 	float timer = 3, xtimer;
+	Camera cam;
 
 	// Start is called before the first frame update
 	void Start()
 	{
+		cam = Camera.main;
+
 		GlowTimer.SetTimer( 8, () =>
 		{
 			GetComponent<Animator>().enabled = false;
@@ -26,12 +29,12 @@ public class TitleCam : MonoBehaviour
 
 	void animateCam()
 	{
-		Camera.main.transform.DORotate( new Vector3( Random.Range( -1f, 2.5f ), 0, -1 ), 4f )
+		cam.transform.DORotate( new Vector3( Random.Range( -1f, 2.5f ), 0, -1 ), 4f )
 		.SetDelay( 1 )
 		.SetEase( Ease.InOutQuad )
 		.OnComplete( () =>
 		{
-			Camera.main.transform.DORotate( new Vector3( Random.Range( -1f, 2.5f ), 0, 1 ), 4f ).SetEase( Ease.InOutQuad );
+			cam.transform.DORotate( new Vector3( Random.Range( -1f, 2.5f ), 0, 1 ), 4f ).SetEase( Ease.InOutQuad );
 		} );
 	}
 
@@ -45,7 +48,7 @@ public class TitleCam : MonoBehaviour
 			if ( xtimer >= 4 )
 			{
 				xtimer = 0;
-				//Camera.main.transform.DOLocalRotate( new Vector3( Random.Range( -1f, 2.5f ), 0, 0 ), 4 );
+				//cam.transform.DOLocalRotate( new Vector3( Random.Range( -1f, 2.5f ), 0, 0 ), 4 );
 			}
 			//float value = Mathf.Sin( timer * .5f );
 			//value = -.4f + ( value - -1 ) * ( 0 - -.4f ) / ( 1 - -1 );
@@ -54,6 +57,6 @@ public class TitleCam : MonoBehaviour
 			timer += Time.deltaTime;//bounce
 		}
 
-		Camera.main.transform.position = new Vector3( 0, 3.2f + yval, -8.95f );
+		cam.transform.position = new Vector3( 0, 3.2f + yval, -8.95f );
 	}
 }

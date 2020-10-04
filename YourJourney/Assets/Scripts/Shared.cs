@@ -9,8 +9,11 @@ public enum TileType { Hex, Battle }
 public enum ProjectType { Standalone, Campaign }
 public enum Ability { Might, Agility, Wisdom, Spirit, Wit, None }
 public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }
-public enum ButtonIcon { None, Action, OK, Continue }
+public enum ButtonIcon { None, Action, OK, Continue, Next }
 public enum TokenType { Search, Person, Threat, Darkness, Exploration, None }
+public enum PersonType { Human, Elf, Hobbit, Dwarf }
+public enum Difficulty { Easy, Normal, Hard }
+public enum FinalStand { Damage, Fear }
 
 public class InteractionResult
 {
@@ -36,7 +39,6 @@ public interface IInteraction
 	string dataName { get; set; }
 	Guid GUID { get; set; }
 	InteractionType interactionType { get; set; }
-	//bool isRandom { get; set; }
 	bool isTokenInteraction { get; set; }
 	string triggerName { get; set; }
 	string triggerAfterName { get; set; }
@@ -44,6 +46,7 @@ public interface IInteraction
 	TextBookData eventBookData { get; set; }
 	TokenType tokenType { get; set; }
 	int loreReward { get; set; }
+	PersonType personType { get; set; }
 }
 
 public interface ICommonData

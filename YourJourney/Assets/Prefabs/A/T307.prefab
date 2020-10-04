@@ -163,6 +163,7 @@ MonoBehaviour:
   currentConnectorID: 0
   isExplored: 0
   rootPosition: {fileID: 15366713779897499}
+  tilemesh: {fileID: 0}
 --- !u!1 &15366712662536100
 GameObject:
   m_ObjectHideFlags: 0

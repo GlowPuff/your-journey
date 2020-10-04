@@ -12,5 +12,6 @@ public class MetaData : MonoBehaviour
 	public Vector3 offset;
 	public Guid GUID;
 	public bool isRandom;
+	public Tile tile;
 }
 

@@ -13,6 +13,8 @@ public class MonsterItem : MonoBehaviour
 	public Monster monster;
 	[HideInInspector]
 	public bool isDead = false;
+	[HideInInspector]
+	public bool activeMonster = false;//visible in combat screen
 
 	int tempCurrentHealth, currentShield, currentSorc, currentMaxHealth, currentDead, idx, sunderModify, healthModify;
 	float healthWidth = 324, shieldWidth = 324, sorcWidth = 324;
@@ -49,7 +51,11 @@ public class MonsterItem : MonoBehaviour
 			return damage;
 		}
 
-		sunderModify += modifier.Sunder ? 1 : 0;
+		//if ( sunderModify == 1 && !modifier.Sunder )//removing sunder
+		//	sunderModify = 0;
+		//else
+		sunderModify = modifier.Sunder ? 1 : 0;//+=
+
 		healthModify = modifier.Lethal ? monster.health / 2 : 0;
 		int damageUsed = 0;
 		tempCurrentHealth = currentMaxHealth;
@@ -114,6 +120,7 @@ public class MonsterItem : MonoBehaviour
 
 	public void Show( Monster m, int index )
 	{
+		activeMonster = true;
 		idx = index;
 		monster = m;
 		currentMaxHealth = monster.currentHealth[index];
@@ -127,6 +134,7 @@ public class MonsterItem : MonoBehaviour
 
 	public void Hide()
 	{
+		activeMonster = false;
 		cg.alpha = 0;
 	}
 }

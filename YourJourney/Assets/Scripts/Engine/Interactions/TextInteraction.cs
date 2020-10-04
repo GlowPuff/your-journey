@@ -11,6 +11,7 @@ public class TextInteraction : IInteraction
 	public TextBookData eventBookData { get; set; }
 	public bool isTokenInteraction { get; set; }
 	public TokenType tokenType { get; set; }
+	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
 
 	public InteractionType interactionType { get { return InteractionType.Text; } set { } }

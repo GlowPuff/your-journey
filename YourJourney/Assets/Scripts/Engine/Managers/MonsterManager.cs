@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 public class MonsterManager : MonoBehaviour
 {
@@ -11,7 +11,9 @@ public class MonsterManager : MonoBehaviour
 	public Transform bar, buttonAttach;
 	public Button leftB, rightB;
 	public Canvas canvas;
+	public Sprite[] banners, eliteBanners;
 
+	Queue<Sprite> bannerQueue, eliteBannerQueue;
 	//Monster selectedMonster;
 	int scrollOffset = -517;
 	bool scrollReady = true;
@@ -28,6 +30,8 @@ public class MonsterManager : MonoBehaviour
 	{
 		attachRect = buttonAttach.GetComponent<RectTransform>();
 		scalar = canvas.scaleFactor;
+		bannerQueue = new Queue<Sprite>( banners );
+		eliteBannerQueue = new Queue<Sprite>( banners );
 	}
 
 	/// <summary>
@@ -35,15 +39,45 @@ public class MonsterManager : MonoBehaviour
 	/// </summary>
 	public void AddMonsterGroup( Monster m, IInteraction interaction = null )
 	{
+		//check if monster can be spawned in this Difficulty mode
+		if ( !m.IsValid() )
+			return;
+
 		bar.DOLocalMoveY( 50, .75f ).SetEase( Ease.InOutCubic );
 
+		//modify monster for difficulty
+		m.AdjustDifficulty();
+		m.AdjustPlayerCountDifficulty();
+
 		m.interaction = interaction;
+		m.currentHealth = new int[3] { m.health, m.health, m.health };
 		GameObject go = Instantiate( monsterButtonPrefab, buttonAttach );
+
 		go.transform.localPosition = new Vector3( ( 175 * monsterList.Count ), 25, 0 );
 		go.GetComponent<MonsterButton>().monster = m;
-		go.GetComponent<MonsterButton>().Show( m.isElite, this );
+		go.GetComponent<MonsterButton>().AddToBar( m.isElite, this );
 
 		monsterList.Add( m );
+
+		//add banner
+		var mc = from monster in monsterList
+						 where monster.monsterType == m.monsterType && monster.isElite == m.isElite
+						 select monster;
+		if ( mc.Count() > 1 )
+		{
+			if ( !m.isElite && bannerQueue.Count > 0 )
+				go.GetComponent<MonsterButton>().SetBanner( bannerQueue.Dequeue() );
+			else if ( m.isElite && eliteBannerQueue.Count > 0 )
+				go.GetComponent<MonsterButton>().SetBanner( eliteBannerQueue.Dequeue() );
+		}
+
+		scrollReady = false;
+		foreach ( Transform child in buttonAttach )
+		{
+			if ( child.transform.position.x > sbRect.position.x + ( 1000f * scalar ) )//off the edge
+				scrollOffset -= 175;
+		}
+		buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
 	}
 
 	private void Update()
@@ -109,33 +143,6 @@ public class MonsterManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Add from interacting with a threat
-	/// </summary>
-	public void AddNewMonsterGroup( Monster[] array, IInteraction interaction )
-	{
-		bar.DOLocalMoveY( 50, .75f ).SetEase( Ease.InOutCubic );
-
-		foreach ( Monster m in array )
-		{
-			m.interaction = interaction;
-			m.currentHealth = new int[3] { m.health, m.health, m.health };
-			GameObject go = Instantiate( monsterButtonPrefab, buttonAttach );
-			go.transform.localPosition = new Vector3( ( 175 * monsterList.Count ), 25, 0 );
-			go.GetComponent<MonsterButton>().monster = m;
-			go.GetComponent<MonsterButton>().Show( m.isElite, this );
-
-			monsterList.Add( m );
-		}
-	}
-
-	//public void RemoveMonster( int i )
-	//{
-	//	if ( i >= monsterList.Count )
-	//		return;
-	//	RemoveMonster( monsterList[i] );
-	//}
-
-	/// <summary>
 	/// removes monster group, shows reward, and fires its Trigger After Event
 	/// </summary>
 	public void RemoveMonster( Monster m )
@@ -152,7 +159,11 @@ public class MonsterManager : MonoBehaviour
 				child.GetComponent<MonsterButton>().cg.DOFade( 0, .5f );
 				child.DOLocalMoveY( 0, .5f ).OnComplete( () =>
 				{
-					child.GetComponent<MonsterButton>().Remove();
+					Sprite b = child.GetComponent<MonsterButton>().Remove();
+					if ( b != null && !m.isElite )
+						bannerQueue.Enqueue( b );
+					else if ( b != null )
+						eliteBannerQueue.Enqueue( b );
 				} );
 			}
 			else
@@ -173,14 +184,19 @@ public class MonsterManager : MonoBehaviour
 		if ( m.interaction != null )
 		{
 			ThreatInteraction ti = (ThreatInteraction)m.interaction;
-			var foo = ( from mnstr in ti.monsterCollection from mbtn in monsterList where mnstr.GUID == mbtn.GUID select mnstr );
+			var foo = ( from mnstr in ti.monsterCollection
+										//where mnstr.IsValid()//no
+									from mbtn in monsterList
+									where mnstr.GUID == mbtn.GUID
+									select mnstr );
 
-			FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( $"Remove 1 {m.dataName} from the board.\r\n\r\nYou or a nearby Hero gain 1 Inspiration.", ButtonIcon.Continue, () =>
+			FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( $"Remove the {m.dataName}(s) from the board.\r\n\r\nYou or a nearby Hero gain 1 Inspiration.", ButtonIcon.Continue, () =>
 			{
 				if ( foo.Count() == 0 )
 				{
 					string trigger = ti.triggerDefeatedName;
 					FindObjectOfType<TriggerManager>().FireTrigger( trigger );
+					FindObjectOfType<LorePanel>().AddLore( ti.loreReward );
 				}
 			} );
 		}

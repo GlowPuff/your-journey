@@ -12,6 +12,7 @@ public class MultiEventInteraction : IInteraction
 	public TextBookData eventBookData { get; set; }
 	public bool isTokenInteraction { get; set; }
 	public TokenType tokenType { get; set; }
+	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
 	public List<string> eventList { get; set; }
 	public List<string> triggerList { get; set; }

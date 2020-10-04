@@ -4130,3 +4130,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerName: 
   interactionName: 
+  triggeredByName: 
+  tokenType: 0
+  offset: {x: 0, y: 0, z: 0}
+  isRandom: 0
+  tile: {fileID: 0}

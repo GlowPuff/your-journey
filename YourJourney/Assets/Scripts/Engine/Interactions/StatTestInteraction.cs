@@ -11,11 +11,12 @@ public class StatTestInteraction : IInteraction
 	public TextBookData eventBookData { get; set; }
 	public bool isTokenInteraction { get; set; }
 	public TokenType tokenType { get; set; }
+	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
 
 	public Ability testAttribute;
 	public bool isCumulative;
-	public bool passFail;
+	public bool passFail { get; set; }
 	public int successValue;
 	public string successTrigger;
 	public string failTrigger;
@@ -27,30 +28,31 @@ public class StatTestInteraction : IInteraction
 
 	public int accumulatedValue = -1;
 
-	public static StatTestInteraction Create( Interaction interaction )
-	{
-		StatTestInteraction st = new StatTestInteraction
-		{
-			GUID = interaction.GUID,
-			dataName = interaction.dataName,
-			isEmpty = interaction.isEmpty,
-			triggerName = interaction.triggerName,
-			triggerAfterName = interaction.triggerAfterName,
-			textBookData = interaction.textBookData,
-			eventBookData = interaction.eventBookData,
+	//public static StatTestInteraction Create( Interaction interaction )
+	//{
+	//	StatTestInteraction st = new StatTestInteraction
+	//	{
+	//		GUID = interaction.GUID,
+	//		dataName = interaction.dataName,
+	//		isEmpty = interaction.isEmpty,
+	//		triggerName = interaction.triggerName,
+	//		triggerAfterName = interaction.triggerAfterName,
+	//		textBookData = interaction.textBookData,
+	//		eventBookData = interaction.eventBookData,
 
-			testAttribute = interaction.testAttribute,
-			isCumulative = interaction.isCumulative,
-			successValue = interaction.successValue,
-			successTrigger = interaction.successTrigger,
-			failTrigger = interaction.failTrigger,
-			passBookData = interaction.passBookData,
-			failBookData = interaction.failBookData,
-			progressBookData = interaction.progressBookData
-		};
+	//		testAttribute = interaction.testAttribute,
+	//		isCumulative = interaction.isCumulative,
+	//		passFail = interaction.passFail,
+	//		successValue = interaction.successValue,
+	//		successTrigger = interaction.successTrigger,
+	//		failTrigger = interaction.failTrigger,
+	//		passBookData = interaction.passBookData,
+	//		failBookData = interaction.failBookData,
+	//		progressBookData = interaction.progressBookData
+	//	};
 
-		return st;
-	}
+	//	return st;
+	//}
 
 	/// <summary>
 	/// Returns true if test is successful, false if not
@@ -60,7 +62,10 @@ public class StatTestInteraction : IInteraction
 		if ( !passFail )
 			accumulatedValue += amount;
 		else
+		{
+			successValue = 0;
 			accumulatedValue = amount;
+		}
 
 		if ( accumulatedValue >= successValue )
 		{

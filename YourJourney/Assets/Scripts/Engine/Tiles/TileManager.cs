@@ -1,22 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
+public class TileManager : MonoBehaviour
 {
 	public GameObject[] tilePrefabs;
 	public GameObject[] tilePrefabsB;
-	public GameObject searchTokenPrefab, darkTokenPrefab, personTokenPrefab, threatTokenPrefab;
+	public GameObject searchTokenPrefab, darkTokenPrefab, humanTokenPrefab, elfTokenPrefab, dwarfTokenPrefab, hobbitTokenPrefab, threatTokenPrefab;
+	public Tile[] ATiles, BTiles;
+	public GameObject fogPrefab;
+	public PartyPanel partyPanel;
 
 	bool disableInput = false;
+	Camera theCamera;
 
 	List<TileGroup> tileGroupList = new List<TileGroup>();
 
 	public TileGroup this[int idx] => tileGroupList[idx];
 
+	void Awake()
+	{
+		theCamera = Camera.main;
+	}
+
 	//take an id (101) and return its prefab
 	public GameObject GetPrefab( string side, int id )
 	{
+		//if ( id == 100 )
+		//	return ATiles[0].gameObject;
+		//else if ( id == 200 )
+		//	return ATiles[1].gameObject;
+
 		return side == "A" ? getATile( id ) : getBTile( id );
 	}
 
@@ -132,14 +148,18 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 	}
 
 	/// <summary>
-	/// return Transform[] of all visible token positions that are "open", not near a used Token
+	/// return Transform[] of all visible token positions (for spawning monsters) that are "open", not near a used Token
 	/// </summary>
-	public Vector3[] GetAvailableTokenPositions()
+	public Vector3[] GetAvailableSpawnPositions( int groupCount )
 	{
 		//get explored tiles
-		var explored = from tg in tileGroupList from tile in tg.tileList where tile.isExplored select tile;
+		var explored = from tg in tileGroupList
+									 from tile in tg.tileList
+									 where tile.isExplored
+									 select tile;
+		Debug.Log( "GetAvailableSpawnPositions::explored: " + explored.Count() );
 		List<Transform> tkattach = new List<Transform>();
-		List<Transform> TKattach = new List<Transform>();
+		List<Transform> TKinUse = new List<Transform>();
 		foreach ( Tile t in explored )
 		{
 			//get all "token attach" positions
@@ -149,26 +169,38 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 			//get all Tokens on the tile
 			foreach ( Transform child in t.transform )
 				if ( child.name.Contains( "Token(Clone)" ) )
-					TKattach.Add( child );
+					TKinUse.Add( child );
 		}
 
 		//if there are tokens on the tile, we need to weed them out
-		if ( TKattach.Count > 0 )
+		//if ( TKinUse.Count > 0 )
+		//{
+		//	Debug.Log( "Looking for open positions for " + groupCount + " groups" );
+		//	//select token positions that aren't near each other - these will be open for use
+		//	//test shows ~1.1 units typical Token to tk attach distance
+		//	var found = from tktf in tkattach
+		//							from TKtf in TKinUse
+		//							where Vector3.Distance( tktf.position, TKtf.position ) > 1.5f
+		//							select tktf;
+		//	//results found - return new vector3[] where y = .3
+		//	//HashSet<Transform> foundHash = new HashSet<Transform>( found );
+		//	if ( found.Count() > groupCount )
+		//	{
+		//		Debug.Log( "returning VALID positions" );
+		//		var open = found.Select( x => new Vector3( x.position.x, .3f, x.position.z ) );
+		//		return open.ToArray();//return results
+		//	}
+		//	else
+		//	{
+		//		Debug.Log( "returning ALL positions" );
+		//		return tkattach.Select( x => new Vector3( x.position.x, .3f, x.position.z ) ).ToArray();//no open attach positions open, return all positions
+		//	}
+		//}
+		//else//no tokens on board to exclude, just return all attach positions
 		{
-			//select token positions that aren't near each other - these will be open for use
-			//test shows ~1.1 units typical Token to tk attach distance
-			var found = from tktf in tkattach from TKtf in TKattach where Vector3.Distance( tktf.position, TKtf.position ) > 1.5f select tktf;
-			//results found - return new vector3[] where y = .3
-			if ( found.Count() > 0 )
-			{
-				var open = found.Select( x => new Vector3( x.position.x, .3f, x.position.z ) );
-				return open.ToArray();//return results
-			}
-			else
-				return null;//no open attach positions open
-		}
-		else//no tokens on board to exclude, just return all attach positions
+			//Debug.Log( "returning ALL positions" );
 			return tkattach.Select( x => new Vector3( x.position.x, .3f, x.position.z ) ).ToArray();
+		}
 	}
 
 	/// <summary>
@@ -177,7 +209,11 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 	public TileGroup CreateGroupFromChapter( Chapter c )
 	{
 		Debug.Log( "CreateGroupFromChapter: " + c.dataName );
-		TileGroup tg = c.isRandomTiles ? TileGroup.CreateRandomGroup( c ) : TileGroup.CreateGroup( c );
+		//Debug.Log( "CreateGroupFromChapter:dynamic? " + c.isDynamic );
+		if ( c.tileObserver.Count == 0 )
+			return null;
+
+		TileGroup tg = c.isRandomTiles ? TileGroup.CreateRandomGroup( c ) : TileGroup.CreateFixedGroup( c );
 		tileGroupList.Add( tg );
 		return tg;
 	}
@@ -194,14 +230,6 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 			GlowTimer.SetTimer( 1, () => { disableInput = false; } );
 	}
 
-	/// <summary>
-	/// Creates a group and places all tiles in Chapter specified, then attaches it to specified group
-	/// </summary>
-	public void CreateGroupAndAttach( Chapter c, TileGroup tg )
-	{
-
-	}
-
 	//public bool Collision()
 	//{
 	//	return tileGroupList[0].CollisionCheck();
@@ -216,12 +244,13 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 
 	private void Update()
 	{
-		if ( FindObjectOfType<InteractionManager>().PanelShowing )
+		if ( FindObjectOfType<InteractionManager>().PanelShowing
+			|| partyPanel.gameObject.activeInHierarchy )
 			return;
 
 		if ( !disableInput && Input.GetMouseButtonDown( 0 ) )
 		{
-			Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
+			Ray ray = theCamera.ScreenPointToRay( Input.mousePosition );
 			foreach ( TileGroup tg in tileGroupList )
 				foreach ( Tile t in tg.tileList )
 					if ( t.InputUpdate( ray ) )
@@ -231,66 +260,73 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 
 	public int UnexploredTileCount()
 	{
-		int c = 0;
-		foreach ( TileGroup tg in tileGroupList )
-			foreach ( Tile t in tg.tileList )
-				if ( !t.isExplored )
-					c++;
-		return c;
+		var tc = from tg in tileGroupList
+						 from tile in tg.tileList
+						 where !tile.isExplored && tile.gameObject.activeInHierarchy
+						 select tile;
+		return tc.Count();
+		//int c = 0;
+		//foreach ( TileGroup tg in tileGroupList )
+		//	foreach ( Tile t in tg.tileList )
+		//		if ( !t.isExplored )
+		//			c++;
+		//return c;
 	}
 
 	public int ThreatTokenCount()
 	{
+		var tc = from tg in tileGroupList
+						 from tile in tg.tileList
+						 where tile.isExplored
+						 select tile;
+
 		int c = 0;
-		foreach ( TileGroup tg in tileGroupList )
-			foreach ( Tile t in tg.tileList )
-			{
-				Transform[] tf = t.GetChildren( "Token" );
-				c += tf.Count( x => x.GetComponent<MetaData>().tokenType == TokenType.Threat );
-			}
+		foreach ( Tile t in tc )
+		{
+			Transform[] tf = t.GetChildren( "Threat Token" ).Where( x => x.gameObject.activeInHierarchy ).ToArray();
+			c += tf.Count( x => x.GetComponent<MetaData>().tokenType == TokenType.Threat );
+		}
+
+		//foreach ( TileGroup tg in tileGroupList )
+		//	foreach ( Tile t in tg.tileList )
+		//	{
+		//		Transform[] tf = t.GetChildren( "Token" );
+		//		c += tf.Count( x => x.GetComponent<MetaData>().tokenType == TokenType.Threat );
+		//	}
 		return c;
 	}
 
 	public bool TryTriggerToken( string name )
 	{
-		//Debug.Log( "TryTriggerToken: " + name );
-		//this method acts on ALL tiles on ALL chapters on the board
+		Debug.Log( "TryTriggerToken: " + name );
+		//this method acts on ALL tiles on ALL VISIBLE chapters on the board
 
-		//select tile(s) that have a token Triggered By 'name'
-		var tiles = from tg in tileGroupList from t in tg.tileList.Where( x => x.HasTriggeredToken( name ) ) select t;
+		//select VISIBLE tile(s) that have a token Triggered By 'name'
+		var tiles = from tg in tileGroupList
+								from t in tg.tileList.Where( x => x.HasTriggeredToken( name ) && x.gameObject.activeInHierarchy )
+								select t;
 
-		//no tiles currently on the table have a token Triggered By this name, so enqueue it for later chapters to check when they get explored
+		//enqueue it for later chapters to check when they get explored
 		FindObjectOfType<ChapterManager>().EnqueueTokenTrigger( name );
 
 		//there are tiles on the table with matching tokens, weed out explored tiles
 		var explored = tiles.Where( x => x.isExplored );
 		var unexplored = tiles.Where( x => !x.isExplored );
 
-		//Debug.Log( "Found " + explored.Count() + " matching EXPLORED tiles" );
-		//Debug.Log( "Found " + unexplored.Count() + " matching UNEXPLORED tiles" );
-
 		//iterate the tiles and either reveal the token or queue it to show when its tile gets explored
 		if ( explored.Count() > 0 )
 		{
-
-			TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
-			p.ShowOkContinue( "Place the indicated Token", ButtonIcon.Continue, () =>
+			//Debug.Log( "Found " + explored.Count() + " matching EXPLORED tiles" );
+			List<Tuple<int, Vector3[]>> tokpos = new List<Tuple<int, Vector3[]>>();
+			foreach ( Tile t in explored )
 			{
-				Vector3 tpos = ( -12345f ).ToVector3();
-				//Debug.Log( "explored count=" + explored.Count() );
-				foreach ( Tile t in explored )
-				{
-					//Debug.Log( "TILE ID:" + t.hexTile.idNumber );
-					tpos = t.RevealTriggeredToken( name );
-					if ( tpos.x != -12345f )
-					{
-						//Debug.Log( "MOVING" );
-						FindObjectOfType<CamControl>().MoveTo( tpos );
-					}
-				}
-			} );
+				tokpos.Add( new Tuple<int, Vector3[]>( t.hexTile.idNumber, t.RevealTriggeredTokens( name ) ) );
+			}
+			StartCoroutine( TokenPlacementPrompt( tokpos ) );
 		}
 
+		//if ( unexplored.Count() > 0 )
+		//	Debug.Log( "Found " + unexplored.Count() + " matching UNEXPLORED tiles" );
 		//mark the rest to trigger later when the tiles get explored
 		foreach ( Tile t in unexplored )
 			t.EnqueueTokenTrigger( name );
@@ -299,5 +335,135 @@ public class TileManager : MonoBehaviour//, IEnumerator, IEnumerable
 			return true;
 		else
 			return false;
+	}
+
+	IEnumerator TokenPlacementPrompt( IEnumerable<Tuple<int, Vector3[]>> explored )
+	{
+		Debug.Log( "**START TokenPlacementPrompt" );
+
+		foreach ( Tuple<int, Vector3[]> t in explored )//each tile...
+		{
+			bool waiting = true;
+			Debug.Log( $"Tokens in tile {t.Item1}: {t.Item2.Length}" );
+
+			foreach ( Vector3 v in t.Item2 )//each token...
+			{
+				FindObjectOfType<CamControl>().MoveTo( v );
+				TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
+				p.ShowOkContinue( "Place the indicated Token on Tile " + t.Item1 + ".", ButtonIcon.Continue, () => waiting = false );
+				while ( waiting )
+					yield return null;
+			}
+		}
+
+		Debug.Log( "**END TokenPlacementPrompt" );
+	}
+
+	/// <summary>
+	/// Pre-build scenario tile layout
+	/// </summary>
+	public void BuildScenario2()
+	{
+		ChapterManager cm = FindObjectOfType<ChapterManager>();
+		List<TileGroup> TGList = new List<TileGroup>();
+		List<TileGroup> pendingTGList = new List<TileGroup>();
+
+		//create Start chapter first
+		Chapter first = cm.chapterList.Where( x => x.dataName == "Start" ).First();
+		TileGroup ftg = first.tileGroup = CreateGroupFromChapter( first );
+		TGList.Add( ftg );
+
+		//build all chapter tilegroups except Start
+		foreach ( Chapter c in cm.chapterList.Where( x => x.dataName != "Start" ) )
+		{
+			//build the tiles in the tg
+			TileGroup tg = c.tileGroup = CreateGroupFromChapter( c );
+			if ( tg == null )
+			{
+				Debug.Log( "WARNING::BuildScenario::Chapter has no tiles: " + c.dataName );
+				return;
+			}
+
+			TGList.Add( tg );
+		}
+
+		//connect all blocks (Start is excluded by its nature) with a hinted attach
+		foreach ( TileGroup currentTG in TGList.Where( x => x.GetChapter().attachHint != "None" ) )
+		{
+			//try connecting to requested Block TG, make sure it exists first and it's not itself
+			if ( TGList.Any( x => x.GetChapter().dataName == currentTG.GetChapter().attachHint && x.GetChapter().dataName == currentTG.GetChapter().dataName ) )
+			{
+				Debug.Log( "WARNING: CONNECTING TO SELF: " + currentTG.GetChapter().dataName );
+				continue;
+			}
+
+			if ( TGList.Any( x => x.GetChapter().dataName == currentTG.GetChapter().attachHint && x.GetChapter().dataName != currentTG.GetChapter().dataName ) )
+			{
+				TileGroup conTo = TGList.Where( x => x.GetChapter().dataName == currentTG.GetChapter().attachHint ).First();
+				bool success = currentTG.AttachTo( conTo );
+				if ( !success )
+				{
+					Debug.Log( "PENDING:" + currentTG.GetChapter().dataName );
+					pendingTGList.Add( currentTG );
+				}
+				else
+				{
+					Debug.Log( "CONNECTED " + currentTG.GetChapter().dataName + " TO " + conTo.GetChapter().dataName );
+				}
+			}
+		}
+
+		//now do the rest (excluding Start), including any pending TGs that couldn't connect
+		var theRest = pendingTGList.Concat( TGList.Where( x => x.GetChapter().attachHint == "None" && x.GetChapter().dataName != "Start" ) );
+		foreach ( TileGroup currentTG in theRest )
+		{
+			foreach ( TileGroup tilegroup in TGList )
+			{
+				if ( tilegroup == currentTG )//don't connect to self
+					continue;
+				bool success = currentTG.AttachTo( tilegroup );
+				if ( success )
+					continue;
+			}
+		}
+	}
+
+	public void BuildScenario()
+	{
+		ChapterManager cm = FindObjectOfType<ChapterManager>();
+		List<TileGroup> TGList = new List<TileGroup>();
+
+		//build ALL chapter tilegroups
+		foreach ( Chapter c in cm.chapterList )
+		{
+			//build the tiles in the tg
+			TileGroup tg = c.tileGroup = CreateGroupFromChapter( c );
+			if ( tg == null )
+			{
+				Debug.Log( "WARNING::BuildScenario::Chapter has no tiles: " + c.dataName );
+				return;
+			}
+
+			TGList.Add( tg );
+		}
+
+		//all non-dynamic tiles excluding start
+		foreach ( TileGroup tg in TGList.Where( x => !x.GetChapter().isDynamic && x.GetChapter().dataName != "Start" ) )
+		{
+			//try attaching tg to oldest tg already on board
+			foreach ( TileGroup tilegroup in TGList.Where( x => !x.GetChapter().isDynamic && x.GUID != tg.GUID ) )//every non-dynamic
+			{
+				bool success = tg.AttachTo( tilegroup );
+				if ( success )
+				{
+					Debug.Log( "***ATTACHING " + tg.GetChapter().dataName + " to " + tilegroup.GetChapter().dataName );
+					GameObject fog = Instantiate( fogPrefab, transform );
+					FogData fg = fog.GetComponent<FogData>();
+					fg.chapterName = tg.GetChapter().dataName;
+					fog.transform.position = tg.groupCenter.Y( .5f );
+					break;
+				}
+			}
+		}
 	}
 }

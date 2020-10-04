@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using Newtonsoft.Json;
+using System.ComponentModel;
 
 public class Token
 {
@@ -9,6 +11,9 @@ public class Token
 	public string triggerName { get; set; }
 	public string triggeredByName { get; set; }
 	public TokenType tokenType { get; set; }
+	[DefaultValue( PersonType.Human )]
+	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
+	public PersonType personType { get; set; }
 	public int idNumber { get; set; }
 	public string position
 	{

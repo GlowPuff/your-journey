@@ -120,6 +120,8 @@ public class CombatPanel : MonoBehaviour
 	{
 		cleaveSelected = !cleaveSelected;
 		btn.GetComponent<Image>().sprite = cleaveSelected ? selectedButton : unselectedButton;
+
+		DoDamage();
 	}
 	public void OnPierce( Button btn )
 	{
@@ -177,11 +179,13 @@ public class CombatPanel : MonoBehaviour
 	{
 		var sp = FindObjectOfType<ShadowPhaseManager>();
 		var mm = FindObjectOfType<MonsterManager>();
+		var im = FindObjectOfType<InteractionManager>();
 		applyButton.interactable = false;
-		int deadCount = monsterItems.Where( x => x.isDead ).Count() - monster.deathTally;
+		//how many died this attack
+		int deadCount = monsterItems.Where( x => x.isDead && x.activeMonster ).Count() - monster.deathTally;
 
 		monster.deadCount = deadCount;//shadow phase reads this number
-		monster.deathTally += deadCount;
+		monster.deathTally += deadCount;//how many have died total
 
 		for ( int i = 0; i < monster.count; i++ )
 			monsterItems[i].Apply( stunSelected );
@@ -195,11 +199,24 @@ public class CombatPanel : MonoBehaviour
 		{
 			//if we're here from the shadow phase AND ALL monsters died, bug out and let shadow phase continue
 			if ( sp.doingShadowPhase && monster.deathTally == monster.count )
+			{
 				mm.RemoveMonster( monster );
+				sp.NotifyInterrupt();
+			}
+			else if ( sp.doingShadowPhase )//otherwise at least 1 killed, remove
+			{
+				im.GetNewTextPanel().ShowOkContinue( $"Remove {deadCount} {monster.dataName}(s) from the board.", ButtonIcon.Continue, null
+					);
+			}
 			else if ( !sp.doingShadowPhase )//otherwise not in SP, continue
 			{
 				if ( monster.deathTally < monster.count )
-					QueryCounterAttack( monster );
+				{
+					im.GetNewTextPanel().ShowOkContinue( $"Remove {deadCount} {monster.dataName}(s) from the board.", ButtonIcon.Continue, () =>
+					{
+						QueryCounterAttack( monster );
+					} );
+				}
 				else
 					mm.RemoveMonster( monster );
 			}
@@ -217,7 +234,7 @@ public class CombatPanel : MonoBehaviour
 			return;
 		}
 
-		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowYesNo( "Can the enemy attack?", res =>
+		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowYesNo( "Can the enemy counterattack?", res =>
 		{
 			if ( res.btn1 )
 			{
@@ -228,31 +245,33 @@ public class CombatPanel : MonoBehaviour
 				 } );
 			}
 			else
-			{
-				//show monster move textbox
-				//Move X: Attack NAME (or closest Hero)
-				//buttons: Attack/No Target
-				FindObjectOfType<InteractionManager>()
-				.GetNewTextPanel()
-				.ShowCustom( "Move " + monster.movementValue + ": Attack " + Bootstrap.GetRandomHero() + " or closest Hero", "Attack", "No Target", r =>
-					 {
-						 if ( r.btn1 )
-						 {
-							 monster.isExhausted = true;
-							 FindObjectOfType<InteractionManager>().GetNewDamagePanel().ShowCombatCounter( monster, () =>
-								{
-									FindObjectOfType<MonsterManager>().UnselectAll();
-								} );
-						 }
-						 else
-						 {
-							 FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( "Move " + monster.movementValue * 2 + " towards closest Hero", ButtonIcon.Continue, () =>
-									{
-										FindObjectOfType<MonsterManager>().UnselectAll();
-									} );
-						 }
-					 } );
-			}
+				FindObjectOfType<MonsterManager>().UnselectAll();
+
+			//else
+			//{
+			//	//show monster move textbox
+
+			//	FindObjectOfType<InteractionManager>()
+			//	.GetNewTextPanel()
+			//	.ShowCustom( "Move " + monster.movementValue + ": Attack " + Bootstrap.GetRandomHero() + " or closest Hero", "Attack", "No Target", r =>
+			//		 {
+			//			 if ( r.btn1 )
+			//			 {
+			//				 monster.isExhausted = true;
+			//				 FindObjectOfType<InteractionManager>().GetNewDamagePanel().ShowCombatCounter( monster, () =>
+			//					{
+			//						FindObjectOfType<MonsterManager>().UnselectAll();
+			//					} );
+			//			 }
+			//			 else
+			//			 {
+			//				 FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( "Move " + monster.movementValue * 2 + " towards closest Hero", ButtonIcon.Continue, () =>
+			//						{
+			//							FindObjectOfType<MonsterManager>().UnselectAll();
+			//						} );
+			//			 }
+			//		 } );
+			//}
 		} );
 	}
 }

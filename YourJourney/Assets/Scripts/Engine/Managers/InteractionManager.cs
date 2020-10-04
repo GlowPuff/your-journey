@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -37,37 +38,37 @@ public class InteractionManager : MonoBehaviour
 		var multitriggers = engine.scenario.triggersObserver.Where( x => x.isMultiTrigger );
 		foreach ( var mt in multitriggers )
 		{
-			var multi = new MultiEventInteraction();
-			multi.GUID = Guid.NewGuid();
-			multi.dataName = "converted multievent";
-			multi.isEmpty = false;
-			multi.triggerName = mt.dataName;
-			multi.triggerAfterName = "None";
-			//multi.textBookData = new TextBookData();
-			//multi.textBookData.pages.Add( "" );
-			//multi.eventBookData = new TextBookData();
-			//multi.eventBookData.pages.Add( "" );
-			multi.isTokenInteraction = false;
-			multi.tokenType = TokenType.None;
-			multi.eventList = new List<string>();
-			multi.triggerList = new List<string>();
-			multi.usingTriggers = false;
-			multi.isSilent = true;
-			multi.interactionType = InteractionType.MultiEvent;
+			var multiEvent = new MultiEventInteraction();
+			multiEvent.GUID = Guid.NewGuid();
+			multiEvent.dataName = "converted multievent";
+			multiEvent.isEmpty = false;
+			multiEvent.triggerName = mt.dataName;//triggered by this trigger
+			multiEvent.triggerAfterName = "None";
+			multiEvent.isTokenInteraction = false;
+			multiEvent.tokenType = TokenType.None;
+			multiEvent.eventList = new List<string>();
+			multiEvent.triggerList = new List<string>();
+			multiEvent.usingTriggers = false;
+			multiEvent.isSilent = true;
+			multiEvent.interactionType = InteractionType.MultiEvent;
 
 			//add any events listening for this trigger to the eventlist
-			Debug.Log( "looking for: " + mt.dataName );
-			foreach ( var t in s.interactionObserver )
-				Debug.Log( t.triggerName );
-			var listeners = s.interactionObserver.Where( x => x.triggerName == mt.dataName );//.Select( y => y.dataName );
-			Debug.Log( "found: " + listeners.Count() );
-			foreach ( var ev in listeners )
+			//foreach ( var t in s.interactionObserver )
+			//	Debug.Log( t.triggerName );
+			var listeners = s.interactionObserver.Where( x => x.triggerName == mt.dataName && x.triggerName != "None" );
+
+			if ( listeners.Count() > 0 )
 			{
-				ev.triggerName = "None";
-				multi.eventList.Add( ev.dataName );
+				//Debug.Log( "MultiTrigger looking for: " + mt.dataName + "::found: " + listeners.Count() );
+				foreach ( var ev in listeners )
+				{
+					ev.triggerName = "None";
+					multiEvent.eventList.Add( ev.dataName );
+				}
+				//Debug.Log( "added multievent to interactionObserver" );
+				//Debug.Log( "Created MultiEvent placeholder with Events: " + multiEvent.eventList.Count );
+				s.interactionObserver.Add( multiEvent );
 			}
-			engine.scenario.interactionObserver.Add( multi );
-			Debug.Log( "Created MultiEvent placeholder with Events:" + multi.eventList.Count );
 		}
 
 		//filter into separate lists
@@ -132,6 +133,7 @@ public class InteractionManager : MonoBehaviour
 	public TextPanel GetNewTextPanel()
 	{
 		return Instantiate( textPanelPrefab, uiRoot ).transform.Find( "TextPanel" ).GetComponent<TextPanel>();
+		//return Instantiate( textPanelPrefabTEST, uiRoot ).transform.Find( "TextPanel" ).GetComponent<TextPanel>();
 	}
 
 	public DecisionPanel GetNewDecisionPanel()
@@ -229,6 +231,7 @@ public class InteractionManager : MonoBehaviour
 			}
 			else
 			{
+				Debug.Log( "Randomly choosing one of them..." );
 				var inters = interactions.Where( x => x.triggerName == triggername ).ToArray();
 				ShowInteraction( inters[UnityEngine.Random.Range( 0, count )] );
 			}
@@ -295,20 +298,27 @@ public class InteractionManager : MonoBehaviour
 		GetNewTextPanel().ShowTextInteraction( it, () =>
 		{
 			engine.triggerManager.FireTrigger( it.triggerAfterName );
+			FindObjectOfType<LorePanel>().AddLore( it.loreReward );
 		} );
 	}
 
 	void HandleThreat( IInteraction it, Vector3 position )
 	{
+		List<Vector3> positions = new List<Vector3>();
+		//get VALID (correct difficulty) monster group count
+		int groupCount = ( (ThreatInteraction)it ).monsterCollection.Where( m => m.IsValid() ).Count();
+		Vector3[] opentf = FindObjectOfType<TileManager>().GetAvailableSpawnPositions( groupCount );
+		int[] rnds = GlowEngine.GenerateRandomNumbers( opentf.Length );
+
+		Debug.Log( "Found " + opentf.Length + " positions" );
 		//if it's NOT a token interaction, figure out WHERE to spawn the group
 		if ( !it.isTokenInteraction )
 		{
-			Vector3[] opentf = FindObjectOfType<TileManager>().GetAvailableTokenPositions();
-
-			if ( opentf != null && opentf.Length > 0 )
+			if ( opentf.Length > 0 )//should never be 0, sanity check
 			{
-				int[] rnds = GlowEngine.GenerateRandomNumbers( opentf.Length );
-				position = opentf[rnds[0]];
+				//only use as many positions as exist
+				for ( int i = 0; i < Math.Min( groupCount, opentf.Length ); i++ )
+					positions.Add( opentf[rnds[i]] );
 				Debug.Log( "HandleThreat::Using random location" );
 			}
 			else
@@ -317,17 +327,20 @@ public class InteractionManager : MonoBehaviour
 				return;
 			}
 		}
+		else//it's a fixed token interaction
+		{
+			Vector3[] nearest = opentf.OrderBy( x => Vector3.Distance( x, position ) ).ToArray();
+			//use as many positions as possible
+			for ( int i = 0; i < Math.Min( groupCount, nearest.Length ); i++ )
+				positions.Add( nearest[i] );//[rnds[i]] );
+		}
 
 		GetNewTextPanel().ShowTextInteraction( it, () =>
 		{
-			GetNewTextPanel().ShowOkContinue( "Place the enemy figures in the indicated position.", ButtonIcon.Continue );
+			StartCoroutine( MonsterPlacementPrompt( ( (ThreatInteraction)it ).monsterCollection.ToArray(), positions.ToArray(), it ) );
+
 			engine.triggerManager.FireTrigger( it.triggerAfterName );
 		} );
-		FindObjectOfType<MonsterManager>().AddNewMonsterGroup( ( (ThreatInteraction)it ).monsterCollection.ToArray(), it );
-		if ( position.x != -1000 )
-		{
-			var go = Instantiate( spawnMarkerPrefab, position, Quaternion.identity );
-		}
 	}
 
 	void HandleDecision( IInteraction it )
@@ -341,6 +354,7 @@ public class InteractionManager : MonoBehaviour
 			else if ( res.btn3 )
 				engine.triggerManager.FireTrigger( ( (DecisionInteraction)it ).choice3Trigger );
 			engine.triggerManager.FireTrigger( it.triggerAfterName );
+			FindObjectOfType<LorePanel>().AddLore( it.loreReward );
 		} );
 	}
 
@@ -348,6 +362,7 @@ public class InteractionManager : MonoBehaviour
 	{
 		( (BranchInteraction)it ).Resolve( this );
 		engine.triggerManager.FireTrigger( it.triggerAfterName );
+		FindObjectOfType<LorePanel>().AddLore( it.loreReward );
 	}
 
 	void HandleStatTest( IInteraction it, Action<InteractionResult> action = null )
@@ -361,6 +376,7 @@ public class InteractionManager : MonoBehaviour
 				GetNewTextPanel().ShowOkContinue( sti.passBookData.pages[0], ButtonIcon.Continue/*, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); }*/ );
 				engine.triggerManager.FireTrigger( sti.successTrigger );
 				action?.Invoke( new InteractionResult() { removeToken = true } );
+				FindObjectOfType<LorePanel>().AddLore( it.loreReward );
 			}
 			else if ( !b.btn4 && !b.success )//show fail textbox
 			{
@@ -376,6 +392,7 @@ public class InteractionManager : MonoBehaviour
 					GetNewTextPanel().ShowOkContinue( sti.passBookData.pages[0], ButtonIcon.Continue/*, () => { engine.triggerManager.FireTrigger( it.triggerAfterName ); }*/ );
 					engine.triggerManager.FireTrigger( sti.successTrigger );
 					action?.Invoke( new InteractionResult() { removeToken = true } );
+					FindObjectOfType<LorePanel>().AddLore( it.loreReward );
 				}
 				else
 				{
@@ -401,6 +418,7 @@ public class InteractionManager : MonoBehaviour
 					engine.triggerManager.FireTrigger( t );
 			}
 			engine.triggerManager.FireTrigger( it.triggerAfterName );
+			FindObjectOfType<LorePanel>().AddLore( it.loreReward );
 		}
 		else
 		{
@@ -417,6 +435,7 @@ public class InteractionManager : MonoBehaviour
 						engine.triggerManager.FireTrigger( t );
 				}
 				engine.triggerManager.FireTrigger( it.triggerAfterName );
+				FindObjectOfType<LorePanel>().AddLore( it.loreReward );
 			} );
 		}
 	}
@@ -432,5 +451,37 @@ public class InteractionManager : MonoBehaviour
 		//conditional events don't have a "triggerAfterName"
 		//conditional events aren't "triggeredBy" - they only listen
 		//conditional events cannot be token interactions - they work silently
+	}
+
+	IEnumerator MonsterPlacementPrompt( Monster[] monsters, Vector3[] positions, IInteraction it )
+	{
+		Debug.Log( "**START MonsterPlacementPrompt" );
+
+		int posidx = 0;
+		for ( int i = 0; i < monsters.Length; i++ )
+		{
+			//only monsters in this difficulty
+			if ( !monsters[i].IsValid() )
+				continue;
+
+			bool waiting = true;
+			if ( i < positions.Length )
+				posidx = i;
+
+			//place marker and move camera
+			Instantiate( spawnMarkerPrefab, positions[posidx], Quaternion.identity );
+			FindObjectOfType<CamControl>().MoveTo( positions[posidx] );
+			Monster m = monsters[i];
+
+			//add monster group to bar, one at a time
+			FindObjectOfType<MonsterManager>().AddMonsterGroup( m, it );
+
+			TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
+			p.ShowOkContinue( $"Place {m.count} {m.dataName}(s) in the indicated position.", ButtonIcon.Continue, () => waiting = false );
+			while ( waiting )
+				yield return null;
+		}
+
+		Debug.Log( "**END MonsterPlacementPrompt" );
 	}
 }

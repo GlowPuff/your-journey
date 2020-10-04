@@ -2,7 +2,6 @@
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TileGroup
 {
@@ -11,14 +10,15 @@ public class TileGroup
 	//0th Tile is the ROOT
 	public List<Tile> tileList;
 	public bool isExplored;
-	public Vector3 startPosition;
+	public Vector3 startPosition { get; set; }
 
 	//each Tile is a child of containerObject
 	Transform containerObject;
 	//List<Vector3> childOffsets;//normalized vectors pointint to child
 	Chapter chapter { get; set; }
 	//int[] randomTileIndices;//randomly index into chapter tileObserver
-	System.Guid GUID;
+	[HideInInspector]
+	public System.Guid GUID;
 
 	private static float RandomAngle()
 	{
@@ -31,7 +31,12 @@ public class TileGroup
 		GUID = System.Guid.NewGuid();
 	}
 
-	public static TileGroup CreateGroup( Chapter c )
+	public Chapter GetChapter()
+	{
+		return chapter;
+	}
+
+	public static TileGroup CreateFixedGroup( Chapter c )
 	{
 		TileGroup tg = new TileGroup();
 		tg.startPosition = ( -1000f ).ToVector3();
@@ -54,7 +59,8 @@ public class TileGroup
 	//Build random group from editor Chapter
 	void BuildRandomFromChapter( Chapter c )
 	{
-		Debug.Log( "BuildRandomFromChapter" );
+		//Debug.Log( "BuildRandomFromChapter" );
+		List<Transform> usedPositions = new List<Transform>();
 		tileManager = Object.FindObjectOfType<TileManager>();
 		chapter = c;
 		tileList = new List<Tile>();
@@ -85,7 +91,12 @@ public class TileGroup
 			//instantiate the tile prefab
 			string side = hexroot.tileSide == "Random" ? ( Random.Range( 1, 101 ) < 50 ? "A" : "B" ) : hexroot.tileSide;
 			Tile tile = Object.Instantiate( tileManager.GetPrefab( side, hexroot.idNumber ), go.transform ).GetComponent<Tile>();
+			//Tile tile = tileManager.GetPrefab( side, hexroot.idNumber );
 			//set its data
+			//tile.Init();
+			tile.gameObject.SetActive( false );
+			//tile.transform.parent = go.transform;
+			//tile.transform.localPosition = Vector3.zero;
 			tile.hexTile = hexroot;
 			tile.tileGroup = this;
 			tile.chapter = c;
@@ -102,8 +113,8 @@ public class TileGroup
 			previous = tile;
 
 			//add fixed tokens
-			if ( !c.usesRandomGroups )
-				AddFixedToken( tile );
+			if ( tile.hexTile.tokenList.Count > 0 )
+				usedPositions.AddRange( AddFixedToken( tile ) );
 
 			if ( hexroot.isStartTile )
 				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
@@ -111,7 +122,7 @@ public class TileGroup
 
 		//add random tokens
 		if ( c.usesRandomGroups )
-			AddRandomTokens();
+			AddRandomTokens( usedPositions.ToArray() );
 
 		//find starting position if applicable
 		if ( c.dataName == "Start" )
@@ -154,7 +165,8 @@ public class TileGroup
 	//Build fixed group from editor Chapter
 	void BuildFixedFromChapter( Chapter c )
 	{
-		Debug.Log( "BuildFixedFromChapter" );
+		//Debug.Log( "BuildFixedFromChapter" );
+		List<Transform> usedPositions = new List<Transform>();
 		tileManager = Object.FindObjectOfType<TileManager>();
 		chapter = c;
 		tileList = new List<Tile>();
@@ -173,8 +185,14 @@ public class TileGroup
 			containerObject.name += " " + h.idNumber.ToString();
 			GameObject goc = new GameObject();
 			goc.name = h.idNumber.ToString();
+
 			Tile tile = Object.Instantiate( tileManager.GetPrefab( h.tileSide, h.idNumber ), goc.transform ).GetComponent<Tile>();
+			//Tile tile = tileManager.GetPrefab( h.tileSide, h.idNumber );
 			//set its data
+			//tile.Init();
+			tile.gameObject.SetActive( false );
+			//tile.transform.parent = goc.transform;
+			//tile.transform.localPosition = Vector3.zero;
 			tile.chapter = c;
 			tile.hexTile = h;
 			tile.tileGroup = this;
@@ -234,84 +252,92 @@ public class TileGroup
 			//set parent of goc 
 			tile.transform.parent.transform.parent = containerObject;
 			//add a token, if there is one
-			if ( !c.usesRandomGroups )
-				AddFixedToken( tile );
+			//if ( !c.usesRandomGroups )
+			if ( tile.hexTile.tokenList.Count > 0 )
+				usedPositions.AddRange( AddFixedToken( tile ) );
 
 			//find starting position if applicable
 			if ( h.isStartTile )
 			{
 				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
-
-				//var positions = tile.GetChildren( "token attach" );
-				//var tokens = tile.GetChildren( " Token(Clone)" );
-				//float dist = 0;
-				//Vector3 pos = Vector3.zero;
-
-				//foreach ( var p in positions )
-				//	foreach ( var t in tokens )
-				//	{
-				//		float d = Vector3.Distance( p.position.Y( 0 ), t.position.Y( 0 ) );
-				//		if ( d > dist )
-				//		{
-				//			dist = d;
-				//			pos = p.position;
-				//		}
-				//	}
-
-				//startPosition = pos.Y( .26f );
-
-				//var open = from p in positions
-				//					 from t in tokens
-				//					 where Vector3.Distance( p.position.Y( 0 ), t.position.Y( 0 ) ) > 1f
-				//					 select new { p, t };
-				//if ( open.Count() > 0 )
-				//	startPosition = open.First().p.position.Y( .26f );
-				//else//otherwise put it on the exploration position
-				//{
-				//	startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
-				//	Debug.Log( "Starting position not found, using default" );
-				//}
 			}
 		}
 
 		//add random tokens
-		if ( c.usesRandomGroups )
-			AddRandomTokens();
+		if ( c.usesRandomGroups && usedPositions.Count > 0 )
+			AddRandomTokens( usedPositions.ToArray() );
 
 		GenerateGroupCenter();
 	}
 
-	void AddRandomTokens()
+	void AddRandomTokens( Transform[] usedPositions )
 	{
 		if ( chapter.randomInteractionGroup == "None" )
 			return;
-
+		//usedPositions = wonky user placed token position
 		InteractionManager im = GlowEngine.FindObjectOfType<InteractionManager>();
 		//get array of interactions that are in the interaction group
-		IInteraction[] interactionArray = im.randomTokenInteractions
+		IInteraction[] interactionGroupArray = im.randomTokenInteractions
 			.Where( x => x.dataName.EndsWith( chapter.randomInteractionGroup ) ).ToArray();
-		Debug.Log( "INTERACTIONS IN GROUP [" + chapter.randomInteractionGroup + "]: " + interactionArray.Length );
-		Debug.Log( $"GRABBING {chapter.randomInteractionGroupCount} INTERACTIONS" );
-		//generate random indexes to interactions within the group
-		int[] rnds = GlowEngine.GenerateRandomNumbers( interactionArray.Length );
-		//randomly get randomInteractionGroupCount number of interactions
-		IInteraction[] igs = new IInteraction[chapter.randomInteractionGroupCount];
-		for ( int i = 0; i < chapter.randomInteractionGroupCount; i++ )
-		{
-			igs[i] = interactionArray[rnds[i]];
-			Debug.Log( $"CHOSE INTERACTION: {igs[i].dataName} WITH TYPE {igs[i].tokenType}" );
-		}
-		//get all the possible token spawn locations
-		List<Transform> tfs = new List<Transform>();
+		//Debug.Log( "EVENTS IN GROUP [" + chapter.randomInteractionGroup + "]: " + interactionGroupArray.Length );
+
+		//get all the possible token spawn locations that are NOT near FIXED tokens already placed
+		List<Transform> attachtfs = new List<Transform>();
+		List<Transform> finalOpenTFS = new List<Transform>();
 		foreach ( Tile t in tileList )
-			tfs.AddRange( t.GetChildren( "token attach" ) );
-		//Debug.Log( "FOUND TRANSFORM POSITIONS: " + tfs.Count );
+		{
+			attachtfs.Clear();
+			attachtfs.AddRange( t.GetChildren( "token attach" ) );
+			var usedInThisTile = from tu in usedPositions
+													 where tu.GetComponent<MetaData>().tile.hexTile.idNumber == t.hexTile.idNumber
+													 select tu;
+
+			var opentfs = new List<Transform>();
+			foreach ( Transform tf in attachtfs )
+			{
+				float minD = 1000;
+				foreach ( Transform utf in usedInThisTile )
+				{
+					float d = Vector3.Distance( utf.position, tf.position );
+					if ( d < minD )
+						minD = d;
+				}
+				if ( minD > 1.1f )
+					opentfs.Add( tf );
+			}
+
+			finalOpenTFS.AddRange( opentfs );
+		}
+
+		//recreate opentfs as hash with UNIQUE items, no dupes
+		var openhash = new HashSet<Transform>( finalOpenTFS );
+		finalOpenTFS = openhash.Select( x => x ).ToList();
+		//Debug.Log( "REQUESTED EVENTS: " + chapter.randomInteractionGroupCount );
+		//Debug.Log( "USED POSITIONS: " + usedPositions.Length );
+		//Debug.Log( "FOUND POSSIBLE POSITIONS: " + attachtfs.Count );
+		//Debug.Log( "FOUND OPEN POSITIONS: " + finalOpenTFS.Count() );
+
+		//sanity check, max number of events based on how many requested and how many actually found in group how many actual open positions
+		int max = Mathf.Min( interactionGroupArray.Length, Mathf.Min( chapter.randomInteractionGroupCount, finalOpenTFS.Count() ) );
+		//Debug.Log( $"GRABBING {max} EVENTS" );
+
+		//generate random indexes to interactions within the group
+		int[] rnds = GlowEngine.GenerateRandomNumbers( max );
+		//randomly get randomInteractionGroupCount number of interactions
+		IInteraction[] igs = new IInteraction[max];
+		for ( int i = 0; i < max; i++ )
+		{
+			igs[i] = interactionGroupArray[rnds[i]];
+			//Debug.Log( $"CHOSE EVENT: {igs[i].dataName} WITH TYPE {igs[i].tokenType}" );
+		}
+
 		//create the tokens on random tiles for the interactions we just got
-		int[] rands = GlowEngine.GenerateRandomNumbers( tfs.Count );
-		for ( int i = 0; i < igs.Length; i++ )
+		int[] rands = GlowEngine.GenerateRandomNumbers( max/*opentfs.Count()*/ );
+		for ( int i = 0; i < max/*igs.Length*/; i++ )
 		{
 			//get tile this transform position belongs to
-			Tile tile = tfs[rands[i]].parent.GetComponent<Tile>();
+			Tile tile = finalOpenTFS[rands[i]].parent.GetComponent<Tile>();
+			//Debug.Log( "TILE #:" + tile.hexTile.idNumber );
 			//if the token points to a persistent event, swap the token type with the event it's delegating to
 
 			//create new token prefab for this interaction
@@ -322,7 +348,14 @@ public class TileGroup
 			}
 			else if ( igs[i].tokenType == TokenType.Person )
 			{
-				go = Object.Instantiate( tileManager.personTokenPrefab, tile.transform );
+				if ( igs[i].personType == PersonType.Human )
+					go = Object.Instantiate( tileManager.humanTokenPrefab, tile.transform );
+				else if ( igs[i].personType == PersonType.Elf )
+					go = Object.Instantiate( tileManager.elfTokenPrefab, tile.transform );
+				else if ( igs[i].personType == PersonType.Hobbit )
+					go = Object.Instantiate( tileManager.hobbitTokenPrefab, tile.transform );
+				else if ( igs[i].personType == PersonType.Dwarf )
+					go = Object.Instantiate( tileManager.dwarfTokenPrefab, tile.transform );
 			}
 			else if ( igs[i].tokenType == TokenType.Threat )
 			{
@@ -337,7 +370,7 @@ public class TileGroup
 				Debug.Log( $"ERROR: TOKEN TYPE SET TO NONE FOR {igs[i].dataName}" );
 			}
 
-			go.transform.position = new Vector3( tfs[rands[i]].position.x, go.transform.position.y, tfs[rands[i]].position.z );
+			go.transform.position = new Vector3( finalOpenTFS[rands[i]].position.x, go.transform.position.y, finalOpenTFS[rands[i]].position.z );
 			go.GetComponent<MetaData>().tokenType = HandlePersistentTokenSwap( igs[i].dataName );//igs[i].tokenType;
 			go.GetComponent<MetaData>().triggeredByName = "None";
 			go.GetComponent<MetaData>().triggerName = "None";
@@ -347,8 +380,12 @@ public class TileGroup
 		}
 	}
 
-	void AddFixedToken( Tile tile )
+	Transform[] AddFixedToken( Tile tile )
 	{
+		List<Transform> usedPositions = new List<Transform>();
+		//List<Vector3> openPositions = new List<Vector3>();
+		//openPositions.AddRange( tile.GetChildren( "token attach" ).Select( x => x.position ) );
+
 		foreach ( Token t in tile.hexTile.tokenList )
 		{
 			//if the token points to a persistent event, swap the token type with the event it's delegating to
@@ -365,7 +402,14 @@ public class TileGroup
 			}
 			else if ( t.tokenType == TokenType.Person )
 			{
-				go = Object.Instantiate( tileManager.personTokenPrefab, tile.transform );
+				if ( t.personType == PersonType.Human )
+					go = Object.Instantiate( tileManager.humanTokenPrefab, tile.transform );
+				else if ( t.personType == PersonType.Elf )
+					go = Object.Instantiate( tileManager.elfTokenPrefab, tile.transform );
+				else if ( t.personType == PersonType.Hobbit )
+					go = Object.Instantiate( tileManager.hobbitTokenPrefab, tile.transform );
+				else if ( t.personType == PersonType.Dwarf )
+					go = Object.Instantiate( tileManager.dwarfTokenPrefab, tile.transform );
 			}
 			else if ( t.tokenType == TokenType.Threat )
 			{
@@ -386,6 +430,7 @@ public class TileGroup
 			//offset to token in EDITOR coords
 			go.GetComponent<MetaData>().offset = t.vposition - new Vector3( 256, 0, 256 );
 			go.GetComponent<MetaData>().isRandom = false;
+			go.GetComponent<MetaData>().tile = tile;
 
 			//calculate position of the Token
 			Vector3 offset = go.GetComponent<MetaData>().offset;
@@ -396,6 +441,8 @@ public class TileGroup
 			offset = Vector3.Reflect( offset, new Vector3( 0, 0, 1 ) );
 			var tokenPos = new Vector3( center.x + offset.x, 2, center.z + offset.z );
 			go.transform.position = tokenPos.Y( 0 );
+
+			usedPositions.Add( go.transform );
 
 			//var positions = tile.GetChildren( "token attach" );
 			////Debug.Log( Vector3.Distance( positions[0].position.Y( 0 ), tokenPos.Y( 0 ) ) );
@@ -410,6 +457,15 @@ public class TileGroup
 			//	go.GetComponent<MetaData>().position = tokenPos;
 			//}
 		}
+
+		//var open = from tok in tile.hexTile.tokenList
+		//					 from used in usedPositions
+		//					 where tok.GUID != used.GUID
+		//					 select tok;
+
+
+
+		return usedPositions.ToArray();
 	}
 
 	TokenType HandlePersistentTokenSwap( string eventName )
@@ -451,8 +507,16 @@ public class TileGroup
 			i += .5f;
 		}
 
+		//isPreExplored is false for all tiles
+		//only Start can be toggled true
 		if ( chapter.dataName == "Start" && chapter.isPreExplored )
 			tweener?.OnComplete( () => { RevealInteractiveTokens(); } );
+		else if ( chapter.dataName == "Start" && !chapter.isPreExplored )
+			tweener?.OnComplete( () =>
+			{
+				RevealExploreToken();
+				RevealInteractiveTokens( true );
+			} );
 		else
 			tweener?.OnComplete( () => { RevealExploreToken(); } );
 	}
@@ -460,7 +524,7 @@ public class TileGroup
 	/// <summary>
 	/// Randomly attaches one group to another
 	/// </summary>
-	public void AttachTo( TileGroup tgToAttachTo )
+	public bool AttachTo( TileGroup tgToAttachTo )
 	{
 		//get all open connectors in THIS tilegroup
 		Vector3[] openConnectors = GlowEngine.RandomizeArray( GetOpenConnectors() );
@@ -493,6 +557,8 @@ public class TileGroup
 			foreach ( Vector3 a in tgOpenConnectors )
 			{
 				containerObject.position = a;
+				//rotate 360 for different orientations?
+
 				//check collision
 				if ( !CheckCollisionsWithinGroup( GetAllOpenConnectorsOnBoard() ) )
 				{
@@ -517,9 +583,13 @@ public class TileGroup
 
 		Object.Destroy( dummy );
 		if ( !safe )
+		{
 			Debug.Log( "AttachTo*********NOT FOUND" );
+			return false;
+		}
 
 		GenerateGroupCenter();
+		return true;
 	}
 
 	public void AttachNorthOf( TileGroup tg )
@@ -673,27 +743,26 @@ public class TileGroup
 	/// <summary>
 	/// only if FIRST tilegroup
 	/// </summary>
-	public void RevealInteractiveTokens()
+	public void RevealInteractiveTokens( bool startTileOnly = false )
 	{
 		//Debug.Log( "RevealInteractiveTokens" );
 		foreach ( Tile t in tileList )
-			//if(t.hexTile.isStartTile)
-			t.RevealInteractiveTokens();
+			if ( startTileOnly && t.hexTile.isStartTile )
+				t.RevealInteractiveTokens();
+			else if ( !startTileOnly )
+				t.RevealInteractiveTokens();
 	}
 
 	/// <summary>
-	/// Explores whole group - colorize
+	/// colorize whole group, fire chapter exploreTrigger
 	/// </summary>
 	public void Colorize( bool onlyStart = false )
 	{
 		Debug.Log( "EXPLORING GROUP isExplored?::" + isExplored );
 
-		//if ( revealTokens )
-		//{
 		if ( isExplored )
 			return;
-		//isExplored = true;
-		//}
+
 		//if it's not the first chapter, set the "on explore" trigger
 		//if ( chapter.dataName != "Start" )
 		GlowEngine.FindObjectOfType<TriggerManager>().FireTrigger( chapter.exploreTrigger );
@@ -705,7 +774,12 @@ public class TileGroup
 			else if ( !onlyStart )
 				t.Colorize();
 		}
-		//	t.Explore( revealTokens );
+	}
+
+	public void ActivateTiles()
+	{
+		foreach ( Tile tile in tileList )
+			tile.gameObject.SetActive( true );
 	}
 
 	/// <summary>

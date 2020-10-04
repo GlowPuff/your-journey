@@ -5986,7 +5986,7 @@ PrefabInstance:
     - target: {fileID: 7060065737139854276, guid: c7ee92a3ff7bddb419dc7b78ffa2eccf,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.907
+      value: 0.672
       objectReference: {fileID: 0}
     - target: {fileID: 7060065737139854276, guid: c7ee92a3ff7bddb419dc7b78ffa2eccf,
         type: 3}
@@ -5996,7 +5996,7 @@ PrefabInstance:
     - target: {fileID: 7060065737139854276, guid: c7ee92a3ff7bddb419dc7b78ffa2eccf,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.175
+      value: -1.354
       objectReference: {fileID: 0}
     - target: {fileID: 7060065737139854276, guid: c7ee92a3ff7bddb419dc7b78ffa2eccf,
         type: 3}
@@ -6042,6 +6042,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7060065737139854279, guid: c7ee92a3ff7bddb419dc7b78ffa2eccf,
+        type: 3}
+      propertyPath: m_SelectedVertices.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7060065737139854279, guid: c7ee92a3ff7bddb419dc7b78ffa2eccf,
         type: 3}

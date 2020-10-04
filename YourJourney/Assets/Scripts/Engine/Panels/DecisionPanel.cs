@@ -5,9 +5,10 @@ using System;
 
 public class DecisionPanel : MonoBehaviour
 {
-	public Text mainText, btn1Text, btn2Text, btn3Text, btn4Text;
+	public Text mainText, btn1Text, btn2Text, btn3Text, btn4Text, dummy;
 	public GameObject btn1, btn2, btn3, btn4;
 	public CanvasGroup overlay;
+	public RectTransform content;
 
 	CanvasGroup group;
 
@@ -66,33 +67,58 @@ public class DecisionPanel : MonoBehaviour
 	void SetText( string t )
 	{
 		mainText.text = t;
+		dummy.text = t;
+
 		TextGenerator textGen = new TextGenerator();
 		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
 		float height = textGen.GetPreferredHeight( t, generationSettings );
+		var windowH = Math.Min( 525, height + 80 );
 
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 80 );
+		if ( height + 80 > 525 )
+			mainText.alignment = TextAnchor.UpperCenter;
+		else
+			mainText.alignment = TextAnchor.MiddleCenter;
+
+		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, windowH );
+		content.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 0 );
+	}
+
+	void DisableButtons()
+	{
+		btn1.SetActive( false );
+		btn2.SetActive( false );
+		btn3.SetActive( false );
+		btn4.SetActive( false );
 	}
 
 	public void OnBtn1()
 	{
+		DisableButtons();
+
 		buttonActions?.Invoke( new InteractionResult() { btn1 = true } );
 		Hide();
 	}
 
 	public void OnBtn2()
 	{
+		DisableButtons();
+
 		buttonActions?.Invoke( new InteractionResult() { btn2 = true } );
 		Hide();
 	}
 
 	public void OnBtn3()
 	{
+		DisableButtons();
+
 		buttonActions?.Invoke( new InteractionResult() { btn3 = true } );
 		Hide();
 	}
 
 	public void OnBtn4()
 	{
+		DisableButtons();
+
 		buttonActions?.Invoke( new InteractionResult() { btn4 = true } );
 		Hide();
 	}

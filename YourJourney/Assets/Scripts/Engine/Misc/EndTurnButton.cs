@@ -6,6 +6,11 @@ using System.Collections.Generic;
 
 public class EndTurnButton : MonoBehaviour
 {
+	class ThresholdMeta : MonoBehaviour
+	{
+		public int threshold;
+	}
+
 	public Transform tickParent;
 	public GameObject tickPrefab;
 	public Text threatText;
@@ -17,11 +22,12 @@ public class EndTurnButton : MonoBehaviour
 
 	float currentThreatAnimated;
 	Queue<Threat> threatStack;
+	GameObject nextTickObject;
 
 	/// <summary>
 	/// set starting threat (new game/continue)
 	/// </summary>
-	public void InitialSet( Scenario s )
+	public void Init( Scenario s )
 	{
 		currentThreatAnimated = currentThreat = 0;
 		threatMax = s.threatMax;
@@ -33,36 +39,60 @@ public class EndTurnButton : MonoBehaviour
 			return;
 		}
 
-		int i = 0;
 		foreach ( Threat t in s.threatObserver )
-		{
-			GameObject go = Instantiate( tickPrefab, tickParent );
-			float angle = GlowEngine.RemapValue( t.threshold, 0, threatMax, 0, 360 );
-			go.transform.DORotate( new Vector3( 0, 0, -angle ), 1 ).SetEase( Ease.OutBounce ).SetDelay( 2 + i++ );
-			Text text = go.transform.GetComponentInChildren<Text>();
-			text.text = t.threshold.ToString();
-			text.transform.Rotate( new Vector3( 0, 0, angle ) );
 			threatStack.Enqueue( t );
-		}
+
+		AddThresholdTick();
 	}
 
-	public Threat AddThreat( float amount )
+	void AddThresholdTick()
+	{
+		if ( threatStack.Count == 0 )
+		{
+			nextTickObject = null;
+			return;
+		}
+
+		Threat t = threatStack.Peek();
+
+		GameObject go = Instantiate( tickPrefab, tickParent );
+		float angle = GlowEngine.RemapValue( t.threshold, 0, threatMax, 0, 360 );
+		go.transform.DORotate( new Vector3( 0, 0, -angle ), 1 ).SetEase( Ease.OutBounce );
+		Text text = go.transform.GetComponentInChildren<Text>();
+		text.text = t.threshold.ToString();
+		text.transform.Rotate( new Vector3( 0, 0, angle ) );
+		go.AddComponent<ThresholdMeta>();
+		go.GetComponent<ThresholdMeta>().threshold = t.threshold;
+
+		nextTickObject = go;
+	}
+
+	public Threat[] AddThreat( float amount )
 	{
 		if ( FindObjectOfType<Engine>().scenario.threatNotUsed || FindObjectOfType<Engine>().scenario.threatObserver.Count() == 0 )
-			return null;
+			return new Threat[0];
 
 		currentThreat = Mathf.Min( currentThreat + amount, threatMax );
 		DOTween.To( () => currentThreatAnimated, x => currentThreatAnimated = x, currentThreat, 2 ).SetEase( Ease.InOutQuad );
-		if ( threatStack.Count > 0 )
+
+		List<Threat> retval = new List<Threat>();
+		int max = threatStack.Count;
+		for ( int i = 0; i < max; i++ )
 		{
 			Threat t = threatStack.Peek();
 			if ( currentThreat >= t.threshold )
-				return threatStack.Dequeue();
-			else
-				return null;
+				retval.Add( threatStack.Dequeue() );
 		}
-		else
-			return null;
+
+		//remove tick from button
+		if ( nextTickObject != null && nextTickObject.GetComponent<ThresholdMeta>() != null )
+		{
+			if ( currentThreat >= nextTickObject.GetComponent<ThresholdMeta>().threshold )
+				GameObject.Destroy( nextTickObject );
+			AddThresholdTick();
+		}
+
+		return retval.ToArray();
 	}
 
 	//SETS the threat level without firing events
@@ -74,7 +104,7 @@ public class EndTurnButton : MonoBehaviour
 
 	private void Update()
 	{
-		threatText.text = Mathf.Ceil( currentThreatAnimated ).ToString() + "/" + threatMax.ToString();
+		threatText.text = Mathf.Ceil( currentThreatAnimated ).ToString() + "\r\n" + threatMax.ToString();
 		meter.fillAmount = currentThreatAnimated / threatMax;
 	}
 }

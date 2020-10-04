@@ -31,8 +31,8 @@ public class TriggerManager : MonoBehaviour
 				queue.Enqueue( name );
 			}
 		}
-		else
-			Debug.Log( "FireTrigger::NO TRIGGER/NONE" );
+		//else
+		//	Debug.Log( "FireTrigger::NO TRIGGER/NONE" );
 	}
 
 	IEnumerator TriggerChain()
@@ -81,8 +81,8 @@ public class TriggerManager : MonoBehaviour
 			}
 			yield return WaitUntilFinished();
 
-			//trigger Objective
-			if ( FindObjectOfType<ObjectiveManager>().TrySetObjective( name ) )
+			//trigger Objective complete
+			if ( FindObjectOfType<ObjectiveManager>().TryCompleteObjective( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -92,8 +92,8 @@ public class TriggerManager : MonoBehaviour
 			}
 			yield return WaitUntilFinished();
 
-			//trigger Objective complete
-			if ( FindObjectOfType<ObjectiveManager>().TryCompleteObjective( name ) )
+			//trigger Objective start
+			if ( FindObjectOfType<ObjectiveManager>().TrySetObjective( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class Tile : MonoBehaviour
 	[HideInInspector]
 	public HexTile hexTile;
 	[HideInInspector]
-	public bool isExplored = false;
+	public bool isExplored { get; set; } = false;
 	//rootPosition is the position (connector) where all xforms take place from. Only used for building a loaded scenario (fixed, not random)
 	public Transform rootPosition;//world coords
 	public TileGroup tileGroup { get; set; }
@@ -29,7 +30,12 @@ public class Tile : MonoBehaviour
 	InteractionManager interactionManager;
 	float sepiaValue = 1;
 	//queue of tokens to fire because tile wasn't explored yet
-	List<string> tokenTriggerList = new List<string>();
+	[HideInInspector]
+	public List<string> tokenTriggerList = new List<string>();
+	[HideInInspector]
+	public List<TokenState> tokenStates = new List<TokenState>();
+	[HideInInspector]
+	//public List<TokenState> randomTokenStates = new List<TokenState>();
 
 	TriggerManager triggerManager;
 	CamControl camControl;
@@ -312,18 +318,31 @@ public class Tile : MonoBehaviour
 		RevealToken( TokenType.Darkness );
 	}
 
+	/// <summary>
+	/// Sets isExplored=true and does token removal animation
+	/// </summary>
 	public void RemoveExplorationToken()
 	{
 		isExplored = true;
-		hexTile.isExplored = true;
+		tileGroup.isExplored = true;
+		//hexTile.isExplored = true;
 		Sequence sequence = DOTween.Sequence();
 		sequence.Append( exploreToken.DOLocalMoveY( 1, 1 ).SetEase( Ease.InOutQuad ) );
 		sequence.Join( exploreToken.DOScale( 0, 1 ) );
 		sequence.Play().OnComplete( () => { exploreToken.gameObject.SetActive( false ); } );
 	}
 
-	public void RemoveInteractivetoken( Transform tf )
+	public void RemoveInteractivetoken( Transform tf, MetaData metaData )
 	{
+		//mark token state as inactive
+		TokenState ts;
+		if ( !metaData.isRandom )
+			ts = tokenStates.Where( x => x.metaData.GUID == metaData.GUID ).FirstOr( null );
+		else
+			ts = tokenStates.Where( x => x.metaData.interactionName == metaData.interactionName ).FirstOr( null );
+		if ( ts != null )
+			ts.isActive = false;
+
 		Sequence sequence = DOTween.Sequence();
 		sequence.Append( tf.DOLocalMoveY( 1, 1 ).SetEase( Ease.InOutQuad ) );
 		sequence.Join( tf.DOScale( 0, 1 ) );
@@ -336,7 +355,7 @@ public class Tile : MonoBehaviour
 	public void Colorize()
 	{
 		isExplored = true;
-		hexTile.isExplored = true;
+		//hexTile.isExplored = true;
 
 		DOTween.To( () => sepiaValue, x =>
 		{
@@ -346,7 +365,7 @@ public class Tile : MonoBehaviour
 	}
 
 	/// <summary>
-	/// reveal/drop token of specified type onto the tile (ONLY if it's not TriggeredBy)
+	/// reveal/drop token of specified type onto the tile ONLY if it's not a triggered Token (TriggeredBy)
 	/// </summary>
 	void RevealToken( TokenType ttype )
 	{
@@ -356,6 +375,8 @@ public class Tile : MonoBehaviour
 
 		for ( int i = 0; i < tf.Length; i++ )
 		{
+			TokenState tState = null;
+			//only want FIXED tokens
 			if ( !tf[i].GetComponent<MetaData>().isRandom )
 			{
 				string tBy = tf[i].GetComponent<MetaData>().triggeredByName;
@@ -380,13 +401,22 @@ public class Tile : MonoBehaviour
 				tf[i].position = tf[i].position.Y( 2 );
 				tf[i].RotateAround( center, Vector3.up, hexTile.angle );
 				tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
+
+				//update token state to active
+				tState = tokenStates.Where( x => x.metaData.GUID == tf[i].GetComponent<MetaData>().GUID ).FirstOr( null );
 			}
 			else
 			{
 				//random tokens are already placed during tile creation using preset transforms built into the mesh "token attach"
 				tf[i].position = tf[i].position.Y( 2 );
 				tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
+
+				//update token state to active
+				tState = tokenStates.Where( x => x.metaData.interactionName == tf[i].GetComponent<MetaData>().interactionName ).FirstOr( null );
 			}
+
+			if ( tState != null )
+				tState.isActive = true;
 		}
 	}
 
@@ -408,7 +438,7 @@ public class Tile : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Reveals ALL triggered tokens on this tile
+	/// Reveals ALL triggered tokens on this tile from TryTriggerToken()
 	/// </summary>
 	public Vector3[] RevealTriggeredTokens( string tname )
 	{
@@ -434,6 +464,20 @@ public class Tile : MonoBehaviour
 			tf[i].RotateAround( center, Vector3.up, hexTile.angle );
 			tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 			tpos.Add( tf[i].position );
+
+			//mark active in token state
+			MetaData metaData = tf[i].GetComponent<MetaData>();
+			TokenState tState = null;
+			if ( !metaData.isRandom )
+			{
+				tState = tokenStates.Where( x => x.metaData.GUID == tf[i].GetComponent<MetaData>().GUID ).FirstOr( null );
+			}
+			else
+			{
+				tState = tokenStates.Where( x => x.metaData.interactionName == tf[i].GetComponent<MetaData>().interactionName ).FirstOr( null );
+			}
+			if ( tState != null )
+				tState.isActive = true;
 		}
 
 		return tpos.ToArray();
@@ -469,7 +513,6 @@ public class Tile : MonoBehaviour
 					{
 						ShowExplorationText( tile, () =>
 						 {
-
 							 tile.RemoveExplorationToken();
 							 tile.Colorize();
 							 tile.RevealInteractiveTokens();
@@ -509,10 +552,11 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	void QueryTokenInteraction( Transform objectHit )
 	{
-		string objectEventName = objectHit.GetComponent<MetaData>().interactionName;
-		string objectEventToken = objectHit.GetComponent<MetaData>().tokenType.ToString();
+		MetaData metaData = objectHit.GetComponent<MetaData>();
+		string objectEventName = metaData.interactionName;
+		string objectEventToken = metaData.tokenType.ToString();
 
-		IInteraction inter = interactionManager.GetInteractionByName( objectHit.GetComponent<MetaData>().interactionName );
+		IInteraction inter = interactionManager.GetInteractionByName( metaData.interactionName );
 		if ( inter is PersistentInteraction )
 		{
 			//ONLY swap in delegate event if the pers event hasn't had its alt text triggered
@@ -525,6 +569,8 @@ public class Tile : MonoBehaviour
 			}
 		}
 
+		Tile tile = objectHit.parent.GetComponent<Tile>();
+
 		interactionManager.QueryTokenInteraction( objectEventName, objectEventToken, ( res ) =>
 		{
 			if ( res.btn2 )
@@ -532,7 +578,7 @@ public class Tile : MonoBehaviour
 				Debug.Log( "INTERACT::" + res.interaction.dataName );
 				DoTokenAction( res.interaction, objectHit );
 				if ( res.removeToken && res.interaction.interactionType != InteractionType.Persistent )
-					RemoveInteractivetoken( objectHit );
+					tile.RemoveInteractivetoken( objectHit, metaData );
 			}
 		} );
 	}
@@ -553,11 +599,14 @@ public class Tile : MonoBehaviour
 		{
 			interactionManager.ShowInteraction( interaction, objectHit, ( a ) =>
 			 {
-				 string objectEventName = objectHit.GetComponent<MetaData>().interactionName;
+				 MetaData metaData = objectHit.GetComponent<MetaData>();
+				 string objectEventName = metaData.interactionName;
 				 IInteraction inter = interactionManager.GetInteractionByName( objectEventName );
 
+				 Tile tile = objectHit.parent.GetComponent<Tile>();
+
 				 if ( !( inter is PersistentInteraction ) && a.removeToken )
-					 RemoveInteractivetoken( objectHit );
+					 tile.RemoveInteractivetoken( objectHit, metaData );
 			 } );
 		}
 	}

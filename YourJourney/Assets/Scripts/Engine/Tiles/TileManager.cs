@@ -9,7 +9,6 @@ public class TileManager : MonoBehaviour
 	public GameObject[] tilePrefabs;
 	public GameObject[] tilePrefabsB;
 	public GameObject searchTokenPrefab, darkTokenPrefab, humanTokenPrefab, elfTokenPrefab, dwarfTokenPrefab, hobbitTokenPrefab, threatTokenPrefab;
-	public Tile[] ATiles, BTiles;
 	public GameObject fogPrefab;
 	public PartyPanel partyPanel;
 
@@ -17,8 +16,6 @@ public class TileManager : MonoBehaviour
 	Camera theCamera;
 
 	List<TileGroup> tileGroupList = new List<TileGroup>();
-
-	public TileGroup this[int idx] => tileGroupList[idx];
 
 	void Awake()
 	{
@@ -148,9 +145,9 @@ public class TileManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// return Transform[] of all visible token positions (for spawning monsters) that are "open", not near a used Token
+	/// return Transform[] of all visible token positions (for spawning monsters)
 	/// </summary>
-	public Vector3[] GetAvailableSpawnPositions( int groupCount )
+	public Vector3[] GetAvailableSpawnPositions()
 	{
 		//get explored tiles
 		var explored = from tg in tileGroupList
@@ -159,7 +156,7 @@ public class TileManager : MonoBehaviour
 									 select tile;
 		Debug.Log( "GetAvailableSpawnPositions::explored: " + explored.Count() );
 		List<Transform> tkattach = new List<Transform>();
-		List<Transform> TKinUse = new List<Transform>();
+		//List<Transform> TKinUse = new List<Transform>();
 		foreach ( Tile t in explored )
 		{
 			//get all "token attach" positions
@@ -167,9 +164,9 @@ public class TileManager : MonoBehaviour
 				if ( child.name.Contains( "token attach" ) )
 					tkattach.Add( child );
 			//get all Tokens on the tile
-			foreach ( Transform child in t.transform )
-				if ( child.name.Contains( "Token(Clone)" ) )
-					TKinUse.Add( child );
+			//foreach ( Transform child in t.transform )
+			//	if ( child.name.Contains( "Token(Clone)" ) )
+			//		TKinUse.Add( child );
 		}
 
 		//if there are tokens on the tile, we need to weed them out
@@ -465,5 +462,47 @@ public class TileManager : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	public TileState GetState()
+	{
+		List<TileGroupState> tgStates = new List<TileGroupState>();
+		List<Guid> dynamicChapters = new List<Guid>();
+
+		foreach ( TileGroup tg in tileGroupList )
+		{
+			TileGroupState tgState = new TileGroupState();
+
+			tgState.globalPosition = tg.containerObject.position;
+			tgState.isExplored = tg.isExplored;
+			tgState.guid = tg.GUID;
+			if ( tg.GetChapter().isDynamic )
+				dynamicChapters.Add( tg.GUID );
+
+			List<SingleTileState> singleTileState = new List<SingleTileState>();
+
+			foreach ( Tile t in tg.tileList )
+			{
+				SingleTileState state = new SingleTileState()
+				{
+					tileGUID = t.hexTile.GUID,
+					tokenTriggerList = t.tokenTriggerList,
+					isExplored = t.isExplored,
+					globalPosition = t.transform.position,
+					globalParentPosition = t.transform.parent.position,
+					globalParentYRotation = t.transform.parent.rotation.eulerAngles.y,
+					tokenStates = t.tokenStates
+				};
+				singleTileState.Add( state );
+			}
+			tgState.tileStates = singleTileState;
+			tgStates.Add( tgState );
+		}
+
+		return new TileState()
+		{
+			activatedDynamicChapters = dynamicChapters,
+			tileGroupStates = tgStates
+		};
 	}
 }

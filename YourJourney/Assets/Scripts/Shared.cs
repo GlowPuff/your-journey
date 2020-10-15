@@ -14,6 +14,7 @@ public enum TokenType { Search, Person, Threat, Darkness, Exploration, None }
 public enum PersonType { Human, Elf, Hobbit, Dwarf }
 public enum Difficulty { Easy, Normal, Hard }
 public enum FinalStand { Damage, Fear }
+public enum DifficultyBias { Light, Medium, Heavy }
 
 public class InteractionResult
 {

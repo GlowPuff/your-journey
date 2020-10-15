@@ -15,12 +15,11 @@ public class Monster
 	public bool isEmpty;
 	public string triggerName;
 
-	public string bonuses;
+	//public string bonuses;
 	public int health;
 	public int shieldValue;
 	public int sorceryValue;
 	public int damage;
-	public int fear;
 	public bool isLarge;
 	public bool isBloodThirsty;
 	public bool isArmored;
@@ -44,8 +43,8 @@ public class Monster
 	[DefaultValue( true )]
 	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
 	public bool isHard { get; set; }
-
-	public IInteraction interaction;//the interaction that spawned this
+	[JsonIgnore]
+	public ThreatInteraction interaction;//the interaction that spawned this
 
 	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Warg", "Hill Troll", "Wight" };
 
@@ -56,6 +55,14 @@ public class Monster
 	public int sunderValue;
 	public int deathTally;
 	public int deadCount;
+	public int cost;
+	public int singlecost;
+
+	//lines up with MonsterType enum
+	public static int[] MonsterCost = new int[7] { 3, 3, 6, 6, 7, 9, 7 };
+	//large, bloodthirsty, armored
+	public static int[] ModCost = new int[3] { 1, 2, 1 };
+	public static string[] modNames = new string[3] { "Large", "Bloodthirsty", "Armored" };
 
 	/// <summary>
 	/// returns # of monsters that are alive
@@ -211,5 +218,79 @@ public class Monster
 		}
 
 		return new Tuple<int, int>( f, d );
+	}
+
+	public static Monster MonsterFactory( MonsterType mType )
+	{
+		//light=2, medium=3, heavy=4
+		int mHealth = 0, mDamage = 0, mSpeed = 0, armor = 0, sorc = 0;
+		string special = "";
+
+		switch ( mType )
+		{
+			case MonsterType.GoblinScout:
+				mHealth = 3;
+				mDamage = 2;
+				mSpeed = 2;
+				armor = 1;
+				break;
+			case MonsterType.Ruffian:
+				mHealth = 5;
+				mDamage = 2;
+				mSpeed = 2;
+				armor = 0;
+				break;
+			case MonsterType.OrcHunter:
+				mHealth = 5;
+				mDamage = 3;
+				mSpeed = 1;
+				armor = 1;
+				special = "Ranged";
+				break;
+			case MonsterType.OrcMarauder:
+				mHealth = 5;
+				mDamage = 3;
+				mSpeed = 1;
+				armor = 2;
+				break;
+			case MonsterType.Warg:
+				mHealth = 8;
+				mDamage = 3;
+				mSpeed = 3;
+				armor = 1;
+				break;
+			case MonsterType.HillTroll:
+				mHealth = 14;
+				mDamage = 4;
+				mSpeed = 1;
+				armor = 2;
+				break;
+			case MonsterType.Wight:
+				mHealth = 6;
+				mDamage = 4;
+				mSpeed = 1;
+				sorc = 3;
+				special = "Fear Bias";
+				break;
+		}
+
+		return new Monster()
+		{
+			dataName = monsterNames[(int)mType],
+			monsterType = mType,
+			GUID = Guid.NewGuid(),
+			health = mHealth,
+			damage = mDamage,
+			movementValue = mSpeed,
+			shieldValue = armor,
+			sorceryValue = sorc,
+			specialAbility = special,
+			triggerName = "None",
+			singlecost = MonsterCost[(int)mType],
+			isEasy = true,
+			isNormal = true,
+			isHard = true,
+			negatedBy = Ability.Might
+		};
 	}
 }

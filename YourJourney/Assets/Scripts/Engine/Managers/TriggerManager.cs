@@ -182,4 +182,12 @@ public class TriggerManager : MonoBehaviour
 	{
 		return firedTriggersList.TryGetValue( name, out bool v ) ? v : false;
 	}
+
+	public TriggerState GetState()
+	{
+		return new TriggerState()
+		{
+			firedTriggersList = firedTriggersList
+		};
+	}
 }

@@ -30,7 +30,7 @@ public class HexTile : ITile
 	public bool isStartTile { get; set; }
 	public string triggerName { get; set; }
 
-	public bool isExplored { get; set; } = false;
+	//public bool isExplored { get; set; } = false;
 
 	public HexTile()
 	{

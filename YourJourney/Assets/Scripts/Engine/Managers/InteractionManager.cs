@@ -133,7 +133,6 @@ public class InteractionManager : MonoBehaviour
 	public TextPanel GetNewTextPanel()
 	{
 		return Instantiate( textPanelPrefab, uiRoot ).transform.Find( "TextPanel" ).GetComponent<TextPanel>();
-		//return Instantiate( textPanelPrefabTEST, uiRoot ).transform.Find( "TextPanel" ).GetComponent<TextPanel>();
 	}
 
 	public DecisionPanel GetNewDecisionPanel()
@@ -305,9 +304,15 @@ public class InteractionManager : MonoBehaviour
 	void HandleThreat( IInteraction it, Vector3 position )
 	{
 		List<Vector3> positions = new List<Vector3>();
-		//get VALID (correct difficulty) monster group count
+
+		//generate the encounter using Pool System
+		( (ThreatInteraction)it ).GenerateEncounter();
+
+		//get VALID (correct difficulty) Pool and scripted monster group count
 		int groupCount = ( (ThreatInteraction)it ).monsterCollection.Where( m => m.IsValid() ).Count();
-		Vector3[] opentf = FindObjectOfType<TileManager>().GetAvailableSpawnPositions( groupCount );
+
+		Vector3[] opentf = FindObjectOfType<TileManager>().GetAvailableSpawnPositions();
+
 		int[] rnds = GlowEngine.GenerateRandomNumbers( opentf.Length );
 
 		Debug.Log( "Found " + opentf.Length + " positions" );
@@ -329,6 +334,7 @@ public class InteractionManager : MonoBehaviour
 		}
 		else//it's a fixed token interaction
 		{
+			//get positions as close as possible to event that spawns this
 			Vector3[] nearest = opentf.OrderBy( x => Vector3.Distance( x, position ) ).ToArray();
 			//use as many positions as possible
 			for ( int i = 0; i < Math.Min( groupCount, nearest.Length ); i++ )
@@ -474,7 +480,7 @@ public class InteractionManager : MonoBehaviour
 			Monster m = monsters[i];
 
 			//add monster group to bar, one at a time
-			FindObjectOfType<MonsterManager>().AddMonsterGroup( m, it );
+			FindObjectOfType<MonsterManager>().AddMonsterGroup( m, it as ThreatInteraction );
 
 			TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
 			p.ShowOkContinue( $"Place {m.count} {m.dataName}(s) in the indicated position.", ButtonIcon.Continue, () => waiting = false );

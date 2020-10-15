@@ -119,7 +119,11 @@ public class DamagePanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonAction = null;
 
-		int test = UnityEngine.Random.Range( 0, 5 );
+		int test;
+		if ( finalStand == FinalStand.Damage )
+			test = UnityEngine.Random.Range( 0, 2 );
+		else
+			test = UnityEngine.Random.Range( 2, 5 );
 		//Might, Agility, Wisdom, Spirit, Wit
 		if ( test == 0 )
 		{

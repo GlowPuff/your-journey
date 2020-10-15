@@ -8,9 +8,11 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap
 {
-	public static string AppVersion = "0.9";
-	public static string FormatVersion = "1.4";
+	public static string AppVersion = "0.11";
+	public static string FormatVersion = "1.5";
 
+	public static string fileName;
+	public static string scenarioFileName;
 	public static bool isNewGame = true;
 	public static string[] heroes;
 	public static Difficulty difficulty = Difficulty.Normal;
@@ -19,7 +21,7 @@ public class Bootstrap
 	public static int loreCount;
 	public static int PlayerCount { get => heroes.Length; }
 	public static string[] heroCustomNames;
-
+	public static System.Random random = new System.Random();
 	static ProjectItem projectItem { get; set; }
 
 	/// <summary>
@@ -31,6 +33,7 @@ public class Bootstrap
 		Debug.Log( "LoadLevel()::Loaded: " + projectItem.fileName );
 		foreach ( string s in heroes )
 			Debug.Log( "Hero:" + s );
+		scenarioFileName = projectItem.fileName;
 		isDead = new bool[5];
 		isDead.Fill( false );
 		lastStandCounter = new int[5];
@@ -41,16 +44,18 @@ public class Bootstrap
 
 	public static Scenario DEBUGLoadLevel()
 	{
-		heroes = new string[2] { "Aragorn", "Gimli" };
+		heroes = new string[2] { "P1", "P2" };
 
 		projectItem = FileManager.GetProjects().First();
 		Debug.Log( "DEBUGLoadLevel()::Loaded: " + projectItem.fileName );
 		Scenario scenario = FileManager.Load( FileManager.GetFullPath( projectItem.fileName ) );
-		difficulty = Difficulty.Hard;
+		scenarioFileName = projectItem.fileName;
+		difficulty = Difficulty.Normal;
 		isDead = new bool[5];
 		isDead.Fill( false );
 		lastStandCounter = new int[5];
 		lastStandCounter.Fill( 1 );
+		fileName = "test.sav";
 
 		return scenario;
 	}

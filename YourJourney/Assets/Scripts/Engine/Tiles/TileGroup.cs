@@ -9,16 +9,16 @@ public class TileGroup
 	public Vector3 groupCenter;
 	//0th Tile is the ROOT
 	public List<Tile> tileList;
-	public bool isExplored;
+	public bool isExplored { get; set; }
 	public Vector3 startPosition { get; set; }
 
 	//each Tile is a child of containerObject
-	Transform containerObject;
+	public Transform containerObject;
 	//List<Vector3> childOffsets;//normalized vectors pointint to child
 	Chapter chapter { get; set; }
 	//int[] randomTileIndices;//randomly index into chapter tileObserver
 	[HideInInspector]
-	public System.Guid GUID;
+	public System.Guid GUID { get; set; }//same as chapter GUID
 
 	private static float RandomAngle()
 	{
@@ -26,9 +26,9 @@ public class TileGroup
 		return a[Random.Range( 0, a.Length )];
 	}
 
-	TileGroup()
+	TileGroup( System.Guid guid )
 	{
-		GUID = System.Guid.NewGuid();
+		GUID = guid;//System.Guid.NewGuid();
 	}
 
 	public Chapter GetChapter()
@@ -38,7 +38,7 @@ public class TileGroup
 
 	public static TileGroup CreateFixedGroup( Chapter c )
 	{
-		TileGroup tg = new TileGroup();
+		TileGroup tg = new TileGroup( c.GUID );
 		tg.startPosition = ( -1000f ).ToVector3();
 		tg.isExplored = false;
 
@@ -48,7 +48,7 @@ public class TileGroup
 
 	public static TileGroup CreateRandomGroup( Chapter c )
 	{
-		TileGroup tg = new TileGroup();
+		TileGroup tg = new TileGroup( c.GUID );
 		tg.startPosition = ( -1000f ).ToVector3();
 		tg.isExplored = false;
 
@@ -117,47 +117,51 @@ public class TileGroup
 				usedPositions.AddRange( AddFixedToken( tile ) );
 
 			if ( hexroot.isStartTile )
+			{
 				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
+				tile.isExplored = true;
+			}
 		}
 
 		//add random tokens
 		if ( c.usesRandomGroups )
 			AddRandomTokens( usedPositions.ToArray() );
 
+		//***start tile cannot be random, below is no longer needed
 		//find starting position if applicable
-		if ( c.dataName == "Start" )
-		{
-			bool found = false;
-			foreach ( var randomTile in tileList )
-			{
-				var positions = randomTile.GetChildren( "token attach" );
-				var tokens = randomTile.GetChildren( " Token(Clone)" );
+		//if ( c.dataName == "Start" )
+		//{
+		//	bool found = false;
+		//	foreach ( var randomTile in tileList )
+		//	{
+		//		var positions = randomTile.GetChildren( "token attach" );
+		//		var tokens = randomTile.GetChildren( " Token(Clone)" );
 
-				var open = from p in positions
-									 from t in tokens
-									 let foo = new { p, t }
-									 where Vector3.Distance( foo.p.position.Y( 0 ), foo.t.position.Y( 0 ) ) > 1f
-									 select foo;
+		//		var open = from p in positions
+		//							 from t in tokens
+		//							 let foo = new { p, t }
+		//							 where Vector3.Distance( foo.p.position.Y( 0 ), foo.t.position.Y( 0 ) ) > 1f
+		//							 select foo;
 
-				if ( open.Count() > 0 )
-				{
-					Debug.Log( "placed starting position" );
-					startPosition = open.First().p.position.Y( .26f );
-					found = true;
-					randomTile.hexTile.isStartTile = true;
-					Colorize( true );
-					break;
-				}
-			}
-			if ( !found )
-			{
-				Debug.Log( "Starting position not found, using default" );
-				int tid = GlowEngine.GenerateRandomNumbers( tileList.Count )[0];
-				startPosition = tileList[tid].GetExploretokenPosition();
-				tileList[tid].hexTile.isStartTile = true;
-				Colorize( true );
-			}
-		}
+		//		if ( open.Count() > 0 )
+		//		{
+		//			Debug.Log( "placed starting position" );
+		//			startPosition = open.First().p.position.Y( .26f );
+		//			found = true;
+		//			randomTile.hexTile.isStartTile = true;
+		//			Colorize( true );
+		//			break;
+		//		}
+		//	}
+		//	if ( !found )
+		//	{
+		//		Debug.Log( "Starting position not found, using default" );
+		//		int tid = GlowEngine.GenerateRandomNumbers( tileList.Count )[0];
+		//		startPosition = tileList[tid].GetExploretokenPosition();
+		//		tileList[tid].hexTile.isStartTile = true;
+		//		Colorize( true );
+		//	}
+		//}
 
 		GenerateGroupCenter();
 	}
@@ -259,6 +263,7 @@ public class TileGroup
 			//find starting position if applicable
 			if ( h.isStartTile )
 			{
+				tile.isExplored = true;
 				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
 			}
 		}
@@ -377,6 +382,14 @@ public class TileGroup
 			go.GetComponent<MetaData>().interactionName = igs[i].dataName;
 			go.GetComponent<MetaData>().GUID = System.Guid.NewGuid();
 			go.GetComponent<MetaData>().isRandom = true;
+
+			tile.tokenStates.Add( new TokenState()
+			{
+				isActive = false,
+				parentTileGUID = tile.hexTile.GUID,
+				globalPosition = go.transform.position,
+				metaData = go.GetComponent<MetaData>(),
+			} );
 		}
 	}
 
@@ -424,9 +437,10 @@ public class TileGroup
 			//go.GetComponent<MetaData>().tokenTypeID = "TOKEN_" + t.tokenType.ToString();
 			go.GetComponent<MetaData>().triggeredByName = t.triggeredByName;
 			go.GetComponent<MetaData>().interactionName = t.triggerName;
-			go.GetComponent<MetaData>().GUID = System.Guid.NewGuid();
+			go.GetComponent<MetaData>().GUID = t.GUID;
+			//System.Guid.NewGuid();
 			//position of token in EDITOR coords
-			go.GetComponent<MetaData>().position = t.vposition;
+			//go.GetComponent<MetaData>().position = t.vposition;
 			//offset to token in EDITOR coords
 			go.GetComponent<MetaData>().offset = t.vposition - new Vector3( 256, 0, 256 );
 			go.GetComponent<MetaData>().isRandom = false;
@@ -444,26 +458,14 @@ public class TileGroup
 
 			usedPositions.Add( go.transform );
 
-			//var positions = tile.GetChildren( "token attach" );
-			////Debug.Log( Vector3.Distance( positions[0].position.Y( 0 ), tokenPos.Y( 0 ) ) );
-			//if ( positions.Any( foo => Vector3.Distance( foo.localPosition.Y( 0 ), tokenPos.Y( 0 ) ) < 1.5f ) )
-			//{
-			//	var ap = ( from p in positions where Vector3.Distance( p.localPosition.Y( 0 ), tokenPos.Y( 0 ) ) < 1.5f select p.localPosition ).First();
-			//	go.GetComponent<MetaData>().position = ap;
-			//}
-			//else
-			//{
-			//	Debug.Log( "No token position found, using default" );
-			//	go.GetComponent<MetaData>().position = tokenPos;
-			//}
+			tile.tokenStates.Add( new TokenState()
+			{
+				isActive = false,
+				parentTileGUID = tile.hexTile.GUID,
+				globalPosition = go.transform.position,
+				metaData = go.GetComponent<MetaData>(),
+			} );
 		}
-
-		//var open = from tok in tile.hexTile.tokenList
-		//					 from used in usedPositions
-		//					 where tok.GUID != used.GUID
-		//					 select tok;
-
-
 
 		return usedPositions.ToArray();
 	}
@@ -754,7 +756,7 @@ public class TileGroup
 	}
 
 	/// <summary>
-	/// colorize whole group, fire chapter exploreTrigger
+	/// colorize whole group (START chapter ONLY), fire chapter exploreTrigger
 	/// </summary>
 	public void Colorize( bool onlyStart = false )
 	{
@@ -762,6 +764,8 @@ public class TileGroup
 
 		if ( isExplored )
 			return;
+
+		//isExplored = true;
 
 		//if it's not the first chapter, set the "on explore" trigger
 		//if ( chapter.dataName != "Start" )

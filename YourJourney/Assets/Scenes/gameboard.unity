@@ -744,7 +744,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 406, y: -313}
-  m_SizeDelta: {x: 400, y: 300}
+  m_SizeDelta: {x: 350, y: 300}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &64743051
 MonoBehaviour:
@@ -1379,7 +1379,6 @@ MonoBehaviour:
   fButton: {fileID: 299202442}
   skullImage: {fileID: 282070956}
   pPanel: {fileID: 0}
-  skullGO: {fileID: 0}
 --- !u!225 &216735955
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -5302,7 +5301,6 @@ MonoBehaviour:
   fButton: {fileID: 963451668}
   skullImage: {fileID: 895270233}
   pPanel: {fileID: 0}
-  skullGO: {fileID: 0}
 --- !u!225 &928856387
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -9743,10 +9741,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: ae703a586934e7541b818c38a01efb68, type: 3}
-    m_FontSize: 40
+    m_FontSize: 37
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -9960,7 +9958,6 @@ MonoBehaviour:
   fButton: {fileID: 966050122}
   skullImage: {fileID: 1669916087}
   pPanel: {fileID: 0}
-  skullGO: {fileID: 1669916085}
 --- !u!225 &1444435354
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -13325,7 +13322,6 @@ MonoBehaviour:
   fButton: {fileID: 496850182}
   skullImage: {fileID: 1022036634}
   pPanel: {fileID: 0}
-  skullGO: {fileID: 0}
 --- !u!225 &1984662140
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -13681,7 +13677,6 @@ MonoBehaviour:
   fButton: {fileID: 1300860514}
   skullImage: {fileID: 2095627426}
   pPanel: {fileID: 0}
-  skullGO: {fileID: 0}
 --- !u!225 &2048050422
 CanvasGroup:
   m_ObjectHideFlags: 0

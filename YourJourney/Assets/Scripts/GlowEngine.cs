@@ -1,6 +1,10 @@
 ﻿/// <summary>
 /// Edit the DATE if anything is ADDED or MODIFIED
 /// 
+/// Modified 10/10
+/// +FirstOr()
+/// provide a default value to LINQ enumeration
+/// 
 /// Modified 6/11
 /// +X,Y,Z
 /// modify ONLY the x, y, or z value of a vector3
@@ -269,6 +273,13 @@ public static class GlowExtensions
 		for ( int i = 0; i < array.Length; i++ )
 			array[i] = value;
 		return array;
+	}
+
+	public static T FirstOr<T>( this IEnumerable<T> source, T alternate )
+	{
+		foreach ( T t in source )
+			return t;
+		return alternate;
 	}
 }
 

@@ -9,7 +9,8 @@ public class ObjectiveManager : MonoBehaviour
 	public Text objectiveText;
 
 	List<Objective> objectiveList;
-	Objective currentObjective;
+	[HideInInspector]
+	public Objective currentObjective;
 
 	public void Init( Scenario s )
 	{
@@ -110,6 +111,7 @@ public class ObjectiveManager : MonoBehaviour
 		if ( currentObjective.triggerName == triggername )
 		{
 			Debug.Log( "Completed Objective: " + currentObjective.dataName );
+			FindObjectOfType<LorePanel>().AddLore( currentObjective.loreReward );
 			string t = currentObjective.nextTrigger;
 			currentObjective = null;
 			objectiveText.text = "No Objective";
@@ -119,5 +121,13 @@ public class ObjectiveManager : MonoBehaviour
 
 		Debug.Log( "TryCompleteObjective NOT FOUND: " + name );
 		return false;
+	}
+
+	public ObjectiveState GetState()
+	{
+		return new ObjectiveState()
+		{
+			currentObjective = currentObjective.GUID
+		};
 	}
 }

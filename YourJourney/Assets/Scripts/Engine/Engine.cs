@@ -23,7 +23,7 @@ public class Engine : MonoBehaviour
 	public AudioSource music;
 	public PostProcessVolume volume;
 
-	bool debug = false;
+	bool debug = true;
 
 	void Awake()
 	{
@@ -111,21 +111,21 @@ public class Engine : MonoBehaviour
 	{
 		if ( Input.GetKeyDown( KeyCode.Alpha1 ) )
 		{
-			FindObjectOfType<MonsterManager>().AddMonsterGroup( new Monster()
-			{
-				//isLarge = true,
-				isElite = false,
-				health = 2,
-				currentHealth = new int[] { 2, 2, 2 },
-				shieldValue = 0,
-				count = 2,
-				movementValue = 2,
-				specialAbility = "",
-				GUID = System.Guid.NewGuid(),
-				monsterType = MonsterType.OrcHunter,
-				dataName = "Orc Hunter",
-				damage = 2
-			} );
+			//FindObjectOfType<MonsterManager>().AddMonsterGroup( new Monster()
+			//{
+			//	//isLarge = true,
+			//	isElite = false,
+			//	health = 2,
+			//	currentHealth = new int[] { 2, 2, 2 },
+			//	shieldValue = 0,
+			//	count = 2,
+			//	movementValue = 2,
+			//	specialAbility = "",
+			//	GUID = System.Guid.NewGuid(),
+			//	monsterType = MonsterType.OrcHunter,
+			//	dataName = "Orc Hunter",
+			//	damage = 2
+			//} );
 		}
 		else if ( Input.GetKeyDown( KeyCode.Alpha2 ) )
 		{
@@ -136,12 +136,10 @@ public class Engine : MonoBehaviour
 			//camControl.MoveTo( tg2.groupCenter );
 			//tg2.AnimateTileUp();
 		}
-		else if ( Input.GetKeyDown( KeyCode.Alpha3 ) )
+		else if ( Input.GetKeyDown( KeyCode.S ) )
 		{
-		}
-		else if ( Input.GetKeyDown( KeyCode.Delete ) )
-		{
-			//tileManager.RemoveAllTiles();
+			GameState gs = new GameState();
+			gs.SaveState( this );
 		}
 	}
 

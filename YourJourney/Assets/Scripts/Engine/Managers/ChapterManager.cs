@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -206,6 +205,7 @@ public class ChapterManager : MonoBehaviour
 					if ( firstChapter && !c.isPreExplored )
 					{
 						tg.Colorize( true );
+						tg.isExplored = true;
 					}
 				} );
 				FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( "Place your Heroes in the indicated position.", ButtonIcon.Continue );
@@ -248,5 +248,13 @@ public class ChapterManager : MonoBehaviour
 			}
 		}
 		yield return null;
+	}
+
+	public ChapterState GetState()
+	{
+		return new ChapterState()
+		{
+			tokenTriggerQueue = tokenTriggerQueue
+		};
 	}
 }

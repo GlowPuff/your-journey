@@ -20,7 +20,7 @@ public class CamControl : MonoBehaviour
 	Vector3 moveStart, targetPos, targetZoom, DOF, targetDOF, targetLookAt;
 	int dClickCount;
 	bool dragging = false;
-	Vector3 dragOrigin, lastPos;
+	Vector3 dragOrigin;
 
 	void Awake()
 	{
@@ -242,5 +242,14 @@ public class CamControl : MonoBehaviour
 			transform.DORotate( new Vector3( 0, rotateAmount, 0 ), rotateDuration, RotateMode.WorldAxisAdd );
 			dragStart = Input.mousePosition;
 		}
+	}
+
+	public CamState GetState()
+	{
+		return new CamState()
+		{
+			position = transform.position,
+			YRotation = transform.rotation.eulerAngles.y
+		};
 	}
 }

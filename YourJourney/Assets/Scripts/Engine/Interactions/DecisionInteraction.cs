@@ -14,6 +14,7 @@ public class DecisionInteraction : IInteraction
 	public PersonType personType { get; set; }
 	public bool isTokenInteraction { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
 
 	public string choice1;
 	public string choice2;
@@ -25,26 +26,26 @@ public class DecisionInteraction : IInteraction
 
 	public InteractionType interactionType { get { return InteractionType.Decision; } set { } }
 
-	public static DecisionInteraction Create( Interaction interaction )
-	{
-		DecisionInteraction d = new DecisionInteraction
-		{
-			GUID = interaction.GUID,
-			dataName = interaction.dataName,
-			isEmpty = interaction.isEmpty,
-			triggerName = interaction.triggerName,
-			triggerAfterName = interaction.triggerAfterName,
-			textBookData = interaction.textBookData,
-			eventBookData = interaction.eventBookData,
+	//public static DecisionInteraction Create( Interaction interaction )
+	//{
+	//	DecisionInteraction d = new DecisionInteraction
+	//	{
+	//		GUID = interaction.GUID,
+	//		dataName = interaction.dataName,
+	//		isEmpty = interaction.isEmpty,
+	//		triggerName = interaction.triggerName,
+	//		triggerAfterName = interaction.triggerAfterName,
+	//		textBookData = interaction.textBookData,
+	//		eventBookData = interaction.eventBookData,
 
-			choice1 = interaction.choice1,
-			choice2 = interaction.choice2,
-			choice3 = interaction.choice3,
-			isThreeChoices = interaction.isThreeChoices,
-			choice1Trigger = interaction.choice1Trigger
-		};
+	//		choice1 = interaction.choice1,
+	//		choice2 = interaction.choice2,
+	//		choice3 = interaction.choice3,
+	//		isThreeChoices = interaction.isThreeChoices,
+	//		choice1Trigger = interaction.choice1Trigger
+	//	};
 
-		return d;
-	}
+	//	return d;
+	//}
 }
 

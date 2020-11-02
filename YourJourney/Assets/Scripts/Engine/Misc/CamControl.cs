@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -17,7 +18,7 @@ public class CamControl : MonoBehaviour
 
 	float rotateAmount = 0, dClickTimer;
 	Vector2 dragStart;
-	Vector3 moveStart, targetPos, targetZoom, DOF, targetDOF, targetLookAt;
+	Vector3 targetPos, targetZoom, DOF, targetDOF, targetLookAt;
 	int dClickCount;
 	bool dragging = false;
 	Vector3 dragOrigin;
@@ -57,27 +58,15 @@ public class CamControl : MonoBehaviour
 		//disable camera control if panels are showing
 		if ( uiRoot.childCount > 0
 			|| combatPanel.gameObject.activeInHierarchy
-			|| partyPanel.gameObject.activeInHierarchy )
+			|| partyPanel.gameObject.activeInHierarchy
+			|| FindObjectOfType<Engine>().settingsDialog.gameObject.activeInHierarchy
+			|| FindObjectOfType<ProvokeMessage>().provokeMode )
 			return;
 
 		HandleDragging();
 		HandleRotation();
 		HandleMove();
 		HandleZoom();
-
-		//junk
-		//timer -= Time.deltaTime;
-		//if ( timer <= 0 )
-		//{
-		//	if ( target.position != lastTargetPos )
-		//	{
-		//		timer = 2.1f;
-		//		look();
-		//		lastTargetPos = target.position;
-		//	}
-		//	else
-		//		timer = .5f;
-		//}
 	}
 
 	void HandleZoom()
@@ -129,15 +118,17 @@ public class CamControl : MonoBehaviour
 		}
 
 		dragging = true;
+		float scalar = Vector3.Distance( dragOrigin, Input.mousePosition );
+		scalar = GlowEngine.RemapValue( scalar, 0, 30, 0, .7f );
+
 		//Vector3 pos = cam.ScreenToViewportPoint( Input.mousePosition - dragOrigin );
 		Vector3 direction = Input.mousePosition - dragOrigin;
 		direction = Vector3.Normalize( direction );
 
-		Vector3 move = new Vector3( direction.x * .1f, 0, direction.y * .2f );
+		Vector3 move = new Vector3( direction.x * scalar, 0, direction.y * scalar );
 		transform.Translate( -move, Space.Self );
 		targetPos = transform.position;
 		dragOrigin = Input.mousePosition;
-
 	}
 
 	void HandleMove()
@@ -154,66 +145,15 @@ public class CamControl : MonoBehaviour
 			dClickTimer = doubleClickSpeed;
 			Ray ray = cam.ScreenPointToRay( Input.mousePosition );
 			RaycastHit hit;
-			if ( Physics.Raycast( ray, out hit, Mathf.Infinity, mask2 ) )
-			{
-				if ( hit.collider.name == "hit Plane" )
-				{
-					moveStart = hit.point;
-				}
-			}
 
 			//double click
 			if ( dClickCount > 1 && Physics.Raycast( ray, out hit, Mathf.Infinity, ~( mask1 | mask2 ) ) )
 			{
 				//Debug.Log( "click::" + hit.collider.name );
 
-				//cam.transform.LookAt( transform );
-
 				MoveTo( hit.collider.transform.parent.GetComponent<Tile>().centerPosition, .2f );
 			}
 		}
-
-		//dragging
-		/*
-		if ( dClickCount <= 1 && Input.GetMouseButton( 0 ) )
-		{
-			Ray ray = cam.ScreenPointToRay( Input.mousePosition );
-			RaycastHit hit;
-			if ( Physics.Raycast( ray, out hit, Mathf.Infinity, mask2 ) )
-			{
-				if ( Input.GetMouseButtonDown( 0 ) )
-				{
-					dragOrigin = Input.mousePosition;
-					return;
-				}
-
-				dragging = true;
-				//Debug.Log( "dragging::" + hit.point );
-
-				float d = Vector3.Distance( moveStart, hit.point );
-				float delta = GlowEngine.RemapValue( d, 0, 3, 0, moveDragSpeed );
-
-				Vector3 p = hit.point;
-				Vector3 direction = moveStart - p;
-				direction = Vector3.Normalize( direction );
-
-				//MoveTo( transform.position + ( delta * direction ) );
-				Vector3 pos = cam.ScreenToViewportPoint( Input.mousePosition - dragOrigin );
-				direction = Input.mousePosition - dragOrigin;
-				direction = Vector3.Normalize( direction );
-
-				Vector3 move = new Vector3( direction.x * .2f, 0, direction.y * .2f );
-				//if ( pos != lastPos )
-				transform.Translate( -move, Space.Self );
-				//else
-				//	dragOrigin = Input.mousePosition;
-
-				lastPos = pos;
-				//moveStart = hit.point;
-			}
-			else
-				dragging = false;
-		}*/
 
 		dClickTimer -= Time.deltaTime;
 		if ( dClickTimer <= 0 )
@@ -251,5 +191,12 @@ public class CamControl : MonoBehaviour
 			position = transform.position,
 			YRotation = transform.rotation.eulerAngles.y
 		};
+	}
+
+	public void SetState( CamState camState )
+	{
+		transform.position = camState.position;
+		MoveTo( camState.position );
+		transform.rotation = Quaternion.Euler( 0, camState.YRotation, 0 );
 	}
 }

@@ -18,6 +18,8 @@ public class ThreatInteraction : IInteraction
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
+
 	public string triggerDefeatedName { get; set; }
 	public bool[] includedEnemies { get; set; }
 	[DefaultValue( 0 )]
@@ -36,9 +38,9 @@ public class ThreatInteraction : IInteraction
 	int modPoints;
 
 	/// <summary>
-	/// Generates enemy groups and adds them to monsterCollection using Pool System
+	/// Generates enemy groups using Pool System
 	/// </summary>
-	public void GenerateEncounter()
+	public List<Monster> GenerateEncounter()
 	{
 		/*
 				Large = +2 health, cost=1
@@ -49,37 +51,38 @@ public class ThreatInteraction : IInteraction
 		lastEnemyIndex = -1;//avoid repeat enemy types if possible
 		modPoints = 0;
 
-		int poolCount = CalculateScaledPoints();
-		int starting = poolCount;
+		float poolCount = CalculateScaledPoints();
+		float starting = poolCount;
 
 		//if no enemies checked, returns 1000
 		int lowestCost = LowestRequestedEnemyCost();
 		if ( lowestCost == 1000 )
 		{
 			Debug.Log( "There are no Enemies included in the Pool." );
-			return;
+			return new List<Monster>();
 		}
 
 		if ( poolCount < lowestCost )
 		{
 			Debug.Log( "There aren't enough Pool Points to generate any Enemies given the current parameters." );
-			return;
+			return new List<Monster>();
 		}
 
 		//generate all the random monster groups possible
 		List<Monster> mList = new List<Monster>();
 		while ( poolCount >= lowestCost )//lowest enemy cost
 		{
-			Tuple<Monster, int> generated = GenerateMonster( poolCount );
+			Tuple<Monster, float> generated = GenerateMonster( poolCount );
 			if ( generated.Item1.dataName != "modifier" )
 			{
-				poolCount = Math.Max( 0, poolCount - generated.Item2 );
+				poolCount = Math.Max( 0f, poolCount - generated.Item2 );
 				mList.Add( generated.Item1 );
+				Debug.Log( "Group cost: " + generated.Item2 );
 			}
 			else
 			{
 				//use dummy point
-				poolCount = Math.Max( 0, poolCount - 1 );
+				poolCount = Math.Max( 0f, poolCount - 1f );
 			}
 		}
 
@@ -96,7 +99,7 @@ public class ThreatInteraction : IInteraction
 				//% chance to add another
 				if ( Bootstrap.random.Next( 100 ) < 50 && sim.count < 2 && sim.singlecost <= poolCount )
 				{
-					poolCount = Math.Max( 0, poolCount - sim.singlecost );
+					poolCount = Math.Max( 0f, poolCount - sim.singlecost );
 					sim.count++;
 					sim.cost += sim.singlecost;
 				}
@@ -126,17 +129,20 @@ public class ThreatInteraction : IInteraction
 			}
 		}
 
-		Debug.Log( "leftover points: " + poolCount );
+		//round it to 2 decimal places
+		float leftOvers = (float)Math.Round( poolCount * 100f ) / 100f;
 
+		Debug.Log( "leftover points: " + leftOvers );
+		return mList;
 		//finally add finished groups to collection
-		foreach ( Monster ms in mList )
-			monsterCollection.Add( ms );
+		//foreach ( Monster ms in mList )
+		//	monsterCollection.Add( ms );
 	}
 
-	Tuple<Monster, int> GenerateMonster( int points )
+	Tuple<Monster, float> GenerateMonster( float points )
 	{
 		//monster type/cost
-		List<Tuple<MonsterType, int>> mList = new List<Tuple<MonsterType, int>>();
+		List<Tuple<MonsterType, float>> mList = new List<Tuple<MonsterType, float>>();
 		//create list of enemy candidates
 		for ( int i = 0; i < includedEnemies.Length; i++ )
 		{
@@ -147,7 +153,7 @@ public class ThreatInteraction : IInteraction
 			//includedEnemies lines up with MonsterType enum and MonsterCost array
 			if ( includedEnemies[i] && points >= Monster.MonsterCost[i] )
 			{
-				mList.Add( new Tuple<MonsterType, int>( (MonsterType)i, Monster.MonsterCost[i] ) );
+				mList.Add( new Tuple<MonsterType, float>( (MonsterType)i, Monster.MonsterCost[i] ) );
 			}
 		}
 
@@ -159,8 +165,18 @@ public class ThreatInteraction : IInteraction
 			//Debug.Log( pick );
 
 			Monster ms = Monster.MonsterFactory( mList[pick].Item1 );
-			int upTo = points / mList[pick].Item2;
-			upTo = Math.Min( upTo, 3 );//max of 3 in group
+			//.6 of cost per count above 1
+			float groupcost = mList[pick].Item2;
+			int upTo = groupcost <= points ? 1 : 0;
+			for ( int i = 0; i < 2; i++ )
+			{
+				if ( ( groupcost + .6f * mList[pick].Item2 ) <= points )
+				{
+					upTo += 1;
+					groupcost += .6f * mList[pick].Item2;
+				}
+			}
+
 			int count = Bootstrap.random.Next( 1, upTo + 1 );
 			//avoid a bunch of 1 enemy groups
 			if ( count == 1 && numSingleGroups >= 1 )
@@ -173,38 +189,42 @@ public class ThreatInteraction : IInteraction
 					else
 					{
 						Monster skip = new Monster() { dataName = "modifier", cost = 1 };
-						return new Tuple<Monster, int>( skip, 0 );
+						return new Tuple<Monster, float>( skip, 0 );
 					}
 				}
 				else//no more room, 30% to add a modifier point instead
 				{
 					Monster skip = new Monster() { dataName = "modifier", cost = 0 };
-					return new Tuple<Monster, int>( skip, Bootstrap.random.Next( 100 ) > 30 ? 1 : 0 );
+					return new Tuple<Monster, float>( skip, Bootstrap.random.Next( 100 ) > 30 ? 1 : 0 );
 				}
 			}
 
+			groupcost = mList[pick].Item2 + ( ( count - 1 ) * ( .6f * mList[pick].Item2 ) );
 			lastEnemyIndex = (int)mList[pick].Item1;
 			ms.count = count;
 			ms.singlecost = mList[pick].Item2;
-			ms.cost = mList[pick].Item2 * count;
+			ms.cost = groupcost;
 			if ( count == 1 )
 				numSingleGroups++;
-			return new Tuple<Monster, int>( ms, mList[pick].Item2 * count );
+			return new Tuple<Monster, float>( ms, mList[pick].Item2 * count );
 		}
 		else
 		{
 			Monster skip = new Monster() { dataName = "modifier", cost = 1 };
-			return new Tuple<Monster, int>( skip, 1 );
+			return new Tuple<Monster, float>( skip, 1 );
 		}
 	}
 
-	private int CalculateScaledPoints()
+	private float CalculateScaledPoints()
 	{
 		float difficultyScale = 0;
 		int bias = 0;
 
+		if ( basePoolPoints == 0 )
+			return 0;
+
 		//set the base pool
-		int poolCount = basePoolPoints;
+		float poolCount = basePoolPoints;
 
 		//set the difficulty bias
 		if ( difficultyBias == DifficultyBias.Light )
@@ -224,7 +244,7 @@ public class ThreatInteraction : IInteraction
 		poolCount += ( Bootstrap.PlayerCount - 1 ) * bias;
 
 		//modify pool based on difficulty scale
-		poolCount += (int)Math.Round( (float)poolCount * difficultyScale );
+		poolCount += poolCount * difficultyScale;
 		Debug.Log( "difficultyScale: " + difficultyScale );
 		Debug.Log( "Scaled Pool Points: " + poolCount );
 		return poolCount;

@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 public class Scenario
 {
+	public Guid scenarioGUID { get; set; }
+	public Guid campaignGUID { get; set; }
+	public int loreStartValue { get; set; }
+	public string specialInstructions { get; set; }
 	public string fileVersion { get; set; }
 	public string saveDate { get; set; }
 	public bool scenarioTypeJourney { get; set; }
@@ -33,6 +38,9 @@ public class Scenario
 	public static Scenario CreateInstance( FileManager fm )
 	{
 		Scenario s = new Scenario();
+		s.scenarioGUID = fm.scenarioGUID;
+		s.campaignGUID = fm.campaignGUID;
+		s.loreStartValue = fm.loreStartValue;
 		s.scenarioName = fm.scenarioName;
 		s.fileVersion = fm.fileVersion;
 		//s.fileName = fm.fileName;
@@ -52,6 +60,7 @@ public class Scenario
 		s.threatNotUsed = fm.threatNotUsed;
 		s.scenarioTypeJourney = fm.scenarioTypeJourney;
 		s.shadowFear = fm.shadowFear;
+		s.specialInstructions = fm.specialInstructions;
 
 		return s;
 	}

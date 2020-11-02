@@ -8,11 +8,12 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap
 {
-	public static string AppVersion = "0.11";
-	public static string FormatVersion = "1.5";
+	public static string AppVersion = "0.13";
+	public static string FormatVersion = "1.6";
 
-	public static string fileName;
-	public static string scenarioFileName;
+	public static string gameName;//name players assign to their save
+	public static int saveStateIndex;
+	public static string scenarioFileName { get; set; }
 	public static bool isNewGame = true;
 	public static string[] heroes;
 	public static Difficulty difficulty = Difficulty.Normal;
@@ -22,40 +23,78 @@ public class Bootstrap
 	public static int PlayerCount { get => heroes.Length; }
 	public static string[] heroCustomNames;
 	public static System.Random random = new System.Random();
-	static ProjectItem projectItem { get; set; }
 
 	/// <summary>
-	/// loads scenario using file info previously set with "SetNewGame" at the title screen
+	/// Resets vars and loads scenario using preset scenarioFileName and heroes
 	/// </summary>
 	public static Scenario LoadLevel()
 	{
-		Scenario scenario = FileManager.Load( FileManager.GetFullPath( projectItem.fileName ) );
-		Debug.Log( "LoadLevel()::Loaded: " + projectItem.fileName );
+		ResetVars();
+		Scenario scenario = FileManager.Load( FileManager.GetFullPath( scenarioFileName ) );
+		if ( scenario != null )
+		{
+			Debug.Log( "LoadLevel()::Loaded: " + scenarioFileName );
+
+			return scenario;
+		}
+
+		return null;
+	}
+
+	/// <summary>
+	/// sets scenarioFileName and loads scenario
+	/// </summary>
+	public static Scenario LoadLevel( string filename )
+	{
+		try
+		{
+			scenarioFileName = filename;
+			Scenario scenario = FileManager.Load( FileManager.GetFullPath( scenarioFileName ) );
+			if ( scenario != null )
+			{
+				Debug.Log( "LoadLevel()::Loaded: " + scenarioFileName );
+				return scenario;
+			}
+			else
+				return null;
+		}
+		catch ( System.Exception e )
+		{
+			Debug.Log( "LoadLevel()::ERROR: " + scenarioFileName );
+			Debug.Log( "LoadLevel()::ERROR: " + e.Message );
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// resets isDead, loreCount, lastStandCounter
+	/// </summary>
+	public static void ResetVars()
+	{
 		foreach ( string s in heroes )
 			Debug.Log( "Hero:" + s );
-		scenarioFileName = projectItem.fileName;
 		isDead = new bool[5];
 		isDead.Fill( false );
 		lastStandCounter = new int[5];
 		lastStandCounter.Fill( 1 );
-
-		return scenario;
+		loreCount = 0;
 	}
 
 	public static Scenario DEBUGLoadLevel()
 	{
 		heroes = new string[2] { "P1", "P2" };
 
-		projectItem = FileManager.GetProjects().First();
-		Debug.Log( "DEBUGLoadLevel()::Loaded: " + projectItem.fileName );
-		Scenario scenario = FileManager.Load( FileManager.GetFullPath( projectItem.fileName ) );
-		scenarioFileName = projectItem.fileName;
+		scenarioFileName = FileManager.GetProjects().First().fileName;
+		Debug.Log( "DEBUGLoadLevel()::Loaded: " + scenarioFileName );
+		Scenario scenario = FileManager.Load( FileManager.GetFullPath( scenarioFileName ) );
+
+		ResetVars();
+
+		//force debug vars
+		gameName = "DEBUG game";
 		difficulty = Difficulty.Normal;
-		isDead = new bool[5];
-		isDead.Fill( false );
-		lastStandCounter = new int[5];
-		lastStandCounter.Fill( 1 );
-		fileName = "test.sav";
+		saveStateIndex = -1;
+		//isNewGame = false;
 
 		return scenario;
 	}
@@ -63,12 +102,6 @@ public class Bootstrap
 	public static string GetRandomHero()
 	{
 		return heroes[Random.Range( 0, heroes.Length )];
-	}
-
-	public static void SetNewGame( string[] heroes, ProjectItem projectItem )
-	{
-		Bootstrap.heroes = heroes;
-		Bootstrap.projectItem = projectItem;
 	}
 
 	public static void SaveHeroName( int index, string name )

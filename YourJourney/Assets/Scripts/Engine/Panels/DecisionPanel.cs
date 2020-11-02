@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
 using DG.Tweening;
-using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class DecisionPanel : MonoBehaviour
 {
@@ -72,6 +72,12 @@ public class DecisionPanel : MonoBehaviour
 		TextGenerator textGen = new TextGenerator();
 		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
 		float height = textGen.GetPreferredHeight( t, generationSettings );
+
+		//Debug.Log( height );//lineheight=35
+		//Regex rx = new Regex( @"\r\n" );
+		//MatchCollection matches = rx.Matches( t );
+		//height -= matches.Count * 35;
+
 		var windowH = Math.Min( 525, height + 80 );
 
 		if ( height + 80 > 525 )

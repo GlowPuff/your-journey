@@ -123,11 +123,27 @@ public class ObjectiveManager : MonoBehaviour
 		return false;
 	}
 
+	public void SetState( ObjectiveState objectiveState )
+	{
+		if ( objectiveState.currentObjective != Guid.Empty )
+		{
+			currentObjective = objectiveList.Where( x => x.GUID == objectiveState.currentObjective ).First();
+			objectiveText.text = currentObjective.objectiveReminder;
+		}
+		else
+		{
+			currentObjective = null;
+			objectiveText.text = "No Objective";
+		}
+	}
+
 	public ObjectiveState GetState()
 	{
-		return new ObjectiveState()
-		{
-			currentObjective = currentObjective.GUID
-		};
+		ObjectiveState os = new ObjectiveState();
+		if ( currentObjective != null )
+			os.currentObjective = currentObjective.GUID;
+		else
+			os.currentObjective = Guid.Empty;
+		return os;
 	}
 }

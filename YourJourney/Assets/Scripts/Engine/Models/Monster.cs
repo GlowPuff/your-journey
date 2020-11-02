@@ -55,8 +55,8 @@ public class Monster
 	public int sunderValue;
 	public int deathTally;
 	public int deadCount;
-	public int cost;
-	public int singlecost;
+	public float cost;
+	public float singlecost;
 
 	//lines up with MonsterType enum
 	public static int[] MonsterCost = new int[7] { 3, 3, 6, 6, 7, 9, 7 };
@@ -99,89 +99,6 @@ public class Monster
 
 		return false;
 	}
-
-	public void AdjustPlayerCountDifficulty()
-	{
-		if ( Bootstrap.PlayerCount == 1 )
-		{
-			Debug.Log( "AdjustPlayerCountDifficulty::1" );
-			//reduce enemy count
-			count = Math.Max( 1, count - 1 );
-			//attributes, -1 to shield/sorc with a minimum of 1 if value exists
-			shieldValue = shieldValue > 0 ? Math.Max( 1, shieldValue - 1 ) : 0;
-			sorceryValue = sorceryValue > 0 ? Math.Max( 1, sorceryValue - 1 ) : 0;
-		}
-		else if ( Bootstrap.PlayerCount > 2 )
-		{
-			Debug.Log( "AdjustPlayerCountDifficulty::>2" );
-
-			int attAmount = Bootstrap.PlayerCount - 2;
-			//health
-			health++;
-			//increase enemy count if it's NOT uniquely named
-			if ( monsterNames.Any( x => dataName == x ) )
-				count = Math.Min( 3, count + 1 );
-			//attributes, +attAmount to shield/sorc
-			shieldValue = shieldValue > 0 ? Math.Min( shieldValue + attAmount, health ) : 0;
-			sorceryValue = sorceryValue > 0 ? Math.Min( sorceryValue + attAmount, health ) : 0;
-		}
-	}
-
-	public void AdjustDifficulty()
-	{
-		if ( Bootstrap.difficulty == Difficulty.Easy )
-		{
-			Debug.Log( "AdjustDifficulty::Easy" );
-			//health
-			health = Math.Max( 1, health - 1 );
-			//attributes
-			shieldValue = sorceryValue = 0;
-		}
-		else if ( Bootstrap.difficulty == Difficulty.Hard )
-		{
-			Debug.Log( "AdjustDifficulty::Hard" );
-			//health
-			health++;
-			//attributes
-			if ( shieldValue == 0 && sorceryValue == 0 )
-				shieldValue = 1;
-			else
-			{
-				//make sure shield/sorc aren't more than health
-				shieldValue = shieldValue > 0 ? shieldValue + 1 : 0;
-				shieldValue = Math.Min( shieldValue, health );
-				sorceryValue = sorceryValue > 0 ? sorceryValue + 1 : 0;
-				sorceryValue = Math.Min( sorceryValue, health );
-			}
-			//elite bonus
-			if ( isElite )
-			{
-				List<int> existing = new List<int>();
-				if ( isLarge )
-					existing.Add( 0 );
-				if ( isBloodThirsty )
-					existing.Add( 1 );
-				if ( isArmored )
-					existing.Add( 2 );
-
-				int[] ebonuses = new int[3] { 0, 1, 2 };
-				//filter out existing bonuses
-				ebonuses = ebonuses.Where( x => !existing.Contains( x ) ).Select( x => x ).ToArray();
-				if ( ebonuses.Length > 0 )
-				{
-					//assign a new, random elite bonus
-					int rnd = UnityEngine.Random.Range( 0, ebonuses.Length );
-					if ( ebonuses[rnd] == 0 )
-						isLarge = true;
-					else if ( ebonuses[rnd] == 1 )
-						isBloodThirsty = true;
-					else if ( ebonuses[rnd] == 2 )
-						isArmored = true;
-				}
-			}
-		}
-	}
-
 
 	//returns Tuple<fear,damage>
 	public Tuple<int, int> CalculateDamage()

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -189,5 +190,10 @@ public class TriggerManager : MonoBehaviour
 		{
 			firedTriggersList = firedTriggersList
 		};
+	}
+
+	public void SetState( TriggerState triggerState )
+	{
+		firedTriggersList = triggerState.firedTriggersList;
 	}
 }

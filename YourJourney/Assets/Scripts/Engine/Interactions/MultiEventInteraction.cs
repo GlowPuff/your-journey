@@ -14,6 +14,8 @@ public class MultiEventInteraction : IInteraction
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
+
 	public List<string> eventList { get; set; }
 	public List<string> triggerList { get; set; }
 	public bool usingTriggers { get; set; }

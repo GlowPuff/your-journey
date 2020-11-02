@@ -15,8 +15,9 @@ public class FileItemButton : MonoBehaviour
 
 	public void OnClick()
 	{
-		FindObjectOfType<TitleManager>().OnSelectQuest( index );
-		image.color = new Color( 114f / 255f, 255, 0, .2f );
+		FindObjectOfType<SelectJourney>().OnSelectQuest( index );
+		image.color = new Color( 1, 1, 1, 1 );
+		//( 114f / 255f, 255, 0, .2f );
 	}
 
 	public void ResetColor()

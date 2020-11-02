@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
 using DG.Tweening;
-using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class StatTestPanel : MonoBehaviour
 {
@@ -106,6 +106,12 @@ public class StatTestPanel : MonoBehaviour
 		TextGenerator textGen = new TextGenerator();
 		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
 		float height = textGen.GetPreferredHeight( t, generationSettings );
+
+		//Debug.Log( height );//lineheight=35
+		//Regex rx = new Regex( @"\r\n" );
+		//MatchCollection matches = rx.Matches( t );
+		//height -= matches.Count * 35;
+
 		var windowH = Math.Min( hmax, height + 80 + 80 );
 
 		if ( height + 80 + 80 > hmax )
@@ -115,6 +121,7 @@ public class StatTestPanel : MonoBehaviour
 
 		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, windowH ); /*height + 80 + 80*/
 		content.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 80 );
+
 	}
 
 	public void OnAdd()

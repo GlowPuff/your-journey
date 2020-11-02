@@ -12,13 +12,13 @@ public class MonsterManager : MonoBehaviour
 	public Button leftB, rightB;
 	public Canvas canvas;
 	public Sprite[] banners, eliteBanners;
+	public RectTransform sbRect;
 
-	Queue<Sprite> bannerQueue, eliteBannerQueue;
-	//Monster selectedMonster;
+	Queue<Sprite> bannerQueue = new Queue<Sprite>(), eliteBannerQueue = new Queue<Sprite>();
 	int scrollOffset = -517;
 	bool scrollReady = true;
 	[HideInInspector]
-	public RectTransform attachRect, sbRect;
+	public RectTransform attachRect;
 	public GameObject sizebar;
 	[HideInInspector]
 	public float scalar;
@@ -29,8 +29,6 @@ public class MonsterManager : MonoBehaviour
 	{
 		attachRect = buttonAttach.GetComponent<RectTransform>();
 		scalar = canvas.scaleFactor;
-		bannerQueue = new Queue<Sprite>( banners );
-		eliteBannerQueue = new Queue<Sprite>( banners );
 	}
 
 	/// <summary>
@@ -43,10 +41,6 @@ public class MonsterManager : MonoBehaviour
 			return;
 
 		bar.DOLocalMoveY( 50, .75f ).SetEase( Ease.InOutCubic );
-
-		//modify monster for difficulty
-		//m.AdjustDifficulty();
-		//m.AdjustPlayerCountDifficulty();
 
 		//apply elite modifier bonuses
 		if ( m.isArmored )
@@ -266,10 +260,26 @@ public class MonsterManager : MonoBehaviour
 		}
 	}
 
+	private void RemoveMonsterButtons()
+	{
+		monsterList.Clear();
+		foreach ( Transform child in buttonAttach )
+		{
+			var mb = child.GetComponent<MonsterButton>();
+			mb.RemoveNow();
+		}
+	}
+
 	public void SetState( MonsterState monsterState )
 	{
+		RemoveMonsterButtons();
+		bannerQueue.Clear();
+		eliteBannerQueue.Clear();
+
 		if ( monsterState.monsterList.Count > 0 )
 			bar.DOLocalMoveY( 50, .75f ).SetEase( Ease.InOutCubic );
+		else
+			bar.DOLocalMoveY( -45, .5f ).SetEase( Ease.InOutCubic );
 
 		foreach ( SingleMonsterState sms in monsterState.monsterList )
 		{
@@ -305,8 +315,11 @@ public class MonsterManager : MonoBehaviour
 				if ( child.transform.position.x > sbRect.position.x + ( 1000f * scalar ) )//off the edge
 					scrollOffset -= 175;
 			}
-			buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
+			//buttonAttach.DOLocalMoveX( scrollOffset, .5f ).SetEase( Ease.InOutQuad ).OnComplete( () => { scrollReady = true; } );
 		}
+
+		scrollOffset = -517;
+		buttonAttach.localPosition = buttonAttach.localPosition.X( -517 );
 	}
 
 	public MonsterState GetState()
@@ -317,8 +330,11 @@ public class MonsterManager : MonoBehaviour
 			{
 				monster = m,
 				eventGUID = m.interaction.GUID,
-				collectionCount = m.interaction.monsterCollection.Count
+				//collectionCount = m.interaction.totalMonsterCount
 			} );
-		return new MonsterState() { monsterList = sms };
+		return new MonsterState()
+		{
+			monsterList = sms
+		};
 	}
 }

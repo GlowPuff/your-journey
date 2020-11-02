@@ -8,8 +8,8 @@ public class Token
 	public string dataName { get; set; }
 	public Guid GUID { get; set; }
 	public bool isEmpty { get; set; }
-	public string triggerName { get; set; }
-	public string triggeredByName { get; set; }
+	public string triggerName { get; set; }//the event name this token fires
+	public string triggeredByName { get; set; }//trigger that spawns this
 
 	[DefaultValue( TokenType.Search )]
 	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]

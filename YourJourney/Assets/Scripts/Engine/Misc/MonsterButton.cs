@@ -52,6 +52,11 @@ public class MonsterButton : MonoBehaviour
 		transform.DOLocalMoveX( newX, .5f );
 	}
 
+	public void RemoveNow()
+	{
+		Destroy( gameObject );
+	}
+
 	public Sprite Remove()
 	{
 		cg.DOFade( 0, .5f ).OnComplete( () => { Destroy( gameObject ); } );

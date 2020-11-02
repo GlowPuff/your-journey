@@ -54,6 +54,12 @@ public class InteractionConverter : JsonConverter
 				case 8:
 					interaction = item.ToObject<ConditionalInteraction>();
 					break;
+				case 9:
+					interaction = item.ToObject<DialogInteraction>();
+					break;
+				case 10:
+					interaction = item.ToObject<ReplaceTokenInteraction>();
+					break;
 				default:
 					throw new Exception( "Interaction Type not supported: " + item["interactionType"].Value<int>() );
 			}

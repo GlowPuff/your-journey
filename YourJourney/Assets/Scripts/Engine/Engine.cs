@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Engine : MonoBehaviour
 {
@@ -22,8 +23,11 @@ public class Engine : MonoBehaviour
 	public SettingsDialog settingsDialog;
 	public AudioSource music;
 	public PostProcessVolume volume;
+	public Text errorText;
 
-	bool debug = true;
+	bool debug = false;
+
+	bool doneLoading = false;
 
 	void Awake()
 	{
@@ -31,6 +35,7 @@ public class Engine : MonoBehaviour
 		System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 		System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
 
+		//load settings - music, F/X
 		var settings = Bootstrap.LoadSettings();
 		Vignette v;
 		ColorGrading cg;
@@ -40,6 +45,7 @@ public class Engine : MonoBehaviour
 			cg.active = settings.Item3 == 1;
 		music.enabled = settings.Item1 == 1;
 
+		//load scenario file
 		if ( debug )
 			scenario = Bootstrap.DEBUGLoadLevel();
 		else
@@ -53,13 +59,22 @@ public class Engine : MonoBehaviour
 		interactionManager.Init( scenario );
 		objectiveManager.Init( scenario );
 		chapterManager.Init( scenario );
-		endTurnButton.Init( scenario );
 
+		fader.gameObject.SetActive( true );
+		//build the tiles
 		StartCoroutine( BuildScenario() );
+		StartCoroutine( BeginGame() );
+	}
+
+	IEnumerator BeginGame()
+	{
+		while ( !doneLoading )
+			yield return null;
 
 		if ( Bootstrap.isNewGame )
 		{
-			fader.gameObject.SetActive( true );
+			endTurnButton.Init( scenario );
+
 			fader.DOFade( 0, 2 ).OnComplete( () =>
 			{
 				fader.gameObject.SetActive( false );
@@ -67,7 +82,13 @@ public class Engine : MonoBehaviour
 			} );
 		}
 		else
-			ContinueGame();
+		{
+			RestoreGame();
+			fader.DOFade( 0, 2 ).OnComplete( () =>
+			{
+				fader.gameObject.SetActive( false );
+			} );
+		}
 	}
 
 	public void StartNewGame()
@@ -96,15 +117,60 @@ public class Engine : MonoBehaviour
 		}
 	}
 
-	public void ContinueGame()
+	public void RestoreGame( bool fromTemp = false )
 	{
+		Debug.Log( "Restoring..." );
+		GameState gameState;
+		if ( fromTemp )
+			gameState = GameState.LoadStateTemp( scenario );
+		else
+			gameState = GameState.LoadState( Bootstrap.saveStateIndex );
+
+		if ( gameState == null )
+		{
+			ShowError( "Could not restore - gamestate is null" );
+			return;
+		}
+
 		//restore data
+		RemoveFogAndMarkers();
+		gameState.partyState.SetState();
+		endTurnButton.SetState( scenario, gameState.partyState );
+		triggerManager.SetState( gameState.triggerState );
+		objectiveManager.SetState( gameState.objectiveState );
+		chapterManager.SetState( gameState.chapterState );
+		FindObjectOfType<CamControl>().SetState( gameState.camState );
+		tileManager.SetState( gameState.tileState );
+		interactionManager.SetState( gameState.interactionState );
+		FindObjectOfType<MonsterManager>().SetState( gameState.monsterState );
+
+		foreach ( FogState fs in gameState.partyState.fogList )
+		{
+			GameObject fog = Instantiate( tileManager.fogPrefab, transform );
+			FogData fg = fog.GetComponent<FogData>();
+			fg.chapterName = fs.chapterName;
+			fog.transform.position = fs.globalPosition;
+		}
+
+		uiControl.interactable = true;
+		Debug.Log( "Restored Game" );
 	}
 
 	IEnumerator BuildScenario()
 	{
 		tileManager.BuildScenario();
 		yield return null;
+		doneLoading = true;
+	}
+
+	public void ShowError( string err )
+	{
+		errorText.text = err;
+		Debug.Log( err );
+		GlowTimer.SetTimer( 5, () =>
+		{
+			errorText.text = "";
+		} );
 	}
 
 	void Update()
@@ -127,19 +193,39 @@ public class Engine : MonoBehaviour
 			//	damage = 2
 			//} );
 		}
-		else if ( Input.GetKeyDown( KeyCode.Alpha2 ) )
-		{
-			FindObjectOfType<LorePanel>().AddLore( 4 );
-			//FindObjectOfType<MonsterManager>().RemoveMonster( 0 );
-			//tg2 = tileManager.CreateGroupFromChapter( scenario.chapterObserver[0] );
-			//tg2.AttachTo( tg1 );
-			//camControl.MoveTo( tg2.groupCenter );
-			//tg2.AnimateTileUp();
-		}
 		else if ( Input.GetKeyDown( KeyCode.S ) )
 		{
+			if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase
+				|| FindObjectOfType<InteractionManager>().PanelShowing
+				|| FindObjectOfType<ProvokeMessage>().provokeMode )
+			{
+				ShowError( "Can't QuickSave at this time" );
+				return;
+			}
+			ShowError( "QuickSave State" );
 			GameState gs = new GameState();
-			gs.SaveState( this );
+			gs.SaveStateTemp( this );
+		}
+		else if ( Input.GetKeyDown( KeyCode.L ) )
+		{
+			if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase
+				|| FindObjectOfType<InteractionManager>().PanelShowing
+				|| FindObjectOfType<ProvokeMessage>().provokeMode )
+			{
+				ShowError( "Can't QuickLoad at this time" );
+				return;
+			}
+
+			ShowError( "QuickLoad State" );
+			RestoreGame( true );
+		}
+		else if ( Input.GetKeyDown( KeyCode.Space ) )
+		{
+			if ( tileManager.GetAllTileGroups().Length > 0 )
+			{
+				Vector3 p = tileManager.GetAllTileGroups()[0].groupCenter;
+				camControl.MoveTo( p );
+			}
 		}
 	}
 
@@ -165,5 +251,43 @@ public class Engine : MonoBehaviour
 			if ( fg != null && fg.chapterName == chName )
 				GameObject.Destroy( child.gameObject );
 		}
+	}
+
+	public void RemoveFogAndMarkers()
+	{
+		foreach ( Transform child in transform )
+		{
+			FogData fg = child.GetComponent<FogData>();
+			if ( fg != null )
+				Destroy( child.gameObject );
+		}
+
+		var objs = FindObjectsOfType<SpawnMarker>();
+		foreach ( var ob in objs )
+		{
+			if ( ob.name.Contains( "SPAWNMARKER" ) )
+				Destroy( ob.gameObject );
+			if ( ob.name == "STARTMARKER" )
+				ob.gameObject.SetActive( false );
+		}
+	}
+
+	public List<FogState> GetFogState()
+	{
+		List<FogState> flist = new List<FogState>();
+		foreach ( Transform child in transform )
+		{
+			FogData fg = child.GetComponent<FogData>();
+			if ( fg != null )
+			{
+				FogState fs = new FogState()
+				{
+					globalPosition = fg.transform.position,
+					chapterName = fg.chapterName
+				};
+				flist.Add( fs );
+			}
+		}
+		return flist;
 	}
 }

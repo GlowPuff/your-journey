@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -254,7 +255,18 @@ public class ChapterManager : MonoBehaviour
 	{
 		return new ChapterState()
 		{
-			tokenTriggerQueue = tokenTriggerQueue
+			tokenTriggerQueue = tokenTriggerQueue,
+			previousGroupGUID = previousGroup.GUID
 		};
+	}
+
+	public void SetState( ChapterState chapterState )
+	{
+		tokenTriggerQueue = chapterState.tokenTriggerQueue;
+
+		var groups = FindObjectOfType<TileManager>().GetAllTileGroups();
+		previousGroup = ( from tg in groups
+											where tg.GUID == chapterState.previousGroupGUID
+											select tg ).First();
 	}
 }

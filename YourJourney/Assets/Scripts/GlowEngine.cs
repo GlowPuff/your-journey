@@ -651,7 +651,6 @@ public class GlowEngine : MonoBehaviour
 				}
 			}
 		}
-		return results[0];
+		return results.Count > 0 ? results[0] : null;
 	}
-
 }

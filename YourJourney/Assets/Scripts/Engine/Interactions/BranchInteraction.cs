@@ -13,6 +13,7 @@ public class BranchInteraction : IInteraction
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
 
 	public string triggerTest;
 	public string triggerIsSet;
@@ -23,27 +24,27 @@ public class BranchInteraction : IInteraction
 
 	public InteractionType interactionType { get { return InteractionType.Branch; } set { } }
 
-	public static BranchInteraction Create( Interaction interaction )
-	{
-		BranchInteraction sb = new BranchInteraction()
-		{
-			GUID = interaction.GUID,
-			dataName = interaction.dataName,
-			isEmpty = interaction.isEmpty,
-			triggerName = interaction.triggerName,
-			triggerAfterName = interaction.triggerAfterName,
-			textBookData = interaction.textBookData,
-			eventBookData = interaction.eventBookData,
+	//public static BranchInteraction Create( Interaction interaction )
+	//{
+	//	BranchInteraction sb = new BranchInteraction()
+	//	{
+	//		GUID = interaction.GUID,
+	//		dataName = interaction.dataName,
+	//		isEmpty = interaction.isEmpty,
+	//		triggerName = interaction.triggerName,
+	//		triggerAfterName = interaction.triggerAfterName,
+	//		textBookData = interaction.textBookData,
+	//		eventBookData = interaction.eventBookData,
 
-			triggerTest = interaction.triggerTest,
-			triggerIsSet = interaction.triggerIsSet,
-			triggerNotSet = interaction.triggerNotSet,
-			triggerIsSetTrigger = interaction.triggerIsSetTrigger,
-			triggerNotSetTrigger = interaction.triggerNotSetTrigger,
-			branchTestEvent = interaction.branchTestEvent,
-		};
-		return sb;
-	}
+	//		triggerTest = interaction.triggerTest,
+	//		triggerIsSet = interaction.triggerIsSet,
+	//		triggerNotSet = interaction.triggerNotSet,
+	//		triggerIsSetTrigger = interaction.triggerIsSetTrigger,
+	//		triggerNotSetTrigger = interaction.triggerNotSetTrigger,
+	//		branchTestEvent = interaction.branchTestEvent,
+	//	};
+	//	return sb;
+	//}
 
 	public void Resolve( InteractionManager im )
 	{

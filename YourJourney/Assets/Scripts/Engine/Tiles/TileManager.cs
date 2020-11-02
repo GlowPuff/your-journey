@@ -11,7 +11,11 @@ public class TileManager : MonoBehaviour
 	public GameObject searchTokenPrefab, darkTokenPrefab, humanTokenPrefab, elfTokenPrefab, dwarfTokenPrefab, hobbitTokenPrefab, threatTokenPrefab;
 	public GameObject fogPrefab;
 	public PartyPanel partyPanel;
+	public SettingsDialog settingsDialog;
 
+	CombatPanel combatPanel;
+	ProvokeMessage provokePanel;
+	InteractionManager interactionManager;
 	bool disableInput = false;
 	Camera theCamera;
 
@@ -20,6 +24,9 @@ public class TileManager : MonoBehaviour
 	void Awake()
 	{
 		theCamera = Camera.main;
+		combatPanel = FindObjectOfType<CombatPanel>();
+		provokePanel = FindObjectOfType<ProvokeMessage>();
+		interactionManager = FindObjectOfType<InteractionManager>();
 	}
 
 	//take an id (101) and return its prefab
@@ -156,48 +163,16 @@ public class TileManager : MonoBehaviour
 									 select tile;
 		Debug.Log( "GetAvailableSpawnPositions::explored: " + explored.Count() );
 		List<Transform> tkattach = new List<Transform>();
-		//List<Transform> TKinUse = new List<Transform>();
 		foreach ( Tile t in explored )
 		{
 			//get all "token attach" positions
 			foreach ( Transform child in t.transform )
 				if ( child.name.Contains( "token attach" ) )
 					tkattach.Add( child );
-			//get all Tokens on the tile
-			//foreach ( Transform child in t.transform )
-			//	if ( child.name.Contains( "Token(Clone)" ) )
-			//		TKinUse.Add( child );
 		}
 
-		//if there are tokens on the tile, we need to weed them out
-		//if ( TKinUse.Count > 0 )
-		//{
-		//	Debug.Log( "Looking for open positions for " + groupCount + " groups" );
-		//	//select token positions that aren't near each other - these will be open for use
-		//	//test shows ~1.1 units typical Token to tk attach distance
-		//	var found = from tktf in tkattach
-		//							from TKtf in TKinUse
-		//							where Vector3.Distance( tktf.position, TKtf.position ) > 1.5f
-		//							select tktf;
-		//	//results found - return new vector3[] where y = .3
-		//	//HashSet<Transform> foundHash = new HashSet<Transform>( found );
-		//	if ( found.Count() > groupCount )
-		//	{
-		//		Debug.Log( "returning VALID positions" );
-		//		var open = found.Select( x => new Vector3( x.position.x, .3f, x.position.z ) );
-		//		return open.ToArray();//return results
-		//	}
-		//	else
-		//	{
-		//		Debug.Log( "returning ALL positions" );
-		//		return tkattach.Select( x => new Vector3( x.position.x, .3f, x.position.z ) ).ToArray();//no open attach positions open, return all positions
-		//	}
-		//}
-		//else//no tokens on board to exclude, just return all attach positions
-		{
-			//Debug.Log( "returning ALL positions" );
-			return tkattach.Select( x => new Vector3( x.position.x, .3f, x.position.z ) ).ToArray();
-		}
+		//return all attach positions
+		return tkattach.Select( x => new Vector3( x.position.x, .3f, x.position.z ) ).ToArray();
 	}
 
 	/// <summary>
@@ -241,8 +216,12 @@ public class TileManager : MonoBehaviour
 
 	private void Update()
 	{
-		if ( FindObjectOfType<InteractionManager>().PanelShowing
-			|| partyPanel.gameObject.activeInHierarchy )
+		if ( interactionManager.PanelShowing
+			|| partyPanel.gameObject.activeInHierarchy
+			|| combatPanel.gameObject.activeInHierarchy
+			|| settingsDialog.gameObject.activeInHierarchy
+			|| provokePanel.provokeMode
+			)
 			return;
 
 		if ( !disableInput && Input.GetMouseButtonDown( 0 ) )
@@ -485,6 +464,7 @@ public class TileManager : MonoBehaviour
 			{
 				SingleTileState state = new SingleTileState()
 				{
+					isActive = t.gameObject.activeInHierarchy,
 					tileGUID = t.hexTile.GUID,
 					tokenTriggerList = t.tokenTriggerList,
 					isExplored = t.isExplored,
@@ -504,5 +484,20 @@ public class TileManager : MonoBehaviour
 			activatedDynamicChapters = dynamicChapters,
 			tileGroupStates = tgStates
 		};
+	}
+
+	public void SetState( TileState tileState )
+	{
+		foreach ( TileGroup tg in tileGroupList )
+		{
+			TileGroupState tgs = ( from state in tileState.tileGroupStates
+														 where state.guid == tg.GUID
+														 select state ).FirstOr( null );
+			if ( tgs != null )
+				tg.SetState( tgs );
+		}
+
+		//activate dynamic chapters
+
 	}
 }

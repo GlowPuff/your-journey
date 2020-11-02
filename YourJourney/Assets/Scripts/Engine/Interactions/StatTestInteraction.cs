@@ -13,6 +13,8 @@ public class StatTestInteraction : IInteraction
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
+
 
 	public Ability testAttribute;
 	public bool isCumulative;
@@ -27,32 +29,6 @@ public class StatTestInteraction : IInteraction
 	public InteractionType interactionType { get { return InteractionType.StatTest; } set { } }
 
 	public int accumulatedValue = -1;
-
-	//public static StatTestInteraction Create( Interaction interaction )
-	//{
-	//	StatTestInteraction st = new StatTestInteraction
-	//	{
-	//		GUID = interaction.GUID,
-	//		dataName = interaction.dataName,
-	//		isEmpty = interaction.isEmpty,
-	//		triggerName = interaction.triggerName,
-	//		triggerAfterName = interaction.triggerAfterName,
-	//		textBookData = interaction.textBookData,
-	//		eventBookData = interaction.eventBookData,
-
-	//		testAttribute = interaction.testAttribute,
-	//		isCumulative = interaction.isCumulative,
-	//		passFail = interaction.passFail,
-	//		successValue = interaction.successValue,
-	//		successTrigger = interaction.successTrigger,
-	//		failTrigger = interaction.failTrigger,
-	//		passBookData = interaction.passBookData,
-	//		failBookData = interaction.failBookData,
-	//		progressBookData = interaction.progressBookData
-	//	};
-
-	//	return st;
-	//}
 
 	/// <summary>
 	/// Returns true if test is successful, false if not

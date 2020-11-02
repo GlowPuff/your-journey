@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using System.Text.RegularExpressions;
 
 public class TextPanel : MonoBehaviour
 {
@@ -148,7 +149,12 @@ public class TextPanel : MonoBehaviour
 		TextGenerator textGen = new TextGenerator();
 		TextGenerationSettings generationSettings = dummy.GetGenerationSettings( dummy.rectTransform.rect.size );
 		float height = textGen.GetPreferredHeight( t, generationSettings );
-		//Debug.Log( height );
+
+		//Debug.Log( height );//lineheight=35
+		//Regex rx = new Regex( @"\r\n" );
+		//MatchCollection matches = rx.Matches( t );
+		//height -= matches.Count * 35;
+
 		var windowH = Math.Min( 525, height + 80 );
 
 		if ( height + 80 > 525 )

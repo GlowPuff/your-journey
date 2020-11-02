@@ -19,9 +19,10 @@ public class EndTurnButton : MonoBehaviour
 
 	[HideInInspector]
 	public float currentThreat, threatMax;
+	[HideInInspector]
+	public Queue<Threat> threatStack;
 
 	float currentThreatAnimated;
-	Queue<Threat> threatStack;
 	GameObject nextTickObject;
 
 	/// <summary>
@@ -43,6 +44,26 @@ public class EndTurnButton : MonoBehaviour
 			threatStack.Enqueue( t );
 
 		AddThresholdTick();
+	}
+
+	public void SetState( Scenario s, PartyState partyState )
+	{
+		foreach ( Transform child in tickParent )
+			Destroy( child.gameObject );
+
+		currentThreatAnimated = currentThreat = partyState.threatThreshold;
+		threatMax = s.threatMax;
+		threatStack = partyState.threatStack;
+
+		if ( s.threatNotUsed || s.threatObserver.Count() == 0 )
+		{
+			numberArea.SetActive( false );
+			return;
+		}
+
+		AddThresholdTick();
+
+		DOTween.To( () => currentThreatAnimated, x => currentThreatAnimated = x, currentThreat, 2 ).SetEase( Ease.InOutQuad );
 	}
 
 	void AddThresholdTick()
@@ -93,13 +114,6 @@ public class EndTurnButton : MonoBehaviour
 		}
 
 		return retval.ToArray();
-	}
-
-	//SETS the threat level without firing events
-	public void SetThreat( float amount )
-	{
-		currentThreat = amount;
-		DOTween.To( () => currentThreatAnimated, x => currentThreatAnimated = x, currentThreat, 2 ).SetEase( Ease.InOutQuad );
 	}
 
 	private void Update()

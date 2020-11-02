@@ -1,27 +1,43 @@
 ﻿using System;
-using Newtonsoft.Json;
 using UnityEngine;
 
-[JsonObject( MemberSerialization.OptIn )]
 public class MetaData : MonoBehaviour
 {
-	[JsonProperty]
 	public string triggerName;
-	[JsonProperty]
 	public string interactionName;
-	[JsonProperty]
 	public string triggeredByName;
-	[JsonProperty]
 	public TokenType tokenType;
-	//public string tokenTypeID;
-	//public Vector3 position { get; set; }
-	[JsonProperty]
-	public Vector3 offset { get; set; }
-	[JsonProperty]
+	public PersonType personType;
+	public Vector3 offset;
 	public Guid GUID;
-	[JsonProperty]
 	public bool isRandom;
-	[JsonIgnore]
-	public Tile tile;
+	public int tileID;
 }
 
+public class MetaDataJSON
+{
+	public string triggerName;
+	public string interactionName;
+	public string triggeredByName;
+	public TokenType tokenType;
+	public PersonType personType;
+	public Vector3 offset;
+	public Guid GUID;
+	public bool isRandom;
+	public int tileID;
+
+	public MetaDataJSON( MetaData md )
+	{
+		if ( md == null )
+			return;
+		triggerName = md.triggerName;
+		interactionName = md.interactionName;
+		triggeredByName = md.triggeredByName;
+		tokenType = md.tokenType;
+		personType = md.personType;
+		offset = md.offset;
+		GUID = md.GUID;
+		isRandom = md.isRandom;
+		tileID = md.tileID;
+	}
+}

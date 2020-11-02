@@ -294,7 +294,7 @@ public class TileGroup
 			attachtfs.Clear();
 			attachtfs.AddRange( t.GetChildren( "token attach" ) );
 			var usedInThisTile = from tu in usedPositions
-													 where tu.GetComponent<MetaData>().tile.hexTile.idNumber == t.hexTile.idNumber
+													 where tu.GetComponent<MetaData>().tileID/*tile.hexTile.idNumber*/ == t.hexTile.idNumber
 													 select tu;
 
 			var opentfs = new List<Transform>();
@@ -377,18 +377,21 @@ public class TileGroup
 
 			go.transform.position = new Vector3( finalOpenTFS[rands[i]].position.x, go.transform.position.y, finalOpenTFS[rands[i]].position.z );
 			go.GetComponent<MetaData>().tokenType = HandlePersistentTokenSwap( igs[i].dataName );//igs[i].tokenType;
+			go.GetComponent<MetaData>().personType = igs[i].personType;
 			go.GetComponent<MetaData>().triggeredByName = "None";
 			go.GetComponent<MetaData>().triggerName = "None";
 			go.GetComponent<MetaData>().interactionName = igs[i].dataName;
 			go.GetComponent<MetaData>().GUID = System.Guid.NewGuid();
 			go.GetComponent<MetaData>().isRandom = true;
+			//go.GetComponent<MetaData>().isCreatedFromReplaced = false;
+			//go.GetComponent<MetaData>().hasBeenReplaced = false;
 
 			tile.tokenStates.Add( new TokenState()
 			{
 				isActive = false,
 				parentTileGUID = tile.hexTile.GUID,
-				globalPosition = go.transform.position,
-				metaData = go.GetComponent<MetaData>(),
+				localPosition = go.transform.localPosition,
+				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
 		}
 	}
@@ -434,17 +437,17 @@ public class TileGroup
 			}
 
 			go.GetComponent<MetaData>().tokenType = t.tokenType;
-			//go.GetComponent<MetaData>().tokenTypeID = "TOKEN_" + t.tokenType.ToString();
+			go.GetComponent<MetaData>().personType = t.personType;
 			go.GetComponent<MetaData>().triggeredByName = t.triggeredByName;
 			go.GetComponent<MetaData>().interactionName = t.triggerName;
 			go.GetComponent<MetaData>().GUID = t.GUID;
-			//System.Guid.NewGuid();
-			//position of token in EDITOR coords
-			//go.GetComponent<MetaData>().position = t.vposition;
 			//offset to token in EDITOR coords
 			go.GetComponent<MetaData>().offset = t.vposition - new Vector3( 256, 0, 256 );
 			go.GetComponent<MetaData>().isRandom = false;
-			go.GetComponent<MetaData>().tile = tile;
+			go.GetComponent<MetaData>().tileID = tile.hexTile.idNumber;
+			//go.GetComponent<MetaData>().isCreatedFromReplaced = false;
+			//go.GetComponent<MetaData>().hasBeenReplaced = false;
+			//go.GetComponent<MetaData>().isActive = false;
 
 			//calculate position of the Token
 			Vector3 offset = go.GetComponent<MetaData>().offset;
@@ -462,14 +465,84 @@ public class TileGroup
 			{
 				isActive = false,
 				parentTileGUID = tile.hexTile.GUID,
-				globalPosition = go.transform.position,
-				metaData = go.GetComponent<MetaData>(),
+				localPosition = go.transform.localPosition,
+				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
 		}
 
 		return usedPositions.ToArray();
 	}
 
+	/// <summary>
+	/// Used by Replacement Event to replace existing token with new one and update owner tile's MetaDataJSON
+	/// </summary>
+	public MetaData ReplaceToken( IInteraction sourceEvent, MetaData oldMD, Tile tile )
+	{
+		GameObject go = null;
+
+		if ( sourceEvent.tokenType == TokenType.Search )
+		{
+			go = Object.Instantiate( tileManager.searchTokenPrefab, tile.transform );
+		}
+		else if ( sourceEvent.tokenType == TokenType.Person )
+		{
+			if ( sourceEvent.personType == PersonType.Human )
+				go = Object.Instantiate( tileManager.humanTokenPrefab, tile.transform );
+			else if ( sourceEvent.personType == PersonType.Elf )
+				go = Object.Instantiate( tileManager.elfTokenPrefab, tile.transform );
+			else if ( sourceEvent.personType == PersonType.Hobbit )
+				go = Object.Instantiate( tileManager.hobbitTokenPrefab, tile.transform );
+			else if ( sourceEvent.personType == PersonType.Dwarf )
+				go = Object.Instantiate( tileManager.dwarfTokenPrefab, tile.transform );
+		}
+		else if ( sourceEvent.tokenType == TokenType.Threat )
+		{
+			go = Object.Instantiate( tileManager.threatTokenPrefab, tile.transform );
+		}
+		else if ( sourceEvent.tokenType == TokenType.Darkness )
+		{
+			go = Object.Instantiate( tileManager.darkTokenPrefab, tile.transform );
+		}
+
+		//update old metadataJSON so token is not active
+		TokenState oldtstate = tile.tokenStates.Where( x => x.metaData.GUID == oldMD.GUID ).FirstOr( null );
+		//swap in relevant metadata from old target
+		MetaData newMD = go.GetComponent<MetaData>();
+
+		newMD.tokenType = sourceEvent.tokenType;
+		newMD.personType = sourceEvent.personType;
+		newMD.triggeredByName = oldMD.triggeredByName;
+		newMD.interactionName = sourceEvent.dataName;
+		newMD.GUID = sourceEvent.GUID;//oldMD.GUID;
+		newMD.offset = oldMD.offset;
+		newMD.isRandom = false;
+		//newMD.isCreatedFromReplaced = true;
+		//newMD.hasBeenReplaced = false;
+		newMD.tileID = tile.hexTile.idNumber;
+		newMD.transform.position = oldMD.transform.position;
+		newMD.gameObject.SetActive( oldMD.gameObject.activeSelf );
+
+		//add new token state for new token
+		var ts = new TokenState()
+		{
+			isActive = oldtstate.isActive,
+			parentTileGUID = tile.hexTile.GUID,
+			localPosition = go.transform.localPosition,
+			metaData = new MetaDataJSON( newMD ),
+		};
+		tile.tokenStates.Add( ts );
+
+		oldtstate.isActive = false;//make old token inactive
+
+		oldMD.gameObject.SetActive( false );//inactivate old token object
+																				//oldMD.hasBeenReplaced = true;//mark it's been replaced
+
+		return newMD;
+	}
+
+	/// <summary>
+	/// swap token type to delegate event if it's a persistent event
+	/// </summary>
 	TokenType HandlePersistentTokenSwap( string eventName )
 	{
 		IInteraction persEvent = GlowEngine.FindObjectOfType<InteractionManager>().GetInteractionByName( eventName );
@@ -593,38 +666,6 @@ public class TileGroup
 		GenerateGroupCenter();
 		return true;
 	}
-
-	public void AttachNorthOf( TileGroup tg )
-	{
-
-	}
-
-	public void AttachSouthOf( TileGroup tg )
-	{
-
-	}
-
-	public void AttachWestOf( TileGroup tg )
-	{
-
-	}
-
-	public void AttachEastOf( TileGroup tg )
-	{
-
-	}
-
-	/*public bool CollisionCheck()
-	{
-		bool found = false;
-		foreach ( Tile tile in tileList )
-		{
-			if ( tile.CheckCollision() )
-				found = true;
-			//Debug.Log( tile.CheckCollision() );
-		}
-		return found;
-	}*/
 
 	/// <summary>
 	/// check collisions between THIS group's CONNECTORS and input test points (CONNECTORS)
@@ -787,18 +828,30 @@ public class TileGroup
 	}
 
 	/// <summary>
-	/// marks as explored, colorizes, reveals interactive tokens
+	/// returns all TokenStates[] that given token is in
 	/// </summary>
-	//public void ExploreTile()
-	//{
-	//	Debug.Log( "ExploreTile::" + containerObject.name );
-	//	if ( isExplored )
-	//		return;
-	//	foreach ( Tile t in tileList )
-	//	{
-	//		t.Colorize();
-	//		t.RevealInteractiveTokens();
-	//	}
-	//	isExplored = true;
-	//}
+	public TokenState[] GetTokenListByGUID( System.Guid guid )
+	{
+		return ( from tile in tileList
+						 from tstate in tile.tokenStates
+						 where tstate.metaData.GUID == guid
+						 select tstate ).ToArray();
+	}
+
+	public void SetState( TileGroupState tileGroupState )
+	{
+		containerObject.position = tileGroupState.globalPosition;
+		isExplored = tileGroupState.isExplored;
+
+		foreach ( Tile tile in tileList )
+		{
+			SingleTileState sts = ( from t in tileGroupState.tileStates
+															where t.tileGUID == tile.hexTile.GUID
+															select t ).FirstOr( null );
+			if ( sts != null )
+				tile.SetState( sts );
+		}
+
+		GenerateGroupCenter();
+	}
 }

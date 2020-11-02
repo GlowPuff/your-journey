@@ -13,8 +13,10 @@ public class DarknessInteraction : IInteraction
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
 
 	public InteractionType interactionType { get { return InteractionType.Darkness; } set { } }
+
 
 	public static DarknessInteraction Create( Interaction interaction )
 	{

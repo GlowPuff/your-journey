@@ -85,7 +85,7 @@ public class ShadowPhaseManager : MonoBehaviour
 		//advance threat
 		//trigger threat if threshold reached
 
-		//TODO - disable group button
+		//TODO?? - disable group button
 		StartCoroutine( EndTurnSequence() );
 	}
 
@@ -113,8 +113,9 @@ public class ShadowPhaseManager : MonoBehaviour
 		doingShadowPhase = false;
 		Debug.Log( "***ENDED COROUTINE" );
 
-		//SAVE PROGRESS HERE
-
+		//SAVE PROGRESS
+		GameState gs = new GameState();
+		gs.SaveState( FindObjectOfType<Engine>(), Bootstrap.saveStateIndex );
 	}
 
 	IEnumerator EnemyStep()
@@ -177,7 +178,7 @@ public class ShadowPhaseManager : MonoBehaviour
 			allowAttacks = false;
 
 			//if group was just removed from an interruption, wait until reward and any OnDefeated Events are complete
-			yield return new WaitForSeconds( 1 );
+			yield return new WaitForSeconds( .25f );
 			yield return WaitUntilFinished();
 
 			//check if monster group is dead/exhausted and abort this monter's attack if needed

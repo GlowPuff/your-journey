@@ -13,22 +13,12 @@ public class TextInteraction : IInteraction
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
+
+	//text props
+	public bool isPersistent, hasActivated = false;
+	public string persistentText;
 
 	public InteractionType interactionType { get { return InteractionType.Text; } set { } }
-
-	//public static TextInteraction Create( TextInteraction interaction )
-	//{
-	//	TextInteraction ti = new TextInteraction()
-	//	{
-	//		GUID = interaction.GUID,
-	//		dataName = interaction.dataName,
-	//		isEmpty = interaction.isEmpty,
-	//		triggerName = interaction.triggerName,
-	//		triggerAfterName = interaction.triggerAfterName,
-	//		textBookData = interaction.textBookData,
-	//		eventBookData = interaction.eventBookData,
-	//	};
-	//	return ti;
-	//}
 }
 

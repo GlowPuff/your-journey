@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public enum ScenarioType { Journey, Battle }
-public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional }
+public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional, Dialog, Replace }
 public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, Warg, HillTroll, Wight }
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle }
@@ -18,7 +18,7 @@ public enum DifficultyBias { Light, Medium, Heavy }
 
 public class InteractionResult
 {
-	public bool btn1, btn2, btn3, btn4, removeToken, success, canceled;
+	public bool btn1, btn2, btn3, btn4, removeToken = true, success, canceled;
 	public int value;
 	public IInteraction interaction;
 
@@ -48,6 +48,7 @@ public interface IInteraction
 	TokenType tokenType { get; set; }
 	int loreReward { get; set; }
 	PersonType personType { get; set; }
+	bool isPersistant { get; set; }
 }
 
 public interface ICommonData
@@ -66,6 +67,13 @@ public class ProjectItem
 	public ProjectType projectType { get; set; }
 	public string fileName { get; set; }
 	public string fileVersion { get; set; }
+}
+
+public class StateItem
+{
+	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath;
+	public string[] heroArray;
+	public Guid scenarioGUID;
 }
 
 public struct Vector

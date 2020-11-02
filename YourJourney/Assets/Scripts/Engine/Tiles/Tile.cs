@@ -34,8 +34,6 @@ public class Tile : MonoBehaviour
 	public List<string> tokenTriggerList = new List<string>();
 	[HideInInspector]
 	public List<TokenState> tokenStates = new List<TokenState>();
-	[HideInInspector]
-	//public List<TokenState> randomTokenStates = new List<TokenState>();
 
 	TriggerManager triggerManager;
 	CamControl camControl;
@@ -81,11 +79,11 @@ public class Tile : MonoBehaviour
 			tokenTriggerList.Add( name );
 	}
 
-	public Vector3 GetExploretokenPosition()
-	{
-		Transform tf = transform.Find( "Exploration Token" );
-		return new Vector3( tf.position.x, .26f, tf.position.z );
-	}
+	//public Vector3 GetExploretokenPosition()
+	//{
+	//	Transform tf = transform.Find( "Exploration Token" );
+	//	return new Vector3( tf.position.x, .26f, tf.position.z );
+	//}
 
 	//IEnumerator Wait1Frame()
 	//{
@@ -307,6 +305,8 @@ public class Tile : MonoBehaviour
 	public void RevealExplorationToken()
 	{
 		exploreToken.gameObject.SetActive( true );
+		exploreToken.localScale = Vector3.one;
+		exploreToken.position = exploreToken.position.Y( 2f );
 		exploreToken.DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 	}
 
@@ -376,18 +376,17 @@ public class Tile : MonoBehaviour
 		for ( int i = 0; i < tf.Length; i++ )
 		{
 			TokenState tState = null;
+			MetaData metaData = tf[i].GetComponent<MetaData>();
 			//only want FIXED tokens
-			if ( !tf[i].GetComponent<MetaData>().isRandom )
+			if ( !metaData.isRandom )//&& !metaData.hasBeenReplaced )
 			{
-				string tBy = tf[i].GetComponent<MetaData>().triggeredByName;
+				string tBy = metaData.triggeredByName;
 				//skip if it's triggeredBy
 				if ( tBy != "None" )
 				{
 					//if it's not in the list, keep it hidden because it hasn't activated yet, move to next token in loop
 					if ( !tokenTriggerList.Contains( tBy ) )//( tBy != "None" )
 						continue;
-					//else//otherwise remove from list and drop it on tile
-					//	tokenTriggerList.Remove( tBy );
 				}
 
 				//offset to token in EDITOR coords
@@ -398,25 +397,30 @@ public class Tile : MonoBehaviour
 				//offset = Vector3.Reflect( offset, new Vector3( 0, 0, 1 ) );
 
 				//tf[i].position = new Vector3( center.x + offset.x, 2, center.z + offset.z );
+				tf[i].gameObject.SetActive( true );
 				tf[i].position = tf[i].position.Y( 2 );
 				tf[i].RotateAround( center, Vector3.up, hexTile.angle );
 				tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 
 				//update token state to active
-				tState = tokenStates.Where( x => x.metaData.GUID == tf[i].GetComponent<MetaData>().GUID ).FirstOr( null );
+				tState = tokenStates.Where( x => x.metaData.GUID == metaData.GUID ).FirstOr( null );
 			}
-			else
+			else //if ( !metaData.hasBeenReplaced )
 			{
 				//random tokens are already placed during tile creation using preset transforms built into the mesh "token attach"
+				tf[i].gameObject.SetActive( true );
 				tf[i].position = tf[i].position.Y( 2 );
 				tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 
 				//update token state to active
-				tState = tokenStates.Where( x => x.metaData.interactionName == tf[i].GetComponent<MetaData>().interactionName ).FirstOr( null );
+				tState = tokenStates.Where( x => x.metaData.interactionName == metaData.interactionName ).FirstOr( null );
 			}
 
 			if ( tState != null )
+			{
 				tState.isActive = true;
+				tState.localPosition = tf[i].localPosition.Y( .3f );
+			}
 		}
 	}
 
@@ -444,31 +448,33 @@ public class Tile : MonoBehaviour
 	{
 		var size = tilemesh.GetComponent<MeshRenderer>().bounds.size;
 		var center = tilemesh.GetComponent<MeshRenderer>().bounds.center;
-		Transform[] tf = GetChildren( "Token" );
+		Transform[] tf = GetChildren( "Token(Clone)" );
 		//Vector3 tpos = ( -12345f ).ToVector3();
 		List<Vector3> tpos = new List<Vector3>();
 
 		for ( int i = 0; i < tf.Length; i++ )
 		{
-			string tBy = tf[i].GetComponent<MetaData>().triggeredByName;
-			if ( tBy != tname )
+			MetaData tfmetaData = tf[i].GetComponent<MetaData>();
+			string tBy = tfmetaData.triggeredByName;
+			if ( tBy != tname )//|| tfmetaData.hasBeenReplaced )
 				continue;
 
 			//offset to token in EDITOR coords
-			Vector3 offset = tf[i].GetComponent<MetaData>().offset;
+			Vector3 offset = tfmetaData.offset;
 			float scalar = Mathf.Max( size.x, size.z ) / 650f;
 			offset *= scalar;
 			offset = Vector3.Reflect( offset, new Vector3( 0, 0, 1 ) );
 
+			tf[i].gameObject.SetActive( true );
 			tf[i].position = new Vector3( center.x + offset.x, 2, center.z + offset.z );
 			tf[i].RotateAround( center, Vector3.up, hexTile.angle );
 			tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 			tpos.Add( tf[i].position );
 
 			//mark active in token state
-			MetaData metaData = tf[i].GetComponent<MetaData>();
+			//MetaData metaData = tf[i].GetComponent<MetaData>();
 			TokenState tState = null;
-			if ( !metaData.isRandom )
+			if ( !tfmetaData.isRandom )
 			{
 				tState = tokenStates.Where( x => x.metaData.GUID == tf[i].GetComponent<MetaData>().GUID ).FirstOr( null );
 			}
@@ -477,7 +483,10 @@ public class Tile : MonoBehaviour
 				tState = tokenStates.Where( x => x.metaData.interactionName == tf[i].GetComponent<MetaData>().interactionName ).FirstOr( null );
 			}
 			if ( tState != null )
+			{
 				tState.isActive = true;
+				tState.localPosition = tf[i].localPosition.Y( .3f );
+			}
 		}
 
 		return tpos.ToArray();
@@ -555,8 +564,11 @@ public class Tile : MonoBehaviour
 		MetaData metaData = objectHit.GetComponent<MetaData>();
 		string objectEventName = metaData.interactionName;
 		string objectEventToken = metaData.tokenType.ToString();
+		Tile tile = objectHit.parent.GetComponent<Tile>();
 
 		IInteraction inter = interactionManager.GetInteractionByName( metaData.interactionName );
+
+		//handle edge case PersistentInteraction
 		if ( inter is PersistentInteraction )
 		{
 			//ONLY swap in delegate event if the pers event hasn't had its alt text triggered
@@ -566,48 +578,161 @@ public class Tile : MonoBehaviour
 				IInteraction delegateInteraction = interactionManager.GetInteractionByName( objectEventName );
 				//delegate action to this event
 				objectEventToken = delegateInteraction.tokenType.ToString();
+				//make it persistant
+				delegateInteraction.isPersistant = true;
 			}
 		}
 
-		Tile tile = objectHit.parent.GetComponent<Tile>();
-
 		interactionManager.QueryTokenInteraction( objectEventName, objectEventToken, ( res ) =>
+	{
+		if ( res.btn2 )
 		{
-			if ( res.btn2 )
+			Debug.Log( "INTERACT::" + res.interaction.dataName );
+			if ( res.interaction.interactionType != InteractionType.Persistent )
 			{
-				Debug.Log( "INTERACT::" + res.interaction.dataName );
-				DoTokenAction( res.interaction, objectHit );
-				if ( res.removeToken && res.interaction.interactionType != InteractionType.Persistent )
-					tile.RemoveInteractivetoken( objectHit, metaData );
+				interactionManager.ShowInteraction( res.interaction, objectHit, ( iresult ) =>
+				{
+					if ( !res.interaction.isPersistant && iresult.removeToken )
+						tile.RemoveInteractivetoken( objectHit, metaData );
+				} );
 			}
-		} );
+			else
+				Debug.Log( "Persistent Event, doing nothing" );
+		}
+		else
+			Debug.Log( "NO BTN2" );
+	} );
 	}
 
-	void DoTokenAction( IInteraction interaction, Transform objectHit )
+	void CreateToken( TokenState tokenState )
 	{
-		Debug.Log( "do interaction::" + interaction.dataName );
-		if ( interaction.interactionType == InteractionType.Persistent )
-		{
-			//this block should never even be run
-			//DO NOTHING, action already delegated and alt text already triggered
-			Debug.Log( "Persistent Event, doing nothing" );
+		GameObject go = null;
+		TileManager tileManager = FindObjectOfType<TileManager>();
 
-			//Debug.Log( "event to activate: " + ( (PersistentInteraction)interaction ).eventToActivate );
-			//FindObjectOfType<TriggerManager>().FireTrigger( ( (PersistentInteraction)interaction ).eventToActivate );
+		if ( tokenState.metaData.tokenType == TokenType.Search )
+		{
+			go = Object.Instantiate( tileManager.searchTokenPrefab, gameObject.transform );
+		}
+		else if ( tokenState.metaData.tokenType == TokenType.Person )
+		{
+			if ( tokenState.metaData.personType == PersonType.Human )
+				go = Object.Instantiate( tileManager.humanTokenPrefab, gameObject.transform );
+			else if ( tokenState.metaData.personType == PersonType.Elf )
+				go = Object.Instantiate( tileManager.elfTokenPrefab, gameObject.transform );
+			else if ( tokenState.metaData.personType == PersonType.Hobbit )
+				go = Object.Instantiate( tileManager.hobbitTokenPrefab, gameObject.transform );
+			else if ( tokenState.metaData.personType == PersonType.Dwarf )
+				go = Object.Instantiate( tileManager.dwarfTokenPrefab, gameObject.transform );
+		}
+		else if ( tokenState.metaData.tokenType == TokenType.Threat )
+		{
+			go = Object.Instantiate( tileManager.threatTokenPrefab, gameObject.transform );
+		}
+		else if ( tokenState.metaData.tokenType == TokenType.Darkness )
+		{
+			go = Object.Instantiate( tileManager.darkTokenPrefab, gameObject.transform );
+		}
+
+		MetaData newMD = go.GetComponent<MetaData>();
+
+		newMD.triggerName = tokenState.metaData.triggerName;
+		newMD.interactionName = tokenState.metaData.interactionName;
+		newMD.triggeredByName = tokenState.metaData.triggeredByName;
+		newMD.tokenType = tokenState.metaData.tokenType;
+		newMD.personType = tokenState.metaData.personType;
+		newMD.offset = tokenState.metaData.offset;
+		newMD.GUID = tokenState.metaData.GUID;
+		newMD.isRandom = tokenState.metaData.isRandom;
+		newMD.tileID = hexTile.idNumber;
+
+		newMD.transform.localScale = Vector3.one;
+		newMD.transform.localPosition = tokenState.localPosition;
+		newMD.gameObject.SetActive( tokenState.isActive );
+	}
+
+	public void SetState( SingleTileState singleTileState )
+	{
+		isExplored = singleTileState.isExplored;
+		if ( isExplored )
+		{
+			if ( singleTileState.isActive )
+				exploreToken.gameObject.SetActive( false );
+			DOTween.To( () => 0, x =>
+			{
+				sepiaValue = x;
+				meshRenderer.material.SetFloat( "_sepiaValue", sepiaValue );
+			}, 0, 2f );
 		}
 		else
 		{
-			interactionManager.ShowInteraction( interaction, objectHit, ( a ) =>
-			 {
-				 MetaData metaData = objectHit.GetComponent<MetaData>();
-				 string objectEventName = metaData.interactionName;
-				 IInteraction inter = interactionManager.GetInteractionByName( objectEventName );
+			if ( singleTileState.isActive )
+				RevealExplorationToken();
+			else
+			{
+				exploreToken.gameObject.SetActive( false );
+				exploreToken.position = exploreToken.position.Y( 2f );
+			}
 
-				 Tile tile = objectHit.parent.GetComponent<Tile>();
-
-				 if ( !( inter is PersistentInteraction ) && a.removeToken )
-					 tile.RemoveInteractivetoken( objectHit, metaData );
-			 } );
+			DOTween.To( () => 1, x =>
+			{
+				sepiaValue = x;
+				meshRenderer.material.SetFloat( "_sepiaValue", sepiaValue );
+			}, 1, 2f );
 		}
+
+		///RESTORE TILE STATE
+		transform.parent.position = singleTileState.globalParentPosition;
+		transform.parent.rotation = Quaternion.Euler( 0, singleTileState.globalParentYRotation, 0 );
+		transform.position = singleTileState.globalPosition;
+		tokenTriggerList = singleTileState.tokenTriggerList;
+		tokenStates = singleTileState.tokenStates;
+		gameObject.SetActive( singleTileState.isActive );
+
+		///RESTORE TOKENS
+		//clear tokenstates list and remove all tokens on tile
+		tokenStates = singleTileState.tokenStates;
+		//get all token on this tile
+		Transform[] tf = GetChildren( "Token(Clone)" );
+		var remove = tf.Select( x => x.gameObject );
+		foreach ( var rmd in remove )
+			Destroy( rmd.gameObject );
+		//recreate tokens
+		foreach ( TokenState ts in singleTileState.tokenStates )
+		{
+			CreateToken( ts );
+		}
+
+		//remove any tokens that are created from replaced event
+		//only important for quick loading
+		//var replacedMDs = tf.Where( x => x.GetComponent<MetaData>().isCreatedFromReplaced );
+		//foreach ( var rmd in replacedMDs )
+		//	Destroy( rmd.gameObject );
+
+
+		//restore token states
+		/*for ( int i = 0; i < tf.Length; i++ )
+		{
+			//token on tile
+			MetaData md = tf[i].GetComponent<MetaData>();
+			//find matching token state to token on tile
+			TokenState token = ( from mjson in singleTileState.tokenStates
+													 where mjson.metaData.GUID == md.GUID || mjson.metaData.interactionName == md.interactionName
+													 select mjson ).FirstOr( null );
+			if ( token != null )
+			{
+				md.gameObject.SetActive( token.isActive );
+				md.transform.localScale = Vector3.one;
+				md.transform.localPosition = token.localPosition;
+				md.triggerName = token.metaData.triggerName;
+				md.interactionName = token.metaData.interactionName;
+				md.triggeredByName = token.metaData.triggeredByName;
+				md.tokenType = token.metaData.tokenType;
+				md.offset = token.metaData.offset;
+				md.isRandom = token.metaData.isRandom;
+				md.tileID = token.metaData.tileID;
+				md.hasBeenReplaced = token.metaData.hasBeenReplaced;
+				//md.isActive = token.metaData.isActive;
+			}
+		}*/
 	}
 }

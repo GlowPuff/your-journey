@@ -69,5 +69,9 @@ public class HeroItem : MonoBehaviour
 			cg.alpha = .25f;
 			skullImage.color = Color.red;
 		}
+		else
+		{
+			cg.alpha = 1;
+		}
 	}
 }

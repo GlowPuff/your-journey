@@ -9,6 +9,10 @@ using Newtonsoft.Json;
 /// </summary>
 public class FileManager
 {
+	public Guid scenarioGUID { get; set; }
+	public Guid campaignGUID { get; set; }
+	public int loreStartValue { get; set; }
+	public string specialInstructions { get; set; }
 	public string fileVersion { get; set; }
 	//public string fileName { get; set; }
 	public string saveDate { get; set; }
@@ -56,6 +60,10 @@ public class FileManager
 		threatNotUsed = source.threatNotUsed;
 		scenarioTypeJourney = source.scenarioTypeJourney;
 		shadowFear = source.shadowFear;
+		specialInstructions = source.specialInstructions;
+		scenarioGUID = source.scenarioGUID;
+		campaignGUID = source.campaignGUID;
+		loreStartValue = source.loreStartValue;
 	}
 
 	/// <summary>
@@ -63,15 +71,27 @@ public class FileManager
 	/// </summary>
 	public static Scenario Load( string filename )
 	{
-		string json = "";
-		using ( StreamReader sr = new StreamReader( filename ) )
+		string mydocs = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
+		string basePath = Path.Combine( mydocs, "Your Journey" );
+		if ( !Directory.Exists( basePath ) )
+			Directory.CreateDirectory( basePath );
+
+		try
 		{
-			json = sr.ReadToEnd();
+			string json = "";
+			using ( StreamReader sr = new StreamReader( filename ) )
+			{
+				json = sr.ReadToEnd();
+			}
+
+			var fm = JsonConvert.DeserializeObject<FileManager>( json );
+
+			return Scenario.CreateInstance( fm );
 		}
-
-		var fm = JsonConvert.DeserializeObject<FileManager>( json );
-
-		return Scenario.CreateInstance( fm );
+		catch
+		{
+			return null;
+		}
 	}
 
 	/// <summary>
@@ -105,7 +125,7 @@ public class FileManager
 	}
 
 	/// <summary>
-	/// this should get the documents folder from ANY system type: windows/mac/linux
+	/// this should build the full path to filename, including the documents folder from ANY system type: windows/mac/linux
 	/// </summary>
 	public static string GetFullPath( string filename )
 	{

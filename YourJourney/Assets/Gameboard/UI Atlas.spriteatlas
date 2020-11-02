@@ -35,7 +35,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 8d242c989899e954eaaf392790d9ad1c, type: 3}
     - {fileID: 102900000, guid: c80935fd8efbc4b4abb7edc027a64235, type: 3}
     - {fileID: 102900000, guid: ddca5c03c60fd6145b5dcad61a41bf74, type: 3}
-    totalSpriteSurfaceArea: 4787037
+    totalSpriteSurfaceArea: 4809565
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -161,6 +161,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fd59f97f66700eb4e8036e02b455c8db, type: 3}
   - {fileID: 21300000, guid: e7a9b59f859f5af499e47e5269023f09, type: 3}
   - {fileID: 21300000, guid: 8a2c1cdfc5f95074b95f8056c0953335, type: 3}
+  - {fileID: 21300000, guid: 2fc2ebff9e43b8a4bb6c063dfb11fe9f, type: 3}
   m_PackedSpriteNamesToIndex:
   - frame_15_delay-0.11s
   - frame_02_delay-0.11s
@@ -284,5 +285,6 @@ SpriteAtlas:
   - frame_06_delay-0.1s
   - frame_06_delay-0.11s
   - party button pressed
+  - resizeable standard
   m_Tag: UI Atlas
   m_IsVariant: 0

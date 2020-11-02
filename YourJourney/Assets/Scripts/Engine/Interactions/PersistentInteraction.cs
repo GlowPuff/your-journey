@@ -13,6 +13,8 @@ public class PersistentInteraction : IInteraction
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
 	public int loreReward { get; set; }
+	public bool isPersistant { get; set; }
+
 	public TextBookData alternativeBookData { get; set; }
 	public string eventToActivate { get; set; }
 	public string alternativeTextTrigger { get; set; }

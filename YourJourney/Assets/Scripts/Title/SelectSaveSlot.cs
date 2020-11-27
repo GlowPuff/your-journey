@@ -6,54 +6,58 @@ using UnityEngine.UI;
 
 public class SelectSaveSlot : MonoBehaviour
 {
+	public CampaignScreen campaignScreen;
 	public SelectJourney selectJourney;
 	public ConfirmDelete confirmDelete;
 	public NameGameDialog nameDialog;
 	public Image finalFader;
-	public Text selectedName, selectedDate, warningMsg, headingText, nextText, loadedGameScenario;
+	public Text selectedName, selectedDate, warningMsg, headingText, nextText, loadedGameScenario, itemType;
 	public Button nextButton, cancelButton;
 	public Toggle toggle;
-	public GameObject warning;
+	public GameObject warning, campaignSaveWarning;
 	public SaveSlotButton[] saveSlotButtons;
 
 	StateItem[] stateItems;
 	StateItem selectedState = null;
 	int selectedIndex = -1;
-	int slotMode;//0=choose a new game slot, 1=choose a game to load
+	//int slotMode;//0=choose a new game slot, 1=choose a game to load
 	string gameName;
+	TitleMetaData titleMetaData;
 
-	public void ActivateScreen( int mode, bool isCampaign = false )
+	public void ActivateScreen( TitleMetaData metaData )
 	{
+		titleMetaData = metaData;
 		gameObject.SetActive( true );
 		warning.SetActive( false );
 		nextButton.interactable = false;
 		cancelButton.interactable = false;
-		if ( ( mode == 0 && isCampaign ) || mode == 1 )
+		if ( titleMetaData.slotMode == 1 )//|| titleMetaData.slotMode == 1 )
 			toggle.gameObject.SetActive( false );
 		else
 			toggle.gameObject.SetActive( true );
 		toggle.isOn = false;
-		selectedName.text = selectedDate.text = loadedGameScenario.text = "";
-		slotMode = mode;
+		selectedName.text = selectedDate.text = loadedGameScenario.text = itemType.text = "";
 		selectedState = null;
 		selectedIndex = -1;
 
-		if ( slotMode == 0 )
+		if ( titleMetaData.slotMode == 0 )
 		{
 			headingText.text = "New Save Slot";
 			nextText.text = "Next";
+			campaignSaveWarning.SetActive( true );
 		}
 		else
 		{
 			headingText.text = "Load A Saved Game";
 			nextText.text = "Begin";
+			campaignSaveWarning.SetActive( false );
 		}
 
 		//reset all buttons
 		for ( int i = 0; i < saveSlotButtons.Length; i++ )
 		{
 			saveSlotButtons[i].ResetButton();
-			if ( slotMode == 0 )//disable by default
+			if ( titleMetaData.slotMode == 0 )//disable by default
 				saveSlotButtons[i].EnableButton();
 		}
 
@@ -72,17 +76,19 @@ public class SelectSaveSlot : MonoBehaviour
 
 	public void OnToggleNoSave()
 	{
+		selectedIndex = -1;
+		gameName = "";
+		selectedName.text = selectedDate.text = itemType.text = "";
+
 		if ( toggle.isOn )//don't save
 		{
-			selectedIndex = -1;
-			selectedName.text = selectedDate.text = "";
 			nextButton.interactable = true;
 			RefreshButtons();
 		}
 		else
 		{
-			RefreshButtons();
 			nextButton.interactable = false;
+			RefreshButtons();
 		}
 	}
 
@@ -93,12 +99,12 @@ public class SelectSaveSlot : MonoBehaviour
 	{
 		selectedIndex = -1;
 		selectedState = null;
-		selectedName.text = selectedDate.text = "";
+		selectedName.text = selectedDate.text = itemType.text = "";
 
 		for ( int i = 0; i < saveSlotButtons.Length; i++ )
 		{
 			saveSlotButtons[i].ResetButton();
-			if ( slotMode == 0 && !toggle.isOn )
+			if ( titleMetaData.slotMode == 0 && !toggle.isOn )
 				saveSlotButtons[i].EnableButton();
 		}
 
@@ -115,7 +121,7 @@ public class SelectSaveSlot : MonoBehaviour
 		RefreshButtons();
 		warning.SetActive( false );
 
-		if ( slotMode == 0 )//new game
+		if ( titleMetaData.slotMode == 0 )//new game
 		{
 			if ( toggle.isOn )//no save is ON
 				return;
@@ -126,7 +132,7 @@ public class SelectSaveSlot : MonoBehaviour
 				selectedState = null;
 
 				selectedName.text = "Empty Slot";
-				selectedDate.text = "";
+				selectedDate.text = itemType.text = "";
 
 				//name new game
 				nameDialog.Show( OnYes, OnNo );
@@ -141,17 +147,10 @@ public class SelectSaveSlot : MonoBehaviour
 				confirmDelete.Show( selectedState, () =>
 				{//yes
 					saveSlotButtons[selectedIndex].ResetButton();
-					if ( selectedState == stateItems[selectedIndex] )
-					{
-						selectedName.text = selectedDate.text = "";
-						//old save was deleted, continue to next screen
-						finalFader.DOFade( 1, .5f ).OnComplete( () =>
-						{
-							gameObject.SetActive( false );
-							selectJourney.ActivateScreen( slotMode );
-						} );
-						return;
-					}
+					selectedName.text = selectedDate.text = itemType.text = "";
+					stateItems[index] = null;
+					//name deleted slot
+					nameDialog.Show( OnYes, OnNo );
 				}, () =>
 				{//no
 					selectedIndex = -1;
@@ -160,38 +159,65 @@ public class SelectSaveSlot : MonoBehaviour
 				} );
 			}
 		}
-		else if ( slotMode == 1 )
+		else if ( titleMetaData.slotMode == 1 )//continue game
 		{
 			selectedIndex = index;
 			selectedState = stateItems[index];
 
+			gameName = selectedState.gameName;
 			nextButton.interactable = true;
 			warning.SetActive( false );
 			selectedName.text = stateItems[index].gameName;
 			selectedDate.text = stateItems[index].gameDate;
-			//check file version
-			Scenario s = Bootstrap.LoadLevel( selectedState.scenarioFilename );
-			if ( s != null )
+			itemType.text = "This is a Standalone Scenario";
+
+			Debug.Log( "OnSelectSlot::" + index + "::" + selectedState.projectType );
+			//check file version for standalone scenario
+			if ( selectedState.projectType == ProjectType.Standalone )
 			{
-				loadedGameScenario.text = s.scenarioName;
-				if ( s.scenarioGUID != selectedState.scenarioGUID )
+				nextText.text = "Begin";
+				Scenario s = Bootstrap.LoadScenarioFromFilename( selectedState.scenarioFilename );
+				if ( s != null )
 				{
-					warningMsg.text = "WARNING\r\nThe selected item was saved with a different version of the Scenario than you have.";
+					loadedGameScenario.text = s.scenarioName;
+					if ( s.scenarioGUID != selectedState.stateGUID )
+					{
+						warningMsg.text = "WARNING\r\nThe selected item was saved with a different version of the Scenario than you have.";
+						warning.SetActive( true );
+					}
+				}
+				else
+				{
+					loadedGameScenario.text = "";
+					selectedDate.text = "";
+					itemType.text = "";
+					selectedIndex = -1;
+					selectedState = null;
+					nextButton.interactable = false;
+					warningMsg.text = "WARNING\r\nThere was a problem loading the Scenario this item was saved in.";
 					warning.SetActive( true );
 				}
 			}
-			else
+			else//campaign
 			{
-				loadedGameScenario.text = "";
-				selectedIndex = -1;
-				selectedState = null;
-				nextButton.interactable = false;
-				warningMsg.text = "WARNING\r\nThere was a problem loading the Scenario this item was saved in.";
-				warning.SetActive( true );
+				nextText.text = "Next";
+				selectedDate.text = selectedState.campaignState.gameDate;
+				itemType.text = "This is a Campaign";
+				loadedGameScenario.text = selectedState.campaignState.campaign.campaignName;
+				Campaign c = FileManager.LoadCampaign( selectedState.campaignState.campaign.campaignGUID.ToString() );
+				//check file version for campaign
+				if ( c.fileVersion != selectedState.fileVersion )
+				{
+					warningMsg.text = "WARNING\r\nThe selected Campaign state was saved with a different version of the Campaign than you have.";
+					warning.SetActive( true );
+				}
 			}
 		}
 	}
 
+	/// <summary>
+	/// from new game name dialog
+	/// </summary>
 	public void OnYes( string gname )
 	{
 		gameName = gname;
@@ -205,8 +231,9 @@ public class SelectSaveSlot : MonoBehaviour
 	{
 		nextButton.interactable = false;
 		saveSlotButtons[selectedIndex].ResetButton();
-		saveSlotButtons[selectedIndex].EnableButton( slotMode == 0 );
+		saveSlotButtons[selectedIndex].EnableButton( titleMetaData.slotMode == 0 );
 		selectedIndex = -1;
+		gameName = "";
 		selectedState = null;
 	}
 
@@ -225,7 +252,7 @@ public class SelectSaveSlot : MonoBehaviour
 			 }
 			 stateItems[index] = null;
 			 saveSlotButtons[index].ResetButton();
-			 saveSlotButtons[index].EnableButton( slotMode == 0 );
+			 saveSlotButtons[index].EnableButton( titleMetaData.slotMode == 0 );
 		 }, () =>
 		 {//no
 		 } );
@@ -236,27 +263,60 @@ public class SelectSaveSlot : MonoBehaviour
 		nextButton.interactable = false;
 		cancelButton.interactable = false;
 
-		if ( !toggle.isOn )//DO save
+		if ( toggle.isOn )//do not save
 		{
-			Bootstrap.gameName = gameName;
-			Bootstrap.saveStateIndex = selectedIndex;
+			titleMetaData.saveStateIndex = -1;
 		}
-		else
-			Bootstrap.saveStateIndex = -1;
 
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
-			gameObject.SetActive( false );
-			if ( slotMode == 0 )//new game
-				selectJourney.ActivateScreen( slotMode );
+			if ( titleMetaData.slotMode == 0 )//new game
+			{
+				gameObject.SetActive( false );
+				titleMetaData.saveStateIndex = selectedIndex;
+				titleMetaData.gameName = gameName;
+
+				selectJourney.ActivateScreen( titleMetaData );
+			}
 			else//restore game
 			{
 				if ( selectedState != null )
 				{
-					Bootstrap.scenarioFileName = selectedState.scenarioFilename;
-					Bootstrap.heroes = selectedState.heroArray;
-					Bootstrap.isNewGame = false;
-					SceneManager.LoadScene( "gameboard" );
+					//load gameboard into standalone scenario
+					if ( selectedState.projectType == ProjectType.Standalone )
+					{
+						gameObject.SetActive( false );
+						//bootstrap the game state
+						GameStarter gameStarter = new GameStarter();
+
+						if ( !toggle.isOn )//DO save
+						{
+							gameStarter.gameName = gameName;
+							gameStarter.saveStateIndex = selectedIndex;
+						}
+						else
+						{
+							gameStarter.saveStateIndex = -1;
+						}
+						gameStarter.scenarioFileName = selectedState.scenarioFilename;
+						gameStarter.heroes = selectedState.heroArray;
+						gameStarter.isNewGame = false;
+
+						Bootstrap.campaignState = null;
+						Bootstrap.gameStarter = gameStarter;
+
+						SceneManager.LoadScene( "gameboard" );
+					}
+					else//else it's a campaign
+					{
+						//fill in metadata
+						titleMetaData.campaignState = GameState.LoadState( selectedIndex ).campaignState;
+						titleMetaData.saveStateIndex = selectedIndex;
+						titleMetaData.previousScreen = TitleScreen.SelectSlot;
+
+						gameObject.SetActive( false );
+						campaignScreen.ActivateScreen( titleMetaData );
+					}
 				}
 				else
 				{
@@ -278,9 +338,4 @@ public class SelectSaveSlot : MonoBehaviour
 			FindObjectOfType<TitleManager>().ResetScreen();
 		} );
 	}
-
-	//private void Update()
-	//{
-
-	//}
 }

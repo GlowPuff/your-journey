@@ -7,9 +7,9 @@ public class MistController : MonoBehaviour
 
 	void Start()
 	{
-		InvokeRepeating( "DoAnim", 0, 30 );
-		InvokeRepeating( "DoAnim1", 0, 35 );
-		InvokeRepeating( "DoAnim2", 0, 35 );
+		InvokeRepeating( nameof( DoAnim ), 0, 30 );
+		InvokeRepeating( nameof( DoAnim1 ), 0, 35 );
+		InvokeRepeating( nameof( DoAnim2 ), 0, 35 );
 	}
 
 	void DoAnim()

@@ -15,6 +15,9 @@ public enum PersonType { Human, Elf, Hobbit, Dwarf }
 public enum Difficulty { Easy, Normal, Hard }
 public enum FinalStand { Damage, Fear }
 public enum DifficultyBias { Light, Medium, Heavy }
+public enum CampaignStatus { InMenus, PlayingScenario }
+public enum ScenarioStatus { NotPlayed, Success, Failure }
+public enum TitleScreen { Title, SelectSlot, SelectJourney, SelectHeroes }
 
 public class InteractionResult
 {
@@ -47,8 +50,10 @@ public interface IInteraction
 	TextBookData eventBookData { get; set; }
 	TokenType tokenType { get; set; }
 	int loreReward { get; set; }
+	int xpReward { get; set; }
+	int threatReward { get; set; }
 	PersonType personType { get; set; }
-	bool isPersistant { get; set; }
+	bool isPersistent { get; set; }
 }
 
 public interface ICommonData
@@ -67,13 +72,60 @@ public class ProjectItem
 	public ProjectType projectType { get; set; }
 	public string fileName { get; set; }
 	public string fileVersion { get; set; }
+	public string campaignGUID { get; set; }
+	public string campaignStory { get; set; }
+	public string campaignDescription { get; set; }
+}
+
+public class CampaignItem
+{
+	public string scenarioName { get; set; }
+	/// <summary>
+	/// file NAME only, NOT the full path
+	/// </summary>
+	public string fileName { get; set; }
 }
 
 public class StateItem
 {
-	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath;
+	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath, fileVersion;
 	public string[] heroArray;
-	public Guid scenarioGUID;
+	public Guid stateGUID;
+	public ProjectType projectType;
+	public CampaignState campaignState;
+}
+
+public class TitleMetaData
+{
+	public int slotMode;
+	public ProjectItem projectItem;//set in SelectJourney
+	public CampaignState campaignState;
+	public string[] selectedHeroes;
+	public int saveStateIndex;
+	public string gameName;
+	public Difficulty difficulty;
+	public TitleScreen previousScreen;
+	public bool skippedToCampaignScreen = false;
+}
+
+/// <summary>
+/// Required data for starting any scenario
+/// </summary>
+public class GameStarter
+{
+	public string gameName;//name players assign to their save
+	public int saveStateIndex = -1;
+	/// <summary>
+	/// file NAME only, NOT the full path
+	/// </summary>
+	public string scenarioFileName;
+	public string[] heroes;
+	/// <summary>
+	/// setting this to false makes the scenario load state from the previously set saveStateIndex, default=true
+	/// </summary>
+	public bool isNewGame = true;
+	//REQUIRED for NEW scenarios, otherwise restored from state
+	public Difficulty difficulty = Difficulty.Normal;
 }
 
 public struct Vector

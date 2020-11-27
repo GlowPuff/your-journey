@@ -160,7 +160,7 @@ public class MonsterManager : MonoBehaviour
 			if ( mb.monster == m )
 			{
 				//add any lore unique to this monster
-				FindObjectOfType<LorePanel>().AddLore( mb.monster.loreReward );
+				FindObjectOfType<LorePanel>().AddReward( mb.monster.loreReward );
 
 				mb.markRemove = true;
 				mb.cg.DOFade( 0, .5f );
@@ -199,7 +199,7 @@ public class MonsterManager : MonoBehaviour
 				{
 					string trigger = ti.triggerDefeatedName;
 					FindObjectOfType<TriggerManager>().FireTrigger( trigger );
-					FindObjectOfType<LorePanel>().AddLore( ti.loreReward );
+					FindObjectOfType<LorePanel>().AddReward( ti.loreReward );
 				}
 			} );
 		}

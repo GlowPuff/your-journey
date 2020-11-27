@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using DG.Tweening;
-using UnityEngine.SceneManagement;
-using UnityEngine.Rendering.PostProcessing;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Engine : MonoBehaviour
 {
@@ -49,13 +49,36 @@ public class Engine : MonoBehaviour
 		if ( debug )
 			scenario = Bootstrap.DEBUGLoadLevel();
 		else
-			scenario = Bootstrap.LoadLevel();
+		{
+			scenario = Bootstrap.LoadScenario();
+		}
+
+		if ( scenario == null )
+		{
+			fader.gameObject.SetActive( true );
+			fader.DOFade( 0, 2 ).OnComplete( () =>
+			{
+				fader.gameObject.SetActive( false );
+				interactionManager.GetNewTextPanel().ShowOkContinue( "Critical Error\r\n\r\nCould not load Scenario.", ButtonIcon.Continue, () =>
+				{
+					fader.gameObject.SetActive( true );
+					fader.DOFade( 1, 2 ).OnComplete( () =>
+					{
+						//return to title screen
+						SceneManager.LoadScene( "title" );
+					} );
+				} );
+			} );
+
+			return;
+		}
 
 		//first objective/interaction/trigger are DUMMIES (None), remove them
 		scenario.objectiveObserver.RemoveAt( 0 );
 		scenario.interactionObserver.RemoveAt( 0 );
 		scenario.triggersObserver.RemoveAt( 0 );
 
+		triggerManager.InitCampaignTriggers();
 		interactionManager.Init( scenario );
 		objectiveManager.Init( scenario );
 		chapterManager.Init( scenario );
@@ -69,9 +92,12 @@ public class Engine : MonoBehaviour
 	IEnumerator BeginGame()
 	{
 		while ( !doneLoading )
+		{
+			//Debug.Log( "waiting..." );
 			yield return null;
+		}
 
-		if ( Bootstrap.isNewGame )
+		if ( Bootstrap.gameStarter.isNewGame )
 		{
 			endTurnButton.Init( scenario );
 
@@ -95,18 +121,48 @@ public class Engine : MonoBehaviour
 	{
 		if ( !debug )
 		{
-			interactionManager.GetNewTextPanel().ShowOkContinue( scenario.introBookData.pages[0], ButtonIcon.Continue, () =>
-				{
-					uiControl.interactable = true;
+			//only show intro text if it's not empty
+			if ( !string.IsNullOrEmpty( scenario.introBookData.pages[0] ) )
+			{
+				interactionManager.GetNewTextPanel().ShowOkContinue( scenario.introBookData.pages[0], ButtonIcon.Continue, () =>
+					{
+						uiControl.interactable = true;
 
-					if ( objectiveManager.Exists( scenario.objectiveName ) )
-						objectiveManager.TrySetFirstObjective( scenario.objectiveName, () =>
-						 {
-							 chapterManager.TryTriggerChapter( "Start", true );
-						 } );
-					else
+						if ( objectiveManager.Exists( scenario.objectiveName ) )
+							objectiveManager.TrySetFirstObjective( scenario.objectiveName, () =>
+							 {
+								 chapterManager.TryTriggerChapter( "Start", true );
+							 } );
+						else
+							chapterManager.TryTriggerChapter( "Start", true );
+
+						//fire any campaign triggers
+						if ( Bootstrap.campaignState != null )
+						{
+							foreach ( var t in Bootstrap.campaignState.campaignTriggerState )
+								triggerManager.FireTrigger( t );
+						}
+					} );
+			}
+			else
+			{
+				uiControl.interactable = true;
+
+				if ( objectiveManager.Exists( scenario.objectiveName ) )
+					objectiveManager.TrySetFirstObjective( scenario.objectiveName, () =>
+					{
 						chapterManager.TryTriggerChapter( "Start", true );
-				} );
+					} );
+				else
+					chapterManager.TryTriggerChapter( "Start", true );
+
+				//fire any campaign triggers
+				if ( Bootstrap.campaignState != null )
+				{
+					foreach ( var t in Bootstrap.campaignState.campaignTriggerState )
+						triggerManager.FireTrigger( t );
+				}
+			}
 		}
 		else
 		{
@@ -124,7 +180,7 @@ public class Engine : MonoBehaviour
 		if ( fromTemp )
 			gameState = GameState.LoadStateTemp( scenario );
 		else
-			gameState = GameState.LoadState( Bootstrap.saveStateIndex );
+			gameState = GameState.LoadState( Bootstrap.gameStarter.saveStateIndex );
 
 		if ( gameState == null )
 		{
@@ -134,6 +190,7 @@ public class Engine : MonoBehaviour
 
 		//restore data
 		RemoveFogAndMarkers();
+		gameState.campaignState?.SetState();
 		gameState.partyState.SetState();
 		endTurnButton.SetState( scenario, gameState.partyState );
 		triggerManager.SetState( gameState.triggerState );
@@ -173,6 +230,41 @@ public class Engine : MonoBehaviour
 		} );
 	}
 
+	/// <summary>
+	/// updates campaign xp/lore/scenario success/failure and saves state.
+	/// only updates xp/lore if value is larger than the one already recorded
+	/// </summary>
+	public void EndScenario( string resName )//Scenario Ended
+	{
+		//add scenario lore/xp reward
+		FindObjectOfType<LorePanel>().AddReward( scenario.loreReward, scenario.xpReward );
+
+		bool success = scenario.scenarioEndStatus[resName];//default reso
+		string msg = success ? "S U C C E S S" : "F A I L U R E";
+		var text = interactionManager.GetNewTextPanel();
+		text.ShowOkContinue( "The Scenario has ended.\r\n\r\n" + msg, ButtonIcon.Continue, () =>
+			{
+				fader.gameObject.SetActive( true );
+				fader.DOFade( 1, 2 ).OnComplete( () =>
+				{
+					if ( scenario.projectType == ProjectType.Campaign )
+					{
+						Debug.Log( "ENDING CAMPAIGN" );
+						//update campaign lore/xp rewards
+						Bootstrap.campaignState.UpdateCampaign( Bootstrap.loreCount, Bootstrap.xpCount, success );
+						Bootstrap.returnToCampaign = true;
+						//save campaign state
+						GameState gs = new GameState();
+						gs.SaveCampaignState( Bootstrap.gameStarter.saveStateIndex, Bootstrap.campaignState );
+					}
+					else
+						Debug.Log( "ENDING SCENARIO" );
+					//return to title screen
+					SceneManager.LoadScene( "title" );
+				} );
+			} );
+	}
+
 	void Update()
 	{
 		if ( Input.GetKeyDown( KeyCode.Alpha1 ) )
@@ -197,7 +289,8 @@ public class Engine : MonoBehaviour
 		{
 			if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase
 				|| FindObjectOfType<InteractionManager>().PanelShowing
-				|| FindObjectOfType<ProvokeMessage>().provokeMode )
+				|| FindObjectOfType<ProvokeMessage>().provokeMode
+				|| fader.gameObject.activeSelf )
 			{
 				ShowError( "Can't QuickSave at this time" );
 				return;
@@ -210,7 +303,8 @@ public class Engine : MonoBehaviour
 		{
 			if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase
 				|| FindObjectOfType<InteractionManager>().PanelShowing
-				|| FindObjectOfType<ProvokeMessage>().provokeMode )
+				|| FindObjectOfType<ProvokeMessage>().provokeMode
+				|| fader.gameObject.activeSelf )
 			{
 				ShowError( "Can't QuickLoad at this time" );
 				return;
@@ -227,6 +321,12 @@ public class Engine : MonoBehaviour
 				camControl.MoveTo( p );
 			}
 		}
+		else if ( Input.GetKeyDown( KeyCode.X ) )
+		{
+			//debug - save campaign state as if scenario was finished
+			ShowError( "DEBUG save campaign - scenario finished" );
+
+		}
 	}
 
 	public void OnShowSettings()
@@ -236,6 +336,10 @@ public class Engine : MonoBehaviour
 
 	public void OnQuit()
 	{
+		//SAVE PROGRESS
+		GameState gs = new GameState();
+		gs.SaveState( FindObjectOfType<Engine>(), Bootstrap.gameStarter.saveStateIndex );
+
 		fader.gameObject.SetActive( true );
 		fader.DOFade( 1, 2 ).OnComplete( () =>
 		{

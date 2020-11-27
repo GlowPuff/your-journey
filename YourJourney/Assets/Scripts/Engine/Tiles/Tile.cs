@@ -578,8 +578,8 @@ public class Tile : MonoBehaviour
 				IInteraction delegateInteraction = interactionManager.GetInteractionByName( objectEventName );
 				//delegate action to this event
 				objectEventToken = delegateInteraction.tokenType.ToString();
-				//make it persistant
-				delegateInteraction.isPersistant = true;
+				//make it persistent
+				delegateInteraction.isPersistent = true;
 			}
 		}
 
@@ -592,7 +592,7 @@ public class Tile : MonoBehaviour
 			{
 				interactionManager.ShowInteraction( res.interaction, objectHit, ( iresult ) =>
 				{
-					if ( !res.interaction.isPersistant && iresult.removeToken )
+					if ( !res.interaction.isPersistent && iresult.removeToken )
 						tile.RemoveInteractivetoken( objectHit, metaData );
 				} );
 			}

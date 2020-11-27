@@ -10,20 +10,23 @@ public class TitleCam : MonoBehaviour
 	float timer = 3, xtimer;
 	Camera cam;
 
-	// Start is called before the first frame update
 	void Start()
 	{
 		cam = Camera.main;
 
 		GlowTimer.SetTimer( 8, () =>
 		{
-			GetComponent<Animator>().enabled = false;
-			button1.DOLocalMoveX( -700, 1 ).SetEase( Ease.InOutQuad );
-			button2.DOLocalMoveX( -700, 1 ).SetEase( Ease.InOutQuad ).SetDelay( 1 );
-			optionButton.DOLocalMoveX( 880, 1 ).SetEase( Ease.InOutQuad );
+			try
+			{
+				GetComponent<Animator>().enabled = false;
+				button1.DOLocalMoveX( -700, 1 ).SetEase( Ease.InOutQuad );
+				button2.DOLocalMoveX( -700, 1 ).SetEase( Ease.InOutQuad ).SetDelay( 1 );
+				optionButton.DOLocalMoveX( 880, 1 ).SetEase( Ease.InOutQuad );
 
-			gotime = true;
-			InvokeRepeating( "animateCam", 0, 8 );
+				gotime = true;
+				InvokeRepeating( nameof( animateCam ), 0, 8 );
+			}
+			catch { }
 		} );
 	}
 

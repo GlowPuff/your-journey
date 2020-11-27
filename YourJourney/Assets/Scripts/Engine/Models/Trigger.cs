@@ -8,4 +8,5 @@ public class Trigger
 	public bool triggerValue;
 	public string triggerName;
 	public bool isMultiTrigger;
+	public bool isCampaignTrigger;
 }

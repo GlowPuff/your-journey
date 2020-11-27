@@ -1,22 +1,7 @@
-﻿using System;
-
-public class StatTestInteraction : IInteraction
+﻿public class StatTestInteraction : InteractionBase
 {
-	public Guid GUID { get; set; }
-	public string dataName { get; set; }
-	public bool isEmpty { get; set; }
-	public string triggerName { get; set; }
-	public string triggerAfterName { get; set; }
-	public TextBookData textBookData { get; set; }
-	public TextBookData eventBookData { get; set; }
-	public bool isTokenInteraction { get; set; }
-	public TokenType tokenType { get; set; }
-	public PersonType personType { get; set; }
-	public int loreReward { get; set; }
-	public bool isPersistant { get; set; }
-
-
 	public Ability testAttribute;
+	public Ability altTestAttribute;
 	public bool isCumulative;
 	public bool passFail { get; set; }
 	public int successValue;
@@ -25,15 +10,17 @@ public class StatTestInteraction : IInteraction
 	public TextBookData passBookData;
 	public TextBookData failBookData;
 	public TextBookData progressBookData;
+	public int rewardLore, rewardXP, rewardThreat, failThreat;
+	public bool noAlternate;
 
-	public InteractionType interactionType { get { return InteractionType.StatTest; } set { } }
+	public override InteractionType interactionType { get { return InteractionType.StatTest; } set { } }
 
 	public int accumulatedValue = -1;
 
 	/// <summary>
 	/// Returns true if test is successful, false if not
 	/// </summary>
-	public bool ResolveCumulative( int amount, Engine engine )
+	public bool ResolveCumulative( int amount )
 	{
 		if ( !passFail )
 			accumulatedValue += amount;

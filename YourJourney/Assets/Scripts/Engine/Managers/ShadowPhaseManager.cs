@@ -115,7 +115,7 @@ public class ShadowPhaseManager : MonoBehaviour
 
 		//SAVE PROGRESS
 		GameState gs = new GameState();
-		gs.SaveState( FindObjectOfType<Engine>(), Bootstrap.saveStateIndex );
+		gs.SaveState( FindObjectOfType<Engine>(), Bootstrap.gameStarter.saveStateIndex );
 	}
 
 	IEnumerator EnemyStep()
@@ -242,7 +242,7 @@ public class ShadowPhaseManager : MonoBehaviour
 		Debug.Log( "***THREAT STEP" );
 		//add up threat
 		//2*hero count + # unexplored tiles + 1 per threat token
-		int hc = 2 * Bootstrap.heroes.Length;
+		int hc = 2 * Bootstrap.gameStarter.heroes.Length;
 		int ut = FindObjectOfType<TileManager>().UnexploredTileCount();
 		int tt = FindObjectOfType<TileManager>().ThreatTokenCount();
 		Debug.Log( "***hero threat: " + hc );

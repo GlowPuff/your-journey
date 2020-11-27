@@ -274,10 +274,11 @@ public class InteractionManager : MonoBehaviour
 		{
 			var text = engine.scenario.resolutionObserver.Where( x => x.triggerName == name ).First();
 			GetNewTextPanel().ShowOkContinue( text.pages[0], ButtonIcon.Continue );
+			//handle end game
+			engine.triggerManager.TriggerEndGame( text.dataName );
 			return true;
 		}
 		return false;
-
 	}
 
 	/// <summary>
@@ -337,7 +338,7 @@ public class InteractionManager : MonoBehaviour
 			GetNewTextPanel().ShowTextInteraction( it, () =>
 			{
 				engine.triggerManager.FireTrigger( it.triggerAfterName );
-				FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+				FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
 				if ( textInteraction.isTokenInteraction && textInteraction.isPersistent )
 				{
 					textInteraction.hasActivated = true;
@@ -385,6 +386,7 @@ public class InteractionManager : MonoBehaviour
 		//if it's NOT a token interaction, figure out WHERE to spawn the group
 		if ( !it.isTokenInteraction )
 		{
+			//TODO: SORT BY CLOSEST DISTANCE?
 			if ( opentf.Length > 0 )//should never be 0, sanity check
 			{
 				//only use as many positions as exist
@@ -429,7 +431,7 @@ public class InteractionManager : MonoBehaviour
 				engine.triggerManager.FireTrigger( ( (DecisionInteraction)it ).choice3Trigger );
 			action?.Invoke( new InteractionResult() { removeToken = true } );
 			engine.triggerManager.FireTrigger( it.triggerAfterName );
-			FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+			FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
 		} );
 	}
 
@@ -438,13 +440,15 @@ public class InteractionManager : MonoBehaviour
 		( (BranchInteraction)it ).Resolve( this );
 		action?.Invoke( new InteractionResult() { removeToken = true } );
 		engine.triggerManager.FireTrigger( it.triggerAfterName );
-		FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+		FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
 	}
 
 	void HandleStatTest( IInteraction it, Action<InteractionResult> action = null )
 	{
 		GetNewStatPanel().Show( (StatTestInteraction)it, ( b ) =>
 		{
+			engine.triggerManager.FireTrigger( it.triggerAfterName );
+
 			StatTestInteraction sti = (StatTestInteraction)it;
 
 			if ( b.success )//show success textbox
@@ -454,7 +458,8 @@ public class InteractionManager : MonoBehaviour
 					action?.Invoke( new InteractionResult() { removeToken = true } );
 				} );
 				engine.triggerManager.FireTrigger( sti.successTrigger );
-				FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+				//success reward
+				FindObjectOfType<LorePanel>().AddReward( sti.rewardLore, sti.rewardXP, sti.rewardThreat );
 			}
 			else if ( !b.btn4 && !b.success )//show fail textbox
 			{
@@ -463,18 +468,21 @@ public class InteractionManager : MonoBehaviour
 					action?.Invoke( new InteractionResult() { removeToken = true } );
 				} );
 				engine.triggerManager.FireTrigger( sti.failTrigger );
+				//fail reward
+				FindObjectOfType<LorePanel>().AddPenalty( sti.failThreat );
 			}
 			else if ( b.btn4 )//show progress or success box
 			{
-				bool success = ( (StatTestInteraction)it ).ResolveCumulative( b.value, engine );
-				if ( success )
+				bool success = ( (StatTestInteraction)it ).ResolveCumulative( b.value );
+				if ( success )//success
 				{
 					GetNewTextPanel().ShowOkContinue( sti.passBookData.pages[0], ButtonIcon.Continue, () =>
 					{
 						action?.Invoke( new InteractionResult() { removeToken = true } );
 					} );
 					engine.triggerManager.FireTrigger( sti.successTrigger );
-					FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+					//success reward
+					FindObjectOfType<LorePanel>().AddReward( sti.rewardLore, sti.rewardXP, sti.rewardThreat );
 				}
 				else//progressive fail
 				{
@@ -485,6 +493,8 @@ public class InteractionManager : MonoBehaviour
 				}
 			}
 		} );
+		//event reward right after event fired, before test shown
+		FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
 	}
 
 	void HandleMultiEvent( IInteraction it, Action<InteractionResult> action )
@@ -503,7 +513,7 @@ public class InteractionManager : MonoBehaviour
 			}
 			action?.Invoke( new InteractionResult() { removeToken = true } );
 			engine.triggerManager.FireTrigger( it.triggerAfterName );
-			FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+			FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
 		}
 		else
 		{
@@ -521,7 +531,7 @@ public class InteractionManager : MonoBehaviour
 				}
 				action.Invoke( new InteractionResult() { removeToken = true } );
 				engine.triggerManager.FireTrigger( it.triggerAfterName );
-				FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+				FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
 			} );
 		}
 	}
@@ -578,7 +588,7 @@ public class InteractionManager : MonoBehaviour
 				//only add lore and fire trigger the first time it's activated
 				di.hasActivated = true;
 				engine.triggerManager.FireTrigger( it.triggerAfterName );
-				FindObjectOfType<LorePanel>().AddLore( it.loreReward );
+				FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
 			}
 		} );
 	}
@@ -654,7 +664,7 @@ public class InteractionManager : MonoBehaviour
 		}
 
 		engine.triggerManager.FireTrigger( repEvent.triggerAfterName );
-		FindObjectOfType<LorePanel>().AddLore( repEvent.loreReward );
+		FindObjectOfType<LorePanel>().AddReward( repEvent.loreReward, repEvent.xpReward, repEvent.threatReward );
 	}
 
 	IEnumerator MonsterPlacementPrompt( Monster[] monsters, Vector3[] positions, IInteraction it )

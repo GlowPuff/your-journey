@@ -6,10 +6,23 @@ using UnityEngine;
 
 public class TriggerManager : MonoBehaviour
 {
+	public Engine engine;
 	public Dictionary<string, bool> firedTriggersList = new Dictionary<string, bool>();
+	[HideInInspector]
 	public bool busyTriggering = false;
 
 	Queue<string> queue = new Queue<string>();
+	string endTriggerGUID, resolutionName;
+	Dictionary<string, bool> campaignTriggers = new Dictionary<string, bool>();
+
+	public void InitCampaignTriggers()
+	{
+		if ( Bootstrap.campaignState == null )
+			return;
+
+		foreach ( var t in Bootstrap.campaignState.campaign.triggerCollection )
+			campaignTriggers.Add( t.dataName, false );
+	}
 
 	/// <summary>
 	/// Takes a trigger name or event name to fire
@@ -36,6 +49,14 @@ public class TriggerManager : MonoBehaviour
 		//	Debug.Log( "FireTrigger::NO TRIGGER/NONE" );
 	}
 
+	public void TriggerEndGame( string rname )
+	{
+		endTriggerGUID = Guid.NewGuid().ToString();
+		resolutionName = rname;
+
+		FireTrigger( endTriggerGUID );
+	}
+
 	IEnumerator TriggerChain()
 	{
 		Debug.Log( "*******************TriggerChain STARTED" );
@@ -43,11 +64,33 @@ public class TriggerManager : MonoBehaviour
 		while ( queue.Count > 0 )
 		{
 			busyTriggering = true;
+			//wait until engine ready to handle next trigger
 			yield return WaitUntilFinished();
 			string name = queue.Peek();
 			Trigger trigger;
-			if ( FindObjectOfType<Engine>().scenario.triggersObserver.Any( x => x.dataName == name ) )
-				trigger = FindObjectOfType<Engine>().scenario.triggersObserver.Where( x => x.dataName == name ).First();
+			//check normal Triggers
+			if ( engine.scenario.triggersObserver.Any( x => x.dataName == name ) )
+				trigger = engine.scenario.triggersObserver.Where( x => x.dataName == name ).First();
+			//check campaign Triggers
+			else if ( campaignTriggers.Any( x => x.Key == name ) )
+			{
+				trigger = new Trigger()
+				{
+					dataName = name,
+					isMultiTrigger = true,
+					isCampaignTrigger = true
+				};
+			}
+			//handle end scenario Trigger
+			else if ( name == endTriggerGUID )
+			{
+				trigger = new Trigger()
+				{
+					dataName = endTriggerGUID,
+					triggerName = resolutionName
+				};
+			}
+			//handle no Trigger with name found
 			else
 				trigger = new Trigger() { isMultiTrigger = false };
 
@@ -59,20 +102,28 @@ public class TriggerManager : MonoBehaviour
 				continue;
 			}
 
-			//sanity check
+			//sanity check - add trigger to fired list
 			if ( !firedTriggersList.ContainsKey( name ) )
 				firedTriggersList.Add( name, true );
+			//add campaign trigger to campaignstate trigger fired list
+			if ( Bootstrap.campaignState != null
+				&& trigger.isCampaignTrigger
+				&& !Bootstrap.campaignState.campaignTriggerState.Contains( name ) )
+				Bootstrap.campaignState.campaignTriggerState.Add( name );
 
 			//first, check conditional events listening for triggers to fire
-			foreach ( ConditionalInteraction con in FindObjectOfType<InteractionManager>().interactions.Where( x => x.interactionType == InteractionType.Conditional ) )
+			foreach ( ConditionalInteraction con in engine.interactionManager.interactions.Where( x => x.interactionType == InteractionType.Conditional ) )
 			{
-				bool containsAll = con.triggerList.All( x => firedTriggersList.Keys.Contains( x ) );
-				if ( containsAll )
-					FireTrigger( con.finishedTrigger );
+				if ( con.triggerList.Count > 0 )
+				{
+					bool containsAll = con.triggerList.All( x => firedTriggersList.Keys.Contains( x ) );
+					if ( containsAll )
+						FireTrigger( con.finishedTrigger );
+				}
 			}
 
 			//trigger Token
-			if ( FindObjectOfType<TileManager>().TryTriggerToken( name ) )
+			if ( engine.tileManager.TryTriggerToken( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -83,7 +134,7 @@ public class TriggerManager : MonoBehaviour
 			yield return WaitUntilFinished();
 
 			//trigger Objective complete
-			if ( FindObjectOfType<ObjectiveManager>().TryCompleteObjective( name ) )
+			if ( engine.objectiveManager.TryCompleteObjective( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -94,7 +145,7 @@ public class TriggerManager : MonoBehaviour
 			yield return WaitUntilFinished();
 
 			//trigger Objective start
-			if ( FindObjectOfType<ObjectiveManager>().TrySetObjective( name ) )
+			if ( engine.objectiveManager.TrySetObjective( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -105,7 +156,7 @@ public class TriggerManager : MonoBehaviour
 			yield return WaitUntilFinished();
 
 			//trigger Event by trigger
-			if ( FindObjectOfType<InteractionManager>().TryFireEventByTrigger( name ) )
+			if ( engine.interactionManager.TryFireEventByTrigger( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -116,7 +167,7 @@ public class TriggerManager : MonoBehaviour
 			yield return WaitUntilFinished();
 
 			//trigger Event by event name
-			if ( FindObjectOfType<InteractionManager>().TryFireEventByName( name ) )
+			if ( engine.interactionManager.TryFireEventByName( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -127,7 +178,7 @@ public class TriggerManager : MonoBehaviour
 			yield return WaitUntilFinished();
 
 			//trigger Chapter
-			if ( FindObjectOfType<ChapterManager>().TriggerChapterByTrigger( name ) )
+			if ( engine.chapterManager.TriggerChapterByTrigger( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -138,7 +189,7 @@ public class TriggerManager : MonoBehaviour
 			yield return WaitUntilFinished();
 
 			//trigger end scenario
-			if ( FindObjectOfType<InteractionManager>().TryFireEndScenario( name ) )
+			if ( engine.interactionManager.TryFireEndScenario( name ) )
 			{
 				if ( !trigger.isMultiTrigger )
 				{
@@ -148,16 +199,29 @@ public class TriggerManager : MonoBehaviour
 			}
 			yield return WaitUntilFinished();
 
+			if ( trigger.dataName == endTriggerGUID )
+			{
+				Debug.Log( "Triggering End Scenario" );
+				engine.EndScenario( trigger.triggerName );
+				queue.Dequeue();
+				continue;
+			}
+			yield return WaitUntilFinished();
+
 			string n = queue.Dequeue();
 			Debug.Log( "Multi done/Nothing listening to: " + n );
 		}
 		Debug.Log( "******************TriggerChain ENDED" );
 		busyTriggering = false;
+
 		//}
 		//else
 		//	Debug.Log( "FireTrigger::NO TRIGGER/NONE" );
 	}
 
+	/// <summary>
+	/// wait until engine is ready to handle next trigger (no panels shown)
+	/// </summary>
 	IEnumerator WaitUntilFinished()
 	{
 		//Debug.Log( "***WAITING..." );

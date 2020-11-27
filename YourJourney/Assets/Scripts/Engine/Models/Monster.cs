@@ -90,11 +90,11 @@ public class Monster
 	//returns true if this monster can appear in current difficulty
 	public bool IsValid()
 	{
-		if ( Bootstrap.difficulty == Difficulty.Easy && isEasy )
+		if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy && isEasy )
 			return true;
-		else if ( Bootstrap.difficulty == Difficulty.Normal && isNormal )
+		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Normal && isNormal )
 			return true;
-		else if ( Bootstrap.difficulty == Difficulty.Hard && isHard )
+		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Hard && isHard )
 			return true;
 
 		return false;

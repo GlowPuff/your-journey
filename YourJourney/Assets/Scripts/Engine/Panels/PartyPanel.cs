@@ -46,7 +46,7 @@ public class PartyPanel : MonoBehaviour
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
 
-		diffText.text = Bootstrap.difficulty.ToString();
+		diffText.text = Bootstrap.gameStarter.difficulty.ToString();
 		loreText.text = "Lore: " + Bootstrap.loreCount.ToString();
 
 		foreach ( HeroItem go in heroItems )
@@ -55,7 +55,7 @@ public class PartyPanel : MonoBehaviour
 			go.pPanel = this;
 		}
 
-		for ( int i = 0; i < Bootstrap.heroes.Length; i++ )
+		for ( int i = 0; i < Bootstrap.gameStarter.heroes.Length; i++ )
 		{
 			heroItems[i].gameObject.SetActive( true );
 			heroItems[i].UpdateUI();
@@ -86,12 +86,15 @@ public class PartyPanel : MonoBehaviour
 
 	public void OnDifficulty()
 	{
-		if ( Bootstrap.difficulty == Difficulty.Easy )
-			Bootstrap.difficulty = Difficulty.Normal;
-		else if ( Bootstrap.difficulty == Difficulty.Normal )
-			Bootstrap.difficulty = Difficulty.Hard;
-		else if ( Bootstrap.difficulty == Difficulty.Hard )
-			Bootstrap.difficulty = Difficulty.Easy;
-		diffText.text = Bootstrap.difficulty.ToString();
+		if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy )
+			Bootstrap.gameStarter.difficulty = Difficulty.Normal;
+		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Normal )
+			Bootstrap.gameStarter.difficulty = Difficulty.Hard;
+		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Hard )
+			Bootstrap.gameStarter.difficulty = Difficulty.Easy;
+		diffText.text = Bootstrap.gameStarter.difficulty.ToString();
+		//set campaign state difficulty, if it exists
+		if ( Bootstrap.campaignState != null )
+			Bootstrap.campaignState.difficulty = Bootstrap.gameStarter.difficulty;
 	}
 }

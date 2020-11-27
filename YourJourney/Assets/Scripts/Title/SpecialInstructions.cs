@@ -11,17 +11,13 @@ public class SpecialInstructions : MonoBehaviour
 	public Text loreText, instructions;
 	public AudioSource music;
 
-	int slotMode;
-	ProjectItem selectedJourney;
-	string[] selectedHeroes;
 	RectTransform itemContainer;
+	TitleMetaData titleMetaData;
 
-	public void ActivateScreen( string[] heronames, ProjectItem journey, int smode )
+	public void ActivateScreen( TitleMetaData metaData )
 	{
+		titleMetaData = metaData;
 		gameObject.SetActive( true );
-		slotMode = smode;
-		selectedJourney = journey;
-		selectedHeroes = heronames;
 		itemContainer = instructions.rectTransform;
 
 		loreText.text = "0";
@@ -32,7 +28,7 @@ public class SpecialInstructions : MonoBehaviour
 			beginButton.interactable = true;
 			backButton.interactable = true;
 			cancelButton.interactable = true;
-			Scenario s = Bootstrap.LoadLevel( journey.fileName );
+			Scenario s = Bootstrap.LoadScenarioFromFilename( titleMetaData.projectItem.fileName );
 			if ( s != null )
 			{
 				if ( !string.IsNullOrEmpty( s.specialInstructions ) )
@@ -63,8 +59,18 @@ public class SpecialInstructions : MonoBehaviour
 
 	public void OnBegin()
 	{
-		Bootstrap.heroes = selectedHeroes;
-		Bootstrap.scenarioFileName = selectedJourney.fileName;
+		//bootstrap into the scenario
+		GameStarter gameStarter = new GameStarter();
+		gameStarter.gameName = titleMetaData.gameName;
+		gameStarter.saveStateIndex = titleMetaData.saveStateIndex;
+		gameStarter.scenarioFileName = titleMetaData.projectItem.fileName;
+		gameStarter.heroes = titleMetaData.selectedHeroes;
+		gameStarter.difficulty = titleMetaData.difficulty;
+		gameStarter.isNewGame = true;
+
+		Bootstrap.gameStarter = gameStarter;
+		Bootstrap.campaignState = null;
+
 		DOTween.To( () => music.volume, setter => music.volume = setter, 0f, .5f );
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
@@ -77,7 +83,7 @@ public class SpecialInstructions : MonoBehaviour
 	{
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
-			selectHeroes.ActivateScreen( selectedJourney, slotMode );
+			selectHeroes.ActivateScreen( titleMetaData );
 			gameObject.SetActive( false );
 		} );
 	}

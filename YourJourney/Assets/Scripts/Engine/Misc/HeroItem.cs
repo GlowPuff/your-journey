@@ -45,7 +45,7 @@ public class HeroItem : MonoBehaviour
 
 	public void UpdateUI()
 	{
-		if ( heroIndex >= Bootstrap.heroes.Length )
+		if ( heroIndex >= Bootstrap.gameStarter.heroes.Length )
 			return;
 
 		//skullImage.gameObject.SetActive( Bootstrap.lastStandCounter[heroIndex] > 1 );
@@ -61,7 +61,7 @@ public class HeroItem : MonoBehaviour
 		}
 
 		thresholdText.text = Bootstrap.lastStandCounter[heroIndex].ToString();
-		heroNameText.text = Bootstrap.heroes[heroIndex];
+		heroNameText.text = Bootstrap.gameStarter.heroes[heroIndex];
 		dButton.interactable = !Bootstrap.isDead[heroIndex];
 		fButton.interactable = !Bootstrap.isDead[heroIndex];
 		if ( Bootstrap.isDead[heroIndex] )

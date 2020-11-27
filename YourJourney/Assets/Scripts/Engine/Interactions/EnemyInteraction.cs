@@ -5,21 +5,8 @@ using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class ThreatInteraction : IInteraction
+public class ThreatInteraction : InteractionBase
 {
-	public Guid GUID { get; set; }
-	public string dataName { get; set; }
-	public bool isEmpty { get; set; }
-	public string triggerName { get; set; }
-	public string triggerAfterName { get; set; }
-	public TextBookData textBookData { get; set; }
-	public TextBookData eventBookData { get; set; }
-	public bool isTokenInteraction { get; set; }
-	public TokenType tokenType { get; set; }
-	public PersonType personType { get; set; }
-	public int loreReward { get; set; }
-	public bool isPersistant { get; set; }
-
 	public string triggerDefeatedName { get; set; }
 	public bool[] includedEnemies { get; set; }
 	[DefaultValue( 0 )]
@@ -31,7 +18,7 @@ public class ThreatInteraction : IInteraction
 
 	public List<Monster> monsterCollection;
 
-	public InteractionType interactionType { get { return InteractionType.Threat; } set { } }
+	public override InteractionType interactionType { get { return InteractionType.Threat; } set { } }
 
 	int lastEnemyIndex;
 	int numSingleGroups;
@@ -134,9 +121,6 @@ public class ThreatInteraction : IInteraction
 
 		Debug.Log( "leftover points: " + leftOvers );
 		return mList;
-		//finally add finished groups to collection
-		//foreach ( Monster ms in mList )
-		//	monsterCollection.Add( ms );
 	}
 
 	Tuple<Monster, float> GenerateMonster( float points )
@@ -235,9 +219,9 @@ public class ThreatInteraction : IInteraction
 			bias = 7;
 
 		//set the difficulty scale
-		if ( Bootstrap.difficulty == Difficulty.Easy )//easy
+		if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy )//easy
 			difficultyScale = -.25f;
-		else if ( Bootstrap.difficulty == Difficulty.Hard )//hard
+		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Hard )//hard
 			difficultyScale = .5f;
 
 		//modify pool based on hero count above 1 and bias

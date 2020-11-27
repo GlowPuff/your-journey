@@ -21,8 +21,11 @@ public class Scenario
 	public bool threatNotUsed { get; set; }
 	public ProjectType projectType { get; set; }
 	public int shadowFear { get; set; }
+	public Dictionary<string, bool> scenarioEndStatus;
 
 	public TextBookData introBookData { get; set; }
+	public int loreReward { get; set; }
+	public int xpReward { get; set; }
 
 	public List<IInteraction> interactionObserver { get; set; }
 	public ObservableCollection<Trigger> triggersObserver { get; set; }
@@ -54,6 +57,7 @@ public class Scenario
 		s.threatObserver = new ObservableCollection<Threat>( fm.threats );
 		s.chapterObserver = new ObservableCollection<Chapter>( fm.chapters );
 		s.globalTilePool = new ObservableCollection<int>( fm.globalTiles );
+		s.scenarioEndStatus = new Dictionary<string, bool>( fm.scenarioEndStatus );
 		//s.fileName = fm.fileName;
 		s.introBookData = fm.introBookData;
 		s.threatMax = fm.threatMax;
@@ -61,6 +65,8 @@ public class Scenario
 		s.scenarioTypeJourney = fm.scenarioTypeJourney;
 		s.shadowFear = fm.shadowFear;
 		s.specialInstructions = fm.specialInstructions;
+		s.loreReward = fm.loreReward;
+		s.xpReward = fm.xpReward;
 
 		return s;
 	}

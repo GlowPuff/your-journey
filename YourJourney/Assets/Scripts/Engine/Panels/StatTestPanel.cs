@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StatTestPanel : MonoBehaviour
 {
 	public Text mainText, abilityText, counterText, dummy;
-	public Image abilityIcon;
+	public Image abilityIcon, abilityIcon2;
 	public GameObject btn1, btn2, continueBtn;
 	public CanvasGroup overlay;
 	public GameObject progressRoot;
@@ -59,9 +59,23 @@ public class StatTestPanel : MonoBehaviour
 		buttonActions = actions;
 
 		if ( testInteraction.isCumulative && !testInteraction.passFail )
+		{
 			abilityText.text = "Test: " + testInteraction.testAttribute.ToString();
+			if ( !testInteraction.noAlternate )//use alternate test
+			{
+				abilityIcon2.gameObject.SetActive( true );
+				abilityText.text += " or " + testInteraction.altTestAttribute.ToString();
+			}
+		}
 		else
+		{
 			abilityText.text = "Success: " + testInteraction.testAttribute.ToString() + " " + testInteraction.successValue;
+			if ( !testInteraction.noAlternate )
+			{
+				abilityIcon2.gameObject.SetActive( true );
+				abilityText.text = "Success: " + testInteraction.testAttribute.ToString() + " or " + testInteraction.altTestAttribute.ToString() + " " + testInteraction.successValue;
+			}
+		}
 
 		//if it's cumulative (and not simple pass/fail) and already started, show progress text
 		if ( ( testInteraction.isCumulative && !testInteraction.passFail ) && testInteraction.accumulatedValue >= 0 )
@@ -75,6 +89,9 @@ public class StatTestPanel : MonoBehaviour
 		abilityIcon.gameObject.SetActive( true );
 		abilityIcon.sprite = icons[(int)testInteraction.testAttribute];
 		abilityIcon.color = testColors[(int)testInteraction.testAttribute];
+
+		abilityIcon2.sprite = icons[(int)testInteraction.altTestAttribute];
+		abilityIcon2.color = testColors[(int)testInteraction.altTestAttribute];
 
 		//acc value starts at -1, so set it to minimum of 0 to show the event has started
 		testInteraction.accumulatedValue = Math.Max( 0, testInteraction.accumulatedValue );

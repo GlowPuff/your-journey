@@ -111,7 +111,7 @@ public class ObjectiveManager : MonoBehaviour
 		if ( currentObjective.triggerName == triggername )
 		{
 			Debug.Log( "Completed Objective: " + currentObjective.dataName );
-			FindObjectOfType<LorePanel>().AddLore( currentObjective.loreReward );
+			FindObjectOfType<LorePanel>().AddReward( currentObjective.loreReward, currentObjective.xpReward, currentObjective.threatReward );
 			string t = currentObjective.nextTrigger;
 			currentObjective = null;
 			objectiveText.text = "No Objective";

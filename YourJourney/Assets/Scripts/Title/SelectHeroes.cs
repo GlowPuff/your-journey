@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SelectHeroes : MonoBehaviour
 {
+	public CampaignScreen campaignScreen;
 	public SelectJourney selectJourney;
 	public SpecialInstructions specialInstructions;
 	public Image finalFader;
@@ -17,18 +18,18 @@ public class SelectHeroes : MonoBehaviour
 	string tempName;
 	bool isChangingName = false;
 	int nameIndex = -1;
-	ProjectItem selectedJourney;
-	int slotMode;
+	TitleMetaData titleMetaData;
 
-	public void ActivateScreen( ProjectItem journey, int smode )
+	public void ActivateScreen( TitleMetaData metaData )
 	{
-		slotMode = smode;
+		titleMetaData = metaData;
 		gameObject.SetActive( true );
-		selectedJourney = journey;
 		selectedHeroes = new bool[6].Fill( false );
-		Bootstrap.difficulty = Difficulty.Normal;
 		diffText.text = "Normal";
 		ResetHeros();
+
+		titleMetaData.difficulty = Difficulty.Normal;
+		diffText.text = titleMetaData.difficulty.ToString();
 
 		finalFader.DOFade( 0, .5f ).OnComplete( () =>
 		{
@@ -88,13 +89,13 @@ public class SelectHeroes : MonoBehaviour
 
 	public void OnDifficulty()
 	{
-		if ( Bootstrap.difficulty == Difficulty.Easy )
-			Bootstrap.difficulty = Difficulty.Normal;
-		else if ( Bootstrap.difficulty == Difficulty.Normal )
-			Bootstrap.difficulty = Difficulty.Hard;
-		else if ( Bootstrap.difficulty == Difficulty.Hard )
-			Bootstrap.difficulty = Difficulty.Easy;
-		diffText.text = Bootstrap.difficulty.ToString();
+		if ( titleMetaData.difficulty == Difficulty.Easy )
+			titleMetaData.difficulty = Difficulty.Normal;
+		else if ( titleMetaData.difficulty == Difficulty.Normal )
+			titleMetaData.difficulty = Difficulty.Hard;
+		else if ( titleMetaData.difficulty == Difficulty.Hard )
+			titleMetaData.difficulty = Difficulty.Easy;
+		diffText.text = titleMetaData.difficulty.ToString();
 	}
 
 	public void OnChangeNameClick( int index )
@@ -116,15 +117,30 @@ public class SelectHeroes : MonoBehaviour
 				sh[i] = heroNameText[i].text;
 		}
 		sh = sh.Where( s => !string.IsNullOrEmpty( s ) ).ToArray();
+		titleMetaData.selectedHeroes = sh;
 
-		Bootstrap.heroes = sh;
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
-			specialInstructions.ActivateScreen( sh, selectedJourney, slotMode );
 			gameObject.SetActive( false );
-		} );
+			if ( titleMetaData.projectItem.projectType == ProjectType.Standalone )
+				specialInstructions.ActivateScreen( titleMetaData );
+			else
+			{
+				//create new campaign state and save it
+				CampaignState campaignState = new CampaignState( FileManager.LoadCampaign( titleMetaData.projectItem.campaignGUID ) );
+				titleMetaData.campaignState = campaignState;
+				titleMetaData.campaignState.heroes = titleMetaData.selectedHeroes;
+				titleMetaData.campaignState.gameName = titleMetaData.gameName;
+				titleMetaData.campaignState.saveStateIndex = titleMetaData.saveStateIndex;
+				titleMetaData.campaignState.difficulty = titleMetaData.difficulty;
+				//titleMetaData difficulty is already set
+				titleMetaData.previousScreen = TitleScreen.SelectHeroes;
 
-		//Bootstrap.SetGameVars( sh, selectedJourney.fileName );
+				new GameState().SaveCampaignState( titleMetaData.saveStateIndex, titleMetaData.campaignState );
+
+				campaignScreen.ActivateScreen( titleMetaData );
+			}
+		} );
 
 		//DOTween.To( () => music.volume, setter => music.volume = setter, 0f, .5f );
 		//finalFader.gameObject.SetActive( true );
@@ -137,7 +153,7 @@ public class SelectHeroes : MonoBehaviour
 		isChangingName = false;
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
-			selectJourney.ActivateScreen( slotMode );
+			selectJourney.ActivateScreen( titleMetaData );
 			gameObject.SetActive( false );
 		} );
 	}

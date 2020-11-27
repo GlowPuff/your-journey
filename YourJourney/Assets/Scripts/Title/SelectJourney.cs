@@ -12,19 +12,19 @@ public class SelectJourney : MonoBehaviour
 	public Image finalFader;
 	public Text nameText, versionText, fileText, appVersion, engineVersion;
 	ProjectItem[] projectItems;
-	ProjectItem selectedJourney;
 	public GameObject fileItemPrefab, warningPanel;
 	public RectTransform itemContainer;
 	public Button nextButton, cancelButton;
+	public GameObject campaignWarning;
 
-	int slotMode;
+	TitleMetaData titleMetaData;
 
-	public void ActivateScreen( int smode )
+	public void ActivateScreen( TitleMetaData metaData )
 	{
+		titleMetaData = metaData;
 		gameObject.SetActive( true );
 		warningPanel.SetActive( false );
 		cancelButton.interactable = true;
-		slotMode = smode;
 
 		for ( int i = 0; i < fileItemButtons.Count; i++ )
 			fileItemButtons[i].ResetColor();
@@ -40,12 +40,15 @@ public class SelectJourney : MonoBehaviour
 
 	public void AddScenarioPrefabs()
 	{
-		projectItems = FileManager.GetProjects().ToArray();
+		var scenarios = FileManager.GetProjects().ToArray();
+		var campaigns = FileManager.GetCampaigns().ToArray();
+		projectItems = campaigns.Concat( scenarios ).ToArray();
+
 		for ( int i = 0; i < projectItems.Length; i++ )
 		{
 			var go = Instantiate( fileItemPrefab, itemContainer ).GetComponent<FileItemButton>();
 			go.transform.localPosition = new Vector3( 0, ( -110 * i ) );
-			go.Init( i, projectItems[i].Title );
+			go.Init( i, projectItems[i].Title, projectItems[i].projectType, ( index ) => OnSelectQuest( index ) );
 			fileItemButtons.Add( go );
 		}
 		itemContainer.sizeDelta = new Vector2( 772, fileItemButtons.Count * 110 );
@@ -54,36 +57,47 @@ public class SelectJourney : MonoBehaviour
 	public void OnSelectQuest( int index )
 	{
 		warningPanel.SetActive( false );
+		campaignWarning.SetActive( false );
 
 		for ( int i = 0; i < fileItemButtons.Count; i++ )
 		{
 			if ( i != index )
 				fileItemButtons[i].ResetColor();
 		}
+
 		//fill in file info
 		nameText.text = projectItems[index].Title;
-		fileText.text = projectItems[index].fileName;
+		if ( projectItems[index].projectType == ProjectType.Standalone )
+			fileText.text = projectItems[index].fileName;
+		else
+			fileText.text = projectItems[index].campaignDescription;
 		versionText.text = "File Version: " + projectItems[index].fileVersion;
 
 		//check version
 		if ( projectItems[index].fileVersion != Bootstrap.FormatVersion )
 			warningPanel.SetActive( true );
 
+		//check if it's a campaign without a save slot
+		if ( projectItems[index].projectType == ProjectType.Campaign && titleMetaData.saveStateIndex == -1 )
+		{
+			campaignWarning.SetActive( true );
+			return;
+		}
+
 		nextButton.interactable = true;
-		selectedJourney = projectItems[index];
-		Debug.Log( selectedJourney.fileName );
+		titleMetaData.projectItem = projectItems[index];
+		//Debug.Log( selectedJourney.fileName );
 	}
 
 	public void OnNext()
 	{
-		Bootstrap.scenarioFileName = selectedJourney.fileName;
 		nextButton.interactable = false;
 		cancelButton.interactable = false;
 
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
 			gameObject.SetActive( false );
-			selectHeroes.ActivateScreen( selectedJourney, slotMode );
+			selectHeroes.ActivateScreen( titleMetaData );
 		} );
 	}
 
@@ -94,7 +108,7 @@ public class SelectJourney : MonoBehaviour
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
 			gameObject.SetActive( false );
-			selectSaveSlot.ActivateScreen( slotMode );
+			selectSaveSlot.ActivateScreen( titleMetaData );
 		} );
 	}
 }

@@ -13,5 +13,5 @@ public class Objective
 	public bool skipSummary;
 	public string nextTrigger;
 	public TextBookData textBookData;
-	public int loreReward;
+	public int loreReward, xpReward, threatReward;
 }

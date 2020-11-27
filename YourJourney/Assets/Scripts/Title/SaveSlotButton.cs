@@ -8,6 +8,7 @@ public class SaveSlotButton : MonoBehaviour
 	public Text title, heroes;
 	public GameObject emptyText;
 	public Button delButton;
+
 	[HideInInspector]
 	public bool isEmpty { get => emptyText.activeInHierarchy; }
 
@@ -58,7 +59,7 @@ public class SaveSlotButton : MonoBehaviour
 
 	public void OnClick()
 	{
-		Debug.Log( "CLICK: " + index );
+		//Debug.Log( "CLICK: " + index );
 		FindObjectOfType<SelectSaveSlot>().OnSelectSlot( index );
 		image.color = new Color( 1, 1, 1, 1 );
 	}

@@ -116,6 +116,24 @@ public class EndTurnButton : MonoBehaviour
 		return retval.ToArray();
 	}
 
+	public void AddThreatNoTriggering( int amount )
+	{
+		if ( FindObjectOfType<Engine>().scenario.threatNotUsed || FindObjectOfType<Engine>().scenario.threatObserver.Count() == 0 )
+			return;
+
+		currentThreat = Mathf.Min( currentThreat + amount, threatMax );
+		DOTween.To( () => currentThreatAnimated, x => currentThreatAnimated = x, currentThreat, 2 ).SetEase( Ease.InOutQuad );
+	}
+
+	public void RemoveThreat( int amount )
+	{
+		if ( FindObjectOfType<Engine>().scenario.threatNotUsed || FindObjectOfType<Engine>().scenario.threatObserver.Count() == 0 )
+			return;
+
+		currentThreat = Mathf.Max( currentThreat - amount, 0 );
+		DOTween.To( () => currentThreatAnimated, x => currentThreatAnimated = x, currentThreat, 2 ).SetEase( Ease.InOutQuad );
+	}
+
 	private void Update()
 	{
 		threatText.text = Mathf.Ceil( currentThreatAnimated ).ToString() + "\r\n" + threatMax.ToString();

@@ -122,6 +122,8 @@ public class InteractionManager : MonoBehaviour
 			return (DialogInteraction)interaction;
 		else if ( interaction.interactionType == InteractionType.Replace )
 			return (ReplaceTokenInteraction)interaction;
+		else if ( interaction.interactionType == InteractionType.Reward )
+			return (RewardInteraction)interaction;
 
 		throw new Exception( "Couldn't create Interaction from: " + interaction.dataName );
 	}
@@ -229,15 +231,15 @@ public class InteractionManager : MonoBehaviour
 	/// </summary>
 	public bool TryFireEventByName( string name )
 	{
-		Debug.Log( "TryFireEventByName: " + name );
+		//Debug.Log( "TryFireEventByName: " + name );
 		if ( interactions.Any( x => x.dataName == name ) )
 		{
-			Debug.Log( "Found Event: " + name );
+			Debug.Log( "TryFireEventByName() FOUND Event: " + name );
 			ShowInteraction( interactions.Where( x => x.dataName == name ).First() );
 			return true;
 		}
-		else
-			Debug.Log( "Couldn't find Event with name: " + name );
+		//else
+		//	Debug.Log( "Couldn't find Event with name: " + name );
 		return false;
 	}
 
@@ -246,11 +248,11 @@ public class InteractionManager : MonoBehaviour
 	/// </summary>
 	public bool TryFireEventByTrigger( string triggername )
 	{
-		Debug.Log( "TryFireEventByTrigger: " + triggername );
+		//Debug.Log( "TryFireEventByTrigger: " + triggername );
 		if ( interactions.Any( x => x.triggerName == triggername ) )
 		{
 			int count = interactions.Count( x => x.triggerName == triggername );
-			Debug.Log( "Found " + count + " Event(s): " + triggername );
+			Debug.Log( "TryFireEventByTrigger() FOUND " + count + " Event(s): " + triggername );
 			if ( count == 1 )
 			{
 				ShowInteraction( interactions.Where( x => x.triggerName == triggername ).First() );
@@ -263,8 +265,8 @@ public class InteractionManager : MonoBehaviour
 			}
 			return true;
 		}
-		else
-			Debug.Log( "Couldn't find Event listening to Trigger: " + triggername );
+		//else
+		//	Debug.Log( "Couldn't find Event listening to Trigger: " + triggername );
 		return false;
 	}
 
@@ -323,6 +325,10 @@ public class InteractionManager : MonoBehaviour
 		else if ( it.interactionType == InteractionType.Replace )
 		{
 			HandleReplacement( it, action );
+		}
+		else if ( it.interactionType == InteractionType.Reward )
+		{
+			HandleReward( it, action );
 		}
 		else
 			GetNewTextPanel().ShowOkContinue( $"Data Error (ShowInteraction)\r\nCould not find Interaction with type '{it.interactionType}'.", ButtonIcon.Continue );
@@ -437,10 +443,28 @@ public class InteractionManager : MonoBehaviour
 
 	void HandleBranch( IInteraction it, Action<InteractionResult> action )
 	{
-		( (BranchInteraction)it ).Resolve( this );
-		action?.Invoke( new InteractionResult() { removeToken = true } );
-		engine.triggerManager.FireTrigger( it.triggerAfterName );
-		FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
+		BranchInteraction bi = it as BranchInteraction;
+
+		void func()
+		{
+			bi.Resolve( this );
+			action?.Invoke( new InteractionResult() { removeToken = true } );
+			engine.triggerManager.FireTrigger( it.triggerAfterName );
+			FindObjectOfType<LorePanel>().AddReward( it.loreReward, it.xpReward, it.threatReward );
+		}
+
+		//only show event text if it's NOT empty
+		if ( !string.IsNullOrEmpty( bi.eventBookData.pages[0].Trim() ) )
+		{
+			GetNewTextPanel().ShowTextInteraction( it, () =>
+			{
+				func();
+			} );
+		}
+		else//otherwise silently activate
+		{
+			func();
+		}
 	}
 
 	void HandleStatTest( IInteraction it, Action<InteractionResult> action = null )
@@ -608,6 +632,31 @@ public class InteractionManager : MonoBehaviour
 		}
 		else
 			DoReplacement( repevt );
+	}
+
+	void HandleReward( IInteraction it, Action<InteractionResult> action )
+	{
+		RewardInteraction ri = it as RewardInteraction;
+
+		void func()
+		{
+			action?.Invoke( new InteractionResult() { removeToken = true } );
+			engine.triggerManager.FireTrigger( it.triggerAfterName );
+			FindObjectOfType<LorePanel>().AddReward( ri.rewardLore, ri.rewardXP, ri.rewardThreat );
+		}
+
+		//only show event text if it's NOT empty
+		if ( !string.IsNullOrEmpty( ri.eventBookData.pages[0].Trim() ) )
+		{
+			GetNewTextPanel().ShowTextInteraction( it, () =>
+			{
+				func();
+			} );
+		}
+		else//otherwise silently activate
+		{
+			func();
+		}
 	}
 
 	void DoReplacement( ReplaceTokenInteraction repEvent, bool fromLoad = false, bool isActive = false )

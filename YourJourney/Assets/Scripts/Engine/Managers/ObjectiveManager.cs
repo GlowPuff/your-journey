@@ -24,11 +24,11 @@ public class ObjectiveManager : MonoBehaviour
 	/// </summary>
 	public bool TrySetObjective( string name, Action followupAction = null )
 	{
-		Debug.Log( $"TrySetObjective: {name}" );
+		//Debug.Log( $"TrySetObjective: {name}" );
 		if ( objectiveList.Any( x => x.triggeredByName == name ) )
 		{
 			currentObjective = objectiveList.Where( x => x.triggeredByName == name ).First();
-			Debug.Log( "Found Objective: " + currentObjective.dataName );
+			Debug.Log( "TrySetObjective() FOUND: " + currentObjective.dataName );
 			//set reminder text
 			objectiveText.text = currentObjective.objectiveReminder;
 
@@ -43,7 +43,7 @@ public class ObjectiveManager : MonoBehaviour
 			return true;
 		}
 
-		Debug.Log( "TrySetObjective NOT FOUND: " + name );
+		//Debug.Log( "TrySetObjective() NOT FOUND: " + name );
 		return false;
 	}
 

@@ -60,6 +60,9 @@ public class InteractionConverter : JsonConverter
 				case 10:
 					interaction = item.ToObject<ReplaceTokenInteraction>();
 					break;
+				case 11:
+					interaction = item.ToObject<RewardInteraction>();
+					break;
 				default:
 					throw new Exception( "Interaction Type not supported: " + item["interactionType"].Value<int>() );
 			}

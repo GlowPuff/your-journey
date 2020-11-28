@@ -274,7 +274,7 @@ public class TileManager : MonoBehaviour
 
 	public bool TryTriggerToken( string name )
 	{
-		Debug.Log( "TryTriggerToken: " + name );
+		//Debug.Log( "TryTriggerToken: " + name );
 		//this method acts on ALL tiles on ALL VISIBLE chapters on the board
 
 		//select VISIBLE tile(s) that have a token Triggered By 'name'
@@ -292,6 +292,7 @@ public class TileManager : MonoBehaviour
 		//iterate the tiles and either reveal the token or queue it to show when its tile gets explored
 		if ( explored.Count() > 0 )
 		{
+			Debug.Log( "TryTriggerToken() FOUND: " + name );
 			//Debug.Log( "Found " + explored.Count() + " matching EXPLORED tiles" );
 			List<Tuple<int, Vector3[]>> tokpos = new List<Tuple<int, Vector3[]>>();
 			foreach ( Tile t in explored )

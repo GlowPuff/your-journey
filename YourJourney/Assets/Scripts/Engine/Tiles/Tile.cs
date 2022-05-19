@@ -549,11 +549,16 @@ public class Tile : MonoBehaviour
 
 	void ShowExplorationText( Tile tile, System.Action action )
 	{
-		string s = tile.hexTile.flavorBookData.pages.Count > 0 ? tile.hexTile.flavorBookData.pages[0] : "";
-		if ( !string.IsNullOrEmpty( s ) )
-			interactionManager.GetNewTextPanel().ShowOkContinue( tile.hexTile.flavorBookData.pages[0], ButtonIcon.Continue, action );
+		string flavor = tile.hexTile.flavorBookData.pages.Count > 0 ? tile.hexTile.flavorBookData.pages[0] : "";
+		string instructions = "Discard the exploration token.";
+		if ( Bootstrap.gameStarter.difficulty != Difficulty.Hard )
+			instructions += " Gain 1 inspiration.";
+		if ( !string.IsNullOrEmpty( flavor ) )
+			flavor = flavor + "\r\n\r\n" + instructions;
 		else
-			action?.Invoke();
+			flavor = instructions;
+
+		interactionManager.GetNewTextPanel().ShowOkContinue( flavor, ButtonIcon.Continue, action );
 	}
 
 	/// <summary>

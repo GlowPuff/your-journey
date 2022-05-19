@@ -29,10 +29,7 @@ public class MonsterManager : MonoBehaviour
 	{
 		attachRect = buttonAttach.GetComponent<RectTransform>();
 		scalar = canvas.scaleFactor;
-
-		//Load the banners and eliteBanners that are attached in unity into the queues used in this class
-		bannerQueue = new Queue<Sprite>(banners);
-		eliteBannerQueue = new Queue<Sprite>(eliteBanners);
+		LoadBanners();
 	}
 
 	/// <summary>
@@ -64,25 +61,7 @@ public class MonsterManager : MonoBehaviour
 
 		monsterList.Add( m );
 
-		//Elite enemies: always add a banner (if there is a banner available)
-		if ( m.isElite )
-		{
-			 if ( eliteBannerQueue.Count > 0 )
-			 {
-				go.GetComponent<MonsterButton>().SetBanner( eliteBannerQueue.Dequeue() );
-			 }
-		}
-		//Normal enemies: add a banner if there are any other enemies of the same type already on the board
-		else
-		{
-			var mc = from monster in monsterList
-							where monster.monsterType == m.monsterType
-							select monster;
-			if ( mc.Count() > 1 && bannerQueue.Count > 0 )
-			{
-				go.GetComponent<MonsterButton>().SetBanner( bannerQueue.Dequeue() );
-			}
-		}
+		AddBanners(go, m);
 
 		scrollReady = false;
 		foreach ( Transform child in buttonAttach )
@@ -287,6 +266,7 @@ public class MonsterManager : MonoBehaviour
 		RemoveMonsterButtons();
 		bannerQueue.Clear();
 		eliteBannerQueue.Clear();
+		LoadBanners();
 
 		if ( monsterState.monsterList.Count > 0 )
 			bar.DOLocalMoveY( 50, .75f ).SetEase( Ease.InOutCubic );
@@ -309,17 +289,7 @@ public class MonsterManager : MonoBehaviour
 
 			monsterList.Add( m );
 
-			//add banner
-			var mc = from monster in monsterList
-							 where monster.monsterType == m.monsterType && monster.isElite == m.isElite
-							 select monster;
-			if ( mc.Count() > 1 )
-			{
-				if ( !m.isElite && bannerQueue.Count > 0 )
-					go.GetComponent<MonsterButton>().SetBanner( bannerQueue.Dequeue() );
-				else if ( m.isElite && eliteBannerQueue.Count > 0 )
-					go.GetComponent<MonsterButton>().SetBanner( eliteBannerQueue.Dequeue() );
-			}
+			AddBanners(go, m);
 
 			scrollReady = false;
 			foreach ( Transform child in buttonAttach )
@@ -332,6 +302,40 @@ public class MonsterManager : MonoBehaviour
 
 		scrollOffset = -517;
 		buttonAttach.localPosition = buttonAttach.localPosition.X( -517 );
+	}
+
+	public void LoadBanners()
+	{
+		//Load the banners and eliteBanners that are attached in unity into the queues used in this class
+		bannerQueue = new Queue<Sprite>(banners);
+		eliteBannerQueue = new Queue<Sprite>(eliteBanners);
+	}
+
+	public void AddBanners(GameObject go, Monster m)
+	{
+		//Elite enemies: always add a banner (if there is a banner available)
+		if ( m.isElite )
+		{
+			 if ( eliteBannerQueue.Count > 0 )
+			 {
+				go.GetComponent<MonsterButton>().SetBanner( eliteBannerQueue.Dequeue() );
+				m.hasBanner = true;
+			 }
+		}
+		//Normal enemies: add a banner if there are any other enemies of the same type already on the board that don't have a banner
+		else
+		{
+			var mc = from monster in monsterList
+							where monster.monsterType == m.monsterType 
+							&& monster.isElite == m.isElite
+							&& monster.hasBanner == false
+							select monster;
+			if ( mc.Count() > 1 && bannerQueue.Count > 0 )
+			{
+				go.GetComponent<MonsterButton>().SetBanner( bannerQueue.Dequeue() );
+				m.hasBanner = true;
+			}
+		}
 	}
 
 	public MonsterState GetState()

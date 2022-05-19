@@ -24,6 +24,7 @@ public class Monster
 	public bool isBloodThirsty;
 	public bool isArmored;
 	public bool isElite;
+	public bool hasBanner = false;
 	public Ability negatedBy { get; set; }
 	public MonsterType monsterType { get; set; }
 	public int count;
@@ -37,9 +38,6 @@ public class Monster
 	[DefaultValue( true )]
 	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
 	public bool isAdventure { get; set; }
-	[DefaultValue( true )]
-	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
-	public bool isEasy { get; set; }
 	[DefaultValue( true )]
 	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
 	public bool isNormal { get; set; }
@@ -94,8 +92,6 @@ public class Monster
 	public bool IsValid()
 	{
 		if ( Bootstrap.gameStarter.difficulty == Difficulty.Adventure && isAdventure )
-			return true;
-		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy && isEasy )
 			return true;
 		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Normal && isNormal )
 			return true;
@@ -210,7 +206,6 @@ public class Monster
 			triggerName = "None",
 			singlecost = MonsterCost[(int)mType],
 			isAdventure = true,
-			isEasy = true,
 			isNormal = true,
 			isHard = true,
 			negatedBy = Ability.Might

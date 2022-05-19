@@ -12,7 +12,7 @@ public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }
 public enum ButtonIcon { None, Action, OK, Continue, Next }
 public enum TokenType { Search, Person, Threat, Darkness, Exploration, None }
 public enum PersonType { Human, Elf, Hobbit, Dwarf }
-public enum Difficulty { Adventure, Easy, Normal, Hard }
+public enum Difficulty { Adventure, Normal, Hard }
 public enum FinalStand { Damage, Fear }
 public enum DifficultyBias { Light, Medium, Heavy }
 public enum CampaignStatus { InMenus, PlayingScenario }

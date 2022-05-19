@@ -90,8 +90,6 @@ public class SelectHeroes : MonoBehaviour
 	public void OnDifficulty()
 	{
 		if ( titleMetaData.difficulty == Difficulty.Adventure )
-			titleMetaData.difficulty = Difficulty.Easy;
-		else if ( titleMetaData.difficulty == Difficulty.Easy )
 			titleMetaData.difficulty = Difficulty.Normal;
 		else if ( titleMetaData.difficulty == Difficulty.Normal )
 			titleMetaData.difficulty = Difficulty.Hard;

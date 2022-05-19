@@ -87,8 +87,6 @@ public class PartyPanel : MonoBehaviour
 	public void OnDifficulty()
 	{
 		if ( Bootstrap.gameStarter.difficulty == Difficulty.Adventure )
-			Bootstrap.gameStarter.difficulty = Difficulty.Easy;
-		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy )
 			Bootstrap.gameStarter.difficulty = Difficulty.Normal;
 		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Normal )
 			Bootstrap.gameStarter.difficulty = Difficulty.Hard;

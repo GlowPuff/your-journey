@@ -14,7 +14,7 @@ public class MonsterManager : MonoBehaviour
 	public Sprite[] banners, eliteBanners;
 	public RectTransform sbRect;
 
-	Queue<Sprite> bannerQueue = new Queue<Sprite>(), eliteBannerQueue = new Queue<Sprite>();
+	Queue<Sprite> bannerQueue, eliteBannerQueue;
 	int scrollOffset = -517;
 	bool scrollReady = true;
 	[HideInInspector]
@@ -29,6 +29,10 @@ public class MonsterManager : MonoBehaviour
 	{
 		attachRect = buttonAttach.GetComponent<RectTransform>();
 		scalar = canvas.scaleFactor;
+
+		//Load the banners and eliteBanners that are attached in unity into the queues used in this class
+		bannerQueue = new Queue<Sprite>(banners);
+		eliteBannerQueue = new Queue<Sprite>(eliteBanners);
 	}
 
 	/// <summary>
@@ -60,16 +64,24 @@ public class MonsterManager : MonoBehaviour
 
 		monsterList.Add( m );
 
-		//add banner
-		var mc = from monster in monsterList
-						 where monster.monsterType == m.monsterType && monster.isElite == m.isElite
-						 select monster;
-		if ( mc.Count() > 1 )
+		//Elite enemies: always add a banner (if there is a banner available)
+		if ( m.isElite )
 		{
-			if ( !m.isElite && bannerQueue.Count > 0 )
-				go.GetComponent<MonsterButton>().SetBanner( bannerQueue.Dequeue() );
-			else if ( m.isElite && eliteBannerQueue.Count > 0 )
+			 if ( eliteBannerQueue.Count > 0 )
+			 {
 				go.GetComponent<MonsterButton>().SetBanner( eliteBannerQueue.Dequeue() );
+			 }
+		}
+		//Normal enemies: add a banner if there are any other enemies of the same type already on the board
+		else
+		{
+			var mc = from monster in monsterList
+							where monster.monsterType == m.monsterType
+							select monster;
+			if ( mc.Count() > 1 && bannerQueue.Count > 0 )
+			{
+				go.GetComponent<MonsterButton>().SetBanner( bannerQueue.Dequeue() );
+			}
 		}
 
 		scrollReady = false;

@@ -97,6 +97,9 @@ public class ShadowPhaseManager : MonoBehaviour
 		phaseNotification.Show( "Shadow Phase" );
 		yield return new WaitForSeconds( 3 );
 
+		//INSPIRATION STEP
+		yield return InspirationStep();
+
 		//ENEMY ACTIVATION STEP
 		yield return EnemyStep();
 
@@ -116,6 +119,23 @@ public class ShadowPhaseManager : MonoBehaviour
 		//SAVE PROGRESS
 		GameState gs = new GameState();
 		gs.SaveState( FindObjectOfType<Engine>(), Bootstrap.gameStarter.saveStateIndex );
+	}
+
+	IEnumerator InspirationStep()
+	{
+		Debug.Log( "***INSPIRATION STEP" );
+		if ( Bootstrap.gameStarter.difficulty == Difficulty.Adventure )
+		{
+			var im = FindObjectOfType<InteractionManager>();
+			bool waiting = true;
+			im.GetNewTextPanel().ShowOkContinue( "Your fellowship is prepared to face the shadow."
+				+ "\r\n\r\n"
+				+ "Each hero gains 1 inspiration.", 
+					ButtonIcon.Continue, () => waiting = false );
+
+			while ( waiting )
+				yield return null;
+		}
 	}
 
 	IEnumerator EnemyStep()
@@ -243,7 +263,9 @@ public class ShadowPhaseManager : MonoBehaviour
 		//add up threat
 		//2*hero count + # unexplored tiles + 1 per threat token
 		int hc = 2 * Bootstrap.gameStarter.heroes.Length;
-		int ut = FindObjectOfType<TileManager>().UnexploredTileCount();
+		int ut = 0;
+		if ( Bootstrap.gameStarter.difficulty != Difficulty.Adventure )
+			FindObjectOfType<TileManager>().UnexploredTileCount();
 		int tt = FindObjectOfType<TileManager>().ThreatTokenCount();
 		Debug.Log( "***hero threat: " + hc );
 		Debug.Log( "***unexplored threat: " + ut );

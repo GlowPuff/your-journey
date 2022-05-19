@@ -219,7 +219,8 @@ public class ThreatInteraction : InteractionBase
 			bias = 7;
 
 		//set the difficulty scale
-		if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy )//easy
+		if ( Bootstrap.gameStarter.difficulty == Difficulty.Adventure 
+	        || Bootstrap.gameStarter.difficulty == Difficulty.Easy )//easy
 			difficultyScale = -.25f;
 		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Hard )//hard
 			difficultyScale = .5f;

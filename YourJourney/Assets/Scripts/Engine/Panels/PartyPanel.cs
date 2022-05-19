@@ -86,12 +86,14 @@ public class PartyPanel : MonoBehaviour
 
 	public void OnDifficulty()
 	{
-		if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy )
+		if ( Bootstrap.gameStarter.difficulty == Difficulty.Adventure )
+			Bootstrap.gameStarter.difficulty = Difficulty.Easy;
+		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Easy )
 			Bootstrap.gameStarter.difficulty = Difficulty.Normal;
 		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Normal )
 			Bootstrap.gameStarter.difficulty = Difficulty.Hard;
 		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Hard )
-			Bootstrap.gameStarter.difficulty = Difficulty.Easy;
+			Bootstrap.gameStarter.difficulty = Difficulty.Adventure;
 		diffText.text = Bootstrap.gameStarter.difficulty.ToString();
 		//set campaign state difficulty, if it exists
 		if ( Bootstrap.campaignState != null )

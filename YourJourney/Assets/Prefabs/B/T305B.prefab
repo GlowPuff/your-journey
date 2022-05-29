@@ -161,9 +161,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 0}
   currentConnectorID: 0
-  isExplored: 0
   rootPosition: {fileID: 9046796554937600336}
   tilemesh: {fileID: 0}
+  tokenTriggerList: []
 --- !u!1 &15366712662536100
 GameObject:
   m_ObjectHideFlags: 0

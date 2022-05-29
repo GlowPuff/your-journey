@@ -37,7 +37,7 @@ public class Monster
 
 	[DefaultValue( true )]
 	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
-	public bool isAdventure { get; set; }
+	public bool isEasy { get; set; } //adventure mode
 	[DefaultValue( true )]
 	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
 	public bool isNormal { get; set; }
@@ -91,7 +91,7 @@ public class Monster
 	//returns true if this monster can appear in current difficulty
 	public bool IsValid()
 	{
-		if ( Bootstrap.gameStarter.difficulty == Difficulty.Adventure && isAdventure )
+		if ( Bootstrap.gameStarter.difficulty == Difficulty.Adventure && isEasy )
 			return true;
 		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Normal && isNormal )
 			return true;
@@ -205,7 +205,7 @@ public class Monster
 			specialAbility = special,
 			triggerName = "None",
 			singlecost = MonsterCost[(int)mType],
-			isAdventure = true,
+			isEasy = true,
 			isNormal = true,
 			isHard = true,
 			negatedBy = Ability.Might

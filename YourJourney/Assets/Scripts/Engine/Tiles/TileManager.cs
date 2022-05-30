@@ -93,6 +93,8 @@ public class TileManager : MonoBehaviour
 			//Shadowed Paths Expansion Tiles
 			case 102:
 				return tilePrefabs[22];
+			case 210:
+				return tilePrefabs[23];
 
 			//Default
 			default:
@@ -104,6 +106,7 @@ public class TileManager : MonoBehaviour
 	{
 		switch ( id )
 		{
+			//Original JiME Tiles
 			case 100:
 				return tilePrefabsB[0];
 			case 101:
@@ -148,6 +151,14 @@ public class TileManager : MonoBehaviour
 				return tilePrefabsB[20];
 			case 400:
 				return tilePrefabsB[21];
+
+			//Shadowed Paths Expansion Tiles
+			case 102:
+				return tilePrefabsB[22];
+			case 210:
+				return tilePrefabsB[23];
+
+			//Default
 			default:
 				return tilePrefabsB[0];
 		}

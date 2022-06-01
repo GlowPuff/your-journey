@@ -111,6 +111,14 @@ public class TileManager : MonoBehaviour
 				return tilePrefabs[30];
 			case 218:
 				return tilePrefabs[31];
+			case 219:
+				return tilePrefabs[32];
+			case 220:
+				return tilePrefabs[33];
+			case 221:
+				return tilePrefabs[34];
+			case 309:
+				return tilePrefabs[35];
 
 			//Default
 			default:

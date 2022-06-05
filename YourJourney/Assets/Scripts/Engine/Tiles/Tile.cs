@@ -38,6 +38,10 @@ public class Tile : MonoBehaviour
 	TriggerManager triggerManager;
 	CamControl camControl;
 
+	public GameObject anchorSphere;
+	public GameObject connectorSphere;
+	public GameObject specialSphere;
+
 	public void Awake()
 	{
 		interactionManager = FindObjectOfType<InteractionManager>();
@@ -424,6 +428,59 @@ public class Tile : MonoBehaviour
 		}
 	}
 
+	public void RevealAllAnchorConnectorTokens()
+    {
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			Transform child = transform.GetChild(i);
+
+			if (child.name.Contains("anchor"))
+			{
+				RevealAnchorConnectorToken(child, "anchor");
+			}
+			else if (child.name.Contains("connector"))
+			{
+				RevealAnchorConnectorToken(child, "connector");
+			}
+		}
+	}
+
+	/// <summary>
+	/// reveal anchor/connector/special placeholder token for debug purposes
+	/// </summary>
+	void RevealAnchorConnectorToken(Transform t, string tokenName)
+	{
+		var center = tilemesh.GetComponent<MeshRenderer>().bounds.center;
+
+		GameObject token = null;
+		if(tokenName == "anchor")
+        {
+			//token = Instantiate(anchorSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
+			token = Instantiate(anchorSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
+			//token = Instantiate(anchorSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
+			Debug.Log("anchor at " + t.localPosition);
+        }
+		else if(tokenName == "connector")
+        {
+			//token = Instantiate(connectorSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
+			token = Instantiate(connectorSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
+			//token = Instantiate(connectorSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
+			Debug.Log("connector at " + t.localPosition);
+        }
+		else if (tokenName == "special")
+		{
+			//token = Instantiate(specialSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
+			token = Instantiate(specialSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
+			//token = Instantiate(specialSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
+			Debug.Log("special at " + t.localPosition);
+		}
+		if (token != null)
+		{
+			token.transform.parent = transform;
+			token.SetActive(true);
+		}
+	}
+
 	public bool HasTriggeredToken( string name )
 	{
 		bool found = false;
@@ -539,7 +596,15 @@ public class Tile : MonoBehaviour
 			}
 			else if ( objectHit.name.Contains( "Token" ) )
 			{
-				camControl.MoveTo( objectHit.parent.GetComponent<Tile>().centerPosition, .2f );
+				Debug.Log("name " + objectHit.name);
+				Debug.Log("parent " + objectHit.parent);
+				Debug.Log("tile " + objectHit.parent.GetComponent<Tile>());
+				Debug.Log("center " + objectHit.parent.GetComponent<Tile>().centerPosition);
+				Debug.Log("camControl " + camControl);
+				if (camControl != null)
+				{
+					camControl.MoveTo(objectHit.parent.GetComponent<Tile>().centerPosition, .2f);
+				}
 				QueryTokenInteraction( objectHit );
 				return true;
 			}

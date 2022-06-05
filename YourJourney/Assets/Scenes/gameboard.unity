@@ -5991,6 +5991,12 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: 81c441bb5996614408a779877e2da359, type: 3}
   - {fileID: 15366712624692153, guid: 7cfb3592c4b3ad3418d308566ccec03d, type: 3}
   - {fileID: 15366712624692153, guid: 6d399a8f971664d4c843034e92321085, type: 3}
+  - {fileID: 15366712624692153, guid: 5615a4356a62f8d49891e25a7a7e414d, type: 3}
+  - {fileID: 15366712624692153, guid: c7f82b880828e21418e388a659e53e45, type: 3}
+  - {fileID: 15366712624692153, guid: bc549c0eee0f4304b9ceda528a554fdc, type: 3}
+  - {fileID: 15366712624692153, guid: c55377bc69a850a4991009dafbc4151f, type: 3}
+  - {fileID: 15366712624692153, guid: 413a25761ddb390418340b9fdf340e51, type: 3}
+  - {fileID: 15366712624692153, guid: c8fd861c7466c6b438b9a387d47d0c81, type: 3}
   tilePrefabsB:
   - {fileID: 15366712624692153, guid: fb3903cc4747df14fb6fe521b828750e, type: 3}
   - {fileID: 15366712624692153, guid: b68125ca865b393448370a3fdeae9b6e, type: 3}
@@ -6059,6 +6065,7 @@ MonoBehaviour:
   music: {fileID: 924888960}
   volume: {fileID: 513023858}
   errorText: {fileID: 1610728912}
+  debug: 1
 --- !u!114 &965560139
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -100,6 +100,8 @@ public class TileGroup
 			tile.hexTile = hexroot;
 			tile.tileGroup = this;
 			tile.chapter = c;
+//tile.gameObject.SetActive(true);
+//tile.RevealAllAnchorConnectorTokens();
 			//rotate go object
 			tile.transform.parent.localRotation = Quaternion.Euler( 0, hexroot.angle, 0 );
 			//set go's parent
@@ -200,6 +202,8 @@ public class TileGroup
 			tile.chapter = c;
 			tile.hexTile = h;
 			tile.tileGroup = this;
+//tile.gameObject.SetActive(true);
+//tile.RevealAllAnchorConnectorTokens();
 			if ( i > 0 )
 			{
 				//3D distance between tiles in X = 0.75
@@ -226,11 +230,19 @@ public class TileGroup
 				Vector3 tilefix = Vector3.zero;
 				//convert the string to vector2
 				string[] s = tile.hexTile.hexRoot.Split( ',' );
+				Debug.Log("hexRoot::" + goc.name + "::" + tile.hexTile.hexRoot);
 				Vector2 p = new Vector2( float.Parse( s[0] ), float.Parse( s[1] ) );
-				if ( p.y != 1 )
-					tilefix = new Vector3( 0, 0, -.4330127f * ( p.y - 1f ) );
-				if ( p.x != 0 )
-					tilefix = new Vector3( p.x * .75f, 0, 0 );
+				if (p.y != 1)
+				{
+					//Debug.Log("tilefix>.Z::" + goc.name + "::" + (-.4330127f * (p.y - 1f)));
+					tilefix.z = -.4330127f * ( p.y - 1f );
+				}
+				if (p.x != 0)
+				{
+					//Debug.Log("tilefix>.X::" + goc.name + "::" + (p.x * .75f));
+					tilefix.x = p.x * .75f;
+				}
+				//Debug.Log("tilefix>::" + goc.name + "::" + tilefix);
 
 				//set tile position using goc's position + reflected offset
 				tile.SetPosition( tileList[0].transform.parent.transform.position + n + tilefix, h.angle );
@@ -243,11 +255,20 @@ public class TileGroup
 				Vector3 tilefix = Vector3.zero;
 				//convert the string to vector2
 				string[] s = tile.hexTile.hexRoot.Split( ',' );
+				//Debug.Log("hexRoot::" + goc.name + "::" + tile.hexTile.hexRoot);
 				Vector2 p = new Vector2( float.Parse( s[0] ), float.Parse( s[1] ) );
-				if ( p.y != 1 )
-					tilefix = new Vector3( 0, 0, -.4330127f * ( p.y - 1f ) );
-				if ( p.x != 0 )
-					tilefix = new Vector3( p.x * .75f, 0, 0 );
+				if (p.y != 1)
+				{
+					//Debug.Log("tilefix0.Z::" + goc.name + "::" + (-.4330127f * (p.y - 1f)));
+					tilefix.z = -.4330127f * ( p.y - 1f );
+				}
+				if (p.x != 0)
+				{
+					//Debug.Log("tilefix0.X::" + goc.name + "::" + (p.x * .75f));
+					tilefix.x = p.x * .75f;
+				}
+				//tilefix = new Vector3(p.x * .75f, 0, p.y * 0.4330127f);
+				//Debug.Log("tilefix0::" + goc.name + "::" + tilefix);
 				tile.SetPosition( Vector3.zero, h.angle );
 				tile.transform.position += tilefix;
 			}
@@ -728,6 +749,8 @@ public class TileGroup
 	/// </summary>
 	public Vector3[] GetOpenConnectors()
 	{
+		var bar = from tile in tileList from c in tile.GetChildren("connector") select c.name;
+		Debug.Log("openConnectors: " + string.Join(", ", bar.ToArray()));
 		var foo = from tile in tileList from c in tile.GetChildren( "connector" ) select c.position;
 		return foo.ToArray();
 	}
@@ -764,6 +787,8 @@ public class TileGroup
 	/// </summary>
 	public Vector3[] GetOpenAnchors()
 	{
+		var bar = from tile in tileList from c in tile.GetChildren("anchor") select c.name;
+		Debug.Log("openConnectors: " + string.Join(", ", bar.ToArray()));
 		var allAnchors = from tile in tileList from tf in tile.GetChildren( "anchor" ) select tf.position;
 		return allAnchors.ToArray();
 	}
@@ -823,8 +848,10 @@ public class TileGroup
 
 	public void ActivateTiles()
 	{
-		foreach ( Tile tile in tileList )
-			tile.gameObject.SetActive( true );
+		foreach (Tile tile in tileList)
+		{
+			tile.gameObject.SetActive(true);
+		}
 	}
 
 	/// <summary>

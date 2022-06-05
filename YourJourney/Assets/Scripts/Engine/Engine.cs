@@ -25,7 +25,7 @@ public class Engine : MonoBehaviour
 	public PostProcessVolume volume;
 	public Text errorText;
 
-	bool debug = false;
+	public bool debug = false;
 
 	bool doneLoading = false;
 

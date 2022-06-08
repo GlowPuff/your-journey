@@ -966,7 +966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiRoot: {fileID: 1996677956}
   focusDistMin: 1.4
-  focusDistMax: 3
+  focusDistMax: 30
   postProcProf: {fileID: 11400000, guid: 7a9b60748b9a6e0468775bb32cd7dd38, type: 2}
   partyPanel: {fileID: 365931356}
   moveDragSpeed: 5

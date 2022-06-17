@@ -12,13 +12,26 @@ public class ChapterManager : MonoBehaviour
 
 	TileGroup previousGroup;
 	List<string> tokenTriggerQueue = new List<string>();
-	List<int> darknessTiles = new List<int>();
+	List<string> darknessTiles = new List<string>();
+	List<string> difficultTiles = new List<string>();
 
 	public void Init( Scenario s )
 	{
 		chapterList = new List<Chapter>( s.chapterObserver );
 		previousGroup = null;
-		darknessTiles.AddRange( new int[] { 204, 207, 208, 303, 306, 307 } );
+		darknessTiles.AddRange( new string[] { 
+				//JiME Base Game
+				"204B", "207B", "208B", "303B", "306B", "307B",
+				//Shadowed Paths
+				"212A", "215A", "216A", "219A", "221A", "310A",
+				"102B", "210B", "211B", "212B", "213B", "214B", "215B", "216B", "217B", "218B", 
+				"309B", "310B", "311B", "312B", "401B", "402B"
+			} );
+		difficultTiles.AddRange(new string[] {
+				//Shadowed Paths
+				"210A", "214A", "220A", "311A", "313A", "401A", "402A",
+				"214B", "220B", "313B", 
+			} );
 		//Debug.Log( $"Chapter Manager: {chapterList.Count} Chapters Found" );
 	}
 
@@ -41,8 +54,8 @@ public class ChapterManager : MonoBehaviour
 			from tg in tm
 			from tile in tg.tileList
 			where tile.isExplored
-			where tile.hexTile.tileSide == "B"
-			where darknessTiles.Contains( tile.hexTile.idNumber )
+			//where tile.hexTile.tileSide == "B"
+			where darknessTiles.Contains( "" + tile.hexTile.idNumber + tile.hexTile.tileSide)
 			select tile;
 
 		//int tk = tokensfound.Count();

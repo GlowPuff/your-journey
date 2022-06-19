@@ -47,7 +47,12 @@ public class Monster
 	[JsonIgnore]
 	public ThreatInteraction interaction;//the interaction that spawned this
 
-	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Warg", "Hill Troll", "Wight" };
+	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Warg", "Hill Troll", "Wight",
+											"Atarin", "Gulgotar", "Coalfang",
+											"Giant Spider", "Pit Goblin", "Orc Taskmaster", "Shadowman", "Nameless Thing", "Cave Troll", "Balrog", "Spawn of Ungoliant",
+											"Supplicant of Morgoth", "Ursa", "Ollie",
+											"Fell Beast", "Warg Rider", "Siege Engine", "War Oliphaunt", "Soldier", "Uruk Warrior"
+	};
 
 	public int[] currentHealth { get; set; } = new int[3];
 	public bool isDead;

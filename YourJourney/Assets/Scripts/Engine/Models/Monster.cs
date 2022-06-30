@@ -65,7 +65,12 @@ public class Monster
 	public float singlecost;
 
 	//lines up with MonsterType enum
-	public static int[] MonsterCost = new int[7] { 3, 3, 6, 6, 7, 9, 7 };
+	public static int[] MonsterCost = new int[] { 7, 4, 10, 9, 14, 25, 17, //Core Set
+		14, 22, 28, //Villains of Eriador
+		5, 4, 14, 17, 27, 20, 50, 36, //Shadowed Paths
+		34, 28, 40, //Dwellers in Darkness
+		24, 14, 22, 30, 8, 11 //Spreading War
+	};
 	//large, bloodthirsty, armored
 	public static int[] ModCost = new int[3] { 1, 2, 1 };
 	public static string[] modNames = new string[3] { "Large", "Bloodthirsty", "Armored" };
@@ -151,6 +156,7 @@ public class Monster
 
 		switch ( mType )
 		{
+			//Core Set
 			case MonsterType.GoblinScout:
 				mHealth = 3;
 				mDamage = 2;
@@ -194,6 +200,41 @@ public class Monster
 				mSpeed = 1;
 				sorc = 3;
 				special = "Fear Bias";
+				break;
+			//Villains of Eriador
+			case MonsterType.Atarin:
+			case MonsterType.Gulgotar:
+			case MonsterType.Coalfang:
+			//Shadowed Paths
+			case MonsterType.GiantSpider:
+			case MonsterType.PitGoblin:
+			case MonsterType.OrcTaskmaster:
+			case MonsterType.Shadowman:
+			case MonsterType.NamelessThing:
+			case MonsterType.CaveTroll:
+			case MonsterType.Balrog:
+			case MonsterType.SpawnOfUngoliant:
+			//Dwellers in Darkness
+			case MonsterType.SupplicantOfMorgoth:
+			case MonsterType.Ursa:
+			case MonsterType.Ollie:
+			//Spreading War
+			case MonsterType.FellBeast:
+			case MonsterType.WargRider:
+			case MonsterType.SiegeEngine:
+			case MonsterType.WarOliphaunt:
+			case MonsterType.Soldier:
+			case MonsterType.UrukWarrior:
+				mHealth = 3;
+				mDamage = 2;
+				mSpeed = 2;
+				armor = 1;
+				break;
+			default:
+				mHealth = 3;
+				mDamage = 2;
+				mSpeed = 2;
+				armor = 1;
 				break;
 		}
 

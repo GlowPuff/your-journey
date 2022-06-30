@@ -35,7 +35,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 8d242c989899e954eaaf392790d9ad1c, type: 3}
     - {fileID: 102900000, guid: c80935fd8efbc4b4abb7edc027a64235, type: 3}
     - {fileID: 102900000, guid: ddca5c03c60fd6145b5dcad61a41bf74, type: 3}
-    totalSpriteSurfaceArea: 4809565
+    totalSpriteSurfaceArea: 5518910
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -77,6 +77,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: bed30d1456eaf6d43b6fb1098268d2ac, type: 3}
   - {fileID: 21300000, guid: a720bd3400f257545a72ce73bb6b934c, type: 3}
   - {fileID: 21300000, guid: 162ea754fb93a754d94c74d3cd376716, type: 3}
+  - {fileID: 21300000, guid: 12037c540aa96a840a41d9599a7c12a0, type: 3}
   - {fileID: 21300000, guid: 3a2318847ebbc464fa619e5b852dab9c, type: 3}
   - {fileID: 21300000, guid: 269f46c45d859ed49a0830f872c5b9ab, type: 3}
   - {fileID: 21300000, guid: f0a06a05db457674aa9e8b293aa78be8, type: 3}
@@ -91,12 +92,14 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 8bb09d169ab3ca147b549b1c0c8e571f, type: 3}
   - {fileID: 21300000, guid: daef5826bd5c6e641960d1fa62fee613, type: 3}
   - {fileID: 21300000, guid: 40b8004645f1cbd46af1abb23abc2072, type: 3}
+  - {fileID: 21300000, guid: 10063846e289a3b48bd5240677ca400d, type: 3}
   - {fileID: 21300000, guid: c401338644e34b545bb707e80d464a15, type: 3}
   - {fileID: 21300000, guid: 12975986a21a02a4c818c13cff9e8728, type: 3}
   - {fileID: 21300000, guid: d5161c960c1e95b449355bdaa560d77e, type: 3}
   - {fileID: 21300000, guid: 6e1583a647bb0904baf769f47261702e, type: 3}
   - {fileID: 21300000, guid: 08373fe637f73a5469b61f138dba13a4, type: 3}
   - {fileID: 21300000, guid: fde0c367ed8dfc64cb5b48383a205934, type: 3}
+  - {fileID: 21300000, guid: c6308077d93849444875bbe2a9402e06, type: 3}
   - {fileID: 21300000, guid: 01b9c077be90f19489af093149c867c6, type: 3}
   - {fileID: 21300000, guid: 6a1ee1771b7184240bc5ca0bcce4e023, type: 3}
   - {fileID: 21300000, guid: 5f40078742582a5449d1cae494f821c3, type: 3}
@@ -108,16 +111,24 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 61466ed7ea0b9254183c991a4f7b6f35, type: 3}
   - {fileID: 21300000, guid: 5945e4e7168ae1242b3becb3f20526c7, type: 3}
   - {fileID: 21300000, guid: cf87d038645bc0a49bc45d52136c3987, type: 3}
+  - {fileID: 21300000, guid: eb9f6638dd45d7b4db51947bdc16a39e, type: 3}
+  - {fileID: 21300000, guid: 8ef9273806a91f0439662a87c6ebb8dc, type: 3}
   - {fileID: 21300000, guid: b42bac58a9d4daf42977d9e62185f272, type: 3}
+  - {fileID: 21300000, guid: 85f71a9857a40d249b3f5006759f859a, type: 3}
+  - {fileID: 21300000, guid: a3ccada8b0f143a459d50fcdd541454c, type: 3}
   - {fileID: 21300000, guid: d6bc49c892915d6468527077aa6cb017, type: 3}
   - {fileID: 21300000, guid: 2628b5f85a75ee44a87ca278ab1a7575, type: 3}
   - {fileID: 21300000, guid: d3d6e7191add93545b8fe8cbbc9cf20b, type: 3}
   - {fileID: 21300000, guid: a28511298721d0740acd039690f457fe, type: 3}
   - {fileID: 21300000, guid: a350632916b4327478efc6d716161140, type: 3}
+  - {fileID: 21300000, guid: b7061529a90c08846b76352541dbf1a9, type: 3}
   - {fileID: 21300000, guid: a6ddee49cae35ae45b01141937bdd9b3, type: 3}
   - {fileID: 21300000, guid: 14d90859e17bd6f4fbafbd4c257a3440, type: 3}
   - {fileID: 21300000, guid: 5beb2f9940d52414d97a5bf1fb155ec5, type: 3}
+  - {fileID: 21300000, guid: fd4923a9f4306d6459120c6e47da4a32, type: 3}
+  - {fileID: 21300000, guid: b369e4d9990ba4e46a9ae861c81fb9fe, type: 3}
   - {fileID: 21300000, guid: 55f3744a7e82f734ab05017e49f02cf6, type: 3}
+  - {fileID: 21300000, guid: c704735a9e0760e48a751f1a0a5a9177, type: 3}
   - {fileID: 21300000, guid: 0371595afdd90bb489185f8f57116511, type: 3}
   - {fileID: 21300000, guid: 1c48407a2f1e58b45a7b287d65bd19a7, type: 3}
   - {fileID: 21300000, guid: 49cea87a5b780cb4fa90f90fefe87b91, type: 3}
@@ -135,6 +146,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1785c1abf05b93e4bb8838deed1911ac, type: 3}
   - {fileID: 21300000, guid: d85250cbf3bf5d04a88456d6f5517a9c, type: 3}
   - {fileID: 21300000, guid: b3b003dbd62981c409733b7caa72e163, type: 3}
+  - {fileID: 21300000, guid: 1f26670c783cee14ba02daa128e114e1, type: 3}
   - {fileID: 21300000, guid: 8e98982cf64b8494cb3eba12632628c0, type: 3}
   - {fileID: 21300000, guid: c9af0b2ca29fddb42add166a2b2b9412, type: 3}
   - {fileID: 21300000, guid: 27138e3c1f9aba74a8f9d6451002efff, type: 3}
@@ -148,6 +160,8 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 4618a1dca36f3864584c8fed7d894c42, type: 3}
   - {fileID: 21300000, guid: 8910f05d617cb9e4b90ef0f2a4250496, type: 3}
   - {fileID: 21300000, guid: f8d9817d3525a6e4da6246d7f99b993c, type: 3}
+  - {fileID: 21300000, guid: 6726948d009330b43b46a1e9628cdc46, type: 3}
+  - {fileID: 21300000, guid: f4b2268d83bc3574486c01129ec1fa3e, type: 3}
   - {fileID: 21300000, guid: 114a49fd120d15443a16834b87aaa4e0, type: 3}
   - {fileID: 21300000, guid: 5c19600e842d33b4d8dcaf6eb76fc660, type: 3}
   - {fileID: 21300000, guid: f4da8c0e945df4c4fa372c87bea4e44f, type: 3}
@@ -201,6 +215,7 @@ SpriteAtlas:
   - frame_12_delay-0.11s
   - end turn tick
   - ranged
+  - m-balrog
   - be2
   - be1
   - damage icon
@@ -215,12 +230,14 @@ SpriteAtlas:
   - frame_14_delay-0.11s
   - m-warg
   - frame_01_delay-0.11s
+  - m-cave-troll
   - frame_23_delay-0.1s
   - might
   - frame_28_delay-0.12s
   - frame_04_delay-0.11s
   - m-goblin
   - frame_21_delay-0.1s
+  - m-orc-taskmaster
   - health meter
   - be4
   - end turn meter
@@ -232,16 +249,24 @@ SpriteAtlas:
   - frame_19_delay-0.12s
   - frame_10_delay-0.12s
   - m-ruffian
+  - m-ollie
+  - m-ursa
   - groupindicator
+  - m-gulgotar
+  - m-shadowman
   - frame_26_delay-0.11s
   - frame_24_delay-0.1s
   - m-orc
   - frame_16_delay-0.11s
   - add button
+  - m-pit-goblin
   - be6
   - threat meter
   - frame_09_delay-0.1s
+  - m-supplicant-of-morgoth
+  - m-nameless-thing
   - frame_15_delay-0.1s
+  - m-coalfang
   - frame_23_delay-0.11s
   - wisdom
   - frame_16_delay-0.1s
@@ -259,6 +284,7 @@ SpriteAtlas:
   - frame_25_delay-0.11s
   - sphere
   - frame_05_delay-0.11s
+  - m-giant-spider
   - frame_13_delay-0.1s
   - fear icon
   - selected monster
@@ -272,6 +298,8 @@ SpriteAtlas:
   - m-troll
   - spirit
   - provoke
+  - m-atarin
+  - m-spawn-of-ungoliant
   - frame_29_delay-0.11s
   - frame_17_delay-0.11s
   - m-wraith

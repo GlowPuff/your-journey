@@ -3,7 +3,11 @@ using UnityEngine;
 
 public enum ScenarioType { Journey, Battle }
 public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional, Dialog, Replace, Reward }
-public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, Warg, HillTroll, Wight }
+public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, Warg, HillTroll, Wight, 
+						Atarin, Gulgotar, Coalfang,
+						GiantSpider, PitGoblin, OrcTaskmaster, Shadowman, NamelessThing, CaveTroll, Balrog, SpawnOfUngoliant,
+						SupplicantOfMorgoth, Ursa, Ollie,
+						FellBeast, WargRider, SiegeEngine, WarOliphaunt, Soldier, UrukWarrior}
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle }
 public enum ProjectType { Standalone, Campaign }

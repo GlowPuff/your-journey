@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,9 +11,21 @@ public class SelectHeroes : MonoBehaviour
 	public SpecialInstructions specialInstructions;
 	public Image finalFader;
 	public Button[] heroButtons;
-	public Button beginButton, backButton;
+	public Button beginButton, backButton, leftScrollButton, rightScrollButton;
 	public Text[] heroNameText;
 	public Text diffText;
+
+	public Sprite heroImageBlank;
+	public Sprite[] heroImage;
+	public string[] heroName;
+	public string[] heroCollection;
+	int totalHeroe = 0;
+	int lineupOffset = 0;
+	int lineupTotal = 0;
+	int lineupSize = 6;
+	int maxHeroes = 5;
+	int heroCount = 0;
+
 
 	bool[] selectedHeroes;
 	string tempName;
@@ -24,7 +37,8 @@ public class SelectHeroes : MonoBehaviour
 	{
 		titleMetaData = metaData;
 		gameObject.SetActive( true );
-		selectedHeroes = new bool[6].Fill( false );
+		lineupTotal = heroImage.Length;
+		selectedHeroes = new bool[heroImage.Length].Fill( false );
 		diffText.text = "Normal";
 		ResetHeros();
 
@@ -39,51 +53,111 @@ public class SelectHeroes : MonoBehaviour
 
 	public void OnHeroSelect( int index )
 	{
+		int lineupIndex = lineupOffset + index;
 		isChangingName = false;
 		if ( nameIndex != -1 )
 		{
 			heroNameText[nameIndex].color = Color.white;
 			heroNameText[nameIndex].text = tempName;
+			heroName[lineupOffset + nameIndex] = tempName;
 		}
 
-		ColorBlock cb = heroButtons[index].colors;
-		heroButtons[index].colors = new ColorBlock()
+		if (heroCount < maxHeroes || selectedHeroes[lineupIndex]) //Process the click if there are still hero slots left or if we're deselecting
 		{
-			normalColor = new Color( 1, 167f / 255f, 124f / 255f, 1 ),
-			pressedColor = cb.pressedColor,
-			selectedColor = new Color( 1, 167f / 255f, 124f / 255f, 1 ),
-			colorMultiplier = cb.colorMultiplier,
-			disabledColor = cb.disabledColor,
-			fadeDuration = cb.fadeDuration,
-			highlightedColor = cb.highlightedColor
-		};
-		selectedHeroes[index] = !selectedHeroes[index];
+			ColorBlock cb = heroButtons[index].colors;
+			selectedHeroes[lineupIndex] = !selectedHeroes[lineupIndex];
+			heroCount += selectedHeroes[lineupIndex] ? 1 : -1;
+			heroButtons[index].colors = new ColorBlock()
+			{
+				normalColor = selectedHeroes[lineupIndex] ? new Color(1, 167f / 255f, 124f / 255f, 1) : new Color(1, 1, 1, 1),
+				pressedColor = cb.pressedColor,
+				selectedColor = selectedHeroes[index] ? new Color(1, 1, 1, 1) : new Color(1, 167f / 255f, 124f / 255f, 1),
+				colorMultiplier = cb.colorMultiplier,
+				disabledColor = cb.disabledColor,
+				fadeDuration = cb.fadeDuration,
+				highlightedColor = cb.highlightedColor
+			};
+		}
+		heroButtons[index].enabled = false;
+		heroButtons[index].enabled = true;
 
-		ResetHeros();
+		//ResetHeros();
 
 		beginButton.interactable = selectedHeroes.Any( b => b );
 	}
 
+	public void OnHeroScroll( int direction )
+    {
+		Debug.Log("Scroll " + (direction < 0 ? "left" : "right") + "...");
+		bool updated = false;
+		if (direction == -1)
+		{
+			if (lineupOffset > 0)
+			{
+				lineupOffset -= lineupSize;
+				if (lineupOffset < 0) { lineupOffset = 0; }
+				updated = true;
+			}
+		}
+		else
+        {
+			//Check if we can scroll right
+			if (lineupOffset + lineupSize < lineupTotal)
+			{
+				lineupOffset += lineupSize;
+				updated = true;
+			}
+		}
+
+		if(updated)
+        {
+			for(int i=0, j=lineupOffset; i<lineupSize; i++, j++)
+            {
+				if (j < lineupTotal)
+				{
+					heroButtons[i].GetComponent<Image>().sprite = heroImage[j];
+					heroNameText[i].text = heroName[j];
+					heroButtons[i].interactable = true;
+				}
+				else
+                {
+					heroButtons[i].GetComponent<Image>().sprite = heroImageBlank;
+					heroNameText[i].text = "";
+					heroButtons[i].interactable = false;
+                }
+			}
+        }
+
+		leftScrollButton.interactable = lineupOffset > 0;
+		rightScrollButton.interactable = (lineupOffset + lineupSize > lineupTotal) ? false : true;
+
+		ResetHeros();
+	}
+
 	void ResetHeros()
 	{
-		for ( int i = 0; i < 6; i++ )
+		for ( int i=0, j=lineupOffset; i < lineupSize && j < lineupTotal; i++, j++ )
 		{
 			heroNameText[i].color = Color.white;
-			heroNameText[i].text = Bootstrap.GetHeroName( i );
+			string savedName = Bootstrap.GetHeroName(j);
+			heroNameText[i].text = String.IsNullOrWhiteSpace(savedName) ? savedName : heroName[j];
+			heroName[j] = heroNameText[i].text;
 			ColorBlock cb = heroButtons[i].colors;
-			if ( !selectedHeroes[i] )
-			{
+			//if ( selectedHeroes[j] )
+			//{
 				heroButtons[i].colors = new ColorBlock()
 				{
-					normalColor = new Color( 1, 167f / 255f, 124f / 255f, 0 ),
+					normalColor = selectedHeroes[j] ? new Color(1, 167f / 255f, 124f / 255f, 1) : new Color(1, 1, 1, 1),
 					pressedColor = cb.pressedColor,
-					selectedColor = new Color( 1, 167f / 255f, 124f / 255f, 0 ),
+					selectedColor = selectedHeroes[j] ? new Color(1, 1, 1, 1) : new Color( 1, 167f / 255f, 124f / 255f, 1 ),
 					colorMultiplier = cb.colorMultiplier,
 					disabledColor = cb.disabledColor,
 					fadeDuration = cb.fadeDuration,
 					highlightedColor = cb.highlightedColor
 				};
-			}
+			//}
+			heroButtons[i].enabled = false;
+			heroButtons[i].enabled = true;
 		}
 	}
 
@@ -111,13 +185,21 @@ public class SelectHeroes : MonoBehaviour
 	{
 		beginButton.interactable = backButton.interactable = false;
 		string[] sh = new string[6].Fill( "" );
-		for ( int i = 0; i < 6; i++ )
+		int shIndex = 0;
+		for ( int j=0; j < lineupTotal; j++ )
 		{
-			if ( selectedHeroes[i] )
-				sh[i] = heroNameText[i].text;
+			if (selectedHeroes[j])
+			{
+				sh[shIndex] = heroName[j];
+				shIndex++;
+			}
 		}
 		sh = sh.Where( s => !string.IsNullOrEmpty( s ) ).ToArray();
 		titleMetaData.selectedHeroes = sh;
+		foreach (string name in titleMetaData.selectedHeroes)
+        {
+			Debug.Log("Selected " + name);
+        }
 
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
@@ -167,6 +249,7 @@ public class SelectHeroes : MonoBehaviour
 				isChangingName = false;
 				heroNameText[nameIndex].color = Color.white;
 				heroNameText[nameIndex].text = tempName;
+				heroName[lineupOffset + nameIndex] = tempName;
 				return;
 			}
 
@@ -177,20 +260,27 @@ public class SelectHeroes : MonoBehaviour
 					if ( heroNameText[nameIndex].text.Length != 0 )
 					{
 						heroNameText[nameIndex].text = heroNameText[nameIndex].text.Substring( 0, heroNameText[nameIndex].text.Length - 1 );
+						heroName[lineupOffset + nameIndex] = heroNameText[nameIndex].text;
 					}
 				}
 				else if ( ( c == '\n' ) || ( c == '\r' ) ) // enter/return
 				{
 					isChangingName = false;
 					heroNameText[nameIndex].color = Color.white;
-					if ( string.IsNullOrEmpty( heroNameText[nameIndex].text ) )
+					if (string.IsNullOrEmpty(heroNameText[nameIndex].text))
+					{
 						heroNameText[nameIndex].text = tempName;
+						heroName[lineupOffset + nameIndex] = tempName;
+					}
 					else
-						Bootstrap.SaveHeroName( nameIndex, heroNameText[nameIndex].text );
+					{
+						Bootstrap.SaveHeroName(lineupOffset + nameIndex, heroNameText[nameIndex].text);
+					}
 				}
 				else
 				{
 					heroNameText[nameIndex].text += c;
+					heroName[lineupOffset + nameIndex] = heroNameText[nameIndex].text;
 				}
 			}
 		}

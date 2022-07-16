@@ -185,6 +185,7 @@ public class GameState
 					fullSavePath = fi.FullName,
 					heroes = state.partyState.heroes.Aggregate( ( acc, cur ) => acc + ", " + cur ),
 					heroArray = state.partyState.heroes,
+					heroIndexArray = state.partyState.heroesIndex,
 					projectType = ProjectType.Standalone,
 					campaignState = null
 				} );
@@ -199,6 +200,7 @@ public class GameState
 				{
 					gameName = state.campaignState.gameName,
 					heroes = state.campaignState.heroes.Aggregate( ( acc, cur ) => acc + ", " + cur ),
+					heroIndexArray = state.campaignState.heroesIndex,
 					projectType = ProjectType.Campaign,
 					campaignState = state.campaignState,
 					stateGUID = state.campaignState.campaign.campaignGUID,
@@ -253,6 +255,7 @@ public class CampaignState
 	//this data has to be set before starting a new campaign
 	public int saveStateIndex;
 	public string[] heroes;
+	public int[] heroesIndex;
 	public string gameName;
 	public Difficulty difficulty;
 	//list of FIRED campaign triggers
@@ -326,6 +329,7 @@ public class PartyState
 	public Guid scenarioGUID { get; set; }
 	public Difficulty difficulty { get; set; }
 	public string[] heroes { get; set; }
+	public int[] heroesIndex { get; set; }
 	public int[] lastStandCounter { get; set; }
 	public bool[] isDead { get; set; }
 	public int loreCount { get; set; }
@@ -349,6 +353,7 @@ public class PartyState
 			threatThreshold = (int)engine.endTurnButton.currentThreat,
 			threatStack = engine.endTurnButton.threatStack,
 			heroes = Bootstrap.gameStarter.heroes,
+			heroesIndex = Bootstrap.gameStarter.heroesIndex,
 			lastStandCounter = Bootstrap.lastStandCounter,
 			isDead = Bootstrap.isDead,
 			fogList = engine.GetFogState(),
@@ -362,6 +367,7 @@ public class PartyState
 		Bootstrap.gameStarter.saveStateIndex = saveStateIndex;
 		Bootstrap.gameStarter.scenarioFileName = scenarioFileName;
 		Bootstrap.gameStarter.heroes = heroes;
+		Bootstrap.gameStarter.heroesIndex = heroesIndex;
 
 		Bootstrap.gameStarter.difficulty = difficulty;
 		Bootstrap.lastStandCounter = lastStandCounter;

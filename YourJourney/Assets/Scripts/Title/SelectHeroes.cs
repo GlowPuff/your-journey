@@ -3,6 +3,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class SelectHeroes : MonoBehaviour
 {
@@ -13,13 +14,13 @@ public class SelectHeroes : MonoBehaviour
 	public Button[] heroButtons;
 	public Button beginButton, backButton, leftScrollButton, rightScrollButton;
 	public Text[] heroNameText;
+	public Text[] heroCollectionText;
 	public Text diffText;
 
 	public Sprite heroImageBlank;
 	public Sprite[] heroImage;
 	public string[] heroName;
 	public string[] heroCollection;
-	int totalHeroe = 0;
 	int lineupOffset = 0;
 	int lineupTotal = 0;
 	int lineupSize = 6;
@@ -116,12 +117,14 @@ public class SelectHeroes : MonoBehaviour
 				if (j < lineupTotal)
 				{
 					heroButtons[i].GetComponent<Image>().sprite = heroImage[j];
+					heroCollectionText[i].text = heroCollection[j];
 					heroNameText[i].text = heroName[j];
 					heroButtons[i].interactable = true;
 				}
 				else
                 {
 					heroButtons[i].GetComponent<Image>().sprite = heroImageBlank;
+					heroCollectionText[i].text = "";
 					heroNameText[i].text = "";
 					heroButtons[i].interactable = false;
                 }
@@ -129,7 +132,7 @@ public class SelectHeroes : MonoBehaviour
         }
 
 		leftScrollButton.interactable = lineupOffset > 0;
-		rightScrollButton.interactable = (lineupOffset + lineupSize > lineupTotal) ? false : true;
+		rightScrollButton.interactable = (lineupOffset + lineupSize >= lineupTotal) ? false : true;
 
 		ResetHeros();
 	}
@@ -184,22 +187,21 @@ public class SelectHeroes : MonoBehaviour
 	public void OnNext()
 	{
 		beginButton.interactable = backButton.interactable = false;
-		string[] sh = new string[6].Fill( "" );
+		string[] shn = new string[6].Fill( "" ); //names
+		int[] shi = new int[6].Fill(-1); //index, used for images
 		int shIndex = 0;
 		for ( int j=0; j < lineupTotal; j++ )
 		{
 			if (selectedHeroes[j])
 			{
-				sh[shIndex] = heroName[j];
+				shn[shIndex] = heroName[j];
+				shi[shIndex] = j; //AssetDatabase.GetAssetPath(heroImage[j]);
 				shIndex++;
 			}
 		}
-		sh = sh.Where( s => !string.IsNullOrEmpty( s ) ).ToArray();
-		titleMetaData.selectedHeroes = sh;
-		foreach (string name in titleMetaData.selectedHeroes)
-        {
-			Debug.Log("Selected " + name);
-        }
+		shn = shn.Where( s => !string.IsNullOrEmpty( s ) ).ToArray();
+		titleMetaData.selectedHeroes = shn;
+		titleMetaData.selectedHeroesIndex = shi;
 
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
@@ -212,6 +214,7 @@ public class SelectHeroes : MonoBehaviour
 				CampaignState campaignState = new CampaignState( FileManager.LoadCampaign( titleMetaData.projectItem.campaignGUID ) );
 				titleMetaData.campaignState = campaignState;
 				titleMetaData.campaignState.heroes = titleMetaData.selectedHeroes;
+				titleMetaData.campaignState.heroesIndex = titleMetaData.selectedHeroesIndex;
 				titleMetaData.campaignState.gameName = titleMetaData.gameName;
 				titleMetaData.campaignState.saveStateIndex = titleMetaData.saveStateIndex;
 				titleMetaData.campaignState.difficulty = titleMetaData.difficulty;

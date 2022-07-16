@@ -300,6 +300,7 @@ public class SelectSaveSlot : MonoBehaviour
 						}
 						gameStarter.scenarioFileName = selectedState.scenarioFilename;
 						gameStarter.heroes = selectedState.heroArray;
+						gameStarter.heroesIndex = selectedState.heroIndexArray;
 						gameStarter.isNewGame = false;
 
 						Bootstrap.campaignState = null;

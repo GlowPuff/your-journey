@@ -7,6 +7,7 @@ public class HeroItem : MonoBehaviour
 	public Text heroNameText, thresholdText;
 	public Button dButton, fButton;
 	public Image skullImage;
+	public Image portraitImage;
 	[HideInInspector]
 	public PartyPanel pPanel;
 
@@ -62,6 +63,12 @@ public class HeroItem : MonoBehaviour
 
 		thresholdText.text = Bootstrap.lastStandCounter[heroIndex].ToString();
 		heroNameText.text = Bootstrap.gameStarter.heroes[heroIndex];
+
+		//Load portrait image based on the portrait index, e.g p0.png or p63.png
+		Sprite portraitSprite = Resources.Load<Sprite>("Images/Portraits/p" + Bootstrap.gameStarter.heroesIndex[heroIndex]);
+		portraitImage.GetComponent<Image>().sprite = portraitSprite;
+
+
 		dButton.interactable = !Bootstrap.isDead[heroIndex];
 		fButton.interactable = !Bootstrap.isDead[heroIndex];
 		if ( Bootstrap.isDead[heroIndex] )

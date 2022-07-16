@@ -64,8 +64,9 @@ public class SpecialInstructions : MonoBehaviour
 		gameStarter.gameName = titleMetaData.gameName;
 		gameStarter.saveStateIndex = titleMetaData.saveStateIndex;
 		gameStarter.scenarioFileName = titleMetaData.projectItem.fileName;
-		gameStarter.heroes = titleMetaData.selectedHeroes;
-		gameStarter.difficulty = titleMetaData.difficulty;
+        gameStarter.heroes = titleMetaData.selectedHeroes;
+		gameStarter.heroesIndex = titleMetaData.selectedHeroesIndex;
+        gameStarter.difficulty = titleMetaData.difficulty;
 		gameStarter.isNewGame = true;
 
 		Bootstrap.gameStarter = gameStarter;

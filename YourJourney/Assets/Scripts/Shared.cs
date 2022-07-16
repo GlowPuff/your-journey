@@ -94,6 +94,7 @@ public class StateItem
 {
 	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath, fileVersion;
 	public string[] heroArray;
+	public int[] heroIndexArray;
 	public Guid stateGUID;
 	public ProjectType projectType;
 	public CampaignState campaignState;
@@ -105,6 +106,7 @@ public class TitleMetaData
 	public ProjectItem projectItem;//set in SelectJourney
 	public CampaignState campaignState;
 	public string[] selectedHeroes;
+	public int[] selectedHeroesIndex;
 	public int saveStateIndex;
 	public string gameName;
 	public Difficulty difficulty;
@@ -124,6 +126,7 @@ public class GameStarter
 	/// </summary>
 	public string scenarioFileName;
 	public string[] heroes;
+	public int[] heroesIndex;
 	/// <summary>
 	/// setting this to false makes the scenario load state from the previously set saveStateIndex, default=true
 	/// </summary>

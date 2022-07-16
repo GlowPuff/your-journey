@@ -155,6 +155,7 @@ public class CampaignScreen : MonoBehaviour
 		gameStarter.saveStateIndex = campaignState.saveStateIndex;
 		gameStarter.scenarioFileName = campaignState.campaign.scenarioCollection[sIndex].fileName;
 		gameStarter.heroes = campaignState.heroes;
+		gameStarter.heroesIndex = campaignState.heroesIndex;
 		gameStarter.difficulty = campaignState.difficulty;
 
 		Bootstrap.campaignState = campaignState;
@@ -198,6 +199,7 @@ public class CampaignScreen : MonoBehaviour
 		gameStarter.saveStateIndex = campaignState.saveStateIndex;
 		gameStarter.scenarioFileName = campaignState.campaign.scenarioCollection[selectedIndex].fileName;
 		gameStarter.heroes = campaignState.heroes;
+		gameStarter.heroesIndex = campaignState.heroesIndex;
 		gameStarter.difficulty = campaignState.difficulty;
 		gameStarter.isNewGame = true;//start scenario fresh
 
@@ -239,6 +241,7 @@ public class CampaignScreen : MonoBehaviour
 		gameStarter.saveStateIndex = campaignState.saveStateIndex;
 		gameStarter.scenarioFileName = gs.partyState.scenarioFileName;
 		gameStarter.heroes = campaignState.heroes;
+		gameStarter.heroesIndex = campaignState.heroesIndex;
 		gameStarter.difficulty = campaignState.difficulty;
 		gameStarter.isNewGame = false;
 

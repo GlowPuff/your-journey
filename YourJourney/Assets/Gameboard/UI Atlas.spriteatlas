@@ -35,7 +35,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 8d242c989899e954eaaf392790d9ad1c, type: 3}
     - {fileID: 102900000, guid: c80935fd8efbc4b4abb7edc027a64235, type: 3}
     - {fileID: 102900000, guid: ddca5c03c60fd6145b5dcad61a41bf74, type: 3}
-    totalSpriteSurfaceArea: 5809310
+    totalSpriteSurfaceArea: 6069050
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -66,6 +66,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d55acbb2b7abcae458b0181054213f79, type: 3}
   - {fileID: 21300000, guid: 9d60ecd267f9ab1449e6860bfec68e71, type: 3}
   - {fileID: 21300000, guid: 164777f202a6cfd49b6f1ee507283cb5, type: 3}
+  - {fileID: 21300000, guid: f3af4ff24197266479a7901bf11fdb36, type: 3}
   - {fileID: 21300000, guid: fc5f9543098b1f446820116dae391d5c, type: 3}
   - {fileID: 21300000, guid: ed4aa1638a4b82945af26a82acd379e2, type: 3}
   - {fileID: 21300000, guid: 4c6a0893d30108f4abc5c7b02e58dc14, type: 3}
@@ -79,6 +80,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a720bd3400f257545a72ce73bb6b934c, type: 3}
   - {fileID: 21300000, guid: 162ea754fb93a754d94c74d3cd376716, type: 3}
   - {fileID: 21300000, guid: 12037c540aa96a840a41d9599a7c12a0, type: 3}
+  - {fileID: 21300000, guid: 7897a2847d7945448aa4428a643c4aa1, type: 3}
   - {fileID: 21300000, guid: 3a2318847ebbc464fa619e5b852dab9c, type: 3}
   - {fileID: 21300000, guid: 269f46c45d859ed49a0830f872c5b9ab, type: 3}
   - {fileID: 21300000, guid: f0a06a05db457674aa9e8b293aa78be8, type: 3}
@@ -128,6 +130,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 14d90859e17bd6f4fbafbd4c257a3440, type: 3}
   - {fileID: 21300000, guid: 5beb2f9940d52414d97a5bf1fb155ec5, type: 3}
   - {fileID: 21300000, guid: fd4923a9f4306d6459120c6e47da4a32, type: 3}
+  - {fileID: 21300000, guid: 4380fbb947c605147bc288ad72abfed9, type: 3}
   - {fileID: 21300000, guid: b369e4d9990ba4e46a9ae861c81fb9fe, type: 3}
   - {fileID: 21300000, guid: 55f3744a7e82f734ab05017e49f02cf6, type: 3}
   - {fileID: 21300000, guid: c704735a9e0760e48a751f1a0a5a9177, type: 3}
@@ -141,6 +144,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 5e29beaaa24c5e944ae1041252316c93, type: 3}
   - {fileID: 21300000, guid: ab6b61da9f5751f4bbc490cb292737f6, type: 3}
   - {fileID: 21300000, guid: bcf123dad3d66764bb120592e12f21f6, type: 3}
+  - {fileID: 21300000, guid: b08992faec4b67f4d848f8f1f692ab7d, type: 3}
   - {fileID: 21300000, guid: c8781e5bff93b2c4fb7f471f9ccc6c3d, type: 3}
   - {fileID: 21300000, guid: 2dec8d6b098b6264da9698f4524369c7, type: 3}
   - {fileID: 21300000, guid: 6038968b11e05e344b6a06b096b8e68b, type: 3}
@@ -150,6 +154,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d85250cbf3bf5d04a88456d6f5517a9c, type: 3}
   - {fileID: 21300000, guid: b3b003dbd62981c409733b7caa72e163, type: 3}
   - {fileID: 21300000, guid: 1f26670c783cee14ba02daa128e114e1, type: 3}
+  - {fileID: 21300000, guid: 84d4261c21969974dada2803cb71be0f, type: 3}
   - {fileID: 21300000, guid: 8e98982cf64b8494cb3eba12632628c0, type: 3}
   - {fileID: 21300000, guid: c9af0b2ca29fddb42add166a2b2b9412, type: 3}
   - {fileID: 21300000, guid: 27138e3c1f9aba74a8f9d6451002efff, type: 3}
@@ -210,6 +215,7 @@ SpriteAtlas:
   - smoke
   - frame_18_delay-0.11s
   - eye mask
+  - PortraitBoxLeft
   - party button
   - b1
   - frame_02_delay-0.1s
@@ -223,6 +229,7 @@ SpriteAtlas:
   - end turn tick
   - ranged
   - m-balrog
+  - text panel clear
   - be2
   - be1
   - damage icon
@@ -272,6 +279,7 @@ SpriteAtlas:
   - threat meter
   - frame_09_delay-0.1s
   - m-supplicant-of-morgoth
+  - TextBoxOpenLeft
   - m-nameless-thing
   - frame_15_delay-0.1s
   - m-coalfang
@@ -285,6 +293,7 @@ SpriteAtlas:
   - frame_07_delay-0.11s
   - frame_08_delay-0.11s
   - frame_03_delay-0.1s
+  - PortraitBoxRight
   - m-siege-engine
   - frame_14_delay-0.1s
   - b6
@@ -294,6 +303,7 @@ SpriteAtlas:
   - sphere
   - frame_05_delay-0.11s
   - m-giant-spider
+  - TextBoxOpenRight
   - frame_13_delay-0.1s
   - fear icon
   - selected monster

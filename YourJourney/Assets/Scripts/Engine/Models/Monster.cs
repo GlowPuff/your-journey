@@ -51,7 +51,8 @@ public class Monster
 											"Atarin", "Gulgotar", "Coalfang",
 											"Giant Spider", "Pit Goblin", "Orc Taskmaster", "Shadowman", "Nameless Thing", "Cave Troll", "Balrog", "Spawn of Ungoliant",
 											"Supplicant of Morgoth", "Ursa", "Ollie",
-											"Fell Beast", "Warg Rider", "Siege Engine", "War Oliphaunt", "Soldier", "Uruk Warrior"
+											"Fell Beast", "Warg Rider", "Siege Engine", "War Oliphaunt", "Soldier", "Uruk Warrior",
+											"Lord Angon", "Witch-king of Angmar", "Eadris"
 	};
 
 	public int[] currentHealth { get; set; } = new int[3];
@@ -69,7 +70,8 @@ public class Monster
 		14, 22, 28, //Villains of Eriador
 		5, 4, 14, 17, 27, 20, 50, 36, //Shadowed Paths
 		34, 28, 40, //Dwellers in Darkness
-		24, 14, 22, 30, 8, 11 //Spreading War
+		24, 14, 22, 30, 8, 11, //Spreading War
+		50, 50, 50 //Scourges of the Wastes
 	};
 
 	public static int[] MonsterCount = new int[] { 6, 6, 3, 6, 3, 1, 3, //Core Set
@@ -77,6 +79,7 @@ public class Monster
 		6, 6, 3, 3, 3, 2, 1, 1, //Shadowed Paths
 		1, 1, 1, //Dwellers in Darkness
 		3, 3, 2, 1, 6, 6, //Spreading War
+		1, 1, 1, //Scourges of the Wastes
 	};
 	//large, bloodthirsty, armored
 	public static int[] ModCost = new int[3] { 1, 2, 1 };
@@ -232,6 +235,10 @@ public class Monster
 			case MonsterType.WarOliphaunt:
 			case MonsterType.Soldier:
 			case MonsterType.UrukWarrior:
+			//Scourges of the Wastes
+			case MonsterType.LordAngon:
+			case MonsterType.WitchKingOfAngmar:
+			case MonsterType.Eadris:
 				mHealth = 3;
 				mDamage = 2;
 				mSpeed = 2;

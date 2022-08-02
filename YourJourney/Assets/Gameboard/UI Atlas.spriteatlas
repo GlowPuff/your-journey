@@ -35,7 +35,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: 8d242c989899e954eaaf392790d9ad1c, type: 3}
     - {fileID: 102900000, guid: c80935fd8efbc4b4abb7edc027a64235, type: 3}
     - {fileID: 102900000, guid: ddca5c03c60fd6145b5dcad61a41bf74, type: 3}
-    totalSpriteSurfaceArea: 6069050
+    totalSpriteSurfaceArea: 6342250
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -67,6 +67,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 9d60ecd267f9ab1449e6860bfec68e71, type: 3}
   - {fileID: 21300000, guid: 164777f202a6cfd49b6f1ee507283cb5, type: 3}
   - {fileID: 21300000, guid: f3af4ff24197266479a7901bf11fdb36, type: 3}
+  - {fileID: 21300000, guid: 2c7ac213f4103bf409a519d87ced92d2, type: 3}
   - {fileID: 21300000, guid: fc5f9543098b1f446820116dae391d5c, type: 3}
   - {fileID: 21300000, guid: ed4aa1638a4b82945af26a82acd379e2, type: 3}
   - {fileID: 21300000, guid: 4c6a0893d30108f4abc5c7b02e58dc14, type: 3}
@@ -172,6 +173,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: f8d9817d3525a6e4da6246d7f99b993c, type: 3}
   - {fileID: 21300000, guid: 6726948d009330b43b46a1e9628cdc46, type: 3}
   - {fileID: 21300000, guid: f4b2268d83bc3574486c01129ec1fa3e, type: 3}
+  - {fileID: 21300000, guid: 365e1d9da33e42b4bb546d58ac3eb939, type: 3}
   - {fileID: 21300000, guid: 0f2902cddb011614c853e58528e54794, type: 3}
   - {fileID: 21300000, guid: 114a49fd120d15443a16834b87aaa4e0, type: 3}
   - {fileID: 21300000, guid: 5c19600e842d33b4d8dcaf6eb76fc660, type: 3}
@@ -184,6 +186,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: c9af46ee267daaa449270efadccdae67, type: 3}
   - {fileID: 21300000, guid: 3fcca90fbe59b6f4a8b0249a1e0f0a4a, type: 3}
   - {fileID: 21300000, guid: fd59f97f66700eb4e8036e02b455c8db, type: 3}
+  - {fileID: 21300000, guid: 93cf3a7f9370bb84991743634fb36892, type: 3}
   - {fileID: 21300000, guid: e7a9b59f859f5af499e47e5269023f09, type: 3}
   - {fileID: 21300000, guid: 8a2c1cdfc5f95074b95f8056c0953335, type: 3}
   - {fileID: 21300000, guid: 2fc2ebff9e43b8a4bb6c063dfb11fe9f, type: 3}
@@ -216,6 +219,7 @@ SpriteAtlas:
   - frame_18_delay-0.11s
   - eye mask
   - PortraitBoxLeft
+  - m-eadris
   - party button
   - b1
   - frame_02_delay-0.1s
@@ -321,6 +325,7 @@ SpriteAtlas:
   - provoke
   - m-atarin
   - m-spawn-of-ungoliant
+  - m-lord-angon
   - m-uruk-warrior
   - frame_29_delay-0.11s
   - frame_17_delay-0.11s
@@ -333,6 +338,7 @@ SpriteAtlas:
   - frame_01_delay-0.1s
   - shadow
   - frame_06_delay-0.1s
+  - m-witch-king
   - frame_06_delay-0.11s
   - party button pressed
   - resizeable standard

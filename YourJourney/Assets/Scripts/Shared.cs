@@ -7,7 +7,8 @@ public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, Warg, Hi
 						Atarin, Gulgotar, Coalfang,
 						GiantSpider, PitGoblin, OrcTaskmaster, Shadowman, NamelessThing, CaveTroll, Balrog, SpawnOfUngoliant,
 						SupplicantOfMorgoth, Ursa, Ollie,
-						FellBeast, WargRider, SiegeEngine, WarOliphaunt, Soldier, UrukWarrior}
+						FellBeast, WargRider, SiegeEngine, WarOliphaunt, Soldier, UrukWarrior,
+						LordAngon, WitchKingOfAngmar, Eadris }
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle }
 public enum ProjectType { Standalone, Campaign }

@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Newtonsoft.Json;
+using UnityEngine;
 
 /// <summary>
 /// JSON serialization/deserialization for .jime editor files
@@ -25,6 +26,7 @@ public class FileManager
 	public List<TextBookData> resolutions { get; set; }
 	public List<Threat> threats { get; set; }
 	public List<Chapter> chapters { get; set; }
+	public List<Collection> collections { get; set; }
 	public List<int> globalTiles { get; set; }
 	public Dictionary<string, bool> scenarioEndStatus { get; set; }
 	public TextBookData introBookData { get; set; }
@@ -54,6 +56,7 @@ public class FileManager
 		resolutions = source.resolutionObserver.ToList();
 		threats = source.threatObserver.ToList();
 		chapters = source.chapterObserver.ToList();
+		collections = source.collectionObserver.ToList();
 		globalTiles = source.globalTilePool.ToList();
 		scenarioEndStatus = source.scenarioEndStatus;
 
@@ -91,12 +94,19 @@ public class FileManager
 				json = sr.ReadToEnd();
 			}
 
-			var fm = JsonConvert.DeserializeObject<FileManager>( json );
+			var fm = JsonConvert.DeserializeObject<FileManager>( json, new JsonSerializerSettings()
+			{
+				Error = (sender, error) => {
+					Debug.Log("Scenario deserialize error: " + error);
+					error.ErrorContext.Handled = true;
+				}
+			});
 
 			return Scenario.CreateInstance( fm );
 		}
-		catch
+		catch(Exception e)
 		{
+			Debug.Log("LoadScenario exception: " + e.ToString());
 			return null;
 		}
 	}

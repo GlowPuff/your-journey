@@ -30,8 +30,8 @@ public class MonsterButton : MonoBehaviour
 
 		countText.text = monster.count.ToString();
 		lastCount = monster.count;
-		if ( monster.specialAbility != null && monster.specialAbility.Contains( "Ranged" ) )
-			rangedIcon.SetActive( true );
+		if (monster.isRanged)
+			rangedIcon.SetActive(true);
 
 		hidden = transform.position.x < manager.sbRect.position.x || transform.position.x > manager.sbRect.position.x + ( 1000f * manager.scalar );
 

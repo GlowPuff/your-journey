@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum ScenarioType { Journey, Battle }
 public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional, Dialog, Replace, Reward }
-public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, Warg, HillTroll, Wight, 
+public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, HungryWarg, HillTroll, Wight, 
 						Atarin, Gulgotar, Coalfang,
 						GiantSpider, PitGoblin, OrcTaskmaster, Shadowman, NamelessThing, CaveTroll, Balrog, SpawnOfUngoliant,
 						SupplicantOfMorgoth, Ursa, Ollie,

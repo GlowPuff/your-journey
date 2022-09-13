@@ -76,7 +76,7 @@ public class ThreatInteraction : InteractionBase
 		//recalculate points left over
 		poolCount = starting;
 		foreach ( Monster sim in mList )
-			poolCount -= sim.cost;
+			poolCount -= sim.fCost;
 
 		//if enough points left for more enemies, add them
 		if ( poolCount > lowestCost )
@@ -88,7 +88,7 @@ public class ThreatInteraction : InteractionBase
 				{
 					poolCount = Math.Max( 0f, poolCount - sim.singlecost );
 					sim.count++;
-					sim.cost += sim.singlecost;
+					sim.fCost += sim.singlecost;
 				}
 			}
 		}
@@ -172,13 +172,13 @@ public class ThreatInteraction : InteractionBase
 						count += 1;
 					else
 					{
-						Monster skip = new Monster() { dataName = "modifier", cost = 1 };
+						Monster skip = new Monster() { dataName = "modifier", fCost = 1 };
 						return new Tuple<Monster, float>( skip, 0 );
 					}
 				}
 				else//no more room, 30% to add a modifier point instead
 				{
-					Monster skip = new Monster() { dataName = "modifier", cost = 0 };
+					Monster skip = new Monster() { dataName = "modifier", fCost = 0 };
 					return new Tuple<Monster, float>( skip, Bootstrap.random.Next( 100 ) > 30 ? 1 : 0 );
 				}
 			}
@@ -187,14 +187,14 @@ public class ThreatInteraction : InteractionBase
 			lastEnemyIndex = (int)mList[pick].Item1;
 			ms.count = count;
 			ms.singlecost = mList[pick].Item2;
-			ms.cost = groupcost;
+			ms.fCost = groupcost;
 			if ( count == 1 )
 				numSingleGroups++;
 			return new Tuple<Monster, float>( ms, mList[pick].Item2 * count );
 		}
 		else
 		{
-			Monster skip = new Monster() { dataName = "modifier", cost = 1 };
+			Monster skip = new Monster() { dataName = "modifier", fCost = 1 };
 			return new Tuple<Monster, float>( skip, 1 );
 		}
 	}
@@ -236,7 +236,7 @@ public class ThreatInteraction : InteractionBase
 
 	private int LowestRequestedEnemyCost()
 	{
-		int cost = 1000;
+		int fCost = 1000;
 
 		if ( includedEnemies == null )//backwards compatible
 			return 1000;
@@ -245,13 +245,13 @@ public class ThreatInteraction : InteractionBase
 		{
 			if ( includedEnemies[i] )
 			{
-				if ( Monster.MonsterCost[i] < cost )
+				if ( Monster.MonsterCost[i] < fCost )
 				{
-					cost = Monster.MonsterCost[i];
+					fCost = Monster.MonsterCost[i];
 				}
 			}
 		}
 
-		return cost;
+		return fCost;
 	}
 }

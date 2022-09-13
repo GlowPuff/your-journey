@@ -16,7 +16,7 @@ public class MonsterItem : MonoBehaviour
 	[HideInInspector]
 	public bool activeMonster = false;//visible in combat screen
 
-	int tempCurrentHealth, currentShield, currentSorc, currentMaxHealth, currentDead, idx, sunderModify, healthModify;
+	int tempCurrentHealth, tempCurrentSunder, currentShield, currentSorc, currentMaxHealth, currentDead, idx, sunderModify, healthModify;
 	float healthWidth = 324, shieldWidth = 324, sorcWidth = 324;
 	bool startedDead;
 
@@ -54,12 +54,27 @@ public class MonsterItem : MonoBehaviour
 		//if ( sunderModify == 1 && !modifier.Sunder )//removing sunder
 		//	sunderModify = 0;
 		//else
-		sunderModify = modifier.Sunder ? 1 : 0;//+=
 
 		healthModify = modifier.Lethal ? monster.health / 2 : 0;
 		int damageUsed = 0;
 		tempCurrentHealth = currentMaxHealth;
-		currentShield = Mathf.Max( 0, monster.shieldValue - sunderModify );
+		currentShield = Mathf.Max( 0, monster.shieldValue - tempCurrentSunder);
+
+		//Sunder - permanently remove one point of armor
+		sunderModify = modifier.Sunder ? 1 : 0;
+		if ( modifier.Sunder )
+		{
+			if ( currentShield > 0 ) //If there's not shield on this one, Sunder may affect the next MonsterItem
+            {
+				currentShield = Mathf.Max(0, monster.shieldValue - tempCurrentSunder - sunderModify);
+				if (!modifier.Cleave)
+				{
+					//Prevent the Sunder from applying to another MonsterItem unless Cleave is enabled (effects all enemies)
+					modifier.Sunder = false;
+				}
+			}
+		}
+
 		if ( modifier.Pierce )
 			currentShield = 0;
 		currentSorc = monster.sorceryValue;
@@ -114,7 +129,8 @@ public class MonsterItem : MonoBehaviour
 		}
 
 		monster.currentHealth[idx] = tempCurrentHealth;
-		monster.sunderValue = sunderModify;
+		//monster.sunderValue = sunderModify;
+		monster.currentSunder[idx] += sunderModify;
 		return !isDead;
 	}
 
@@ -124,8 +140,9 @@ public class MonsterItem : MonoBehaviour
 		idx = index;
 		monster = m;
 		currentMaxHealth = monster.currentHealth[index];
+		tempCurrentSunder = monster.currentSunder[index];
 		startedDead = currentMaxHealth == 0;
-		sunderModify = monster.sunderValue;
+		//sunderModify = monster.sunderValue;
 
 		Damage( 0, new CombatModify() );
 

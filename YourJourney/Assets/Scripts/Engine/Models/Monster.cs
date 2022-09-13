@@ -64,10 +64,11 @@ public class Monster
 	};
 
 	public int[] currentHealth { get; set; } = new int[3];
+	public int[] currentSunder { get; set; } = new int[3];
 	public bool isDead;
 	public bool isExhausted;
 	public bool isStunned;
-	public int sunderValue;
+	//public int sunderValue;
 	public int deathTally;
 	public int deadCount;
 	public float fCost;

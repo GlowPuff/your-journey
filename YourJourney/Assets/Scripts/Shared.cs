@@ -13,7 +13,7 @@ public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, HungryWa
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle }
 public enum ProjectType { Standalone, Campaign }
-public enum Ability { Might, Agility, Wisdom, Spirit, Wit, None }
+public enum Ability { Might, Agility, Wisdom, Spirit, Wit, Wild, None }
 public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }
 public enum ButtonIcon { None, Action, OK, Continue, Next }
 public enum TokenType { Search, Person, Threat, Darkness, Exploration, None }
@@ -24,6 +24,36 @@ public enum DifficultyBias { Light, Medium, Heavy }
 public enum CampaignStatus { InMenus, PlayingScenario }
 public enum ScenarioStatus { NotPlayed, Success, Failure }
 public enum TitleScreen { Title, SelectSlot, SelectJourney, SelectHeroes }
+
+public class AbilityUtility
+{
+	//This is used to return a bolded HTML string with optional size and color, to display an ability icon from a font.
+	//The LoTR-JiME-Icons font has been renamed as Harrington in the harringtonBold font. The <b></b> tags switch to this icon font and display the icon.
+	// Might, Agility, Wisdom, Spirit, Wit, Wild
+	public static readonly string[] testColors = new string[] { "ff0000", "55cc00", "bb00bb", "0088ff", "ffff00", "ffffff" };
+	public static readonly string[] testChars = new string[] { "M", "A", "Z", "S", "W", "X" }; //In the LoTR-JiME-Icons font
+
+	public static string Text(Ability ability)
+    {
+		return "<b>" + testChars[(int)ability] + "</b>";
+    }
+
+	public static string Text(Ability ability, int size)
+	{
+		return "<size=" + size + "><b>" + testChars[(int)ability] + "</b></size>";
+	}
+
+	public static string ColoredText(Ability ability)
+    {
+		return "<color=#" + testColors[(int)ability] + ">" + Text(ability) + "</color>";
+    }
+
+	public static string ColoredText(Ability ability, int size)
+	{
+		return "<color=#" + testColors[(int)ability] + ">" + Text(ability, size) + "</color>";
+	}
+}
+
 
 public class InteractionResult
 {

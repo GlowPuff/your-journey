@@ -14,6 +14,7 @@ public class DamagePanel : MonoBehaviour
 
 	CanvasGroup group;
 	Color[] testColors;
+	string[] testChar;
 	RectTransform rect;
 	Vector3 sp;
 	Vector2 ap;
@@ -31,13 +32,23 @@ public class DamagePanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
-		testColors = new Color[5];
+		testColors = new Color[6];
 		//mit/agi/wis/spi/wit
 		testColors[0] = Color.red;
 		testColors[1] = Color.green;
 		testColors[2] = Color.HSVToRGB( 300f / 360f, 1, .5f );
 		testColors[3] = Color.HSVToRGB( 207f / 360f, .61f, .71f );
 		testColors[4] = Color.yellow;
+		testColors[5] = Color.white;
+
+		// Might, Agility, Wisdom, Spirit, Wit, Wild
+		testChar = new string[6];
+		testChar[0] = "M";
+		testChar[1] = "A";
+		testChar[2] = "Z";
+		testChar[3] = "S";
+		testChar[4] = "W";
+		testChar[5] = "X";
 	}
 
 	public void ShowCombatCounter( Monster m, Action action = null )
@@ -59,16 +70,21 @@ public class DamagePanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonAction = action;
 
-		abilityText.text = m.negatedBy.ToString() + " negates.";
+		Ability negatedBy = m.negatedBy;
+		negatedBy = (Ability)GlowEngine.GenerateRandomNumbers(6)[0]; //Randomize the ability instead of taking it from the monster (which is always Might right now)
+
+		Debug.Log("Color: " + testColors[(int)negatedBy].ToString());
+		abilityText.text = AbilityUtility.ColoredText(negatedBy, 42) + "  " + negatedBy.ToString() + " negates.";
 
 		SetText( $"A {m.dataName} attacks!" );
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
 
-		abilityIcon.gameObject.SetActive( true );
-		abilityIcon.sprite = icons[(int)m.negatedBy];
-		abilityIcon.color = testColors[(int)m.negatedBy];
+		//This is still in the UI panel but removed the code in favor of AbilityUtility.ColoredText
+		//abilityIcon.gameObject.SetActive( true );
+		//abilityIcon.sprite = icons[(int)negatedBy];
+		//abilityIcon.color = testColors[(int)negatedBy];
 
 		group.DOFade( 1, .5f );
 	}

@@ -51,9 +51,13 @@ public class MonsterItem : MonoBehaviour
 			return damage;
 		}
 
+		bool startedSunder = modifier.Sunder;
+
 		//if ( sunderModify == 1 && !modifier.Sunder )//removing sunder
 		//	sunderModify = 0;
 		//else
+
+		//TODO Lethal when first monster has 1 HP and other monsters have more HP doesn't seem to work.
 
 		healthModify = modifier.Lethal ? monster.health / 2 : 0;
 		int damageUsed = 0;
@@ -105,6 +109,8 @@ public class MonsterItem : MonoBehaviour
 			if ( damageUsed == currentDead )
 			{
 				isDead = true;
+				//Restore Sunder for next enemy if necessary. When an enemy is defeated, Sunder applies to the next enemy as well.
+				if (startedSunder) { modifier.Sunder = true; }
 				break;
 			}
 		}

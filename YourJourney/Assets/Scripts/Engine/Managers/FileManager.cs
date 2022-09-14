@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 /// <summary>
@@ -26,7 +27,8 @@ public class FileManager
 	public List<TextBookData> resolutions { get; set; }
 	public List<Threat> threats { get; set; }
 	public List<Chapter> chapters { get; set; }
-	public List<Collection> collections { get; set; }
+	//public List<Collection> collections { get; set; }
+	public List<int> collections { get; set; }
 	public List<int> globalTiles { get; set; }
 	public Dictionary<string, bool> scenarioEndStatus { get; set; }
 	public TextBookData introBookData { get; set; }
@@ -94,10 +96,13 @@ public class FileManager
 				json = sr.ReadToEnd();
 			}
 
+			ITraceWriter traceWriter = new MemoryTraceWriter();
 			var fm = JsonConvert.DeserializeObject<FileManager>( json, new JsonSerializerSettings()
 			{
+				TraceWriter = traceWriter,
 				Error = (sender, error) => {
 					Debug.Log("Scenario deserialize error: " + error);
+					Debug.Log(traceWriter);
 					error.ErrorContext.Handled = true;
 				}
 			});
@@ -135,7 +140,8 @@ public class FileManager
 					projectType = s.projectType,
 					Date = s.saveDate,
 					fileName = fi.Name,
-					fileVersion = s.fileVersion
+					fileVersion = s.fileVersion,
+					collections = s.collectionObserver.ToList() //string.Join(" ", s.collectionObserver.Select(c=> Collection.FromID(c).FontCharacter))
 				} );
 		}
 		return items;
@@ -177,8 +183,27 @@ public class FileManager
 				pi.campaignStory = c.storyText;
 				pi.fileVersion = c.fileVersion;
 				pi.fileName = fi.FullName;
+				pi.collections = new List<int>();
+
+				int scIndex = 0;
+				foreach ( CampaignItem item in c.scenarioCollection)
+                {
+					var scenario = FileManager.LoadScenario(FileManager.GetFullPathWithCampaign(item.fileName, pi.campaignGUID.ToString()));
+					//TODO collections in CampaignScreen?
+                    //c.scenarioCollection[scIndex].collections = scenario.collectionObserver.ToList();
+					foreach ( int col in scenario.collectionObserver )
+                    {
+						if(!pi.collections.Contains( col)) { pi.collections.Add( col ); }
+                    }
+					scIndex++;
+                }
+				pi.collections.Sort();
+				c.collections = pi.collections;
+
 				items.Add( pi );
 			}
+			//var scenario = FileManager.LoadScenario(FileManager.GetFullPathWithCampaign(gameStarter.scenarioFileName, campaign.campaignGUID.ToString()));
+
 		}
 
 		return items;

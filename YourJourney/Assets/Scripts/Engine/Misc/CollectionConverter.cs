@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using UnityEngine;
 
 public class CollectionConverter : JsonConverter
 {
@@ -46,6 +46,7 @@ public class CollectionConverter : JsonConverter
 
 		foreach (var item in jsonObject)
 		{
+			Debug.Log("CollectionConverter ReadJson <= " + item);
 			collection = Collection.FromID(item.Value<int>());
 			collectionList.Add(collection);
 		}

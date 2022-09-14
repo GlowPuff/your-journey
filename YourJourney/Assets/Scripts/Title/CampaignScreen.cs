@@ -46,7 +46,9 @@ public class CampaignScreen : MonoBehaviour
 		{
 			var go = Instantiate( fileItemButtonPrefab, itemContainer ).GetComponent<FileItemButton>();
 			go.transform.localPosition = new Vector3( 0, ( -110 * i ) );
-			go.Init( i, campaign.scenarioCollection[i].scenarioName, ProjectType.Standalone, ( index ) => OnSelectScenario( index ) );
+			go.Init( i, campaign.scenarioCollection[i].scenarioName,
+				"", //TODO collections?
+				ProjectType.Standalone, ( index ) => OnSelectScenario( index ) );
 			if ( campaignState.currentScenarioIndex != i || finishedCampaign )
 				go.RemoveRing();
 			go.SetSuccess( campaignState.scenarioStatus[i] );

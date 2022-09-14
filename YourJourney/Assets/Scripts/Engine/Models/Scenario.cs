@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 public class Scenario
 {
@@ -33,7 +34,9 @@ public class Scenario
 	public ObservableCollection<TextBookData> resolutionObserver { get; set; }
 	public ObservableCollection<Threat> threatObserver { get; set; }
 	public ObservableCollection<Chapter> chapterObserver { get; set; }
-	public ObservableCollection<Collection> collectionObserver { get; set; }
+	//[JsonConverter(typeof(CollectionConverter))]
+	//public ObservableCollection<Collection> collectionObserver { get; set; }
+	public ObservableCollection<int> collectionObserver { get; set; }
 	public ObservableCollection<int> globalTilePool { get; set; }
 
 	/// <summary>
@@ -57,7 +60,8 @@ public class Scenario
 		s.resolutionObserver = new ObservableCollection<TextBookData>( fm.resolutions );
 		s.threatObserver = new ObservableCollection<Threat>( fm.threats );
 		s.chapterObserver = new ObservableCollection<Chapter>( fm.chapters );
-		s.collectionObserver = new ObservableCollection<Collection>(fm.collections);
+		//s.collectionObserver = new ObservableCollection<Collection>(fm.collections);
+		s.collectionObserver = new ObservableCollection<int>(fm.collections);
 		s.globalTilePool = new ObservableCollection<int>( fm.globalTiles );
 		s.scenarioEndStatus = new Dictionary<string, bool>( fm.scenarioEndStatus );
 		//s.fileName = fm.fileName;

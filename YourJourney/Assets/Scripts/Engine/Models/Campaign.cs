@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public class Campaign
 {
@@ -8,6 +10,8 @@ public class Campaign
 	public string fileVersion { get; set; }
 	public string storyText { get; set; }
 	public string description { get; set; }
+    [JsonIgnore]
+	public List<int> collections { get; set; }
 
 	public ObservableCollection<CampaignItem> scenarioCollection { get; set; }
 	public ObservableCollection<Trigger> triggerCollection { get; set; }

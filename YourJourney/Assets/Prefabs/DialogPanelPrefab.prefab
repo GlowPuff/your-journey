@@ -921,7 +921,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3481645953757398987
 RectTransform:
   m_ObjectHideFlags: 0
@@ -969,7 +969,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: ae703a586934e7541b818c38a01efb68, type: 3}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -982,7 +982,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "When a Sprite\u2019s Draw Mode is set to Sliced, you can choose to change
     the size using the Size property on the Sprite Renderer or the Rect Transform
-    Tool. You can still scale the Sprite using the Transform properties or the Transform
+    Tool. You can still scale the Sprite using the Transform properties or the Tr</b>ansform
     Tool; however, the Transform scales the Sprite without applying the 9-slicing.\r\n\r\nWhen
     you set the Draw Mode to Tiled, an additional property called Tile Mode appears.
     See the next section in this page for more information on how Tile Mode works.\r\n\r\nSee

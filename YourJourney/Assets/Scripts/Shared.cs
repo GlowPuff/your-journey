@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum ScenarioType { Journey, Battle }
 public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional, Dialog, Replace, Reward }
@@ -77,6 +78,7 @@ public class ProjectItem
 	public ProjectType projectType { get; set; }
 	public string fileName { get; set; }
 	public string fileVersion { get; set; }
+	public List<int> collections { get; set; }
 	public string campaignGUID { get; set; }
 	public string campaignStory { get; set; }
 	public string campaignDescription { get; set; }
@@ -89,6 +91,8 @@ public class CampaignItem
 	/// file NAME only, NOT the full path
 	/// </summary>
 	public string fileName { get; set; }
+	//TODO collections in CampaignScreen?
+	//public List<int> collections { get; set; }
 }
 
 public class StateItem

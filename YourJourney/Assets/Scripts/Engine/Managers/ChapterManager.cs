@@ -131,7 +131,9 @@ public class ChapterManager : MonoBehaviour
 	{
 		string s = "Prepare the following tiles:\r\n\r\n";
 		foreach ( HexTile ht in c.tileObserver )
-			s += ht.idNumber + ", ";
+			s += ht.idNumber 
+				+ "<b>" + Collection.FromTileNumber(ht.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
+				+ ", ";
 		s = s.Substring( 0, s.Length - 2 );
 
 		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( s, ButtonIcon.Continue, () =>

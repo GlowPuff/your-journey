@@ -6,14 +6,16 @@ public class FileItemButton : MonoBehaviour
 {
 	public Image image, icon;
 	public Text title;
+	public Text collections;
 	int index;
 	Action<int> callback;
 	Color clickColor = new Color( 1, 1, 1, 1 );
 
-	public void Init( int idx, string t, ProjectType ptype, Action<int> cb = null )
+	public void Init( int idx, string t, string c, ProjectType ptype, Action<int> cb = null )
 	{
 		index = idx;
 		title.text = t;
+		collections.text = c;
 		callback = cb;
 		if ( ptype == ProjectType.Campaign )
 			icon.color = new Color( 1, 197f / 255f, 0 );

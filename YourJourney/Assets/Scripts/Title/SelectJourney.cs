@@ -10,7 +10,7 @@ public class SelectJourney : MonoBehaviour
 	public SelectSaveSlot selectSaveSlot;
 	public List<FileItemButton> fileItemButtons = new List<FileItemButton>();
 	public Image finalFader;
-	public Text nameText, versionText, fileText, appVersion, engineVersion;
+	public Text nameText, collectionsText, versionText, fileText, appVersion, engineVersion;
 	ProjectItem[] projectItems;
 	public GameObject fileItemPrefab, warningPanel;
 	public RectTransform itemContainer;
@@ -34,6 +34,7 @@ public class SelectJourney : MonoBehaviour
 		nameText.text = "";
 		fileText.text = "";
 		versionText.text = "";
+		collectionsText.text = "";
 
 		finalFader.DOFade( 0, .5f );
 	}
@@ -48,7 +49,10 @@ public class SelectJourney : MonoBehaviour
 		{
 			var go = Instantiate( fileItemPrefab, itemContainer ).GetComponent<FileItemButton>();
 			go.transform.localPosition = new Vector3( 0, ( -110 * i ) );
-			go.Init( i, projectItems[i].Title, projectItems[i].projectType, ( index ) => OnSelectQuest( index ) );
+			//TODO collections
+			go.Init( i, projectItems[i].Title,
+				string.Join(" ", projectItems[i].collections.Select(c => Collection.FromID(c).FontCharacter)), 
+				projectItems[i].projectType, ( index ) => OnSelectQuest( index ) );
 			fileItemButtons.Add( go );
 		}
 		itemContainer.sizeDelta = new Vector2( 772, fileItemButtons.Count * 110 );
@@ -71,6 +75,8 @@ public class SelectJourney : MonoBehaviour
 			fileText.text = projectItems[index].fileName;
 		else
 			fileText.text = projectItems[index].campaignDescription;
+		collectionsText.text = string.Join(" ", projectItems[index].collections.Select(c => Collection.FromID(c).FontCharacter));
+		//projectItems[index].collections;
 		versionText.text = "File Version: " + projectItems[index].fileVersion;
 
 		//check version

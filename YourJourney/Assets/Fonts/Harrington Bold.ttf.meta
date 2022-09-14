@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: ae703a586934e7541b818c38a01efb68
+guid: 98ed446d3e6f159468590d611a6a6e38
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
-  fontSize: 40
+  fontSize: 16
   forceTextureCase: -2
   characterSpacing: 0
   characterPadding: 1
@@ -13,7 +13,7 @@ TrueTypeFontImporter:
   - Harrington
   fallbackFontReferences: []
   customCharacters: 
-  fontRenderingMode: 1
+  fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1

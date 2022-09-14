@@ -58,6 +58,7 @@ public class StatTestPanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonActions = actions;
 
+		/*
 		if ( testInteraction.isCumulative && !testInteraction.passFail )
 		{
 			abilityText.text = "Test: " + testInteraction.testAttribute.ToString();
@@ -76,6 +77,28 @@ public class StatTestPanel : MonoBehaviour
 				abilityText.text = "Success: " + testInteraction.testAttribute.ToString() + " or " + testInteraction.altTestAttribute.ToString() + " " + testInteraction.successValue;
 			}
 		}
+		*/
+		if (testInteraction.isCumulative && !testInteraction.passFail)
+		{
+			abilityText.text = "Test " + AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
+			if (!testInteraction.noAlternate)//use alternate test
+			{
+				//abilityIcon2.gameObject.SetActive(true);
+				abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+			}
+			abilityText.text += ".";
+		}
+		else
+		{
+			abilityText.text = "Test " + AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
+			if (!testInteraction.noAlternate)
+			{
+				//abilityIcon2.gameObject.SetActive(true);
+				abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+			}
+			abilityText.text += "; " + testInteraction.successValue + ".";
+		}
+
 
 		//if it's cumulative (and not simple pass/fail) and already started, show progress text
 		if ( ( testInteraction.isCumulative && !testInteraction.passFail ) && testInteraction.accumulatedValue >= 0 )
@@ -86,12 +109,14 @@ public class StatTestPanel : MonoBehaviour
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
 
+		/*
 		abilityIcon.gameObject.SetActive( true );
 		abilityIcon.sprite = icons[(int)testInteraction.testAttribute];
 		abilityIcon.color = testColors[(int)testInteraction.testAttribute];
 
 		abilityIcon2.sprite = icons[(int)testInteraction.altTestAttribute];
 		abilityIcon2.color = testColors[(int)testInteraction.altTestAttribute];
+		*/
 
 		//acc value starts at -1, so set it to minimum of 0 to show the event has started
 		testInteraction.accumulatedValue = Math.Max( 0, testInteraction.accumulatedValue );

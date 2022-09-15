@@ -13,8 +13,6 @@ public class DamagePanel : MonoBehaviour
 	public Sprite[] icons;
 
 	CanvasGroup group;
-	Color[] testColors;
-	string[] testChar;
 	RectTransform rect;
 	Vector3 sp;
 	Vector2 ap;
@@ -32,23 +30,6 @@ public class DamagePanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
-		testColors = new Color[6];
-		//mit/agi/wis/spi/wit
-		testColors[0] = Color.red;
-		testColors[1] = Color.green;
-		testColors[2] = Color.HSVToRGB( 300f / 360f, 1, .5f );
-		testColors[3] = Color.HSVToRGB( 207f / 360f, .61f, .71f );
-		testColors[4] = Color.yellow;
-		testColors[5] = Color.white;
-
-		// Might, Agility, Wisdom, Spirit, Wit, Wild
-		testChar = new string[6];
-		testChar[0] = "M";
-		testChar[1] = "A";
-		testChar[2] = "Z";
-		testChar[3] = "S";
-		testChar[4] = "W";
-		testChar[5] = "X";
 	}
 
 	public void ShowCombatCounter( Monster m, Action action = null )
@@ -73,18 +54,12 @@ public class DamagePanel : MonoBehaviour
 		Ability negatedBy = m.negatedBy;
 		negatedBy = (Ability)GlowEngine.GenerateRandomNumbers(6)[0]; //Randomize the ability instead of taking it from the monster (which is always Might right now)
 
-		Debug.Log("Color: " + testColors[(int)negatedBy].ToString());
 		abilityText.text = AbilityUtility.ColoredText(negatedBy, 42) + "  " + negatedBy.ToString() + " negates.";
 
 		SetText( $"A {m.dataName} attacks!" );
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
-
-		//This is still in the UI panel but removed the code in favor of AbilityUtility.ColoredText
-		//abilityIcon.gameObject.SetActive( true );
-		//abilityIcon.sprite = icons[(int)negatedBy];
-		//abilityIcon.color = testColors[(int)negatedBy];
 
 		group.DOFade( 1, .5f );
 	}
@@ -107,7 +82,8 @@ public class DamagePanel : MonoBehaviour
 
 		abilityText.text = "";
 
-		SetText( "A menacing Darkness spreads across the land, overwhelming the heroes.\r\n\r\nIf a Hero is on a Space with a Darkness Icon or Token, suffer Fear.\r\n\r\nSpirit negates." );
+		SetText( "A menacing Darkness spreads across the land, overwhelming the heroes.\r\n\r\nIf a Hero is on a Space with a Darkness Icon or Token, suffer Fear.\r\n\r\n" +
+			AbilityUtility.ColoredText(Ability.Spirit, 42) + " Spirit negates." );
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
@@ -144,33 +120,27 @@ public class DamagePanel : MonoBehaviour
 		//Might, Agility, Wisdom, Spirit, Wit
 		if ( test == 0 )
 		{
-			SetText( "You can still survive, push through it!" );
-			abilityText.text = "Test Might: " + amount;
+			SetText( "Strive for life with all your might!" );
 		}
 		else if ( test == 1 )
 		{
 			SetText( "Skillful maneuvering can lead to escape!" );
-			abilityText.text = "Test Agility: " + amount;
 		}
 		else if ( test == 2 )
 		{
 			SetText( "Put your knowledge of healing and survival to the test!" );
-			abilityText.text = "Test Wisdom: " + amount;
 		}
 		else if ( test == 3 )
 		{
 			SetText( "You can still survive, fight the fear!" );
-			abilityText.text = "Test Spirit: " + amount;
 		}
 		else if ( test == 4 )
 		{
 			SetText( "Quick thinking can save you!" );
-			abilityText.text = "Test Wit: " + amount;
 		}
-
-		abilityIcon.gameObject.SetActive( true );
-		abilityIcon.sprite = icons[test];
-		abilityIcon.color = testColors[test];
+		abilityText.text = "Test " +
+			AbilityUtility.ColoredText((Ability)test, 42) + " " +
+			((Ability)test).ToString() + "; " + amount + ".";
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );

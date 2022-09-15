@@ -14,7 +14,6 @@ public class StatTestPanel : MonoBehaviour
 	public RectTransform content;
 
 	CanvasGroup group;
-	Color[] testColors;
 	RectTransform rect;
 	Vector3 sp;
 	Vector2 ap;
@@ -31,13 +30,6 @@ public class StatTestPanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
-		testColors = new Color[5];
-		//mit/agi/wis/spi/wit
-		testColors[0] = Color.red;
-		testColors[1] = Color.green;
-		testColors[2] = Color.HSVToRGB( 300f / 360f, 1, .5f );
-		testColors[3] = Color.HSVToRGB( 207f / 360f, .61f, .71f );
-		testColors[4] = Color.yellow;
 	}
 
 	public void Show( StatTestInteraction testInteraction, Action<InteractionResult> actions )
@@ -58,32 +50,12 @@ public class StatTestPanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonActions = actions;
 
-		/*
-		if ( testInteraction.isCumulative && !testInteraction.passFail )
-		{
-			abilityText.text = "Test: " + testInteraction.testAttribute.ToString();
-			if ( !testInteraction.noAlternate )//use alternate test
-			{
-				abilityIcon2.gameObject.SetActive( true );
-				abilityText.text += " or " + testInteraction.altTestAttribute.ToString();
-			}
-		}
-		else
-		{
-			abilityText.text = "Success: " + testInteraction.testAttribute.ToString() + " " + testInteraction.successValue;
-			if ( !testInteraction.noAlternate )
-			{
-				abilityIcon2.gameObject.SetActive( true );
-				abilityText.text = "Success: " + testInteraction.testAttribute.ToString() + " or " + testInteraction.altTestAttribute.ToString() + " " + testInteraction.successValue;
-			}
-		}
-		*/
+
 		if (testInteraction.isCumulative && !testInteraction.passFail)
 		{
 			abilityText.text = "Test " + AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
 			if (!testInteraction.noAlternate)//use alternate test
 			{
-				//abilityIcon2.gameObject.SetActive(true);
 				abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
 			}
 			abilityText.text += ".";
@@ -93,7 +65,6 @@ public class StatTestPanel : MonoBehaviour
 			abilityText.text = "Test " + AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
 			if (!testInteraction.noAlternate)
 			{
-				//abilityIcon2.gameObject.SetActive(true);
 				abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
 			}
 			abilityText.text += "; " + testInteraction.successValue + ".";
@@ -108,15 +79,6 @@ public class StatTestPanel : MonoBehaviour
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
-
-		/*
-		abilityIcon.gameObject.SetActive( true );
-		abilityIcon.sprite = icons[(int)testInteraction.testAttribute];
-		abilityIcon.color = testColors[(int)testInteraction.testAttribute];
-
-		abilityIcon2.sprite = icons[(int)testInteraction.altTestAttribute];
-		abilityIcon2.color = testColors[(int)testInteraction.altTestAttribute];
-		*/
 
 		//acc value starts at -1, so set it to minimum of 0 to show the event has started
 		testInteraction.accumulatedValue = Math.Max( 0, testInteraction.accumulatedValue );

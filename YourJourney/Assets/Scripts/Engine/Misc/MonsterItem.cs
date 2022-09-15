@@ -57,9 +57,7 @@ public class MonsterItem : MonoBehaviour
 		//	sunderModify = 0;
 		//else
 
-		//TODO Lethal when first monster has 1 HP and other monsters have more HP doesn't seem to work.
-
-		healthModify = modifier.Lethal ? monster.health / 2 : 0;
+		healthModify = modifier.Lethal ? currentMaxHealth / 2 : 0;
 		int damageUsed = 0;
 		tempCurrentHealth = currentMaxHealth;
 		currentShield = Mathf.Max( 0, monster.shieldValue - tempCurrentSunder);
@@ -109,6 +107,7 @@ public class MonsterItem : MonoBehaviour
 			if ( damageUsed == currentDead )
 			{
 				isDead = true;
+				currentShield = 0; //Set to 0 so remaining armor doesn't algorithmically resurrect dead enemies?
 				//Restore Sunder for next enemy if necessary. When an enemy is defeated, Sunder applies to the next enemy as well.
 				if (startedSunder) { modifier.Sunder = true; }
 				break;

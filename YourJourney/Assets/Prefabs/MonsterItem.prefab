@@ -30,7 +30,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3623013040499419820}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -103,7 +103,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3623013040499419820}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -253,8 +253,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3623013040741463002}
-  - {fileID: 4890901127683142461}
   - {fileID: 421837442967910845}
+  - {fileID: 4890901127683142461}
   - {fileID: 3623013040430273129}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -285,7 +285,7 @@ MonoBehaviour:
   sorcText: {fileID: 1771174671612790089}
   skullnbones: {fileID: 5035998535831245167}
   isDead: 0
-  currentMax: 0
+  activeMonster: 0
 --- !u!225 &6718835288478750875
 CanvasGroup:
   m_ObjectHideFlags: 0

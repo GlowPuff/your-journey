@@ -2,7 +2,10 @@
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 public class DamagePanel : MonoBehaviour
 {
@@ -40,9 +43,69 @@ public class DamagePanel : MonoBehaviour
 		damageIcon.SetActive( true );
 		fearIcon.SetActive( true );
 
-		Tuple<int, int> damage = m.CalculateDamage();
-		fearText.text = damage.Item1.ToString();
-		damageText.text = damage.Item2.ToString();
+		Ability negatedBy;
+		string sNegatedBy;
+		string sFear;
+		string sDamage;
+		string sAttack;
+		string sEffect;
+
+		//First check if there are Monster Activations available...
+		ObservableCollection<MonsterActivations> activationsObserver = Engine.currentScenario.activationsObserver;
+		ObservableCollection<MonsterActivationItem> activationItems = new ObservableCollection<MonsterActivationItem>();
+		Debug.Log("ShowCombatCounter: activationsId=" + m.activationsId + " activationsObserver.Count=" + (activationsObserver == null ? "null" : activationsObserver.Count.ToString()));
+		if (m.activationsId >= 0 && activationsObserver != null && activationsObserver.Count > 0)
+        {
+			activationItems = activationsObserver.Where(a => a.id == m.activationsId ).First().activations;
+        }
+
+		int groupIndex = 0;
+		MonsterActivationItem item = null;
+		Debug.Log("activationItems.Count=" + (activationItems == null ? "null" : activationItems.Count.ToString()));
+		if(activationItems != null && activationItems.Count > 0)
+        {
+			groupIndex = m.ActiveMonsterCount - 1; //subtract one to make it work as an array index
+			if (groupIndex < 0) { groupIndex = 0; }
+			if (groupIndex > 2) { groupIndex = 2; }
+			List<MonsterActivationItem> validItems;
+
+			for (; groupIndex >= 0; groupIndex--)
+			{
+				validItems = activationItems.Where(a => a.valid[groupIndex]).ToList();
+				Debug.Log("validItems.Count=" + (validItems == null ? "null" : validItems.Count.ToString()));
+				if (validItems.Count > 0)
+				{
+					int randomIndex = UnityEngine.Random.Range(0, validItems.Count);
+					Debug.Log("randomIndex=" + randomIndex);
+					item = validItems[randomIndex];
+					break;
+				}
+			}
+		}
+
+		if (item != null)
+		{
+			Debug.Log("item damage=" + item.damage.ToString() + " fear=" + item.fear.ToString() + " negate=" + ((Ability)item.negate));
+			sDamage = item.damage[groupIndex].ToString();
+			sFear = item.fear[groupIndex].ToString();
+			negatedBy = (Ability)item.negate;
+			sAttack = item.text;
+			sEffect = item.effect;
+		}
+		else
+		{
+			//Only apply Default damage if there are no Monster Activations
+			Tuple<int, int> damage = m.CalculateDamage();
+			sFear = damage.Item1.ToString();
+			sDamage = damage.Item2.ToString();
+			negatedBy = m.negatedBy;
+			negatedBy = (Ability)GlowEngine.GenerateRandomNumbers(6)[0]; //Randomize the ability instead of taking it from the monster (which is always Might right now)
+			sAttack = $"A {m.dataName} attacks!";
+			sEffect = "";
+		}
+
+		fearText.text = sFear;
+		damageText.text = sDamage;
 
 		overlay.alpha = 0;
 		overlay.gameObject.SetActive( true );
@@ -51,14 +114,12 @@ public class DamagePanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonAction = action;
 
-		Ability negatedBy = m.negatedBy;
-		negatedBy = (Ability)GlowEngine.GenerateRandomNumbers(6)[0]; //Randomize the ability instead of taking it from the monster (which is always Might right now)
+		abilityText.text = "";
+		sNegatedBy = AbilityUtility.ColoredText(negatedBy, 42) + "  " + negatedBy.ToString() + " negates.";
 
-		abilityText.text = AbilityUtility.ColoredText(negatedBy, 42) + "  " + negatedBy.ToString() + " negates.";
+		SetText(sAttack + "\r\n\r\n" + sNegatedBy + (sEffect == "" ? "" : "\r\n\r\n" + sEffect));
 
-		SetText( $"A {m.dataName} attacks!" );
-
-		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
+        rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
 
 		group.DOFade( 1, .5f );

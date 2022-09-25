@@ -12,6 +12,7 @@ public class Monster
 {
 	public Guid GUID;
 	public int id;
+	public int activationsId;
 	public string dataName;
 	public bool isEmpty;
 	public string triggerName;
@@ -814,6 +815,7 @@ public class Monster
 		{
 			//dataName = monsterNames[(int)mType],
 			id = mId,
+			activationsId = mId,
 			dataName = mDataName,
 			monsterType = mType,
 			GUID = Guid.NewGuid(),

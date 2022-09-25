@@ -24,6 +24,7 @@ public class FileManager
 	public List<IInteraction> interactions { get; set; }
 	public List<Trigger> triggers { get; set; }
 	public List<Objective> objectives { get; set; }
+	public List<MonsterActivations> activations { get; set; }
 	public List<TextBookData> resolutions { get; set; }
 	public List<Threat> threats { get; set; }
 	public List<Chapter> chapters { get; set; }
@@ -55,6 +56,7 @@ public class FileManager
 		interactions = source.interactionObserver;
 		triggers = source.triggersObserver.ToList();
 		objectives = source.objectiveObserver.ToList();
+		activations = source.activationsObserver.ToList();
 		resolutions = source.resolutionObserver.ToList();
 		threats = source.threatObserver.ToList();
 		chapters = source.chapterObserver.ToList();
@@ -90,12 +92,14 @@ public class FileManager
 
 		try
 		{
+			Debug.Log("StreamReader#ReadToEnd()");
 			string json = "";
 			using ( StreamReader sr = new StreamReader( filename ) )
 			{
 				json = sr.ReadToEnd();
 			}
 
+			Debug.Log("JsonConvert#DeserializeObject()");
 			ITraceWriter traceWriter = new MemoryTraceWriter();
 			var fm = JsonConvert.DeserializeObject<FileManager>( json, new JsonSerializerSettings()
 			{
@@ -107,6 +111,7 @@ public class FileManager
 				}
 			});
 
+			Debug.Log("Scenario#CreateInstance()");
 			return Scenario.CreateInstance( fm );
 		}
 		catch(Exception e)

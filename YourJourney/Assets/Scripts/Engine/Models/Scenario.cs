@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using UnityEngine;
 
 public class Scenario
 {
@@ -31,6 +32,7 @@ public class Scenario
 	public List<IInteraction> interactionObserver { get; set; }
 	public ObservableCollection<Trigger> triggersObserver { get; set; }
 	public ObservableCollection<Objective> objectiveObserver { get; set; }
+	public ObservableCollection<MonsterActivations> activationsObserver { get; set; }
 	public ObservableCollection<TextBookData> resolutionObserver { get; set; }
 	public ObservableCollection<Threat> threatObserver { get; set; }
 	public ObservableCollection<Chapter> chapterObserver { get; set; }
@@ -44,6 +46,7 @@ public class Scenario
 	/// </summary>
 	public static Scenario CreateInstance( FileManager fm )
 	{
+		Debug.Log("CreateInstance 1");
 		Scenario s = new Scenario();
 		s.scenarioGUID = fm.scenarioGUID;
 		s.campaignGUID = fm.campaignGUID;
@@ -51,17 +54,36 @@ public class Scenario
 		s.scenarioName = fm.scenarioName;
 		s.fileVersion = fm.fileVersion;
 		//s.fileName = fm.fileName;
+		Debug.Log("CreateInstance 2");
 		s.saveDate = fm.saveDate;
 		s.projectType = fm.projectType;
 		s.objectiveName = fm.objectiveName;
 		s.interactionObserver = new List<IInteraction>( fm.interactions );
 		s.triggersObserver = new ObservableCollection<Trigger>( fm.triggers );
 		s.objectiveObserver = new ObservableCollection<Objective>( fm.objectives );
+		Debug.Log("CreateInstance 3");
+		if (fm.activations != null)
+		{
+			s.activationsObserver = new ObservableCollection<MonsterActivations>(fm.activations);
+		}
+		else
+        {
+			s.activationsObserver = new ObservableCollection<MonsterActivations>();
+        }
 		s.resolutionObserver = new ObservableCollection<TextBookData>( fm.resolutions );
 		s.threatObserver = new ObservableCollection<Threat>( fm.threats );
 		s.chapterObserver = new ObservableCollection<Chapter>( fm.chapters );
 		//s.collectionObserver = new ObservableCollection<Collection>(fm.collections);
-		s.collectionObserver = new ObservableCollection<int>(fm.collections);
+		Debug.Log("CreateInstance 4");
+		if (fm.collections != null)
+		{
+			s.collectionObserver = new ObservableCollection<int>(fm.collections);
+		}
+		else
+        {
+			s.collectionObserver = new ObservableCollection<int>();
+			s.collectionObserver.Add(Collection.CORE_SET.ID);
+        }
 		s.globalTilePool = new ObservableCollection<int>( fm.globalTiles );
 		s.scenarioEndStatus = new Dictionary<string, bool>( fm.scenarioEndStatus );
 		//s.fileName = fm.fileName;
@@ -73,6 +95,7 @@ public class Scenario
 		s.specialInstructions = fm.specialInstructions;
 		s.loreReward = fm.loreReward;
 		s.xpReward = fm.xpReward;
+		Debug.Log("CreateInstance 5");
 
 		return s;
 	}

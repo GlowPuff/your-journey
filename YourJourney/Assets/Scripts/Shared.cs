@@ -13,7 +13,7 @@ public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, HungryWa
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle }
 public enum ProjectType { Standalone, Campaign }
-public enum Ability { Might, Agility, Wisdom, Spirit, Wit, Wild, None }
+public enum Ability { Might, Agility, Wisdom, Spirit, Wit, Wild, Random, None }
 public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }
 public enum ButtonIcon { None, Action, OK, Continue, Next }
 public enum TokenType { Search, Person, Threat, Darkness, Exploration, None }

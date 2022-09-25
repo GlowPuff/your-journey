@@ -174,7 +174,19 @@ public class ShadowPhaseManager : MonoBehaviour
 			//Move X: Attack NAME (or closest Hero)
 			//buttons: Attack/No Target
 			doInterrupt = false;
-			tp.ShowYesNo( $"Move {monsters[i].movementValue}: Attack {heroName} or closest Hero.\r\n\r\nCan this enemy group attack a target?\r\n\r\nIf you have a skill to attack or apply damage to this enemy group, do it now by selecting its Enemy Button.", res =>
+			int moveA = 0;
+			int moveB = 0;
+            if (monsters[i].moveA > 0 || monsters[i].moveB > 0)
+            {
+				moveA = monsters[i].moveA;
+				moveB = monsters[i].moveB;
+            }
+			else
+            {
+				moveA = monsters[i].movementValue;
+				moveB = moveA * 2;
+            }
+			tp.ShowYesNo( $"Move {moveA}: Attack {heroName} or closest Hero.\r\n\r\nCan this enemy group attack a target?\r\n\r\nIf you have a skill to attack or apply damage to this enemy group, do it now by selecting its Enemy Button.", res =>
 			{
 				waiting = false;
 				iResult = res;
@@ -230,7 +242,7 @@ public class ShadowPhaseManager : MonoBehaviour
 				{
 					Debug.Log( "***NO ATTACK" );
 					waiting = true;
-					im.GetNewTextPanel().ShowOkContinue( $"Move {monsters[i].dataName} group {monsters[i].movementValue * 2} spaces towards {heroName}.", ButtonIcon.Continue, () => waiting = false );
+					im.GetNewTextPanel().ShowOkContinue( $"Move {monsters[i].dataName} group {moveB} spaces towards {heroName}.", ButtonIcon.Continue, () => waiting = false );
 					//wait
 					while ( waiting )
 						yield return null;

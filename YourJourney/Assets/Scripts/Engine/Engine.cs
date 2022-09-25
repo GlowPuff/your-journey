@@ -10,6 +10,7 @@ public class Engine : MonoBehaviour
 {
 	[HideInInspector]
 	public Scenario scenario;
+	public static Scenario currentScenario;
 
 	public CamControl camControl;
 	public TileManager tileManager;
@@ -77,6 +78,9 @@ public class Engine : MonoBehaviour
 		scenario.objectiveObserver.RemoveAt( 0 );
 		scenario.interactionObserver.RemoveAt( 0 );
 		scenario.triggersObserver.RemoveAt( 0 );
+
+		//Set the static currentScenario so we can access it from anywhere
+		currentScenario = scenario;
 
 		triggerManager.InitCampaignTriggers();
 		interactionManager.Init( scenario );

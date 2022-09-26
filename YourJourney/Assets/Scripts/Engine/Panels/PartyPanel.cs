@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class PartyPanel : MonoBehaviour
 {
 	public CanvasGroup overlay;
-	public Text loreText, diffText;
+	public Text loreText, xpText, diffText;
 	public HeroItem[] heroItems;
 
 	CanvasGroup group;
@@ -48,6 +48,7 @@ public class PartyPanel : MonoBehaviour
 
 		diffText.text = Bootstrap.gameStarter.difficulty.ToString();
 		loreText.text = "Lore: " + Bootstrap.loreCount.ToString();
+		xpText.text = "XP: " + Bootstrap.xpCount.ToString();
 
 		foreach ( HeroItem go in heroItems )
 		{

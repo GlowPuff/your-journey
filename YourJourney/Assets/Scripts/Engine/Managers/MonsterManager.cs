@@ -190,7 +190,7 @@ public class MonsterManager : MonoBehaviour
 				{
 					string trigger = ti.triggerDefeatedName;
 					FindObjectOfType<TriggerManager>().FireTrigger( trigger );
-					FindObjectOfType<LorePanel>().AddReward( ti.loreReward );
+					FindObjectOfType<LorePanel>().AddReward( ti.loreReward, ti.xpReward, ti.threatReward );
 				}
 			} );
 		}

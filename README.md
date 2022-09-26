@@ -29,3 +29,6 @@ The editor is available in [a separate repository](https://github.com/TrnsltLife
 [Direct link to latest release](https://github.com/TrnsltLife/JiMEditor/releases)
 
 [Direct link to GlowPuff's releases](https://github.com/GlowPuff/JiMEditor/releases)
+
+## Discuss the project at Board Game Geek
+The official forum post for this project: [BGG Forum Post](https://boardgamegeek.com/thread/2488415/custom-scenario-editor-and-companion-app-create-yo)

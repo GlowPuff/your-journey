@@ -1,6 +1,5 @@
 # Your Journey - v0.20
-The companion playback app for the Journeys in Middle Earth Scenario Editor, forked from [GlowPuff's original project](https://github.com/GlowPuff/your-journey).
-
+The companion playback app for the Journeys in Middle Earth Scenario Editor, forked from [GlowPuff's original project](https://github.com/GlowPuff/your-journey) with new tiles from [Celstra](https://github.com/Celstra/JiMEditor).
 
 #### Download the latest release
 [Download the Newest Release!](https://github.com/TrnsltLife/your-journey/releases/tag/v0.20) Featuring tiles from Shadowed Paths, enemies from all the expansions, more character portraits, and additional enhancements!

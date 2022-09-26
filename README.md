@@ -18,10 +18,10 @@ The companion playback app for the Journeys in Middle Earth Scenario Editor, for
 8. Click the "Begin Journey" button to start playing!
 
 ## LIMITATIONS:
--No tiles from Spreading War yet.
--Battle map scenarios are not supported.
--New mechanics from Shadowed Paths and Spreading War aren't implemented (corruption, difficult ground, fortified).
--You have to manage your inventory and skill cards yourself, based on the Lore and XP you can see on the Party Panel.
+* No tiles from Spreading War yet.
+* Battle map scenarios are not supported.
+* New mechanics from Shadowed Paths and Spreading War aren't implemented (corruption, difficult ground, fortified).
+* You have to manage your inventory and skill cards yourself, based on the Lore and XP you can see on the Party Panel.
 
 ## The Scenario Editor
 The editor is available in [a separate repository](https://github.com/TrnsltLife/JiMEditor).

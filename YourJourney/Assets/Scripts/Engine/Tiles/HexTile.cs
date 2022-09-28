@@ -25,7 +25,20 @@ public class HexTile : ITile
 	public string tileSide { get; set; }
 	public TextBookData flavorBookData { get; set; }
 	public ObservableCollection<Token> tokenList { get; set; }
+
 	public string hexRoot { get; set; }
+
+	private string _pathRoot;
+	public string pathRoot 
+	{ 
+		get => _pathRoot;
+		set
+		{
+			_pathRoot = value;
+			hexRoot = _pathRoot;
+		}
+	}
+
 	public Vector3 vposition { get; set; }
 	public bool isStartTile { get; set; }
 	public string triggerName { get; set; }

@@ -161,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 0}
   currentConnectorID: 0
-  rootPosition: {fileID: 15366713779897499}
+  rootPosition: {fileID: 15366712662536101}
   tilemesh: {fileID: 0}
   tokenTriggerList: []
   anchorSphere: {fileID: 0}

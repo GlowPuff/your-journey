@@ -14,7 +14,8 @@ public class CamControl : MonoBehaviour
 	Camera cam;
 
 	//old Z = -2.40108
-	public float moveDragSpeed = .005f, rotateSpeed = 30, rotateDuration = .25f, doubleClickSpeed = .25f, smoothSpeed;
+	public float moveDragSpeed = .005f, rotateSpeed = 30, rotateDuration = .25f, 
+		doubleClickSpeed = .25f, zoomMin = 3f, zoomMax = 20f, smoothSpeed;
 
 	float rotateAmount = 0, dClickTimer;
 	Vector2 dragStart;
@@ -74,17 +75,26 @@ public class CamControl : MonoBehaviour
 		float axis = Input.GetAxis( "Mouse ScrollWheel" );
 		float y = cam.transform.localPosition.y;
 
+		float zoomAmount = 2f;
+		if (y <= 14f) { zoomAmount = 1f; }
+		if (y <= 8f) { zoomAmount = 0.5f; }
+		if (y <= 5f) { zoomAmount = 0.2f; }
+
 		// scroll up
 		if ( axis > 0f )
 		{
-			if ( y - .2f >= 3f )
-				targetZoom = cam.transform.localPosition - new Vector3( 0, .2f, 0 );
+			if (y - zoomAmount >= zoomMin)
+				targetZoom = cam.transform.localPosition - new Vector3(0, zoomAmount, 0);
+			else
+				targetZoom = new Vector3(0, zoomMin, 0);
 		}
 		// scroll down
 		else if ( axis < 0f )
 		{
-			if ( y + .2f <= 6f )
-				targetZoom = cam.transform.localPosition + new Vector3( 0, .2f, 0 );
+			if (y + zoomAmount <= zoomMax)
+				targetZoom = cam.transform.localPosition + new Vector3(0, zoomAmount, 0);
+			else
+				targetZoom = new Vector3(0, zoomMax, 0);
 		}
 
 		float fdScalar = GlowEngine.RemapValue( y, 3, 6, focusDistMin, focusDistMax );

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using UnityEngine;
 
-public class HexTile : BaseTile
+public class BaseTile : ITile
 {
 	public float angle { get; set; }
 	public int idNumber { get; set; }
@@ -45,14 +45,12 @@ public class HexTile : BaseTile
 
 	//public bool isExplored { get; set; } = false;
 
-	public HexTile()
+	public BaseTile()
 	{
-		tileType = TileType.Hex;
 	}
 
-	public HexTile( int n, Vector position, float angle )
+	public BaseTile( int n, Vector position, float angle )
 	{
-		tileType = TileType.Hex;
 		idNumber = n;
 		tokenCount = ( n / 100 ) % 10;
 		GUID = Guid.NewGuid();

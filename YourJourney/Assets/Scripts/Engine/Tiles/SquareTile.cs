@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using UnityEngine;
 
-public class HexTile : BaseTile
+public class SquareTile : BaseTile
 {
 	public float angle { get; set; }
 	public int idNumber { get; set; }
@@ -23,7 +23,7 @@ public class HexTile : BaseTile
 	}
 	public TileType tileType { get; set; }
 	public string tileSide { get; set; }
-	public TextBookData flavorBookData { get; set; }
+
 	public ObservableCollection<Token> tokenList { get; set; }
 
 	public string hexRoot { get; set; }
@@ -45,12 +45,12 @@ public class HexTile : BaseTile
 
 	//public bool isExplored { get; set; } = false;
 
-	public HexTile()
+	public SquareTile()
 	{
 		tileType = TileType.Hex;
 	}
 
-	public HexTile( int n, Vector position, float angle )
+	public SquareTile( int n, Vector position, float angle )
 	{
 		tileType = TileType.Hex;
 		idNumber = n;

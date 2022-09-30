@@ -12,7 +12,7 @@ public class Collection
 {
     public static readonly Collection CORE_SET = new Collection(1, "Core Set", "r",
         //new Monster[] { new Monster(0), new Monster(1), new Monster(2), new Monster(3), new Monster(4), new Monster(5), new Monster(6) },
-        new int[] { 100, 101, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 300, 301, 302, 303, 304, 305, 306, 307, 308, 400 }, //tileId
+        new int[] { 100, 101, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 300, 301, 302, 303, 304, 305, 306, 307, 308, 400, 998, 999 }, //tileId
         false, false
     );
 

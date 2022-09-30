@@ -132,6 +132,12 @@ public class TileManager : MonoBehaviour
 			case 402:
 				return tilePrefabs[41];
 
+			//Battle Tiles
+			case 998:
+				return tilePrefabs[42];
+			case 999:
+				return tilePrefabs[43];
+
 			//Default
 			default:
 				return tilePrefabs[0];
@@ -229,6 +235,13 @@ public class TileManager : MonoBehaviour
 				return tilePrefabsB[40];
 			case 402:
 				return tilePrefabsB[41];
+
+			//Battle Tiles
+			case 998:
+				return tilePrefabs[42];
+			case 999:
+				return tilePrefabs[43];
+
 
 			//Default
 			default:

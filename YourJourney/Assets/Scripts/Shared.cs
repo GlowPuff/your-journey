@@ -11,7 +11,7 @@ public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, HungryWa
 						FellBeast, WargRider, SiegeEngine, WarOliphaunt, Soldier, UrukWarrior,
 						LordAngon, WitchKingOfAngmar, Eadris }
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
-public enum TileType { Hex, Battle }
+public enum TileType { Hex, Battle, Square }
 public enum ProjectType { Standalone, Campaign }
 public enum Ability { Might, Agility, Wisdom, Spirit, Wit, Wild, Random, None }
 public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }

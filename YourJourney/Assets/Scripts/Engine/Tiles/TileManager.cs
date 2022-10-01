@@ -400,7 +400,7 @@ public class TileManager : MonoBehaviour
 			List<Tuple<int, Vector3[]>> tokpos = new List<Tuple<int, Vector3[]>>();
 			foreach ( Tile t in explored )
 			{
-				tokpos.Add( new Tuple<int, Vector3[]>( t.hexTile.idNumber, t.RevealTriggeredTokens( name ) ) );
+				tokpos.Add( new Tuple<int, Vector3[]>( t.baseTile.idNumber, t.RevealTriggeredTokens( name ) ) );
 			}
 			StartCoroutine( TokenPlacementPrompt( tokpos ) );
 		}
@@ -569,7 +569,7 @@ public class TileManager : MonoBehaviour
 				SingleTileState state = new SingleTileState()
 				{
 					isActive = t.gameObject.activeInHierarchy,
-					tileGUID = t.hexTile.GUID,
+					tileGUID = t.baseTile.GUID,
 					tokenTriggerList = t.tokenTriggerList,
 					isExplored = t.isExplored,
 					globalPosition = t.transform.position,

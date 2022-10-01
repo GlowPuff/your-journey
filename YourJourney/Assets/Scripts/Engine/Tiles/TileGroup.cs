@@ -97,7 +97,7 @@ public class TileGroup
 			tile.gameObject.SetActive( false );
 			//tile.transform.parent = go.transform;
 			//tile.transform.localPosition = Vector3.zero;
-			tile.hexTile = hexroot;
+			tile.baseTile = hexroot;
 			tile.tileGroup = this;
 			tile.chapter = c;
 //tile.gameObject.SetActive(true);
@@ -115,7 +115,7 @@ public class TileGroup
 			previous = tile;
 
 			//add fixed tokens
-			if ( tile.hexTile.tokenList.Count > 0 )
+			if ( tile.baseTile.tokenList.Count > 0 )
 				usedPositions.AddRange( AddFixedToken( tile ) );
 
 			if ( hexroot.isStartTile )
@@ -187,12 +187,12 @@ public class TileGroup
 		{
 			//Debug.Log( chapter.tileObserver[i].idNumber );
 
-			HexTile h = chapter.tileObserver[i] as HexTile;
-			containerObject.name += " " + h.idNumber.ToString();
+			BaseTile bt = chapter.tileObserver[i] as BaseTile;
+			containerObject.name += " " + bt.idNumber.ToString();
 			GameObject goc = new GameObject();
-			goc.name = h.idNumber.ToString();
+			goc.name = bt.idNumber.ToString();
 
-			Tile tile = Object.Instantiate( tileManager.GetPrefab( h.tileSide, h.idNumber ), goc.transform ).GetComponent<Tile>();
+			Tile tile = Object.Instantiate( tileManager.GetPrefab( bt.tileSide, bt.idNumber ), goc.transform ).GetComponent<Tile>();
 			//Tile tile = tileManager.GetPrefab( h.tileSide, h.idNumber );
 			//set its data
 			//tile.Init();
@@ -200,7 +200,7 @@ public class TileGroup
 			//tile.transform.parent = goc.transform;
 			//tile.transform.localPosition = Vector3.zero;
 			tile.chapter = c;
-			tile.hexTile = h;
+			tile.baseTile = bt;
 			tile.tileGroup = this;
 //tile.gameObject.SetActive(true);
 //tile.RevealAllAnchorConnectorTokens();
@@ -211,14 +211,14 @@ public class TileGroup
 
 				//EDITOR distance between hextile centers = 55.425626
 				//3D distance between hextile centers = .8660254
-				float d = Vector3.Distance( tile.hexTile.vposition, tileList[0].hexTile.vposition );
+				float d = Vector3.Distance( tile.baseTile.vposition, tileList[0].baseTile.vposition );
 				//Debug.Log( "DIST:" + d );//x48, y27.71281
 				float scalar = .8660254f * d;
 				scalar = scalar / 55.425626f;
 				//Debug.Log( "SCALAR:" + scalar );//x48, y27.71281
 
 				//get normalized EDITOR vector to first tile in this group
-				Vector3 offset = tile.hexTile.vposition - tileList[0].hexTile.vposition;
+				Vector3 offset = tile.baseTile.vposition - tileList[0].baseTile.vposition;
 				//convert normalized EDITOR vector to 3D using distance tween hexes
 				Vector3 n = Vector3.Normalize( offset ) * scalar;
 				//Debug.Log( "offset::" + goc.name + "::" + n );
@@ -229,8 +229,8 @@ public class TileGroup
 				//fix tile positions that don't have editor root hex at 0,1
 				Vector3 tilefix = Vector3.zero;
 				//convert the string to vector2
-				string[] s = tile.hexTile.hexRoot.Split( ',' );
-				Debug.Log("hexRoot::" + goc.name + "::" + tile.hexTile.hexRoot);
+				string[] s = tile.baseTile.hexRoot.Split( ',' );
+				Debug.Log("hexRoot::" + goc.name + "::" + tile.baseTile.hexRoot);
 				Vector2 p = new Vector2( float.Parse( s[0] ), float.Parse( s[1] ) );
 				if (p.y != 1)
 				{
@@ -245,7 +245,7 @@ public class TileGroup
 				//Debug.Log("tilefix>::" + goc.name + "::" + tilefix);
 
 				//set tile position using goc's position + reflected offset
-				tile.SetPosition( tileList[0].transform.parent.transform.position + n + tilefix, h.angle );
+				tile.SetPosition( tileList[0].transform.parent.transform.position + n + tilefix, bt.angle );
 				//Debug.Log( "ROOTPOS:" + tile.rootPosition.transform.position );
 				//Debug.Log( "ROOT::" + tileList[0].transform.parent.transform.position );
 			}
@@ -254,7 +254,7 @@ public class TileGroup
 				//fix tile positions that don't have editor root hex at 0,1
 				Vector3 tilefix = Vector3.zero;
 				//convert the string to vector2
-				string[] s = tile.hexTile.hexRoot.Split( ',' );
+				string[] s = tile.baseTile.hexRoot.Split( ',' );
 				//Debug.Log("hexRoot::" + goc.name + "::" + tile.hexTile.hexRoot);
 				Vector2 p = new Vector2( float.Parse( s[0] ), float.Parse( s[1] ) );
 				if (p.y != 1)
@@ -269,7 +269,7 @@ public class TileGroup
 				}
 				//tilefix = new Vector3(p.x * .75f, 0, p.y * 0.4330127f);
 				//Debug.Log("tilefix0::" + goc.name + "::" + tilefix);
-				tile.SetPosition( Vector3.zero, h.angle );
+				tile.SetPosition( Vector3.zero, bt.angle );
 				tile.transform.position += tilefix;
 			}
 
@@ -278,11 +278,11 @@ public class TileGroup
 			tile.transform.parent.transform.parent = containerObject;
 			//add a token, if there is one
 			//if ( !c.usesRandomGroups )
-			if ( tile.hexTile.tokenList.Count > 0 )
+			if ( tile.baseTile.tokenList.Count > 0 )
 				usedPositions.AddRange( AddFixedToken( tile ) );
 
 			//find starting position if applicable
-			if ( h.isStartTile )
+			if ( bt.isStartTile )
 			{
 				tile.isExplored = true;
 				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
@@ -315,7 +315,7 @@ public class TileGroup
 			attachtfs.Clear();
 			attachtfs.AddRange( t.GetChildren( "token attach" ) );
 			var usedInThisTile = from tu in usedPositions
-													 where tu.GetComponent<MetaData>().tileID/*tile.hexTile.idNumber*/ == t.hexTile.idNumber
+													 where tu.GetComponent<MetaData>().tileID/*tile.hexTile.idNumber*/ == t.baseTile.idNumber
 													 select tu;
 
 			var opentfs = new List<Transform>();
@@ -410,7 +410,7 @@ public class TileGroup
 			tile.tokenStates.Add( new TokenState()
 			{
 				isActive = false,
-				parentTileGUID = tile.hexTile.GUID,
+				parentTileGUID = tile.baseTile.GUID,
 				localPosition = go.transform.localPosition,
 				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
@@ -423,7 +423,7 @@ public class TileGroup
 		//List<Vector3> openPositions = new List<Vector3>();
 		//openPositions.AddRange( tile.GetChildren( "token attach" ).Select( x => x.position ) );
 
-		foreach ( Token t in tile.hexTile.tokenList )
+		foreach ( Token t in tile.baseTile.tokenList )
 		{
 			//if the token points to a persistent event, swap the token type with the event it's delegating to
 			t.tokenType = HandlePersistentTokenSwap( t.triggerName );
@@ -465,7 +465,7 @@ public class TileGroup
 			//offset to token in EDITOR coords
 			go.GetComponent<MetaData>().offset = t.vposition - new Vector3( 256, 0, 256 );
 			go.GetComponent<MetaData>().isRandom = false;
-			go.GetComponent<MetaData>().tileID = tile.hexTile.idNumber;
+			go.GetComponent<MetaData>().tileID = tile.baseTile.idNumber;
 			//go.GetComponent<MetaData>().isCreatedFromReplaced = false;
 			//go.GetComponent<MetaData>().hasBeenReplaced = false;
 			//go.GetComponent<MetaData>().isActive = false;
@@ -485,7 +485,7 @@ public class TileGroup
 			tile.tokenStates.Add( new TokenState()
 			{
 				isActive = false,
-				parentTileGUID = tile.hexTile.GUID,
+				parentTileGUID = tile.baseTile.GUID,
 				localPosition = go.transform.localPosition,
 				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
@@ -539,7 +539,7 @@ public class TileGroup
 		newMD.isRandom = false;
 		//newMD.isCreatedFromReplaced = true;
 		//newMD.hasBeenReplaced = false;
-		newMD.tileID = tile.hexTile.idNumber;
+		newMD.tileID = tile.baseTile.idNumber;
 		newMD.transform.position = oldMD.transform.position;
 		newMD.gameObject.SetActive( oldMD.gameObject.activeSelf );
 
@@ -547,7 +547,7 @@ public class TileGroup
 		var ts = new TokenState()
 		{
 			isActive = oldtstate.isActive,
-			parentTileGUID = tile.hexTile.GUID,
+			parentTileGUID = tile.baseTile.GUID,
 			localPosition = go.transform.localPosition,
 			metaData = new MetaDataJSON( newMD ),
 		};
@@ -804,7 +804,7 @@ public class TileGroup
 	public void RevealExploreToken()
 	{
 		foreach ( Tile t in tileList )
-			if ( !t.hexTile.isStartTile )
+			if ( !t.baseTile.isStartTile )
 				t.RevealExplorationToken();
 	}
 
@@ -815,7 +815,7 @@ public class TileGroup
 	{
 		//Debug.Log( "RevealInteractiveTokens" );
 		foreach ( Tile t in tileList )
-			if ( startTileOnly && t.hexTile.isStartTile )
+			if ( startTileOnly && t.baseTile.isStartTile )
 				t.RevealInteractiveTokens();
 			else if ( !startTileOnly )
 				t.RevealInteractiveTokens();
@@ -839,7 +839,7 @@ public class TileGroup
 
 		foreach ( Tile t in tileList )
 		{
-			if ( onlyStart && t.hexTile.isStartTile )
+			if ( onlyStart && t.baseTile.isStartTile )
 				t.Colorize();
 			else if ( !onlyStart )
 				t.Colorize();
@@ -873,7 +873,7 @@ public class TileGroup
 		foreach ( Tile tile in tileList )
 		{
 			SingleTileState sts = ( from t in tileGroupState.tileStates
-															where t.tileGUID == tile.hexTile.GUID
+															where t.tileGUID == tile.baseTile.GUID
 															select t ).FirstOr( null );
 			if ( sts != null )
 				tile.SetState( sts );

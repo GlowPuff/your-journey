@@ -43,8 +43,6 @@ public class BaseTile : ITile
 	public bool isStartTile { get; set; }
 	public string triggerName { get; set; }
 
-	//public bool isExplored { get; set; } = false;
-
 	public BaseTile()
 	{
 	}
@@ -62,4 +60,9 @@ public class BaseTile : ITile
 		isStartTile = false;
 		triggerName = "None";
 	}
+
+	virtual public string ToString()
+    {
+		return idNumber + tileSide + " [" + position + "] " + angle + "*, " + tokenCount + " tokens" + (isStartTile ? "[start]" : "");
+    }
 }

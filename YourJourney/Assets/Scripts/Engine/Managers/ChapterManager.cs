@@ -54,8 +54,7 @@ public class ChapterManager : MonoBehaviour
 			from tg in tm
 			from tile in tg.tileList
 			where tile.isExplored
-			//where tile.hexTile.tileSide == "B"
-			where darknessTiles.Contains( "" + tile.hexTile.idNumber + tile.hexTile.tileSide)
+			where darknessTiles.Contains( "" + tile.baseTile.idNumber + tile.baseTile.tileSide)
 			select tile;
 
 		//int tk = tokensfound.Count();
@@ -77,7 +76,7 @@ public class ChapterManager : MonoBehaviour
 	{
 		var foo = from chapter in chapterList
 							from tile in chapter.tileObserver
-							from token in ( (HexTile)tile ).tokenList
+							from token in ( (BaseTile)tile ).tokenList
 							where token.triggeredByName == name
 							select token;
 
@@ -130,11 +129,23 @@ public class ChapterManager : MonoBehaviour
 	void FinishChapterTrigger( Chapter c, bool firstChapter )
 	{
 		string s = "Prepare the following tiles:\r\n\r\n";
-		foreach ( HexTile ht in c.tileObserver )
-			s += ht.idNumber 
-				+ "<b>" + Collection.FromTileNumber(ht.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
-				+ ", ";
-		s = s.Substring( 0, s.Length - 2 );
+		foreach (BaseTile bt in c.tileObserver)
+		{
+			Debug.Log(bt.ToString());
+			if (bt.tileType == TileType.Hex)
+			{
+				s += bt.idNumber + bt.tileSide
+					+ "<b>" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
+					+ ", ";
+			}
+			else if (bt.tileType == TileType.Square)
+            {
+				s += "Battle Map Tile"
+					+ "<b>" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
+					+ ", ";
+			}
+		}
+		s = s.Substring( 0, s.Length - 2 ); //Remove trailing comma
 
 		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( s, ButtonIcon.Continue, () =>
 		{

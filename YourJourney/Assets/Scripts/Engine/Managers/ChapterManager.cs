@@ -134,14 +134,15 @@ public class ChapterManager : MonoBehaviour
 			Debug.Log(bt.ToString());
 			if (bt.tileType == TileType.Hex)
 			{
-				s += bt.idNumber + bt.tileSide
-					+ "<b>" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
+				s += bt.idNumber + " " + bt.tileSide
+					+ " <b>" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
 					+ ", ";
 			}
 			else if (bt.tileType == TileType.Square)
             {
 				s += "Battle Map Tile"
-					+ "<b>" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
+					+ (bt.tileSide == "A" ? " (Grass)" : " (Dirt)")
+					+ " <b>" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</b>" //Add the Collection symbol.
 					+ ", ";
 			}
 		}

@@ -76,37 +76,28 @@ public class TileGroup
 		Tile previous = null;
 		for ( int i = 0; i < c.tileObserver.Count; i++ )
 		{
-			//HexTile hexroot = new HexTile( chapter.randomTilePool[randomTileIndices[i]], new Vector(), RandomAngle() );
-			//HexTile hexroot = new HexTile( randomTiles[i], new Vector(), RandomAngle() );
+			BaseTile tileroot = (BaseTile)c.tileObserver[i];
+			tileroot.vposition = new Vector3();
+			tileroot.angle = RandomAngle();
 
-			HexTile hexroot = (HexTile)c.tileObserver[i];
-			hexroot.vposition = new Vector3();
-			hexroot.angle = RandomAngle();
-
-			//provide OnExplore trigger for random tile?
-			//HexTile hexroot = new HexTile();
 			//create parent object for prefab tile
 			GameObject go = new GameObject();
-			go.name = hexroot.idNumber.ToString();
+			go.name = tileroot.idNumber.ToString();
+
 			//instantiate the tile prefab
-			string side = hexroot.tileSide == "Random" ? ( Random.Range( 1, 101 ) < 50 ? "A" : "B" ) : hexroot.tileSide;
-			Tile tile = Object.Instantiate( tileManager.GetPrefab( side, hexroot.idNumber ), go.transform ).GetComponent<Tile>();
-			//Tile tile = tileManager.GetPrefab( side, hexroot.idNumber );
-			//set its data
-			//tile.Init();
+			string side = tileroot.tileSide == "Random" ? ( Random.Range( 1, 101 ) < 50 ? "A" : "B" ) : tileroot.tileSide;
+			Tile tile = Object.Instantiate( tileManager.GetPrefab( side, tileroot.idNumber ), go.transform ).GetComponent<Tile>();
 			tile.gameObject.SetActive( false );
-			//tile.transform.parent = go.transform;
-			//tile.transform.localPosition = Vector3.zero;
-			tile.baseTile = hexroot;
+			tile.baseTile = tileroot;
 			tile.tileGroup = this;
 			tile.chapter = c;
 //tile.gameObject.SetActive(true);
 //tile.RevealAllAnchorConnectorTokens();
 			//rotate go object
-			tile.transform.parent.localRotation = Quaternion.Euler( 0, hexroot.angle, 0 );
+			tile.transform.parent.localRotation = Quaternion.Euler( 0, tileroot.angle, 0 );
 			//set go's parent
 			tile.transform.parent.transform.parent = containerObject;
-			containerObject.name += " " + hexroot.idNumber.ToString();
+			containerObject.name += " " + tileroot.idNumber.ToString();
 			if ( previous != null )
 			{
 				tile.AttachTo( previous, this );
@@ -118,7 +109,7 @@ public class TileGroup
 			if ( tile.baseTile.tokenList.Count > 0 )
 				usedPositions.AddRange( AddFixedToken( tile ) );
 
-			if ( hexroot.isStartTile )
+			if (tileroot.isStartTile )
 			{
 				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
 				tile.isExplored = true;
@@ -128,42 +119,6 @@ public class TileGroup
 		//add random tokens
 		if ( c.usesRandomGroups )
 			AddRandomTokens( usedPositions.ToArray() );
-
-		//***start tile cannot be random, below is no longer needed
-		//find starting position if applicable
-		//if ( c.dataName == "Start" )
-		//{
-		//	bool found = false;
-		//	foreach ( var randomTile in tileList )
-		//	{
-		//		var positions = randomTile.GetChildren( "token attach" );
-		//		var tokens = randomTile.GetChildren( " Token(Clone)" );
-
-		//		var open = from p in positions
-		//							 from t in tokens
-		//							 let foo = new { p, t }
-		//							 where Vector3.Distance( foo.p.position.Y( 0 ), foo.t.position.Y( 0 ) ) > 1f
-		//							 select foo;
-
-		//		if ( open.Count() > 0 )
-		//		{
-		//			Debug.Log( "placed starting position" );
-		//			startPosition = open.First().p.position.Y( .26f );
-		//			found = true;
-		//			randomTile.hexTile.isStartTile = true;
-		//			Colorize( true );
-		//			break;
-		//		}
-		//	}
-		//	if ( !found )
-		//	{
-		//		Debug.Log( "Starting position not found, using default" );
-		//		int tid = GlowEngine.GenerateRandomNumbers( tileList.Count )[0];
-		//		startPosition = tileList[tid].GetExploretokenPosition();
-		//		tileList[tid].hexTile.isStartTile = true;
-		//		Colorize( true );
-		//	}
-		//}
 
 		GenerateGroupCenter();
 	}
@@ -202,73 +157,26 @@ public class TileGroup
 			tile.chapter = c;
 			tile.baseTile = bt;
 			tile.tileGroup = this;
+//Show ball/sphere/marker for anchor and connection points for debugging
 //tile.gameObject.SetActive(true);
 //tile.RevealAllAnchorConnectorTokens();
 			if ( i > 0 )
 			{
-				//3D distance between tiles in X = 0.75
-				//3D distance between tiles in Y = 0.4330127
+				Vector3 convertedSpace = Vector3.zero;
+				if (tile.baseTile.tileType == TileType.Hex) { convertedSpace = ConvertHexEditorSpaceToGameSpace(tile); }
+				else if (tile.baseTile.tileType == TileType.Square) { convertedSpace = ConvertSquareEditorSpaceToGameSpace(tile); }
 
-				//EDITOR distance between hextile centers = 55.425626
-				//3D distance between hextile centers = .8660254
-				float d = Vector3.Distance( tile.baseTile.vposition, tileList[0].baseTile.vposition );
-				//Debug.Log( "DIST:" + d );//x48, y27.71281
-				float scalar = .8660254f * d;
-				scalar = scalar / 55.425626f;
-				//Debug.Log( "SCALAR:" + scalar );//x48, y27.71281
-
-				//get normalized EDITOR vector to first tile in this group
-				Vector3 offset = tile.baseTile.vposition - tileList[0].baseTile.vposition;
-				//convert normalized EDITOR vector to 3D using distance tween hexes
-				Vector3 n = Vector3.Normalize( offset ) * scalar;
-				//Debug.Log( "offset::" + goc.name + "::" + n );
-
-				//reflect to account for difference in coordinate systems quadrant (2D to 3D)
-				n = Vector3.Reflect( n, new Vector3( 0, 0, 1 ) );
-
-				//fix tile positions that don't have editor root hex at 0,1
-				Vector3 tilefix = Vector3.zero;
-				//convert the string to vector2
-				string[] s = tile.baseTile.hexRoot.Split( ',' );
-				Debug.Log("hexRoot::" + goc.name + "::" + tile.baseTile.hexRoot);
-				Vector2 p = new Vector2( float.Parse( s[0] ), float.Parse( s[1] ) );
-				if (p.y != 1)
-				{
-					//Debug.Log("tilefix>.Z::" + goc.name + "::" + (-.4330127f * (p.y - 1f)));
-					tilefix.z = -.4330127f * ( p.y - 1f );
-				}
-				if (p.x != 0)
-				{
-					//Debug.Log("tilefix>.X::" + goc.name + "::" + (p.x * .75f));
-					tilefix.x = p.x * .75f;
-				}
-				//Debug.Log("tilefix>::" + goc.name + "::" + tilefix);
+				Vector3 tilefix = HexTileOffsetFix(tile);
 
 				//set tile position using goc's position + reflected offset
-				tile.SetPosition( tileList[0].transform.parent.transform.position + n + tilefix, bt.angle );
+				tile.SetPosition( tileList[0].transform.parent.transform.position + convertedSpace + tilefix, bt.angle );
 				//Debug.Log( "ROOTPOS:" + tile.rootPosition.transform.position );
 				//Debug.Log( "ROOT::" + tileList[0].transform.parent.transform.position );
 			}
-			else
+			else //First tile
 			{
-				//fix tile positions that don't have editor root hex at 0,1
-				Vector3 tilefix = Vector3.zero;
-				//convert the string to vector2
-				string[] s = tile.baseTile.hexRoot.Split( ',' );
-				//Debug.Log("hexRoot::" + goc.name + "::" + tile.hexTile.hexRoot);
-				Vector2 p = new Vector2( float.Parse( s[0] ), float.Parse( s[1] ) );
-				if (p.y != 1)
-				{
-					//Debug.Log("tilefix0.Z::" + goc.name + "::" + (-.4330127f * (p.y - 1f)));
-					tilefix.z = -.4330127f * ( p.y - 1f );
-				}
-				if (p.x != 0)
-				{
-					//Debug.Log("tilefix0.X::" + goc.name + "::" + (p.x * .75f));
-					tilefix.x = p.x * .75f;
-				}
-				//tilefix = new Vector3(p.x * .75f, 0, p.y * 0.4330127f);
-				//Debug.Log("tilefix0::" + goc.name + "::" + tilefix);
+				Vector3 tilefix = HexTileOffsetFix(tile);
+
 				tile.SetPosition( Vector3.zero, bt.angle );
 				tile.transform.position += tilefix;
 			}
@@ -294,6 +202,67 @@ public class TileGroup
 			AddRandomTokens( usedPositions.ToArray() );
 
 		GenerateGroupCenter();
+	}
+
+	Vector3 ConvertSquareEditorSpaceToGameSpace(Tile tile)
+    {
+		//3D distance between tiles in X and Y = 6
+		//EDITOR distance between square tile centers X and Y = 425
+		//425 / 6 = 70.833333
+		float d = Vector3.Distance(tile.baseTile.vposition, tileList[0].baseTile.vposition);
+		float scalar = d / 70.833333f;
+
+		Vector3 offset = tile.baseTile.vposition - tileList[0].baseTile.vposition;
+		Vector3 n = Vector3.Normalize(offset) * scalar;
+
+		//reflect to account for difference in coordinate systems quadrant (2D to 3D)
+		n = Vector3.Reflect(n, new Vector3(0, 0, 1));
+
+		return n;
+    }
+
+	Vector3 ConvertHexEditorSpaceToGameSpace(Tile tile)
+    {
+		//3D distance between tiles in X = 0.75
+		//3D distance between tiles in Y = 0.4330127
+
+		//EDITOR distance between hextile centers = 55.425626
+		//3D distance between hextile centers = .8660254
+		float d = Vector3.Distance(tile.baseTile.vposition, tileList[0].baseTile.vposition);
+		float scalar = .8660254f * d;
+		scalar = scalar / 55.425626f;
+
+		//get normalized EDITOR vector to first tile in this group
+		Vector3 offset = tile.baseTile.vposition - tileList[0].baseTile.vposition;
+		//convert normalized EDITOR vector to 3D using distance tween hexes
+		Vector3 n = Vector3.Normalize(offset) * scalar;
+
+		//reflect to account for difference in coordinate systems quadrant (2D to 3D)
+		n = Vector3.Reflect(n, new Vector3(0, 0, 1));
+
+		return n;
+	}
+
+	Vector3 HexTileOffsetFix(Tile tile)
+    {
+		//fix tile positions that don't have editor root hex at 0,1
+		Vector3 tilefix = Vector3.zero;
+		//convert the string to vector2
+		string[] s = tile.baseTile.hexRoot.Split(',');
+		Debug.Log("pathRoot::" + tile.baseTile.idNumber + "::" + tile.baseTile.pathRoot);
+		Vector2 p = new Vector2(float.Parse(s[0]), float.Parse(s[1]));
+		if (p.y != 1)
+		{
+			//Debug.Log("tilefix>.Z::" + tile.baseTile.idNumber + "::" + (-.4330127f * (p.y - 1f)));
+			tilefix.z = -.4330127f * (p.y - 1f);
+		}
+		if (p.x != 0)
+		{
+			//Debug.Log("tilefix>.X::" + tile.baseTile.idNumber + "::" + (p.x * .75f));
+			tilefix.x = p.x * .75f;
+		}
+		//Debug.Log("tilefix>::" + tile.baseTile.idNumber + "::" + tilefix);
+		return tilefix;
 	}
 
 	void AddRandomTokens( Transform[] usedPositions )

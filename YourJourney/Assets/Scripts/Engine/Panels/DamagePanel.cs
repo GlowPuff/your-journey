@@ -242,7 +242,8 @@ public class DamagePanel : MonoBehaviour
 	public void OnPass()
 	{
 		Hide();
-		string t = fStand == FinalStand.Damage ? "DAMAGE" : "FEAR";
+		//string t = fStand == FinalStand.Damage ? "DAMAGE" : "FEAR";
+		string t = fStand == FinalStand.Damage ? "<b>D</b>" : "<b>F</b>";
 		var tb = FindObjectOfType<InteractionManager>().GetNewTextPanel();
 		tb.ShowOkContinue( $"Discard all facedown {t} cards and gain 1 inspiration.", ButtonIcon.Continue, () =>
 		{

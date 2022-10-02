@@ -7689,6 +7689,8 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: a8c23f44a8cb6d64484105d33aee2b10, type: 3}
   - {fileID: 15366712624692153, guid: 13791ee0c7759ae4db85ea722383ebd9, type: 3}
   - {fileID: 15366712624692153, guid: 9d9f72b488171ef42b628299f42b2259, type: 3}
+  - {fileID: 15366712624692153, guid: db348df86dafb534db8eef04070d003a, type: 3}
+  - {fileID: 15366712624692153, guid: 7e3d84f46cf299a48b280779e8b65cec, type: 3}
   searchTokenPrefab: {fileID: 988778545020331381, guid: 586effd6ec404024db3347f9a914e4e4,
     type: 3}
   darkTokenPrefab: {fileID: 6962693354486276480, guid: a13603a466ca22a4f8cd5e59637c4998,

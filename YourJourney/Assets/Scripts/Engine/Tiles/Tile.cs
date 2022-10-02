@@ -333,7 +333,6 @@ public class Tile : MonoBehaviour
 	{
 		isExplored = true;
 		tileGroup.isExplored = true;
-		//hexTile.isExplored = true;
 		Sequence sequence = DOTween.Sequence();
 		sequence.Append( exploreToken.DOLocalMoveY( 1, 1 ).SetEase( Ease.InOutQuad ) );
 		sequence.Join( exploreToken.DOScale( 0, 1 ) );
@@ -363,7 +362,6 @@ public class Tile : MonoBehaviour
 	public void Colorize()
 	{
 		isExplored = true;
-		//hexTile.isExplored = true;
 
 		DOTween.To( () => sepiaValue, x =>
 		{

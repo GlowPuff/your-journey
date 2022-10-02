@@ -238,9 +238,9 @@ public class TileManager : MonoBehaviour
 
 			//Battle Tiles
 			case 998:
-				return tilePrefabs[42];
+				return tilePrefabsB[42];
 			case 999:
-				return tilePrefabs[43];
+				return tilePrefabsB[43];
 
 
 			//Default

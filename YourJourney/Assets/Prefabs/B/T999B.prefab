@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 15366712624692150}
   - component: {fileID: 6417375515770637046}
   m_Layer: 0
-  m_Name: T999A
+  m_Name: T999B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -836,7 +836,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ef45c849df0408e4c8331f6707684eb0, type: 2}
+  - {fileID: 2100000, guid: 14475aea2e3009443a99cc68f676080b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

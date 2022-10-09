@@ -8,7 +8,12 @@ public class TileManager : MonoBehaviour
 {
 	public GameObject[] tilePrefabs;
 	public GameObject[] tilePrefabsB;
-	public GameObject searchTokenPrefab, darkTokenPrefab, humanTokenPrefab, elfTokenPrefab, dwarfTokenPrefab, hobbitTokenPrefab, threatTokenPrefab;
+	public GameObject searchTokenPrefab, darkTokenPrefab, threatTokenPrefab, difficultGroundTokenPrefab, fortifiedTokenPrefab;
+	public GameObject humanTokenPrefab, elfTokenPrefab, dwarfTokenPrefab, hobbitTokenPrefab;
+	public GameObject barrelsTokenPrefab, barricadeTokenPrefab, chestTokenPrefab, elevationTokenPrefab, logTokenPrefab, tableTokenPrefab;
+	public GameObject boulderTokenPrefab, bushTokenPrefab, firePitTokenPrefab, rubbleTokenPrefab, statueTokenPrefab, webTokenPrefab;
+	public GameObject fountainTokenPrefab, mistTokenPrefab, pitTokenPrefab, pondTokenPrefab;
+	public GameObject fenceTokenPrefab, streamTokenPrefab, trenchTokenPrefab, wallTokenPrefab;
 	public GameObject fogPrefab;
 	public PartyPanel partyPanel;
 	public SettingsDialog settingsDialog;

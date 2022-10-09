@@ -8,6 +8,7 @@ public class MetaData : MonoBehaviour
 	public string triggeredByName;
 	public TokenType tokenType;
 	public PersonType personType;
+	public TerrainType terrainType;
 	public Vector3 offset;
 	public Guid GUID;
 	public bool isRandom;
@@ -21,6 +22,7 @@ public class MetaDataJSON
 	public string triggeredByName;
 	public TokenType tokenType;
 	public PersonType personType;
+	public TerrainType terrainType;
 	public Vector3 offset;
 	public Guid GUID;
 	public bool isRandom;
@@ -35,6 +37,7 @@ public class MetaDataJSON
 		triggeredByName = md.triggeredByName;
 		tokenType = md.tokenType;
 		personType = md.personType;
+		TerrainType = md.terrainType;
 		offset = md.offset;
 		GUID = md.GUID;
 		isRandom = md.isRandom;

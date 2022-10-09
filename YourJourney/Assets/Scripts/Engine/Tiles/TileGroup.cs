@@ -360,6 +360,57 @@ public class TileGroup
 			{
 				go = Object.Instantiate( tileManager.darkTokenPrefab, tile.transform );
 			}
+			else if (igs[i].tokenType == TokenType.DifficultGround)
+			{
+				go = Object.Instantiate(tileManager.difficultGroundTokenPrefab, tile.transform);
+			}
+			else if (igs[i].tokenType == TokenType.Fortified)
+			{
+				go = Object.Instantiate(tileManager.fortifiedTokenPrefab, tile.transform);
+			}
+			else if (igs[i].tokenType == TokenType.Terrain)
+			{
+				if (igs[i].terrainType == TerrainType.Barrels)
+					go = Object.Instantiate(tileManager.barrelsTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Barricade)
+					go = Object.Instantiate(tileManager.barricadeTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Boulder)
+					go = Object.Instantiate(tileManager.boulderTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Bush)
+					go = Object.Instantiate(tileManager.bushTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Chest)
+					go = Object.Instantiate(tileManager.chestTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Elevation)
+					go = Object.Instantiate(tileManager.elevationTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Fence)
+					go = Object.Instantiate(tileManager.fenceTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.FirePit)
+					go = Object.Instantiate(tileManager.firePitTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Fountain)
+					go = Object.Instantiate(tileManager.fountainTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Log)
+					go = Object.Instantiate(tileManager.logTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Mist)
+					go = Object.Instantiate(tileManager.mistTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Pit)
+					go = Object.Instantiate(tileManager.pitTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Pond)
+					go = Object.Instantiate(tileManager.pondTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Rubble)
+					go = Object.Instantiate(tileManager.rubbleTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Statue)
+					go = Object.Instantiate(tileManager.statueTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Stream)
+					go = Object.Instantiate(tileManager.streamTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Table)
+					go = Object.Instantiate(tileManager.tableTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Trench)
+					go = Object.Instantiate(tileManager.trenchTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Wall)
+					go = Object.Instantiate(tileManager.wallTokenPrefab, tile.transform);
+				else if (igs[i].terrainType == TerrainType.Web)
+					go = Object.Instantiate(tileManager.webTokenPrefab, tile.transform);
+			}
 			else
 			{
 				Debug.Log( $"ERROR: TOKEN TYPE SET TO NONE FOR {igs[i].dataName}" );
@@ -368,6 +419,7 @@ public class TileGroup
 			go.transform.position = new Vector3( finalOpenTFS[rands[i]].position.x, go.transform.position.y, finalOpenTFS[rands[i]].position.z );
 			go.GetComponent<MetaData>().tokenType = HandlePersistentTokenSwap( igs[i].dataName );//igs[i].tokenType;
 			go.GetComponent<MetaData>().personType = igs[i].personType;
+			go.GetComponent<MetaData>().terrainType = igs[i].terrainType;
 			go.GetComponent<MetaData>().triggeredByName = "None";
 			go.GetComponent<MetaData>().triggerName = "None";
 			go.GetComponent<MetaData>().interactionName = igs[i].dataName;
@@ -398,7 +450,7 @@ public class TileGroup
 			t.tokenType = HandlePersistentTokenSwap( t.triggerName );
 
 			//Debug.Log( t.dataName );
-			if ( t.tokenType == TokenType.Exploration || t.tokenType == TokenType.None )//sanity bail out
+			if ( /* t.tokenType == TokenType.Exploration || */ t.tokenType == TokenType.None )//sanity bail out
 				continue;
 
 			GameObject go = null;
@@ -425,9 +477,61 @@ public class TileGroup
 			{
 				go = Object.Instantiate( tileManager.darkTokenPrefab, tile.transform );
 			}
+			else if (t.tokenType == TokenType.DifficultGround)
+			{
+				go = Object.Instantiate(tileManager.difficultGroundTokenPrefab, tile.transform);
+			}
+			else if (t.tokenType == TokenType.Fortified)
+			{
+				go = Object.Instantiate(tileManager.fortifiedTokenPrefab, tile.transform);
+			}
+			else if (t.tokenType == TokenType.Terrain)
+			{
+				if (t.terrainType == TerrainType.Barrels)
+					go = Object.Instantiate(tileManager.barrelsTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Barricade)
+					go = Object.Instantiate(tileManager.barricadeTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Boulder)
+					go = Object.Instantiate(tileManager.boulderTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Bush)
+					go = Object.Instantiate(tileManager.bushTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Chest)
+					go = Object.Instantiate(tileManager.chestTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Elevation)
+					go = Object.Instantiate(tileManager.elevationTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Fence)
+					go = Object.Instantiate(tileManager.fenceTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.FirePit)
+					go = Object.Instantiate(tileManager.firePitTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Fountain)
+					go = Object.Instantiate(tileManager.fountainTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Log)
+					go = Object.Instantiate(tileManager.logTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Mist)
+					go = Object.Instantiate(tileManager.mistTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Pit)
+					go = Object.Instantiate(tileManager.pitTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Pond)
+					go = Object.Instantiate(tileManager.pondTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Rubble)
+					go = Object.Instantiate(tileManager.rubbleTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Statue)
+					go = Object.Instantiate(tileManager.statueTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Stream)
+					go = Object.Instantiate(tileManager.streamTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Table)
+					go = Object.Instantiate(tileManager.tableTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Trench)
+					go = Object.Instantiate(tileManager.trenchTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Wall)
+					go = Object.Instantiate(tileManager.wallTokenPrefab, tile.transform);
+				else if (t.terrainType == TerrainType.Web)
+					go = Object.Instantiate(tileManager.webTokenPrefab, tile.transform);
+			}
 
 			go.GetComponent<MetaData>().tokenType = t.tokenType;
 			go.GetComponent<MetaData>().personType = t.personType;
+			go.GetComponent<MetaData>().terrainType = t.terrainType;
 			go.GetComponent<MetaData>().triggeredByName = t.triggeredByName;
 			go.GetComponent<MetaData>().interactionName = t.triggerName;
 			go.GetComponent<MetaData>().GUID = t.GUID;
@@ -493,6 +597,57 @@ public class TileGroup
 		{
 			go = Object.Instantiate( tileManager.darkTokenPrefab, tile.transform );
 		}
+		else if (sourceEvent.tokenType == TokenType.DifficultGround)
+		{
+			go = Object.Instantiate(tileManager.difficultGroundTokenPrefab, tile.transform);
+		}
+		else if (sourceEvent.tokenType == TokenType.Fortified)
+		{
+			go = Object.Instantiate(tileManager.fortifiedTokenPrefab, tile.transform);
+		}
+		else if (sourceEvent.tokenType == TokenType.Terrain)
+		{
+			if (sourceEvent.terrainType == TerrainType.Barrels)
+				go = Object.Instantiate(tileManager.barrelsTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Barricade)
+				go = Object.Instantiate(tileManager.barricadeTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Boulder)
+				go = Object.Instantiate(tileManager.boulderTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Bush)
+				go = Object.Instantiate(tileManager.bushTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Chest)
+				go = Object.Instantiate(tileManager.chestTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Elevation)
+				go = Object.Instantiate(tileManager.elevationTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Fence)
+				go = Object.Instantiate(tileManager.fenceTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.FirePit)
+				go = Object.Instantiate(tileManager.firePitTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Fountain)
+				go = Object.Instantiate(tileManager.fountainTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Log)
+				go = Object.Instantiate(tileManager.logTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Mist)
+				go = Object.Instantiate(tileManager.mistTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Pit)
+				go = Object.Instantiate(tileManager.pitTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Pond)
+				go = Object.Instantiate(tileManager.pondTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Rubble)
+				go = Object.Instantiate(tileManager.rubbleTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Statue)
+				go = Object.Instantiate(tileManager.statueTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Stream)
+				go = Object.Instantiate(tileManager.streamTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Table)
+				go = Object.Instantiate(tileManager.tableTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Trench)
+				go = Object.Instantiate(tileManager.trenchTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Wall)
+				go = Object.Instantiate(tileManager.wallTokenPrefab, tile.transform);
+			else if (sourceEvent.terrainType == TerrainType.Web)
+				go = Object.Instantiate(tileManager.webTokenPrefab, tile.transform);
+		}
 
 		//update old metadataJSON so token is not active
 		TokenState oldtstate = tile.tokenStates.Where( x => x.metaData.GUID == oldMD.GUID ).FirstOr( null );
@@ -501,6 +656,7 @@ public class TileGroup
 
 		newMD.tokenType = sourceEvent.tokenType;
 		newMD.personType = sourceEvent.personType;
+		newMD.terrainType = sourceEvent.terrainType;
 		newMD.triggeredByName = oldMD.triggeredByName;
 		newMD.interactionName = sourceEvent.dataName;
 		newMD.GUID = sourceEvent.GUID;//oldMD.GUID;

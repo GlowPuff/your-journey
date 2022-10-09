@@ -704,6 +704,58 @@ public class Tile : MonoBehaviour
 		{
 			go = Object.Instantiate( tileManager.darkTokenPrefab, gameObject.transform );
 		}
+		else if (tokenState.metaData.tokenType == TokenType.DifficultGround)
+		{
+			go = Object.Instantiate(tileManager.difficultGroundTokenPrefab, gameObject.transform);
+		}
+		else if (tokenState.metaData.tokenType == TokenType.Fortified)
+		{
+			go = Object.Instantiate(tileManager.fortifiedTokenPrefab, gameObject.transform);
+		}
+		else if (tokenState.metaData.tokenType == TokenType.Terrain)
+		{
+			if (tokenState.metaData.terrainType == TerrainType.Barrels)
+				go = Object.Instantiate(tileManager.barrelsTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Barricade)
+				go = Object.Instantiate(tileManager.barricadeTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Boulder)
+				go = Object.Instantiate(tileManager.boulderTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Bush)
+				go = Object.Instantiate(tileManager.bushTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Chest)
+				go = Object.Instantiate(tileManager.chestTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Elevation)
+				go = Object.Instantiate(tileManager.elevationTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Fence)
+				go = Object.Instantiate(tileManager.fenceTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.FirePit)
+				go = Object.Instantiate(tileManager.firePitTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Fountain)
+				go = Object.Instantiate(tileManager.fountainTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Log)
+				go = Object.Instantiate(tileManager.logTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Mist)
+				go = Object.Instantiate(tileManager.mistTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Pit)
+				go = Object.Instantiate(tileManager.pitTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Pond)
+				go = Object.Instantiate(tileManager.pondTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Rubble)
+				go = Object.Instantiate(tileManager.rubbleTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Statue)
+				go = Object.Instantiate(tileManager.statueTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Stream)
+				go = Object.Instantiate(tileManager.streamTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Table)
+				go = Object.Instantiate(tileManager.tableTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Trench)
+				go = Object.Instantiate(tileManager.trenchTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Wall)
+				go = Object.Instantiate(tileManager.wallTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Web)
+				go = Object.Instantiate(tileManager.webTokenPrefab, gameObject.transform);
+		}
+
 
 		MetaData newMD = go.GetComponent<MetaData>();
 
@@ -712,6 +764,7 @@ public class Tile : MonoBehaviour
 		newMD.triggeredByName = tokenState.metaData.triggeredByName;
 		newMD.tokenType = tokenState.metaData.tokenType;
 		newMD.personType = tokenState.metaData.personType;
+		newMD.terrainType = tokenState.metaData.terrainType;
 		newMD.offset = tokenState.metaData.offset;
 		newMD.GUID = tokenState.metaData.GUID;
 		newMD.isRandom = tokenState.metaData.isRandom;

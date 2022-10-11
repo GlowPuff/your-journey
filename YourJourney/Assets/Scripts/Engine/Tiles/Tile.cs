@@ -113,10 +113,12 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	public Transform[] GetChildren( string name )
 	{
+		Debug.Log("GetChildren(" + name + ")");
 		Transform[] t = new Transform[GetCount( name )];
 		int c = 0;
 		foreach ( Transform child in transform )
 		{
+			Debug.Log("-- " + child.name);
 			if ( child.name.Contains( name ) )
 				t[c++] = child;
 		}
@@ -324,6 +326,9 @@ public class Tile : MonoBehaviour
 		RevealToken( TokenType.Person );
 		RevealToken( TokenType.Threat );
 		RevealToken( TokenType.Darkness );
+		RevealToken(TokenType.DifficultGround);
+		RevealToken(TokenType.Fortified);
+		RevealToken(TokenType.Terrain);
 	}
 
 	/// <summary>
@@ -375,6 +380,7 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	void RevealToken( TokenType ttype )
 	{
+		Debug.Log("RevealToken " + ttype);
 		//var size = tilemesh.GetComponent<MeshRenderer>().bounds.size;
 		var center = tilemesh.GetComponent<MeshRenderer>().bounds.center;
 		Transform[] tf = GetChildren( ttype.ToString() );
@@ -383,6 +389,7 @@ public class Tile : MonoBehaviour
 		{
 			TokenState tState = null;
 			MetaData metaData = tf[i].GetComponent<MetaData>();
+
 			//only want FIXED tokens
 			if ( !metaData.isRandom )//&& !metaData.hasBeenReplaced )
 			{

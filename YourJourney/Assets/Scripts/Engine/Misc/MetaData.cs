@@ -37,7 +37,7 @@ public class MetaDataJSON
 		triggeredByName = md.triggeredByName;
 		tokenType = md.tokenType;
 		personType = md.personType;
-		TerrainType = md.terrainType;
+		terrainType = md.terrainType;
 		offset = md.offset;
 		GUID = md.GUID;
 		isRandom = md.isRandom;

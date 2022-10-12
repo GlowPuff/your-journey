@@ -535,8 +535,46 @@ public class TileGroup
 			go.GetComponent<MetaData>().triggeredByName = t.triggeredByName;
 			go.GetComponent<MetaData>().interactionName = t.triggerName;
 			go.GetComponent<MetaData>().GUID = t.GUID;
-			//offset to token in EDITOR coords
-			go.GetComponent<MetaData>().offset = t.vposition - new Vector3( 256, 0, 256 );
+
+			//Offset to token in EDITOR coords. [256,256] is the center point since the editor board is 512x512.
+			go.GetComponent<MetaData>().offset = t.vposition - new Vector3( 256, 0, 256) + new Vector3(25, 0, 25);
+			if(Engine.currentScenario.fileVersion == "1.9" || Engine.currentScenario.fileVersion == "1.10")
+            {
+				go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256);
+			}
+			else
+            {
+				//The tokens then need an additional offset of 25 because the editor used to offset the tokens by -25 but that functionality has been moved here instead.
+				go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(25, 0, 25);
+			}
+			var goMetaData = go.GetComponent<MetaData>();
+			if (goMetaData.tokenType == TokenType.Terrain)
+			{
+				//The terrain tokens of different shapes each need different x and y offsets.
+				//To be honest, I don't really understand the individual token offsets and just arrived at them by trial and error.
+				//There are too many coordinate spaces in play - board in Editor, token size and offset in Editor, Game board, token size in Game, local token prefab coordinates and scale and position?
+				if (new List<TerrainType>() { TerrainType.Barrels, TerrainType.Barricade, TerrainType.Chest, TerrainType.Elevation, TerrainType.Log, TerrainType.Table }.Contains(goMetaData.terrainType))
+				{
+					//31mm x 70mm rectangle
+					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(10, 0, 8);
+				}
+				else if (new List<TerrainType>() { TerrainType.Fence, TerrainType.Stream, TerrainType.Trench, TerrainType.Wall }.Contains(goMetaData.terrainType))
+				{
+					//15mm x 94mm rectangle
+					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(0, 0, 10);
+				}
+				else if (new List<TerrainType>() { TerrainType.Boulder, TerrainType.Bush, TerrainType.FirePit, TerrainType.Rubble, TerrainType.Statue, TerrainType.Web }.Contains(goMetaData.terrainType))
+				{
+					//37mm diameter ellipse
+					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(37, 0, 37);
+				}
+				else if (new List<TerrainType>() { TerrainType.Fountain, TerrainType.Mist, TerrainType.Pit, TerrainType.Pond }.Contains(goMetaData.terrainType))
+				{
+					//75mm x 75mm rounded rectangle
+					Debug.Log("Large Round Terrain Type " + goMetaData.terrainType);
+					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(135, 0, 100);
+				}
+			}
 			go.GetComponent<MetaData>().isRandom = false;
 			go.GetComponent<MetaData>().tileID = tile.baseTile.idNumber;
 			//go.GetComponent<MetaData>().isCreatedFromReplaced = false;
@@ -548,6 +586,10 @@ public class TileGroup
 			var center = tile.tilemesh.GetComponent<MeshRenderer>().bounds.center;
 			var size = tile.tilemesh.GetComponent<MeshRenderer>().bounds.size;
 			float scalar = Mathf.Max( size.x, size.z ) / 650f;
+			if (tile.baseTile.tileType == TileType.Square)
+			{
+				scalar = Mathf.Max(size.x, size.z) / 512f;
+			}
 			offset *= scalar;
 			offset = Vector3.Reflect( offset, new Vector3( 0, 0, 1 ) );
 			var tokenPos = new Vector3( center.x + offset.x, 2, center.z + offset.z );

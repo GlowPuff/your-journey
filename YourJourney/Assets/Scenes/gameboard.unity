@@ -7721,20 +7721,34 @@ MonoBehaviour:
     type: 3}
   tableTokenPrefab: {fileID: 5303446990663764553, guid: 3cf4d2aa40d0e8249a7ba58aaf6d6e1f,
     type: 3}
-  boulderTokenPrefab: {fileID: 0}
-  bushTokenPrefab: {fileID: 0}
-  firePitTokenPrefab: {fileID: 0}
-  rubbleTokenPrefab: {fileID: 0}
-  statueTokenPrefab: {fileID: 0}
-  webTokenPrefab: {fileID: 0}
-  fountainTokenPrefab: {fileID: 0}
-  mistTokenPrefab: {fileID: 0}
-  pitTokenPrefab: {fileID: 0}
-  pondTokenPrefab: {fileID: 0}
-  fenceTokenPrefab: {fileID: 0}
-  streamTokenPrefab: {fileID: 0}
-  trenchTokenPrefab: {fileID: 0}
-  wallTokenPrefab: {fileID: 0}
+  boulderTokenPrefab: {fileID: 988778545020331381, guid: 0222f2e43cb60dd48ab98d3787b2a151,
+    type: 3}
+  bushTokenPrefab: {fileID: 988778545020331381, guid: 318c2f17f167fcf48bf2de7ddca5dde9,
+    type: 3}
+  firePitTokenPrefab: {fileID: 988778545020331381, guid: dcca1dfbad17a5243bb1ed1df47c3cbe,
+    type: 3}
+  rubbleTokenPrefab: {fileID: 988778545020331381, guid: 5e29accaa712b274bb9ee3608fc1c947,
+    type: 3}
+  statueTokenPrefab: {fileID: 988778545020331381, guid: bfa91762f554cca489bc3a57ecf3ace9,
+    type: 3}
+  webTokenPrefab: {fileID: 988778545020331381, guid: ac0ae8a6894cebd4499796e8a05822de,
+    type: 3}
+  fountainTokenPrefab: {fileID: 3676691829725197728, guid: 8482052ffb7270a4eaff4f0b04d2df66,
+    type: 3}
+  mistTokenPrefab: {fileID: 3676691829725197728, guid: bbcff67ca4cd3674cbe235d50d4740c7,
+    type: 3}
+  pitTokenPrefab: {fileID: 3676691829725197728, guid: 626f9cb503b287a44a7db56b953b5815,
+    type: 3}
+  pondTokenPrefab: {fileID: 3676691829725197728, guid: a1558a039bcacc14ab36de977a01bd0c,
+    type: 3}
+  fenceTokenPrefab: {fileID: 5303446990663764553, guid: c2f9ef9e967af2641a0154c479337d64,
+    type: 3}
+  streamTokenPrefab: {fileID: 5303446990663764553, guid: ecc8eb54cd71b8b489fca85ab4922edd,
+    type: 3}
+  trenchTokenPrefab: {fileID: 5303446990663764553, guid: d9e9f63016fa16c47ad1c74eeba7b859,
+    type: 3}
+  wallTokenPrefab: {fileID: 5303446990663764553, guid: 449f26b7229d0fd47adc4b574ce78ee0,
+    type: 3}
   fogPrefab: {fileID: 6962067636394627158, guid: a48309a835a7d8b41b542c862a397816,
     type: 3}
   partyPanel: {fileID: 365931356}

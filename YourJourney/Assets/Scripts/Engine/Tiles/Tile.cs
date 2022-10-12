@@ -390,6 +390,12 @@ public class Tile : MonoBehaviour
 			TokenState tState = null;
 			MetaData metaData = tf[i].GetComponent<MetaData>();
 
+			//if (this.baseTile.tileType == TileType.Square)
+			//{
+			//	tf[i].position.X(tf[i].position.x * 1.25f);
+			//	tf[i].position.Z(tf[i].position.z * 1.25f);
+			//}
+
 			//only want FIXED tokens
 			if ( !metaData.isRandom )//&& !metaData.hasBeenReplaced )
 			{
@@ -528,6 +534,10 @@ public class Tile : MonoBehaviour
 			//offset to token in EDITOR coords
 			Vector3 offset = tfmetaData.offset;
 			float scalar = Mathf.Max( size.x, size.z ) / 650f;
+			if(this.baseTile.tileType == TileType.Square)
+            {
+				scalar = Mathf.Max(size.x, size.z) / 512f;
+			}
 			offset *= scalar;
 			offset = Vector3.Reflect( offset, new Vector3( 0, 0, 1 ) );
 

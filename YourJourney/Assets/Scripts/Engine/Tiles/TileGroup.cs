@@ -529,6 +529,12 @@ public class TileGroup
 					go = Object.Instantiate(tileManager.webTokenPrefab, tile.transform);
 			}
 
+			//Scale tokens for hex map
+			if(go != null && tile.baseTile.tileType == TileType.Hex)
+            {
+				go.transform.localScale = new Vector3(0.8f, 1f, 0.8f);
+			}
+
 			go.GetComponent<MetaData>().tokenType = t.tokenType;
 			go.GetComponent<MetaData>().personType = t.personType;
 			go.GetComponent<MetaData>().terrainType = t.terrainType;
@@ -585,8 +591,12 @@ public class TileGroup
 			Vector3 offset = go.GetComponent<MetaData>().offset;
 			var center = tile.tilemesh.GetComponent<MeshRenderer>().bounds.center;
 			var size = tile.tilemesh.GetComponent<MeshRenderer>().bounds.size;
-			float scalar = Mathf.Max( size.x, size.z ) / 650f;
-			if (tile.baseTile.tileType == TileType.Square)
+			float scalar = 1;
+			if (tile.baseTile.tileType == TileType.Hex)
+			{
+				scalar = Mathf.Max(size.x, size.z) / 512f; // 650f;
+			}
+			else if (tile.baseTile.tileType == TileType.Square)
 			{
 				scalar = Mathf.Max(size.x, size.z) / 512f;
 			}

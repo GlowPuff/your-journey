@@ -113,12 +113,10 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	public Transform[] GetChildren( string name )
 	{
-		Debug.Log("GetChildren(" + name + ")");
 		Transform[] t = new Transform[GetCount( name )];
 		int c = 0;
 		foreach ( Transform child in transform )
 		{
-			Debug.Log("-- " + child.name);
 			if ( child.name.Contains( name ) )
 				t[c++] = child;
 		}
@@ -473,21 +471,21 @@ public class Tile : MonoBehaviour
 			//token = Instantiate(anchorSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
 			token = Instantiate(anchorSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
 			//token = Instantiate(anchorSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
-			Debug.Log("anchor at " + t.localPosition);
+			//Debug.Log("anchor at " + t.localPosition);
         }
 		else if(tokenName == "connector")
         {
 			//token = Instantiate(connectorSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
 			token = Instantiate(connectorSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
 			//token = Instantiate(connectorSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
-			Debug.Log("connector at " + t.localPosition);
+			//Debug.Log("connector at " + t.localPosition);
         }
 		else if (tokenName == "special")
 		{
 			//token = Instantiate(specialSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
 			token = Instantiate(specialSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
 			//token = Instantiate(specialSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
-			Debug.Log("special at " + t.localPosition);
+			//Debug.Log("special at " + t.localPosition);
 		}
 		if (token != null)
 		{
@@ -562,6 +560,7 @@ public class Tile : MonoBehaviour
 			{
 				tState.isActive = true;
 				tState.localPosition = tf[i].localPosition.Y( .3f );
+				tState.localRotation = tf[i].localRotation;
 			}
 		}
 
@@ -789,6 +788,7 @@ public class Tile : MonoBehaviour
 
 		newMD.transform.localScale = Vector3.one;
 		newMD.transform.localPosition = tokenState.localPosition;
+		newMD.transform.localRotation = tokenState.localRotation;
 		newMD.gameObject.SetActive( tokenState.isActive );
 	}
 

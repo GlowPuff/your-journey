@@ -46,7 +46,6 @@ public class Scenario
 	/// </summary>
 	public static Scenario CreateInstance( FileManager fm )
 	{
-		Debug.Log("CreateInstance 1");
 		Scenario s = new Scenario();
 		s.scenarioGUID = fm.scenarioGUID;
 		s.campaignGUID = fm.campaignGUID;
@@ -54,14 +53,14 @@ public class Scenario
 		s.scenarioName = fm.scenarioName;
 		s.fileVersion = fm.fileVersion;
 		//s.fileName = fm.fileName;
-		Debug.Log("CreateInstance 2");
+
 		s.saveDate = fm.saveDate;
 		s.projectType = fm.projectType;
 		s.objectiveName = fm.objectiveName;
 		s.interactionObserver = new List<IInteraction>( fm.interactions );
 		s.triggersObserver = new ObservableCollection<Trigger>( fm.triggers );
 		s.objectiveObserver = new ObservableCollection<Objective>( fm.objectives );
-		Debug.Log("CreateInstance 3");
+
 		if (fm.activations != null)
 		{
 			s.activationsObserver = new ObservableCollection<MonsterActivations>(fm.activations);
@@ -74,7 +73,7 @@ public class Scenario
 		s.threatObserver = new ObservableCollection<Threat>( fm.threats );
 		s.chapterObserver = new ObservableCollection<Chapter>( fm.chapters );
 		//s.collectionObserver = new ObservableCollection<Collection>(fm.collections);
-		Debug.Log("CreateInstance 4");
+
 		if (fm.collections != null)
 		{
 			s.collectionObserver = new ObservableCollection<int>(fm.collections);
@@ -95,7 +94,6 @@ public class Scenario
 		s.specialInstructions = fm.specialInstructions;
 		s.loreReward = fm.loreReward;
 		s.xpReward = fm.xpReward;
-		Debug.Log("CreateInstance 5");
 
 		return s;
 	}

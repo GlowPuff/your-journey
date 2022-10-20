@@ -10,6 +10,7 @@ public class MetaData : MonoBehaviour
 	public PersonType personType;
 	public TerrainType terrainType;
 	public Vector3 offset;
+	public Vector3 size; //This is because I can't figure out how to get the ProBuilder object size from the script so I just manually entered them in the Prefabs/Terrain/ objects. Needed for rotating around the proper center point.
 	public Guid GUID;
 	public bool isRandom;
 	public int tileID;

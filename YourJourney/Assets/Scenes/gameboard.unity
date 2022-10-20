@@ -7741,13 +7741,13 @@ MonoBehaviour:
     type: 3}
   pondTokenPrefab: {fileID: 3676691829725197728, guid: a1558a039bcacc14ab36de977a01bd0c,
     type: 3}
-  fenceTokenPrefab: {fileID: 5303446990663764553, guid: c2f9ef9e967af2641a0154c479337d64,
+  fenceTokenPrefab: {fileID: 5303446990663764553, guid: 079b3964683dd36419cd03019e1aa558,
     type: 3}
-  streamTokenPrefab: {fileID: 5303446990663764553, guid: ecc8eb54cd71b8b489fca85ab4922edd,
+  streamTokenPrefab: {fileID: 5303446990663764553, guid: e266d7a08e30c7b4e96a3c4395d366e8,
     type: 3}
-  trenchTokenPrefab: {fileID: 5303446990663764553, guid: d9e9f63016fa16c47ad1c74eeba7b859,
+  trenchTokenPrefab: {fileID: 5303446990663764553, guid: 1cf5e8a36fc2b334383a52f18f3459c1,
     type: 3}
-  wallTokenPrefab: {fileID: 5303446990663764553, guid: 449f26b7229d0fd47adc4b574ce78ee0,
+  wallTokenPrefab: {fileID: 5303446990663764553, guid: 83db385ca452dc7409e242d168202f00,
     type: 3}
   fogPrefab: {fileID: 6962067636394627158, guid: a48309a835a7d8b41b542c862a397816,
     type: 3}

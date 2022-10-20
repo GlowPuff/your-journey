@@ -433,6 +433,7 @@ public class TileGroup
 				isActive = false,
 				parentTileGUID = tile.baseTile.GUID,
 				localPosition = go.transform.localPosition,
+				localRotation = go.transform.localRotation,
 				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
 		}
@@ -530,7 +531,7 @@ public class TileGroup
 			}
 
 			//Scale tokens for hex map
-			if(go != null && tile.baseTile.tileType == TileType.Hex)
+			if(tile.baseTile.tileType == TileType.Hex)
             {
 				go.transform.localScale = new Vector3(0.8f, 1f, 0.8f);
 			}
@@ -553,6 +554,7 @@ public class TileGroup
 				//The tokens then need an additional offset of 25 because the editor used to offset the tokens by -25 but that functionality has been moved here instead.
 				go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(25, 0, 25);
 			}
+
 			var goMetaData = go.GetComponent<MetaData>();
 			if (goMetaData.tokenType == TokenType.Terrain)
 			{
@@ -607,11 +609,25 @@ public class TileGroup
 
 			usedPositions.Add( go.transform );
 
+			//Rotate terrain tokens for square map
+			if (goMetaData.tokenType == TokenType.Terrain)
+			{
+				var tokenSizeX = goMetaData.size.x;
+				var tokenSizeZ = goMetaData.size.z;
+
+				Vector3 rotateCenter = tokenPos + new Vector3(tokenSizeX / 2, 0, -tokenSizeZ / 2);
+				go.transform.RotateAround(rotateCenter, Vector3.up, (float)t.angle);
+				//go.transform.Rotate(0, (float)t.angle, 0);
+				//go.transform.Rotate(Vector3.up, (float)t.angle, Space.World);
+				Debug.Log("rotate token with size [" + tokenSizeX + ", " + tokenSizeZ + "] " + t.angle + " degrees around " + rotateCenter + " vs tokenPos " + tokenPos);
+			}
+
 			tile.tokenStates.Add( new TokenState()
 			{
 				isActive = false,
 				parentTileGUID = tile.baseTile.GUID,
 				localPosition = go.transform.localPosition,
+				localRotation = go.transform.localRotation,
 				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
 		}
@@ -718,6 +734,7 @@ public class TileGroup
 		//newMD.hasBeenReplaced = false;
 		newMD.tileID = tile.baseTile.idNumber;
 		newMD.transform.position = oldMD.transform.position;
+		newMD.transform.rotation = oldMD.transform.rotation;
 		newMD.gameObject.SetActive( oldMD.gameObject.activeSelf );
 
 		//add new token state for new token
@@ -726,6 +743,7 @@ public class TileGroup
 			isActive = oldtstate.isActive,
 			parentTileGUID = tile.baseTile.GUID,
 			localPosition = go.transform.localPosition,
+			localRotation = go.transform.localRotation,
 			metaData = new MetaDataJSON( newMD ),
 		};
 		tile.tokenStates.Add( ts );

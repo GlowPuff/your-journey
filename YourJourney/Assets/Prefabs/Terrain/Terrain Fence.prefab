@@ -331,5 +331,6 @@ MonoBehaviour:
   personType: 4
   terrainType: 7
   offset: {x: 0, y: 0, z: 0}
+  size: {x: 0.31, y: 0.1, z: 1.88286}
   isRandom: 0
   tileID: 0

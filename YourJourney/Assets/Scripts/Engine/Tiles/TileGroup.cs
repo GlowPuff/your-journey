@@ -574,13 +574,13 @@ public class TileGroup
 				else if (new List<TerrainType>() { TerrainType.Boulder, TerrainType.Bush, TerrainType.FirePit, TerrainType.Rubble, TerrainType.Statue, TerrainType.Web }.Contains(goMetaData.terrainType))
 				{
 					//37mm diameter ellipse
-					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(37, 0, 37);
+					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(5, 0, 5);
 				}
 				else if (new List<TerrainType>() { TerrainType.Fountain, TerrainType.Mist, TerrainType.Pit, TerrainType.Pond }.Contains(goMetaData.terrainType))
 				{
 					//75mm x 75mm rounded rectangle
 					Debug.Log("Large Round Terrain Type " + goMetaData.terrainType);
-					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(135, 0, 100);
+					go.GetComponent<MetaData>().offset = t.vposition - new Vector3(256, 0, 256) + new Vector3(15, 0, 15); // + new Vector3(135, 0, 100);
 				}
 			}
 			go.GetComponent<MetaData>().isRandom = false;

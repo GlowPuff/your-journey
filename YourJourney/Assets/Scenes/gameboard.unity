@@ -7721,23 +7721,23 @@ MonoBehaviour:
     type: 3}
   tableTokenPrefab: {fileID: 5303446990663764553, guid: 3cf4d2aa40d0e8249a7ba58aaf6d6e1f,
     type: 3}
-  boulderTokenPrefab: {fileID: 988778545020331381, guid: 0222f2e43cb60dd48ab98d3787b2a151,
+  boulderTokenPrefab: {fileID: 988778545020331381, guid: 129ca7e5dcf4caf4bbe92ab33f8396cd,
     type: 3}
-  bushTokenPrefab: {fileID: 988778545020331381, guid: 318c2f17f167fcf48bf2de7ddca5dde9,
+  bushTokenPrefab: {fileID: 988778545020331381, guid: 9a3e68d1665e83f418b1dcaca2286821,
     type: 3}
   firePitTokenPrefab: {fileID: 988778545020331381, guid: dcca1dfbad17a5243bb1ed1df47c3cbe,
     type: 3}
-  rubbleTokenPrefab: {fileID: 988778545020331381, guid: 5e29accaa712b274bb9ee3608fc1c947,
+  rubbleTokenPrefab: {fileID: 988778545020331381, guid: 61ce759c4b12aff4f82dec7ad9ef6fc7,
     type: 3}
-  statueTokenPrefab: {fileID: 988778545020331381, guid: bfa91762f554cca489bc3a57ecf3ace9,
+  statueTokenPrefab: {fileID: 988778545020331381, guid: 63adfe64cad5ef7408164454a6ef80d2,
     type: 3}
-  webTokenPrefab: {fileID: 988778545020331381, guid: ac0ae8a6894cebd4499796e8a05822de,
+  webTokenPrefab: {fileID: 988778545020331381, guid: 4ab5d1d9ab41cd94bba98c0b11b6aa50,
     type: 3}
-  fountainTokenPrefab: {fileID: 3676691829725197728, guid: 8482052ffb7270a4eaff4f0b04d2df66,
+  fountainTokenPrefab: {fileID: 3676691829725197728, guid: 980f60300d2b51248a20c98d0191a84b,
     type: 3}
-  mistTokenPrefab: {fileID: 3676691829725197728, guid: bbcff67ca4cd3674cbe235d50d4740c7,
+  mistTokenPrefab: {fileID: 3676691829725197728, guid: 1df8583e476150543ac47d8a009c4cc9,
     type: 3}
-  pitTokenPrefab: {fileID: 3676691829725197728, guid: 626f9cb503b287a44a7db56b953b5815,
+  pitTokenPrefab: {fileID: 3676691829725197728, guid: be01ca706e97f654d91f452fa0cf2ad1,
     type: 3}
   pondTokenPrefab: {fileID: 3676691829725197728, guid: a1558a039bcacc14ab36de977a01bd0c,
     type: 3}

@@ -19,6 +19,10 @@ public class Token
 	[JsonProperty( DefaultValueHandling = DefaultValueHandling.Populate )]
 	public PersonType personType { get; set; }
 
+	[DefaultValue(TerrainType.None)]
+	[JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+	public TerrainType terrainType { get; set; }
+
 	public int idNumber { get; set; }
 	public string position
 	{
@@ -29,6 +33,8 @@ public class Token
 			vposition = new Vector3( float.Parse( s[0] ), 0, float.Parse( s[1] ) );
 		}
 	}
+
+	public double angle { get; set; }
 
 	public Vector3 vposition { get; set; }
 }

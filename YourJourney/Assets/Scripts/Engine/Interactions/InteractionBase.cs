@@ -10,6 +10,7 @@ public abstract class InteractionBase : IInteraction
 	public bool isTokenInteraction { get; set; }
 	public TokenType tokenType { get; set; }
 	public PersonType personType { get; set; }
+	public TerrainType terrainType { get; set; }
 	public TextBookData textBookData { get; set; }
 	public TextBookData eventBookData { get; set; }
 	public int loreReward { get; set; }

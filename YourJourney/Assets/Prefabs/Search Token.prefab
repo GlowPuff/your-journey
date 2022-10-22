@@ -4134,6 +4134,7 @@ MonoBehaviour:
   triggeredByName: 
   tokenType: 0
   personType: 0
+  terrainType: 0
   offset: {x: 0, y: 0, z: 0}
   isRandom: 0
   tileID: 0

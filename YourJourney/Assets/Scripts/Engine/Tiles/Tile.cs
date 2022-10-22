@@ -324,6 +324,9 @@ public class Tile : MonoBehaviour
 		RevealToken( TokenType.Person );
 		RevealToken( TokenType.Threat );
 		RevealToken( TokenType.Darkness );
+		RevealToken(TokenType.DifficultGround);
+		RevealToken(TokenType.Fortified);
+		RevealToken(TokenType.Terrain);
 	}
 
 	/// <summary>
@@ -375,6 +378,7 @@ public class Tile : MonoBehaviour
 	/// </summary>
 	void RevealToken( TokenType ttype )
 	{
+		Debug.Log("RevealToken " + ttype);
 		//var size = tilemesh.GetComponent<MeshRenderer>().bounds.size;
 		var center = tilemesh.GetComponent<MeshRenderer>().bounds.center;
 		Transform[] tf = GetChildren( ttype.ToString() );
@@ -383,6 +387,13 @@ public class Tile : MonoBehaviour
 		{
 			TokenState tState = null;
 			MetaData metaData = tf[i].GetComponent<MetaData>();
+
+			//if (this.baseTile.tileType == TileType.Square)
+			//{
+			//	tf[i].position.X(tf[i].position.x * 1.25f);
+			//	tf[i].position.Z(tf[i].position.z * 1.25f);
+			//}
+
 			//only want FIXED tokens
 			if ( !metaData.isRandom )//&& !metaData.hasBeenReplaced )
 			{
@@ -460,21 +471,21 @@ public class Tile : MonoBehaviour
 			//token = Instantiate(anchorSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
 			token = Instantiate(anchorSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
 			//token = Instantiate(anchorSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
-			Debug.Log("anchor at " + t.localPosition);
+			//Debug.Log("anchor at " + t.localPosition);
         }
 		else if(tokenName == "connector")
         {
 			//token = Instantiate(connectorSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
 			token = Instantiate(connectorSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
 			//token = Instantiate(connectorSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
-			Debug.Log("connector at " + t.localPosition);
+			//Debug.Log("connector at " + t.localPosition);
         }
 		else if (tokenName == "special")
 		{
 			//token = Instantiate(specialSphere, new Vector3(t.localPosition.x + center.x, t.localPosition.y + center.y, t.localPosition.z + center.z), t.localRotation);
 			token = Instantiate(specialSphere, new Vector3(t.localPosition.x, t.localPosition.y, t.localPosition.z), t.localRotation);
 			//token = Instantiate(specialSphere, new Vector3(t.position.x + center.x, t.position.y + center.y, t.position.z + center.z), t.rotation);
-			Debug.Log("special at " + t.localPosition);
+			//Debug.Log("special at " + t.localPosition);
 		}
 		if (token != null)
 		{
@@ -521,6 +532,10 @@ public class Tile : MonoBehaviour
 			//offset to token in EDITOR coords
 			Vector3 offset = tfmetaData.offset;
 			float scalar = Mathf.Max( size.x, size.z ) / 650f;
+			if(this.baseTile.tileType == TileType.Square)
+            {
+				scalar = Mathf.Max(size.x, size.z) / 512f;
+			}
 			offset *= scalar;
 			offset = Vector3.Reflect( offset, new Vector3( 0, 0, 1 ) );
 
@@ -545,6 +560,7 @@ public class Tile : MonoBehaviour
 			{
 				tState.isActive = true;
 				tState.localPosition = tf[i].localPosition.Y( .3f );
+				tState.localRotation = tf[i].localRotation;
 			}
 		}
 
@@ -636,6 +652,10 @@ public class Tile : MonoBehaviour
 		MetaData metaData = objectHit.GetComponent<MetaData>();
 		string objectEventName = metaData.interactionName;
 		string objectEventToken = metaData.tokenType.ToString();
+		if(metaData.tokenType == TokenType.Terrain)
+        {
+			objectEventToken = metaData.terrainType.ToString();
+        }
 		Tile tile = objectHit.parent.GetComponent<Tile>();
 
 		IInteraction inter = interactionManager.GetInteractionByName( metaData.interactionName );
@@ -704,6 +724,58 @@ public class Tile : MonoBehaviour
 		{
 			go = Object.Instantiate( tileManager.darkTokenPrefab, gameObject.transform );
 		}
+		else if (tokenState.metaData.tokenType == TokenType.DifficultGround)
+		{
+			go = Object.Instantiate(tileManager.difficultGroundTokenPrefab, gameObject.transform);
+		}
+		else if (tokenState.metaData.tokenType == TokenType.Fortified)
+		{
+			go = Object.Instantiate(tileManager.fortifiedTokenPrefab, gameObject.transform);
+		}
+		else if (tokenState.metaData.tokenType == TokenType.Terrain)
+		{
+			if (tokenState.metaData.terrainType == TerrainType.Barrels)
+				go = Object.Instantiate(tileManager.barrelsTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Barricade)
+				go = Object.Instantiate(tileManager.barricadeTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Boulder)
+				go = Object.Instantiate(tileManager.boulderTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Bush)
+				go = Object.Instantiate(tileManager.bushTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Chest)
+				go = Object.Instantiate(tileManager.chestTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Elevation)
+				go = Object.Instantiate(tileManager.elevationTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Fence)
+				go = Object.Instantiate(tileManager.fenceTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.FirePit)
+				go = Object.Instantiate(tileManager.firePitTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Fountain)
+				go = Object.Instantiate(tileManager.fountainTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Log)
+				go = Object.Instantiate(tileManager.logTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Mist)
+				go = Object.Instantiate(tileManager.mistTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Pit)
+				go = Object.Instantiate(tileManager.pitTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Pond)
+				go = Object.Instantiate(tileManager.pondTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Rubble)
+				go = Object.Instantiate(tileManager.rubbleTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Statue)
+				go = Object.Instantiate(tileManager.statueTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Stream)
+				go = Object.Instantiate(tileManager.streamTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Table)
+				go = Object.Instantiate(tileManager.tableTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Trench)
+				go = Object.Instantiate(tileManager.trenchTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Wall)
+				go = Object.Instantiate(tileManager.wallTokenPrefab, gameObject.transform);
+			else if (tokenState.metaData.terrainType == TerrainType.Web)
+				go = Object.Instantiate(tileManager.webTokenPrefab, gameObject.transform);
+		}
+
 
 		MetaData newMD = go.GetComponent<MetaData>();
 
@@ -712,6 +784,7 @@ public class Tile : MonoBehaviour
 		newMD.triggeredByName = tokenState.metaData.triggeredByName;
 		newMD.tokenType = tokenState.metaData.tokenType;
 		newMD.personType = tokenState.metaData.personType;
+		newMD.terrainType = tokenState.metaData.terrainType;
 		newMD.offset = tokenState.metaData.offset;
 		newMD.GUID = tokenState.metaData.GUID;
 		newMD.isRandom = tokenState.metaData.isRandom;
@@ -719,6 +792,7 @@ public class Tile : MonoBehaviour
 
 		newMD.transform.localScale = Vector3.one;
 		newMD.transform.localPosition = tokenState.localPosition;
+		newMD.transform.localRotation = tokenState.localRotation;
 		newMD.gameObject.SetActive( tokenState.isActive );
 	}
 

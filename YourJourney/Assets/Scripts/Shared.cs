@@ -16,8 +16,11 @@ public enum ProjectType { Standalone, Campaign }
 public enum Ability { Might, Agility, Wisdom, Spirit, Wit, Wild, Random, None }
 public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }
 public enum ButtonIcon { None, Action, OK, Continue, Next }
-public enum TokenType { Search, Person, Threat, Darkness, Exploration, None }
-public enum PersonType { Human, Elf, Hobbit, Dwarf }
+public enum TokenType { Search, Person, Threat, Darkness, DifficultGround, Fortified, Terrain, None }
+public enum PersonType { Human, Elf, Hobbit, Dwarf, None }
+public enum TerrainType { None, Barrels, Barricade, Boulder, Bush, Chest, Elevation, Fence, FirePit, Fountain, Log, Mist, Pit, Pond, Rubble, Statue, Stream, Table, Trench, Wall, Web }
+
+
 public enum Difficulty { Adventure, Normal, Hard }
 public enum FinalStand { Damage, Fear }
 public enum DifficultyBias { Light, Medium, Heavy }
@@ -89,6 +92,7 @@ public interface IInteraction
 	int xpReward { get; set; }
 	int threatReward { get; set; }
 	PersonType personType { get; set; }
+	TerrainType terrainType { get; set; }
 	bool isPersistent { get; set; }
 }
 

@@ -479,6 +479,7 @@ public class TokenState
 {
 	public bool isActive;
 	public Vector3 localPosition;
+	public Quaternion localRotation;
 	public Guid parentTileGUID;
 	public MetaDataJSON metaData;
 }

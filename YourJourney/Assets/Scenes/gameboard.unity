@@ -7645,7 +7645,7 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: 413a25761ddb390418340b9fdf340e51, type: 3}
   - {fileID: 15366712624692153, guid: c8fd861c7466c6b438b9a387d47d0c81, type: 3}
   - {fileID: 15366712624692153, guid: b8c83cf18025a1f4f8479eeee9286381, type: 3}
-  - {fileID: 15366712624692153, guid: 398307db2fd900d4ea6d10b697c60b7a, type: 3}
+  - {fileID: 15366712624692153, guid: 0f1519620bd3a3e4f80e426ecfa5b9f6, type: 3}
   tilePrefabsB:
   - {fileID: 15366712624692153, guid: fb3903cc4747df14fb6fe521b828750e, type: 3}
   - {fileID: 15366712624692153, guid: b68125ca865b393448370a3fdeae9b6e, type: 3}
@@ -7695,6 +7695,12 @@ MonoBehaviour:
     type: 3}
   darkTokenPrefab: {fileID: 6962693354486276480, guid: a13603a466ca22a4f8cd5e59637c4998,
     type: 3}
+  threatTokenPrefab: {fileID: 988778545020331381, guid: 580e09940f3b10943abab22aec72b311,
+    type: 3}
+  difficultGroundTokenPrefab: {fileID: 6962693354486276480, guid: 0df794bec7c4c5e4b8c1be09803e3554,
+    type: 3}
+  fortifiedTokenPrefab: {fileID: 6962693354486276480, guid: 7aabb3a62ecf61b40829877e4c8188e8,
+    type: 3}
   humanTokenPrefab: {fileID: 988778545020331381, guid: 4136ed13163164f4685c552801870696,
     type: 3}
   elfTokenPrefab: {fileID: 988778545020331381, guid: a1e81e1645fa63448a036d6056f506b3,
@@ -7703,7 +7709,45 @@ MonoBehaviour:
     type: 3}
   hobbitTokenPrefab: {fileID: 988778545020331381, guid: ada74b7a46aebbe4a868900b07439bd2,
     type: 3}
-  threatTokenPrefab: {fileID: 988778545020331381, guid: 580e09940f3b10943abab22aec72b311,
+  barrelsTokenPrefab: {fileID: 5303446990663764553, guid: e5ba2f57cef02aa4f8b887a365069214,
+    type: 3}
+  barricadeTokenPrefab: {fileID: 5303446990663764553, guid: 03359cd104ee35046a0961418f898960,
+    type: 3}
+  chestTokenPrefab: {fileID: 5303446990663764553, guid: 55190ab00d1ad3848951446ba406812e,
+    type: 3}
+  elevationTokenPrefab: {fileID: 5303446990663764553, guid: 514a9ccb1a8093e4eb1fa8f1274fea10,
+    type: 3}
+  logTokenPrefab: {fileID: 5303446990663764553, guid: c4e0887ca97af6e4abd2e75215dc610d,
+    type: 3}
+  tableTokenPrefab: {fileID: 5303446990663764553, guid: 3cf4d2aa40d0e8249a7ba58aaf6d6e1f,
+    type: 3}
+  boulderTokenPrefab: {fileID: 988778545020331381, guid: 129ca7e5dcf4caf4bbe92ab33f8396cd,
+    type: 3}
+  bushTokenPrefab: {fileID: 988778545020331381, guid: 9a3e68d1665e83f418b1dcaca2286821,
+    type: 3}
+  firePitTokenPrefab: {fileID: 988778545020331381, guid: dcca1dfbad17a5243bb1ed1df47c3cbe,
+    type: 3}
+  rubbleTokenPrefab: {fileID: 988778545020331381, guid: 61ce759c4b12aff4f82dec7ad9ef6fc7,
+    type: 3}
+  statueTokenPrefab: {fileID: 988778545020331381, guid: 63adfe64cad5ef7408164454a6ef80d2,
+    type: 3}
+  webTokenPrefab: {fileID: 988778545020331381, guid: 4ab5d1d9ab41cd94bba98c0b11b6aa50,
+    type: 3}
+  fountainTokenPrefab: {fileID: 3676691829725197728, guid: 980f60300d2b51248a20c98d0191a84b,
+    type: 3}
+  mistTokenPrefab: {fileID: 3676691829725197728, guid: 1df8583e476150543ac47d8a009c4cc9,
+    type: 3}
+  pitTokenPrefab: {fileID: 3676691829725197728, guid: be01ca706e97f654d91f452fa0cf2ad1,
+    type: 3}
+  pondTokenPrefab: {fileID: 3676691829725197728, guid: a1558a039bcacc14ab36de977a01bd0c,
+    type: 3}
+  fenceTokenPrefab: {fileID: 5303446990663764553, guid: 079b3964683dd36419cd03019e1aa558,
+    type: 3}
+  streamTokenPrefab: {fileID: 5303446990663764553, guid: e266d7a08e30c7b4e96a3c4395d366e8,
+    type: 3}
+  trenchTokenPrefab: {fileID: 5303446990663764553, guid: 1cf5e8a36fc2b334383a52f18f3459c1,
+    type: 3}
+  wallTokenPrefab: {fileID: 5303446990663764553, guid: 83db385ca452dc7409e242d168202f00,
     type: 3}
   fogPrefab: {fileID: 6962067636394627158, guid: a48309a835a7d8b41b542c862a397816,
     type: 3}

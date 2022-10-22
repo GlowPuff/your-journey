@@ -652,6 +652,10 @@ public class Tile : MonoBehaviour
 		MetaData metaData = objectHit.GetComponent<MetaData>();
 		string objectEventName = metaData.interactionName;
 		string objectEventToken = metaData.tokenType.ToString();
+		if(metaData.tokenType == TokenType.Terrain)
+        {
+			objectEventToken = metaData.terrainType.ToString();
+        }
 		Tile tile = objectHit.parent.GetComponent<Tile>();
 
 		IInteraction inter = interactionManager.GetInteractionByName( metaData.interactionName );

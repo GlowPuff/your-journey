@@ -12,7 +12,7 @@ public class Tile : MonoBehaviour
 	[HideInInspector]
 	public int currentConnectorID;
 	[HideInInspector]
-	public HexTile hexTile;
+	public BaseTile baseTile;
 	[HideInInspector]
 	public bool isExplored { get; set; } = false;
 	//rootPosition is the position (connector) where all xforms take place from. Only used for building a loaded scenario (fixed, not random)
@@ -65,9 +65,13 @@ public class Tile : MonoBehaviour
 			}
 		}
 
-		exploreToken = transform.Find( "Exploration Token" ).transform;
-		exploreToken.localPosition = new Vector3( exploreToken.localPosition.x, 2, exploreToken.localPosition.z );
-		exploreToken.gameObject.SetActive( false );
+		Transform findResult = transform.Find("Exploration Token");
+		if (findResult != null)
+		{
+			exploreToken = transform.Find("Exploration Token").transform;
+			exploreToken.localPosition = new Vector3(exploreToken.localPosition.x, 2, exploreToken.localPosition.z);
+			exploreToken.gameObject.SetActive(false);
+		}
 
 		meshRenderer.material.SetFloat( "_sepiaValue", 1 );
 
@@ -329,7 +333,6 @@ public class Tile : MonoBehaviour
 	{
 		isExplored = true;
 		tileGroup.isExplored = true;
-		//hexTile.isExplored = true;
 		Sequence sequence = DOTween.Sequence();
 		sequence.Append( exploreToken.DOLocalMoveY( 1, 1 ).SetEase( Ease.InOutQuad ) );
 		sequence.Join( exploreToken.DOScale( 0, 1 ) );
@@ -359,7 +362,6 @@ public class Tile : MonoBehaviour
 	public void Colorize()
 	{
 		isExplored = true;
-		//hexTile.isExplored = true;
 
 		DOTween.To( () => sepiaValue, x =>
 		{
@@ -403,7 +405,7 @@ public class Tile : MonoBehaviour
 				//tf[i].position = new Vector3( center.x + offset.x, 2, center.z + offset.z );
 				tf[i].gameObject.SetActive( true );
 				tf[i].position = tf[i].position.Y( 2 );
-				tf[i].RotateAround( center, Vector3.up, hexTile.angle );
+				tf[i].RotateAround( center, Vector3.up, baseTile.angle );
 				tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 
 				//update token state to active
@@ -524,7 +526,7 @@ public class Tile : MonoBehaviour
 
 			tf[i].gameObject.SetActive( true );
 			tf[i].position = new Vector3( center.x + offset.x, 2, center.z + offset.z );
-			tf[i].RotateAround( center, Vector3.up, hexTile.angle );
+			tf[i].RotateAround( center, Vector3.up, baseTile.angle );
 			tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 			tpos.Add( tf[i].position );
 
@@ -585,7 +587,7 @@ public class Tile : MonoBehaviour
 							 //fire trigger on chapter exploration
 							 triggerManager.FireTrigger( tile.chapter.exploreTrigger );
 							 //fire trigger on tile exploration
-							 triggerManager.FireTrigger( tile.hexTile.triggerName );
+							 triggerManager.FireTrigger( tile.baseTile.triggerName );
 							 //objectHit.parent.GetComponent<Tile>().tileGroup.ExploreTile();
 						 } );
 					}
@@ -614,7 +616,7 @@ public class Tile : MonoBehaviour
 
 	void ShowExplorationText( Tile tile, System.Action action )
 	{
-		string flavor = tile.hexTile.flavorBookData.pages.Count > 0 ? tile.hexTile.flavorBookData.pages[0] : "";
+		string flavor = tile.baseTile.flavorBookData.pages.Count > 0 ? tile.baseTile.flavorBookData.pages[0] : "";
 		string instructions = "Discard the exploration token.";
 		if ( Bootstrap.gameStarter.difficulty != Difficulty.Hard )
 			instructions += " Gain 1 inspiration.";
@@ -713,7 +715,7 @@ public class Tile : MonoBehaviour
 		newMD.offset = tokenState.metaData.offset;
 		newMD.GUID = tokenState.metaData.GUID;
 		newMD.isRandom = tokenState.metaData.isRandom;
-		newMD.tileID = hexTile.idNumber;
+		newMD.tileID = baseTile.idNumber;
 
 		newMD.transform.localScale = Vector3.one;
 		newMD.transform.localPosition = tokenState.localPosition;

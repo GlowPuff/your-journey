@@ -3,14 +3,14 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using UnityEngine;
 
-public class HexTile : BaseTile
+public class SquareTile : BaseTile
 {
-	public HexTile()
+	public SquareTile()
 	{
 		tileType = TileType.Hex;
 	}
 
-	public HexTile( int n, Vector position, float angle )
+	public SquareTile( int n, Vector position, float angle )
 	{
 		tileType = TileType.Hex;
 		idNumber = n;

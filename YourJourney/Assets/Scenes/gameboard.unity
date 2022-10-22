@@ -1131,13 +1131,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiRoot: {fileID: 1996677956}
   focusDistMin: 1.4
-  focusDistMax: 30
+  focusDistMax: 20
   postProcProf: {fileID: 11400000, guid: 7a9b60748b9a6e0468775bb32cd7dd38, type: 2}
   partyPanel: {fileID: 365931356}
   moveDragSpeed: 5
   rotateSpeed: 30
   rotateDuration: 0.25
   doubleClickSpeed: 0.25
+  zoomMin: 3
+  zoomMax: 20
   smoothSpeed: 0.5
 --- !u!4 &71727266
 Transform:
@@ -7642,6 +7644,8 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: c55377bc69a850a4991009dafbc4151f, type: 3}
   - {fileID: 15366712624692153, guid: 413a25761ddb390418340b9fdf340e51, type: 3}
   - {fileID: 15366712624692153, guid: c8fd861c7466c6b438b9a387d47d0c81, type: 3}
+  - {fileID: 15366712624692153, guid: b8c83cf18025a1f4f8479eeee9286381, type: 3}
+  - {fileID: 15366712624692153, guid: 398307db2fd900d4ea6d10b697c60b7a, type: 3}
   tilePrefabsB:
   - {fileID: 15366712624692153, guid: fb3903cc4747df14fb6fe521b828750e, type: 3}
   - {fileID: 15366712624692153, guid: b68125ca865b393448370a3fdeae9b6e, type: 3}
@@ -7685,6 +7689,8 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: a8c23f44a8cb6d64484105d33aee2b10, type: 3}
   - {fileID: 15366712624692153, guid: 13791ee0c7759ae4db85ea722383ebd9, type: 3}
   - {fileID: 15366712624692153, guid: 9d9f72b488171ef42b628299f42b2259, type: 3}
+  - {fileID: 15366712624692153, guid: db348df86dafb534db8eef04070d003a, type: 3}
+  - {fileID: 15366712624692153, guid: 7e3d84f46cf299a48b280779e8b65cec, type: 3}
   searchTokenPrefab: {fileID: 988778545020331381, guid: 586effd6ec404024db3347f9a914e4e4,
     type: 3}
   darkTokenPrefab: {fileID: 6962693354486276480, guid: a13603a466ca22a4f8cd5e59637c4998,
@@ -15286,7 +15292,7 @@ Transform:
   m_GameObject: {fileID: 1825638177}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 0.1, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 12, y: 12, z: 12}
   m_Children: []
   m_Father: {fileID: 71727266}
   m_RootOrder: 0

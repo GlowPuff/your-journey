@@ -980,14 +980,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "When a Sprite\u2019s Draw Mode is set to Sliced, you can choose to change
-    the size using the Size property on the Sprite Renderer or the Rect Transform
-    Tool. You can still scale the Sprite using the Transform properties or the Tr</b>ansform
-    Tool; however, the Transform scales the Sprite without applying the 9-slicing.\r\n\r\nWhen
-    you set the Draw Mode to Tiled, an additional property called Tile Mode appears.
-    See the next section in this page for more information on how Tile Mode works.\r\n\r\nSee
-    documentation on the Sprite Renderer for full details on all of the component\u2019s
-    properties."
+  m_Text: 
 --- !u!114 &3481645953757398989
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,8 +18,11 @@ public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }
 public enum ButtonIcon { None, Action, OK, Continue, Next }
 public enum TokenType { Search, Person, Threat, Darkness, DifficultGround, Fortified, Terrain, None }
 public enum PersonType { Human, Elf, Hobbit, Dwarf, None }
-public enum TerrainType { None, Barrels, Barricade, Boulder, Bush, Chest, Elevation, Fence, FirePit, Fountain, Log, Mist, Pit, Pond, Rubble, Statue, Stream, Table, Trench, Wall, Web }
-
+public enum TerrainType {
+	None, Barrels, Boulder, Bush, FirePit, Mist, Pit, Statue, Stream, Table, Wall, //Core Set
+	Elevation, Log, Rubble, Web, //Shadowed Paths
+	Barricade, Chest, Fence, Fountain, Pond, Trench //Spreading War
+}
 
 public enum Difficulty { Adventure, Normal, Hard }
 public enum FinalStand { Damage, Fear }

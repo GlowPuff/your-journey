@@ -26,7 +26,7 @@
 			accumulatedValue += amount;
 		else
 		{
-			successValue = 0;
+			//successValue = 0; //removed because it made Repeatable Simple Pass/Fail tests reduce the successValue to 0 on the second attempt. Unclear why this was ever put here.
 			accumulatedValue = amount;
 		}
 

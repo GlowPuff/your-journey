@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 988778545020331338}
   - component: {fileID: 1048308792822173783}
   m_Layer: 0
-  m_Name: Terrain Fire Pit
+  m_Name: Terrain Fire Pit Token
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4134,7 +4134,7 @@ MonoBehaviour:
   triggeredByName: 
   tokenType: 6
   personType: 4
-  terrainType: 8
+  terrainType: 4
   offset: {x: 0, y: 0, z: 0}
   size: {x: 0.74, y: 0.1, z: 0.74}
   isRandom: 0

@@ -7645,7 +7645,7 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: 413a25761ddb390418340b9fdf340e51, type: 3}
   - {fileID: 15366712624692153, guid: c8fd861c7466c6b438b9a387d47d0c81, type: 3}
   - {fileID: 15366712624692153, guid: b8c83cf18025a1f4f8479eeee9286381, type: 3}
-  - {fileID: 15366712624692153, guid: 0f1519620bd3a3e4f80e426ecfa5b9f6, type: 3}
+  - {fileID: 15366712624692153, guid: 5cf04fc342bde284fafc766903f3a931, type: 3}
   tilePrefabsB:
   - {fileID: 15366712624692153, guid: fb3903cc4747df14fb6fe521b828750e, type: 3}
   - {fileID: 15366712624692153, guid: b68125ca865b393448370a3fdeae9b6e, type: 3}
@@ -7689,8 +7689,8 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: a8c23f44a8cb6d64484105d33aee2b10, type: 3}
   - {fileID: 15366712624692153, guid: 13791ee0c7759ae4db85ea722383ebd9, type: 3}
   - {fileID: 15366712624692153, guid: 9d9f72b488171ef42b628299f42b2259, type: 3}
-  - {fileID: 15366712624692153, guid: db348df86dafb534db8eef04070d003a, type: 3}
-  - {fileID: 15366712624692153, guid: 7e3d84f46cf299a48b280779e8b65cec, type: 3}
+  - {fileID: 15366712624692153, guid: edea89bc9ecc94f42b4f8e607331299b, type: 3}
+  - {fileID: 15366712624692153, guid: a5fb2630af1d27c4484ae2321c2155e6, type: 3}
   searchTokenPrefab: {fileID: 988778545020331381, guid: 586effd6ec404024db3347f9a914e4e4,
     type: 3}
   darkTokenPrefab: {fileID: 6962693354486276480, guid: a13603a466ca22a4f8cd5e59637c4998,

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4268783052107947812}
   - component: {fileID: 5913591933485256245}
   m_Layer: 0
-  m_Name: Terrain Wall
+  m_Name: Terrain Wall Token
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   triggeredByName: 
   tokenType: 6
   personType: 4
-  terrainType: 19
+  terrainType: 10
   offset: {x: 0, y: 0, z: 0}
   size: {x: 0.31, y: 0.1, z: 1.88286}
   isRandom: 0

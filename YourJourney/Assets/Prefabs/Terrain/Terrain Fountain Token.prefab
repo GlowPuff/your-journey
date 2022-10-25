@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6263718551367377343}
   - component: {fileID: 6274226940754430587}
   m_Layer: 0
-  m_Name: Terrain Fountain
+  m_Name: Terrain Fountain Token
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -813,7 +813,7 @@ MonoBehaviour:
   triggeredByName: 
   tokenType: 6
   personType: 4
-  terrainType: 9
+  terrainType: 18
   offset: {x: 0, y: 0, z: 0}
   size: {x: 1.38582, y: 0.1, z: 1.38582}
   isRandom: 0

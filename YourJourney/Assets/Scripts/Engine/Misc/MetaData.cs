@@ -25,6 +25,7 @@ public class MetaDataJSON
 	public PersonType personType;
 	public TerrainType terrainType;
 	public Vector3 offset;
+	public Vector3 size;
 	public Guid GUID;
 	public bool isRandom;
 	public int tileID;
@@ -40,6 +41,7 @@ public class MetaDataJSON
 		personType = md.personType;
 		terrainType = md.terrainType;
 		offset = md.offset;
+		size = md.size;
 		GUID = md.GUID;
 		isRandom = md.isRandom;
 		tileID = md.tileID;

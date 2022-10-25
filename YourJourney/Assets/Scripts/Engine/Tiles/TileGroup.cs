@@ -111,7 +111,7 @@ public class TileGroup
 
 			if (tileroot.isStartTile )
 			{
-				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
+				startPosition = tile.GetChildren( "token attach" )[0].position.Y( SpawnMarker.SPAWN_HEIGHT );
 				tile.isExplored = true;
 			}
 		}
@@ -193,7 +193,7 @@ public class TileGroup
 			if ( bt.isStartTile )
 			{
 				tile.isExplored = true;
-				startPosition = tile.GetChildren( "token attach" )[0].position.Y( .26f );
+				startPosition = tile.GetChildren( "token attach" )[0].position.Y( SpawnMarker.SPAWN_HEIGHT );
 			}
 		}
 
@@ -433,7 +433,7 @@ public class TileGroup
 				isActive = false,
 				parentTileGUID = tile.baseTile.GUID,
 				localPosition = go.transform.localPosition,
-				localRotation = go.transform.localRotation,
+				//localRotation = go.transform.localRotation,
 				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
 		}
@@ -610,15 +610,14 @@ public class TileGroup
 			usedPositions.Add( go.transform );
 
 			//Rotate terrain tokens for square map
+			Vector3 rotateCenter = Vector3.zero;
 			if (goMetaData.tokenType == TokenType.Terrain)
 			{
 				var tokenSizeX = goMetaData.size.x;
 				var tokenSizeZ = goMetaData.size.z;
 
-				Vector3 rotateCenter = tokenPos + new Vector3(tokenSizeX / 2, 0, -tokenSizeZ / 2);
+				rotateCenter = tokenPos + new Vector3(tokenSizeX / 2, 0, -tokenSizeZ / 2);
 				go.transform.RotateAround(rotateCenter, Vector3.up, (float)t.angle);
-				//go.transform.Rotate(0, (float)t.angle, 0);
-				//go.transform.Rotate(Vector3.up, (float)t.angle, Space.World);
 				Debug.Log("rotate token with size [" + tokenSizeX + ", " + tokenSizeZ + "] " + t.angle + " degrees around " + rotateCenter + " vs tokenPos " + tokenPos);
 			}
 
@@ -627,7 +626,7 @@ public class TileGroup
 				isActive = false,
 				parentTileGUID = tile.baseTile.GUID,
 				localPosition = go.transform.localPosition,
-				localRotation = go.transform.localRotation,
+				YRotation = (float)t.angle,
 				metaData = new MetaDataJSON( go.GetComponent<MetaData>() ),
 			} );
 		}
@@ -743,7 +742,6 @@ public class TileGroup
 			isActive = oldtstate.isActive,
 			parentTileGUID = tile.baseTile.GUID,
 			localPosition = go.transform.localPosition,
-			localRotation = go.transform.localRotation,
 			metaData = new MetaDataJSON( newMD ),
 		};
 		tile.tokenStates.Add( ts );

@@ -51,7 +51,18 @@ public class GameState
 		if ( basePath is null )
 			return;
 
-		string output = JsonConvert.SerializeObject( this, Formatting.Indented, new Vector3Converter() );
+		//old way: string output = JsonConvert.SerializeObject( this, Formatting.Indented, new Vector3Converter() );
+		//new way to avoid circular references related to token rotation?
+		List<JsonConverter> jsonConverters = new List<JsonConverter>();
+		jsonConverters.Add(new Vector3Converter());
+		jsonConverters.Add(new QuaternionConverter());
+		string output = JsonConvert.SerializeObject(this, Formatting.Indented, 
+			new JsonSerializerSettings()
+			{
+				//PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+				//ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				Converters = jsonConverters
+			});
 		//string outpath = Path.Combine( basePath, "SAVE" + saveIndex + ".sav" );
 		Debug.Log( "SaveState::SAVING TO: " + fullPath );
 
@@ -479,7 +490,7 @@ public class TokenState
 {
 	public bool isActive;
 	public Vector3 localPosition;
-	public Quaternion localRotation;
+	public float YRotation; //Euler Y angle
 	public Guid parentTileGUID;
 	public MetaDataJSON metaData;
 }

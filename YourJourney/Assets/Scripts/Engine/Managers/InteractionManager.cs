@@ -685,7 +685,16 @@ public class InteractionManager : MonoBehaviour
 							if ( !fromLoad && tile.isExplored && oldmd.gameObject.activeSelf )
 							{
 								engine.camControl.MoveTo( oldmd.transform.position );
-								GetNewTextPanel().ShowOkContinue( "Replace the Token with a " + repwith.tokenType + " Token.", ButtonIcon.Continue, () =>
+								string replaceWith = repwith.tokenType.ToString();
+								if(repwith.tokenType == TokenType.Person)
+                                {
+									replaceWith = repwith.personType.ToString();
+                                }
+								else if(repwith.tokenType == TokenType.Terrain)
+                                {
+									replaceWith = repwith.terrainType.ToString();
+                                }
+								GetNewTextPanel().ShowOkContinue( "Replace the Token with a " + replaceWith + " Token.", ButtonIcon.Continue, () =>
 										{
 											//instantiate new prefab, fill in its data
 											tgs[i].ReplaceToken( repwith, oldmd, tile );
@@ -732,7 +741,7 @@ public class InteractionManager : MonoBehaviour
 				posidx = i;
 
 			//place marker and move camera
-			Instantiate( spawnMarkerPrefab, positions[posidx], Quaternion.identity );
+			Instantiate( spawnMarkerPrefab, positions[posidx].Y(SpawnMarker.SPAWN_HEIGHT), Quaternion.identity );
 			FindObjectOfType<CamControl>().MoveTo( positions[posidx] );
 			Monster m = monsters[i];
 

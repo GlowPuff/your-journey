@@ -560,7 +560,6 @@ public class Tile : MonoBehaviour
 			{
 				tState.isActive = true;
 				tState.localPosition = tf[i].localPosition.Y( .3f );
-				tState.localRotation = tf[i].localRotation;
 			}
 		}
 
@@ -651,11 +650,20 @@ public class Tile : MonoBehaviour
 	{
 		MetaData metaData = objectHit.GetComponent<MetaData>();
 		string objectEventName = metaData.interactionName;
+
+		//Set the ->> Interaction button text.
 		string objectEventToken = metaData.tokenType.ToString();
-		if(metaData.tokenType == TokenType.Terrain)
+		if (metaData.tokenType == TokenType.Person)
+		{
+			//Set the ->> Interaction button to the type of Person (Human/Hobbit/Dwarf/Elf)
+			objectEventToken = metaData.personType.ToString();
+		}
+		else if (metaData.tokenType == TokenType.Terrain)
         {
+			//Set the ->> Interaction button to the type of Terrain(Boulder / Bush / FirePit / etc.)
 			objectEventToken = metaData.terrainType.ToString();
         }
+
 		Tile tile = objectHit.parent.GetComponent<Tile>();
 
 		IInteraction inter = interactionManager.GetInteractionByName( metaData.interactionName );
@@ -668,8 +676,21 @@ public class Tile : MonoBehaviour
 			{
 				objectEventName = ( (PersistentInteraction)inter ).eventToActivate;
 				IInteraction delegateInteraction = interactionManager.GetInteractionByName( objectEventName );
+
 				//delegate action to this event
+				//Set the ->> Interaction button text.
 				objectEventToken = delegateInteraction.tokenType.ToString();
+				if (metaData.tokenType == TokenType.Person)
+				{
+					//Set the ->> Interaction button to the type of Person (Human/Hobbit/Dwarf/Elf)
+					objectEventToken = metaData.personType.ToString();
+				}
+				else if (metaData.tokenType == TokenType.Terrain)
+				{
+					//Set the ->> Interaction button to the type of Terrain(Boulder / Bush / FirePit / etc.)
+					objectEventToken = metaData.terrainType.ToString();
+				}
+
 				//make it persistent
 				delegateInteraction.isPersistent = true;
 			}
@@ -790,9 +811,17 @@ public class Tile : MonoBehaviour
 		newMD.isRandom = tokenState.metaData.isRandom;
 		newMD.tileID = baseTile.idNumber;
 
-		newMD.transform.localScale = Vector3.one;
+		//newMD.transform.localScale = Vector3.one;
 		newMD.transform.localPosition = tokenState.localPosition;
-		newMD.transform.localRotation = tokenState.localRotation;
+		//newMD.transform.localRotation = tokenState.localRotation;
+
+		//Rotate terrain tokens
+		if(tokenState.metaData.tokenType == TokenType.Terrain && tokenState.YRotation != 0)
+        {
+			//go.transform.RotateAround(tokenState.rotationCenter, Vector3.up, tokenState.YRotation);
+			go.transform.Rotate(Vector3.up, tokenState.YRotation);
+		}
+
 		newMD.gameObject.SetActive( tokenState.isActive );
 	}
 
@@ -801,7 +830,7 @@ public class Tile : MonoBehaviour
 		isExplored = singleTileState.isExplored;
 		if ( isExplored )
 		{
-			if ( singleTileState.isActive )
+			if (Engine.currentScenario.scenarioTypeJourney && singleTileState.isActive )
 				exploreToken.gameObject.SetActive( false );
 			DOTween.To( () => 0, x =>
 			{

@@ -2,6 +2,8 @@
 
 public class SpawnMarker : MonoBehaviour
 {
+	public static float SPAWN_HEIGHT = 0.5f;
+
 	public void Spawn( Vector3 pos )
 	{
 		gameObject.SetActive( true );

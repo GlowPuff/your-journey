@@ -9,6 +9,7 @@ public class Scenario
 	public Guid scenarioGUID { get; set; }
 	public Guid campaignGUID { get; set; }
 	public int loreStartValue { get; set; }
+	public int xpStartValue { get; set; }
 	public string specialInstructions { get; set; }
 	public string fileVersion { get; set; }
 	public string saveDate { get; set; }
@@ -50,6 +51,7 @@ public class Scenario
 		s.scenarioGUID = fm.scenarioGUID;
 		s.campaignGUID = fm.campaignGUID;
 		s.loreStartValue = fm.loreStartValue;
+		s.xpStartValue = fm.xpStartValue;
 		s.scenarioName = fm.scenarioName;
 		s.fileVersion = fm.fileVersion;
 		//s.fileName = fm.fileName;

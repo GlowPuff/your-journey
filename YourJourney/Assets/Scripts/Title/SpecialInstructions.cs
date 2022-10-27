@@ -8,7 +8,7 @@ public class SpecialInstructions : MonoBehaviour
 	public SelectHeroes selectHeroes;
 	public Image finalFader;
 	public Button beginButton, cancelButton, backButton;
-	public Text loreText, instructions;
+	public Text loreText, xpText, instructions;
 	public AudioSource music;
 
 	RectTransform itemContainer;
@@ -20,7 +20,8 @@ public class SpecialInstructions : MonoBehaviour
 		gameObject.SetActive( true );
 		itemContainer = instructions.rectTransform;
 
-		loreText.text = "0";
+		loreText.text = "";
+		xpText.text = "";
 		instructions.text = "";
 
 		finalFader.DOFade( 0, .5f ).OnComplete( () =>
@@ -36,6 +37,7 @@ public class SpecialInstructions : MonoBehaviour
 				else
 					SetText( "There are no special instructions for this Scenario." );
 				loreText.text = s.loreStartValue.ToString();
+				xpText.text = s.xpStartValue.ToString();
 			}
 			else
 			{

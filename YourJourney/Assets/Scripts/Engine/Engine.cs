@@ -245,8 +245,20 @@ public class Engine : MonoBehaviour
 
 		bool success = scenario.scenarioEndStatus[resName];//default reso
 		string msg = success ? "S U C C E S S" : "F A I L U R E";
+		string end = "\r\n\r\n";
+		if(scenario.projectType == ProjectType.Campaign)
+        {
+			end += "You earned " + Bootstrap.loreCount + " Lore and " + Bootstrap.xpCount + " XP.";
+        }
+		else
+        {
+			end += "You earned " + Bootstrap.loreCount + " Lore and " + Bootstrap.xpCount + " XP.\r\n"
+				+ "With your starting values, that gives you " + (scenario.loreStartValue + Bootstrap.loreCount) + " Lore "
+				+ "and " + (scenario.xpStartValue + Bootstrap.xpCount) + " XP.\r\n\r\n"
+				+ "Be sure to write this down if you want to continue with another standalone scenario.";
+		}
 		var text = interactionManager.GetNewTextPanel();
-		text.ShowOkContinue( "The Scenario has ended.\r\n\r\n" + msg, ButtonIcon.Continue, () =>
+		text.ShowOkContinue( "The Scenario has ended.\r\n\r\n" + msg + end, ButtonIcon.Continue, () =>
 			{
 				fader.gameObject.SetActive( true );
 				fader.DOFade( 1, 2 ).OnComplete( () =>

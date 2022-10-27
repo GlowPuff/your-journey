@@ -15,6 +15,7 @@ public class FileManager
 	public Guid scenarioGUID { get; set; }
 	public Guid campaignGUID { get; set; }
 	public int loreStartValue { get; set; }
+	public int xpStartValue { get; set; }
 	public string specialInstructions { get; set; }
 	public string fileVersion { get; set; }
 	//public string fileName { get; set; }
@@ -78,6 +79,7 @@ public class FileManager
 		loreStartValue = source.loreStartValue;
 		loreReward = source.loreReward;
 		xpReward = source.xpReward;
+		xpStartValue = source.xpStartValue;
 	}
 
 	/// <summary>

@@ -99,7 +99,8 @@ public class CamControl : MonoBehaviour
 
 		float fdScalar = GlowEngine.RemapValue( y, 3, 6, focusDistMin, focusDistMax );
 		targetDOF.Set( fdScalar, fdScalar, fdScalar );
-		targetLookAt.y = 26.87f;
+		targetLookAt.y = 0f;
+		//26.87f;
 		//30.58
 		targetLookAt.x = GlowEngine.RemapValue( targetZoom.y, .2f, 6f, 50f, 55f );
 	}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
@@ -514,13 +515,14 @@ public class Tile : MonoBehaviour
 	/// <summary>
 	/// Reveals ALL triggered tokens on this tile from TryTriggerToken()
 	/// </summary>
-	public Vector3[] RevealTriggeredTokens( string tname )
+	public Tuple<Vector3[], string[]> RevealTriggeredTokens( string tname )
 	{
 		var size = tilemesh.GetComponent<MeshRenderer>().bounds.size;
 		var center = tilemesh.GetComponent<MeshRenderer>().bounds.center;
 		Transform[] tf = GetChildren( "Token(Clone)" );
 		//Vector3 tpos = ( -12345f ).ToVector3();
 		List<Vector3> tpos = new List<Vector3>();
+		List<string> nameList = new List<string>();
 
 		for ( int i = 0; i < tf.Length; i++ )
 		{
@@ -545,6 +547,17 @@ public class Tile : MonoBehaviour
 			tf[i].DOLocalMoveY( .3f, 1 ).SetEase( Ease.OutBounce );
 			tpos.Add( tf[i].position );
 
+			string tokName = tfmetaData.tokenType.ToString();
+			if(tfmetaData.tokenType == TokenType.Person)
+            {
+				tokName = tfmetaData.personType.ToString();
+            }
+			else if(tfmetaData.tokenType == TokenType.Terrain)
+            {
+				tokName = tfmetaData.terrainType.ToString();
+            }
+			nameList.Add(tokName);
+
 			//mark active in token state
 			//MetaData metaData = tf[i].GetComponent<MetaData>();
 			TokenState tState = null;
@@ -563,7 +576,7 @@ public class Tile : MonoBehaviour
 			}
 		}
 
-		return tpos.ToArray();
+		return new Tuple<Vector3[], string[]>(tpos.ToArray(), nameList.ToArray());
 	}
 
 	/// <summary>
@@ -724,81 +737,81 @@ public class Tile : MonoBehaviour
 
 		if (tokenState.metaData.tokenType == TokenType.None)
 		{
-			go = Object.Instantiate(tileManager.noneTokenPrefab, gameObject.transform);
+			go = GameObject.Instantiate(tileManager.noneTokenPrefab, gameObject.transform);
 		}
 		else if ( tokenState.metaData.tokenType == TokenType.Search )
 		{
-			go = Object.Instantiate( tileManager.searchTokenPrefab, gameObject.transform );
+			go = GameObject.Instantiate( tileManager.searchTokenPrefab, gameObject.transform );
 		}
 		else if ( tokenState.metaData.tokenType == TokenType.Person )
 		{
 			if ( tokenState.metaData.personType == PersonType.Human )
-				go = Object.Instantiate( tileManager.humanTokenPrefab, gameObject.transform );
+				go = GameObject.Instantiate( tileManager.humanTokenPrefab, gameObject.transform );
 			else if ( tokenState.metaData.personType == PersonType.Elf )
-				go = Object.Instantiate( tileManager.elfTokenPrefab, gameObject.transform );
+				go = GameObject.Instantiate( tileManager.elfTokenPrefab, gameObject.transform );
 			else if ( tokenState.metaData.personType == PersonType.Hobbit )
-				go = Object.Instantiate( tileManager.hobbitTokenPrefab, gameObject.transform );
+				go = GameObject.Instantiate( tileManager.hobbitTokenPrefab, gameObject.transform );
 			else if ( tokenState.metaData.personType == PersonType.Dwarf )
-				go = Object.Instantiate( tileManager.dwarfTokenPrefab, gameObject.transform );
+				go = GameObject.Instantiate( tileManager.dwarfTokenPrefab, gameObject.transform );
 		}
 		else if ( tokenState.metaData.tokenType == TokenType.Threat )
 		{
-			go = Object.Instantiate( tileManager.threatTokenPrefab, gameObject.transform );
+			go = GameObject.Instantiate( tileManager.threatTokenPrefab, gameObject.transform );
 		}
 		else if ( tokenState.metaData.tokenType == TokenType.Darkness )
 		{
-			go = Object.Instantiate( tileManager.darkTokenPrefab, gameObject.transform );
+			go = GameObject.Instantiate( tileManager.darkTokenPrefab, gameObject.transform );
 		}
 		else if (tokenState.metaData.tokenType == TokenType.DifficultGround)
 		{
-			go = Object.Instantiate(tileManager.difficultGroundTokenPrefab, gameObject.transform);
+			go = GameObject.Instantiate(tileManager.difficultGroundTokenPrefab, gameObject.transform);
 		}
 		else if (tokenState.metaData.tokenType == TokenType.Fortified)
 		{
-			go = Object.Instantiate(tileManager.fortifiedTokenPrefab, gameObject.transform);
+			go = GameObject.Instantiate(tileManager.fortifiedTokenPrefab, gameObject.transform);
 		}
 		else if (tokenState.metaData.tokenType == TokenType.Terrain)
 		{
 			if (tokenState.metaData.terrainType == TerrainType.Barrels)
-				go = Object.Instantiate(tileManager.barrelsTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.barrelsTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Barricade)
-				go = Object.Instantiate(tileManager.barricadeTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.barricadeTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Boulder)
-				go = Object.Instantiate(tileManager.boulderTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.boulderTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Bush)
-				go = Object.Instantiate(tileManager.bushTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.bushTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Chest)
-				go = Object.Instantiate(tileManager.chestTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.chestTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Elevation)
-				go = Object.Instantiate(tileManager.elevationTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.elevationTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Fence)
-				go = Object.Instantiate(tileManager.fenceTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.fenceTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.FirePit)
-				go = Object.Instantiate(tileManager.firePitTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.firePitTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Fountain)
-				go = Object.Instantiate(tileManager.fountainTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.fountainTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Log)
-				go = Object.Instantiate(tileManager.logTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.logTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Mist)
-				go = Object.Instantiate(tileManager.mistTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.mistTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Pit)
-				go = Object.Instantiate(tileManager.pitTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.pitTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Pond)
-				go = Object.Instantiate(tileManager.pondTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.pondTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Rubble)
-				go = Object.Instantiate(tileManager.rubbleTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.rubbleTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Statue)
-				go = Object.Instantiate(tileManager.statueTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.statueTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Stream)
-				go = Object.Instantiate(tileManager.streamTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.streamTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Table)
-				go = Object.Instantiate(tileManager.tableTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.tableTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Trench)
-				go = Object.Instantiate(tileManager.trenchTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.trenchTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Wall)
-				go = Object.Instantiate(tileManager.wallTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.wallTokenPrefab, gameObject.transform);
 			else if (tokenState.metaData.terrainType == TerrainType.Web)
-				go = Object.Instantiate(tileManager.webTokenPrefab, gameObject.transform);
+				go = GameObject.Instantiate(tileManager.webTokenPrefab, gameObject.transform);
 		}
 
 

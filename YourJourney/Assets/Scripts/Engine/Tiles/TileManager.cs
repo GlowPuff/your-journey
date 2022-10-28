@@ -402,10 +402,11 @@ public class TileManager : MonoBehaviour
 		{
 			Debug.Log( "TryTriggerToken() FOUND: " + name );
 			//Debug.Log( "Found " + explored.Count() + " matching EXPLORED tiles" );
-			List<Tuple<int, Vector3[]>> tokpos = new List<Tuple<int, Vector3[]>>();
+			List<Tuple<int, string, Vector3[], string[]>> tokpos = new List<Tuple<int, string, Vector3[], string[]>>();
 			foreach ( Tile t in explored )
 			{
-				tokpos.Add( new Tuple<int, Vector3[]>( t.baseTile.idNumber, t.RevealTriggeredTokens( name ) ) );
+				Tuple<Vector3[], string[]> vectorAndName = t.RevealTriggeredTokens(name);
+				tokpos.Add( new Tuple<int, string, Vector3[], string[]>( t.baseTile.idNumber, t.baseTile.tileSide,  vectorAndName.Item1, vectorAndName.Item2) );
 			}
 			StartCoroutine( TokenPlacementPrompt( tokpos ) );
 		}
@@ -422,20 +423,38 @@ public class TileManager : MonoBehaviour
 			return false;
 	}
 
-	IEnumerator TokenPlacementPrompt( IEnumerable<Tuple<int, Vector3[]>> explored )
+	IEnumerator TokenPlacementPrompt( IEnumerable<Tuple<int, string, Vector3[], string[]>> explored )
 	{
 		Debug.Log( "**START TokenPlacementPrompt" );
 
-		foreach ( Tuple<int, Vector3[]> t in explored )//each tile...
+		foreach ( Tuple<int, string, Vector3[], string[]> t in explored )//each tile...
 		{
 			bool waiting = true;
-			Debug.Log( $"Tokens in tile {t.Item1}: {t.Item2.Length}" );
+			Debug.Log( $"Tokens in tile {t.Item1}: {t.Item3.Length}" );
 
-			foreach ( Vector3 v in t.Item2 )//each token...
+			//foreach ( Vector3 v in t.Item3 )//each token...
+			for(int i=0; i<t.Item3.Length; i++)
 			{
+				Vector3 v = t.Item3[i];
+				string tokenName = t.Item4[i];
 				FindObjectOfType<CamControl>().MoveTo( v );
 				TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
-				p.ShowOkContinue( "Place the indicated Token on Tile " + t.Item1 + ".", ButtonIcon.Continue, () => waiting = false );
+
+				string s = "";
+				if (t.Item1 == 998 || t.Item1 == 999) //SquareTile
+				{
+					s += "the Battle Map Tile "
+						+ (t.Item2 == "A" ? " (Grass)" : " (Dirt)")
+						+ " <b>" + Collection.FromTileNumber(t.Item1).FontCharacter + "</b>"; //Add the Collection symbol.
+				}
+				else //HexTile
+				{
+					s += t.Item1 + " " + t.Item2
+						+ "Tile <b>" + Collection.FromTileNumber(t.Item1).FontCharacter + "</b>"; //Add the Collection symbol.
+
+				}
+
+				p.ShowOkContinue( "Place the indicated " + tokenName + " Token on " + s + ".", ButtonIcon.Continue, () => waiting = false );
 				while ( waiting )
 					yield return null;
 			}

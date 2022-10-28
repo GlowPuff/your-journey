@@ -1038,6 +1038,7 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1071,9 +1072,10 @@ MonoBehaviour:
   triggerName: 
   interactionName: 
   triggeredByName: 
-  tokenType: 0
+  tokenType: 3
+  personType: 4
+  terrainType: 0
   offset: {x: 0, y: 0, z: 0}
+  size: {x: 0, y: 0, z: 0}
   isRandom: 0
   tileID: 0
-  hasBeenReplaced: 0
-  isActive: 0

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6962693354486276483}
   - component: {fileID: 1784052953304227499}
   m_Layer: 0
-  m_Name: Difficult Ground Token
+  m_Name: DifficultGround Token
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1072,8 +1072,10 @@ MonoBehaviour:
   triggerName: 
   interactionName: 
   triggeredByName: 
-  tokenType: 0
-  personType: 0
+  tokenType: 4
+  personType: 4
+  terrainType: 0
   offset: {x: 0, y: 0, z: 0}
+  size: {x: 0, y: 0, z: 0}
   isRandom: 0
   tileID: 0

@@ -255,12 +255,18 @@ public class InteractionManager : MonoBehaviour
 			Debug.Log( "TryFireEventByTrigger() FOUND " + count + " Event(s): " + triggername );
 			if ( count == 1 )
 			{
-				ShowInteraction( interactions.Where( x => x.triggerName == triggername ).First() );
+				IInteraction interact = interactions.Where(x => x.triggerName == triggername).First();
+				Debug.Log("FOUND 1 Event for " + triggername + " -> Event " + interact.dataName);
+				ShowInteraction( interact );
 			}
 			else
 			{
 				Debug.Log( "Randomly choosing one of them..." );
 				var inters = interactions.Where( x => x.triggerName == triggername ).ToArray();
+				foreach(var interact in inters)
+                {
+					Debug.Log(triggername + " -> Event " + interact.dataName);
+				}
 				ShowInteraction( inters[UnityEngine.Random.Range( 0, count )] );
 			}
 			return true;

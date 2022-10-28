@@ -337,7 +337,11 @@ public class TileGroup
 
 			//create new token prefab for this interaction
 			GameObject go = null;
-			if ( igs[i].tokenType == TokenType.Search )
+			if (igs[i].tokenType == TokenType.None)
+			{
+				go = Object.Instantiate(tileManager.noneTokenPrefab, tile.transform);
+			}
+			else if ( igs[i].tokenType == TokenType.Search )
 			{
 				go = Object.Instantiate( tileManager.searchTokenPrefab, tile.transform );
 			}
@@ -455,7 +459,11 @@ public class TileGroup
 				continue;
 
 			GameObject go = null;
-			if ( t.tokenType == TokenType.Search )
+			if (t.tokenType == TokenType.None)
+			{
+				go = Object.Instantiate(tileManager.noneTokenPrefab, tile.transform);
+			}
+			else if ( t.tokenType == TokenType.Search )
 			{
 				go = Object.Instantiate( tileManager.searchTokenPrefab, tile.transform );
 			}
@@ -641,7 +649,11 @@ public class TileGroup
 	{
 		GameObject go = null;
 
-		if ( sourceEvent.tokenType == TokenType.Search )
+		if (sourceEvent.tokenType == TokenType.None)
+		{
+			go = Object.Instantiate(tileManager.noneTokenPrefab, tile.transform);
+		}
+		else if ( sourceEvent.tokenType == TokenType.Search )
 		{
 			go = Object.Instantiate( tileManager.searchTokenPrefab, tile.transform );
 		}

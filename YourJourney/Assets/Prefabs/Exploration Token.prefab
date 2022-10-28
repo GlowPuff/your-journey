@@ -294,6 +294,7 @@ MonoBehaviour:
     m_AreaError: 15
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
+  m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -327,7 +328,10 @@ MonoBehaviour:
   triggerName: None
   interactionName: None
   triggeredByName: None
-  tokenType: 4
-  tokenTypeID: 
-  position: {x: 0, y: 0, z: 0}
+  tokenType: 7
+  personType: 4
+  terrainType: 0
   offset: {x: 0, y: 0, z: 0}
+  size: {x: 0, y: 0, z: 0}
+  isRandom: 0
+  tileID: 0

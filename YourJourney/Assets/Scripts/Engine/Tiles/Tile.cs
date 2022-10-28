@@ -722,7 +722,11 @@ public class Tile : MonoBehaviour
 		GameObject go = null;
 		TileManager tileManager = FindObjectOfType<TileManager>();
 
-		if ( tokenState.metaData.tokenType == TokenType.Search )
+		if (tokenState.metaData.tokenType == TokenType.None)
+		{
+			go = Object.Instantiate(tileManager.noneTokenPrefab, gameObject.transform);
+		}
+		else if ( tokenState.metaData.tokenType == TokenType.Search )
 		{
 			go = Object.Instantiate( tileManager.searchTokenPrefab, gameObject.transform );
 		}

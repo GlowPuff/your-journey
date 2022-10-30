@@ -175,6 +175,8 @@ public class GameStarter
 	public bool isNewGame = true;
 	//REQUIRED for NEW scenarios, otherwise restored from state
 	public Difficulty difficulty = Difficulty.Normal;
+	public int loreStartValue;
+	public int xpStartValue;
 }
 
 public struct Vector

@@ -253,8 +253,8 @@ public class Engine : MonoBehaviour
 		else
         {
 			end += "You earned " + Bootstrap.loreCount + " Lore and " + Bootstrap.xpCount + " XP.\r\n"
-				+ "With your starting values, that gives you " + (scenario.loreStartValue + Bootstrap.loreCount) + " Lore "
-				+ "and " + (scenario.xpStartValue + Bootstrap.xpCount) + " XP.\r\n\r\n"
+				+ "With your starting values, that gives you " + (Bootstrap.gameStarter.loreStartValue + Bootstrap.loreCount) + " Lore "
+				+ "and " + (Bootstrap.gameStarter.xpStartValue + Bootstrap.xpCount) + " XP.\r\n\r\n"
 				+ "Be sure to write this down if you want to continue with another standalone scenario.";
 		}
 		var text = interactionManager.GetNewTextPanel();

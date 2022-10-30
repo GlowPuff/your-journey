@@ -40,6 +40,7 @@ public class SelectHeroes : MonoBehaviour
 		gameObject.SetActive( true );
 		lineupTotal = heroImage.Length;
 		selectedHeroes = new bool[heroImage.Length].Fill( false );
+		heroCount = 0;
 		diffText.text = "Normal";
 		ResetHeros();
 

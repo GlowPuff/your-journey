@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
@@ -13,6 +14,28 @@ public class TitleManager : MonoBehaviour
 	public AudioSource music;
 	public PostProcessVolume volume;
 	public SettingsDialog settings;
+
+	public GameObject scenarioOverlay;
+	private Sprite scenarioSprite;
+	public Vector2 scenarioImageSize = new Vector2(1024, 512);
+
+	public void LoadScenarioImage(string base64Image)
+	{
+		if (base64Image == null || base64Image.Length == 0)
+		{
+			scenarioOverlay.GetComponent<Image>().sprite = null;
+			scenarioOverlay.SetActive(false);
+		}
+		else
+		{
+			byte[] bytes = Convert.FromBase64String(base64Image);
+			Texture2D texture = new Texture2D((int)scenarioImageSize.x, (int)scenarioImageSize.y, TextureFormat.RGBA32, false);
+			texture.LoadImage(bytes);
+			scenarioSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(texture.width / 2, texture.height / 2));
+			scenarioOverlay.GetComponent<Image>().sprite = scenarioSprite;
+			scenarioOverlay.SetActive(true);
+		}
+	}
 
 	CanvasGroup newBcg, loadBcg;
 	bool skipped = false;

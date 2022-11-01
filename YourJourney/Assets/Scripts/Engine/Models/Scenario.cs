@@ -11,6 +11,7 @@ public class Scenario
 	public int loreStartValue { get; set; }
 	public int xpStartValue { get; set; }
 	public string specialInstructions { get; set; }
+	public string coverImage { get; set; }
 	public string fileVersion { get; set; }
 	public string saveDate { get; set; }
 	public bool scenarioTypeJourney { get; set; }
@@ -94,6 +95,7 @@ public class Scenario
 		s.scenarioTypeJourney = fm.scenarioTypeJourney;
 		s.shadowFear = fm.shadowFear;
 		s.specialInstructions = fm.specialInstructions;
+		s.coverImage = fm.coverImage;
 		s.loreReward = fm.loreReward;
 		s.xpReward = fm.xpReward;
 

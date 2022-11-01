@@ -17,6 +17,7 @@ public class FileManager
 	public int loreStartValue { get; set; }
 	public int xpStartValue { get; set; }
 	public string specialInstructions { get; set; }
+	public string coverImage { get; set; }
 	public string fileVersion { get; set; }
 	//public string fileName { get; set; }
 	public string saveDate { get; set; }
@@ -74,6 +75,7 @@ public class FileManager
 		scenarioTypeJourney = source.scenarioTypeJourney;
 		shadowFear = source.shadowFear;
 		specialInstructions = source.specialInstructions;
+		coverImage = source.coverImage;
 		scenarioGUID = source.scenarioGUID;
 		campaignGUID = source.campaignGUID;
 		loreStartValue = source.loreStartValue;
@@ -148,6 +150,7 @@ public class FileManager
 					Date = s.saveDate,
 					fileName = fi.Name,
 					fileVersion = s.fileVersion,
+					coverImage = s.coverImage,
 					collections = s.collectionObserver.ToList() //string.Join(" ", s.collectionObserver.Select(c=> Collection.FromID(c).FontCharacter))
 				} );
 		}

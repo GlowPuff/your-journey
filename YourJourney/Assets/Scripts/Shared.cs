@@ -119,6 +119,7 @@ public class ProjectItem
 	public string campaignGUID { get; set; }
 	public string campaignStory { get; set; }
 	public string campaignDescription { get; set; }
+	public string coverImage { get; set; }
 }
 
 public class CampaignItem

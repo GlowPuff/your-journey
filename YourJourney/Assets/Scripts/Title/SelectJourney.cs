@@ -18,10 +18,15 @@ public class SelectJourney : MonoBehaviour
 	public GameObject campaignWarning;
 
 	TitleMetaData titleMetaData;
+	TitleManager tm;
 
 	public void ActivateScreen( TitleMetaData metaData )
 	{
 		titleMetaData = metaData;
+
+		tm = FindObjectOfType<TitleManager>();
+		tm.LoadScenarioImage(null);
+
 		gameObject.SetActive( true );
 		warningPanel.SetActive( false );
 		cancelButton.interactable = true;
@@ -82,6 +87,9 @@ public class SelectJourney : MonoBehaviour
 		//check version
 		if ( projectItems[index].fileVersion != Bootstrap.FormatVersion )
 			warningPanel.SetActive( true );
+
+        //Set cover image
+        tm.LoadScenarioImage(projectItems[index].coverImage);
 
 		//check if it's a campaign without a save slot
 		if ( projectItems[index].projectType == ProjectType.Campaign && titleMetaData.saveStateIndex == -1 )

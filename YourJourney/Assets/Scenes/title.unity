@@ -2240,8 +2240,8 @@ RectTransform:
   - {fileID: 850184343}
   - {fileID: 1956890593}
   - {fileID: 869055088}
-  - {fileID: 960784776}
   - {fileID: 951644169}
+  - {fileID: 960784776}
   - {fileID: 457867582}
   - {fileID: 1426266494}
   m_Father: {fileID: 0}
@@ -2273,6 +2273,7 @@ MonoBehaviour:
   music: {fileID: 522100124}
   volume: {fileID: 1754111887}
   settings: {fileID: 960784775}
+  gameTitle: {fileID: 556677288}
   scenarioOverlay: {fileID: 629598130}
   scenarioImageSize: {x: 1024, y: 512}
 --- !u!1 &272498360
@@ -6443,6 +6444,7 @@ GameObject:
   - component: {fileID: 629598131}
   - component: {fileID: 629598133}
   - component: {fileID: 629598132}
+  - component: {fileID: 629598134}
   m_Layer: 5
   m_Name: ScenarioOverlayPanel
   m_TagString: Untagged
@@ -6466,8 +6468,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -582}
-  m_SizeDelta: {x: 1920, y: 1164}
+  m_AnchoredPosition: {x: 960, y: -540}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &629598132
 MonoBehaviour:
@@ -6505,6 +6507,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 629598130}
   m_CullTransparentMesh: 0
+--- !u!223 &629598134
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629598130}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &630312520
 GameObject:
   m_ObjectHideFlags: 0
@@ -9524,7 +9547,7 @@ RectTransform:
   - {fileID: 389651071}
   - {fileID: 2114205204}
   m_Father: {fileID: 266494897}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -14220,7 +14243,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1503449622
 RectTransform:
   m_ObjectHideFlags: 0

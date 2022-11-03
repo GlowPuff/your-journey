@@ -84,16 +84,23 @@ public class SpecialInstructions : MonoBehaviour
 		gameStarter.isNewGame = true;
 		gameStarter.loreStartValue = s.loreStartValue;
 		gameStarter.xpStartValue = s.xpStartValue;
+		gameStarter.coverImage = s.coverImage;
 
 		Bootstrap.gameStarter = gameStarter;
 		Bootstrap.campaignState = null;
 
 		DOTween.To( () => music.volume, setter => music.volume = setter, 0f, .5f );
-		finalFader.DOFade( 1, .5f ).OnComplete( () =>
-		{
-			gameObject.SetActive( false );
-			SceneManager.LoadScene( "gameboard" );
-		} );
+		//finalFader.DOFade( 1, .5f ).OnComplete( () =>
+		//{
+			//gameObject.SetActive( false );
+			gameObject.SetActive( false ); //hide the SpecialInstructions form but leave scenarioOverlay with coverImage showing
+			TitleManager tm = FindObjectOfType<TitleManager>();
+			tm.gameTitle.SetActive(false);
+			tm.settingsButton.SetActive(false);
+			tm.bannerTop.SetActive(false);
+			tm.bannerBottom.SetActive(false);
+			SceneManager.LoadSceneAsync( "gameboard" );
+		//} );
 	}
 
 	public void OnBack()

@@ -135,7 +135,7 @@ public class CampaignItem
 
 public class StateItem
 {
-	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath, fileVersion;
+	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath, fileVersion, coverImage;
 	public string[] heroArray;
 	public int[] heroIndexArray;
 	public Guid stateGUID;
@@ -152,6 +152,7 @@ public class TitleMetaData
 	public int[] selectedHeroesIndex;
 	public int saveStateIndex;
 	public string gameName;
+	public string coverImage;
 	public Difficulty difficulty;
 	public TitleScreen previousScreen;
 	public bool skippedToCampaignScreen = false;
@@ -178,6 +179,7 @@ public class GameStarter
 	public Difficulty difficulty = Difficulty.Normal;
 	public int loreStartValue;
 	public int xpStartValue;
+	public string coverImage;
 }
 
 public struct Vector

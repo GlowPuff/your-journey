@@ -14,6 +14,10 @@ public class TitleManager : MonoBehaviour
 	public AudioSource music;
 	public PostProcessVolume volume;
 	public SettingsDialog settings;
+	public GameObject gameTitle;
+	public GameObject settingsButton;
+	public GameObject bannerTop;
+	public GameObject bannerBottom;
 
 	public GameObject scenarioOverlay;
 	private Sprite scenarioSprite;

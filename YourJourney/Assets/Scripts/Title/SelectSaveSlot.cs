@@ -165,6 +165,10 @@ public class SelectSaveSlot : MonoBehaviour
 			selectedState = stateItems[index];
 
 			gameName = selectedState.gameName;
+
+			//Set cover image
+			FindObjectOfType<TitleManager>().LoadScenarioImage(selectedState.coverImage);
+
 			nextButton.interactable = true;
 			warning.SetActive( false );
 			selectedName.text = stateItems[index].gameName;

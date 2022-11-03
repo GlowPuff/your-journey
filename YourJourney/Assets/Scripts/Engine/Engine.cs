@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -25,6 +26,9 @@ public class Engine : MonoBehaviour
 	public AudioSource music;
 	public PostProcessVolume volume;
 	public Text errorText;
+	public GameObject scenarioOverlay;
+	private Sprite scenarioSprite;
+	private Vector2 scenarioImageSize = new Vector2(1024, 512);
 
 	public bool debug = false;
 
@@ -32,6 +36,8 @@ public class Engine : MonoBehaviour
 
 	void Awake()
 	{
+		LoadScenarioImage(Bootstrap.gameStarter.coverImage);
+
 		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 		System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 		System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
@@ -91,6 +97,26 @@ public class Engine : MonoBehaviour
 		//build the tiles
 		StartCoroutine( BuildScenario() );
 		StartCoroutine( BeginGame() );
+	}
+
+	public void LoadScenarioImage(string base64Image)
+	{
+		if (base64Image == null || base64Image.Length == 0)
+		{
+			scenarioOverlay.GetComponent<Image>().sprite = null;
+			scenarioOverlay.SetActive(false);
+		}
+		else
+		{
+			byte[] bytes = Convert.FromBase64String(base64Image);
+			Texture2D texture = new Texture2D((int)scenarioImageSize.x, (int)scenarioImageSize.y, TextureFormat.RGBA32, false);
+			texture.LoadImage(bytes);
+			scenarioSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(texture.width / 2, texture.height / 2));
+			Image image = scenarioOverlay.GetComponent<Image>();
+			image.sprite = scenarioSprite;
+			image.color = new Color(1, 1, 1);
+			scenarioOverlay.SetActive(true);
+		}
 	}
 
 	IEnumerator BeginGame()
@@ -175,6 +201,7 @@ public class Engine : MonoBehaviour
 			uiControl.interactable = true;
 			chapterManager.TryTriggerChapter( "Start", true );
 		}
+		scenarioOverlay.SetActive(false); //hide the cover image
 	}
 
 	public void RestoreGame( bool fromTemp = false )
@@ -212,6 +239,8 @@ public class Engine : MonoBehaviour
 			fg.chapterName = fs.chapterName;
 			fog.transform.position = fs.globalPosition;
 		}
+
+		scenarioOverlay.SetActive(false); //hide the cover image
 
 		uiControl.interactable = true;
 		Debug.Log( "Restored Game" );

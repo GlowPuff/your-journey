@@ -190,6 +190,7 @@ public class GameState
 				{
 					gameName = state.partyState.gameName,
 					gameDate = state.partyState.gameDate,
+					coverImage = state.partyState.coverImage,
 					stateGUID = state.partyState.scenarioGUID,
 					scenarioFilename = state.partyState.scenarioFileName,
 					fileVersion = state.partyState.fileVersion,
@@ -331,6 +332,7 @@ public class PartyState
 {
 	public string gameName { get; set; }
 	public string gameDate { get; set; }
+	public string coverImage { get; set; }
 	public int saveStateIndex { get; set; }
 	/// <summary>
 	/// file NAME only, not the path
@@ -345,6 +347,8 @@ public class PartyState
 	public bool[] isDead { get; set; }
 	public int loreCount { get; set; }
 	public int xpCount { get; set; }
+	public int loreStartValue { get; set; }
+	public int xpStartValue { get; set; }
 	public int threatThreshold { get; set; }
 	public Queue<Threat> threatStack { get; set; }
 	public List<FogState> fogList { get; set; } = new List<FogState>();
@@ -355,12 +359,15 @@ public class PartyState
 		{
 			gameName = Bootstrap.gameStarter.gameName,
 			gameDate = DateTime.Today.ToShortDateString(),
+			coverImage = Bootstrap.gameStarter.coverImage,
 			saveStateIndex = Bootstrap.gameStarter.saveStateIndex,
 			scenarioFileName = Bootstrap.gameStarter.scenarioFileName,
 			scenarioGUID = engine.scenario.scenarioGUID,
 			difficulty = Bootstrap.gameStarter.difficulty,
 			loreCount = Bootstrap.loreCount,
 			xpCount = Bootstrap.xpCount,
+			loreStartValue = Bootstrap.gameStarter.loreStartValue,
+			xpStartValue = Bootstrap.gameStarter.xpStartValue,
 			threatThreshold = (int)engine.endTurnButton.currentThreat,
 			threatStack = engine.endTurnButton.threatStack,
 			heroes = Bootstrap.gameStarter.heroes,
@@ -375,10 +382,13 @@ public class PartyState
 	public void SetState()
 	{
 		Bootstrap.gameStarter.gameName = gameName;
+		Bootstrap.gameStarter.coverImage = coverImage;
 		Bootstrap.gameStarter.saveStateIndex = saveStateIndex;
 		Bootstrap.gameStarter.scenarioFileName = scenarioFileName;
 		Bootstrap.gameStarter.heroes = heroes;
 		Bootstrap.gameStarter.heroesIndex = heroesIndex;
+		Bootstrap.gameStarter.loreStartValue = loreStartValue;
+		Bootstrap.gameStarter.xpStartValue = xpStartValue;
 
 		Bootstrap.gameStarter.difficulty = difficulty;
 		Bootstrap.lastStandCounter = lastStandCounter;

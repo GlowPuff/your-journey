@@ -130,7 +130,8 @@ public class CampaignItem
 	/// </summary>
 	public string fileName { get; set; }
 	//TODO collections in CampaignScreen?
-	//public List<int> collections { get; set; }
+	public List<int> collections { get; set; }
+	public string coverImage { get; set; }
 }
 
 public class StateItem

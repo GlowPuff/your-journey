@@ -90,17 +90,15 @@ public class SpecialInstructions : MonoBehaviour
 		Bootstrap.campaignState = null;
 
 		DOTween.To( () => music.volume, setter => music.volume = setter, 0f, .5f );
-		//finalFader.DOFade( 1, .5f ).OnComplete( () =>
-		//{
-			//gameObject.SetActive( false );
-			gameObject.SetActive( false ); //hide the SpecialInstructions form but leave scenarioOverlay with coverImage showing
-			TitleManager tm = FindObjectOfType<TitleManager>();
-			tm.gameTitle.SetActive(false);
-			tm.settingsButton.SetActive(false);
-			tm.bannerTop.SetActive(false);
-			tm.bannerBottom.SetActive(false);
-			SceneManager.LoadSceneAsync( "gameboard" );
-		//} );
+		//gameObject.SetActive( false );
+		gameObject.SetActive( false ); //hide the SpecialInstructions form but leave scenarioOverlay with coverImage showing
+		TitleManager tm = FindObjectOfType<TitleManager>();
+		tm.gameTitle.SetActive(false);
+		tm.gameTitleFlash.SetActive(false);
+		tm.settingsButton.SetActive(false);
+		tm.bannerTop.SetActive(false);
+		tm.bannerBottom.SetActive(false);
+		SceneManager.LoadSceneAsync( "gameboard" );
 	}
 
 	public void OnBack()

@@ -194,18 +194,20 @@ public class FileManager
 				pi.fileVersion = c.fileVersion;
 				pi.fileName = fi.FullName;
 				pi.collections = new List<int>();
+				pi.coverImage = c.coverImage;
 
-				int scIndex = 0;
+				//Read each scenario in the campaign to get its collections;
+				//also load the collections and coverImage of each scenario into the CampaignItem objects
 				foreach ( CampaignItem item in c.scenarioCollection)
                 {
 					var scenario = FileManager.LoadScenario(FileManager.GetFullPathWithCampaign(item.fileName, pi.campaignGUID.ToString()));
-					//TODO collections in CampaignScreen?
-                    //c.scenarioCollection[scIndex].collections = scenario.collectionObserver.ToList();
+					item.collections = scenario.collectionObserver.ToList();
+					item.coverImage = scenario.coverImage;
+					Debug.Log("setting coverImage for " + scenario.scenarioName + " " + item.coverImage);
 					foreach ( int col in scenario.collectionObserver )
                     {
 						if(!pi.collections.Contains( col)) { pi.collections.Add( col ); }
                     }
-					scIndex++;
                 }
 				pi.collections.Sort();
 				c.collections = pi.collections;
@@ -234,6 +236,17 @@ public class FileManager
 			}
 
 			var c = JsonConvert.DeserializeObject<Campaign>( json );
+
+			//Read each scenario in the campaign to get its collections;
+			//also load the collections and coverImage of each scenario into the CampaignItem objects
+			foreach (CampaignItem item in c.scenarioCollection)
+			{
+				var scenario = FileManager.LoadScenario(FileManager.GetFullPathWithCampaign(item.fileName, c.campaignGUID.ToString()));
+				item.collections = scenario.collectionObserver.ToList();
+				item.coverImage = scenario.coverImage;
+				Debug.Log("setting coverImage for " + scenario.scenarioName + " " + item.coverImage);
+			}
+
 			return c;
 		}
 		catch

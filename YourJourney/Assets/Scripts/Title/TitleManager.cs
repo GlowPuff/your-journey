@@ -15,6 +15,7 @@ public class TitleManager : MonoBehaviour
 	public PostProcessVolume volume;
 	public SettingsDialog settings;
 	public GameObject gameTitle;
+	public GameObject gameTitleFlash;
 	public GameObject settingsButton;
 	public GameObject bannerTop;
 	public GameObject bannerBottom;
@@ -22,6 +23,11 @@ public class TitleManager : MonoBehaviour
 	public GameObject scenarioOverlay;
 	private Sprite scenarioSprite;
 	public Vector2 scenarioImageSize = new Vector2(1024, 512);
+
+	public void ClearScenarioImage()
+    {
+		LoadScenarioImage(null);
+    }
 
 	public void LoadScenarioImage(string base64Image)
 	{

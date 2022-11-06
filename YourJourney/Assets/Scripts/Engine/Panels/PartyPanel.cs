@@ -47,8 +47,8 @@ public class PartyPanel : MonoBehaviour
 		transform.DOMoveY( sp.y, .75f );
 
 		diffText.text = Bootstrap.gameStarter.difficulty.ToString();
-		loreText.text = "Lore: " + Bootstrap.loreCount.ToString();
-		xpText.text = "XP: " + Bootstrap.xpCount.ToString();
+		loreText.text = "Lore: " + (Bootstrap.loreCount + Bootstrap.gameStarter.loreStartValue).ToString();
+		xpText.text = "XP: " + (Bootstrap.xpCount + Bootstrap.gameStarter.xpStartValue).ToString();
 
 		foreach ( HeroItem go in heroItems )
 		{

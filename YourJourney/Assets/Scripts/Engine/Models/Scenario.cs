@@ -96,6 +96,7 @@ public class Scenario
 		s.shadowFear = fm.shadowFear;
 		s.specialInstructions = fm.specialInstructions;
 		s.coverImage = fm.coverImage;
+
 		s.loreReward = fm.loreReward;
 		s.xpReward = fm.xpReward;
 

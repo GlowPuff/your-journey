@@ -143,9 +143,12 @@ public class SelectSaveSlot : MonoBehaviour
 			{
 				selectedIndex = index;
 				selectedState = stateItems[index];
+				//Set cover image
+				FindObjectOfType<TitleManager>().LoadScenarioImage(selectedState.coverImage);
 				//confirm overwrite save
 				confirmDelete.Show( selectedState, () =>
 				{//yes
+					FindObjectOfType<TitleManager>().ClearScenarioImage();
 					saveSlotButtons[selectedIndex].ResetButton();
 					selectedName.text = selectedDate.text = itemType.text = "";
 					stateItems[index] = null;
@@ -339,6 +342,7 @@ public class SelectSaveSlot : MonoBehaviour
 
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
+			FindObjectOfType<TitleManager>().ClearScenarioImage();
 			gameObject.SetActive( false );
 			FindObjectOfType<TitleManager>().ResetScreen();
 		} );

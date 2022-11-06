@@ -25,7 +25,7 @@ public class SelectJourney : MonoBehaviour
 		titleMetaData = metaData;
 
 		tm = FindObjectOfType<TitleManager>();
-		tm.LoadScenarioImage(null);
+		tm.ClearScenarioImage();
 
 		gameObject.SetActive( true );
 		warningPanel.SetActive( false );
@@ -121,6 +121,7 @@ public class SelectJourney : MonoBehaviour
 		cancelButton.interactable = false;
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
+			tm.ClearScenarioImage();
 			gameObject.SetActive( false );
 			selectSaveSlot.ActivateScreen( titleMetaData );
 		} );

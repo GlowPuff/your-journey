@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class GameState
 {
+	public string coverImage;
 	public CampaignState campaignState;
 	public PartyState partyState;
 	public TriggerState triggerState;
@@ -37,6 +38,7 @@ public class GameState
 	{
 		//TODO return a bool for success?
 		campaignState = CampaignState.GetState();
+		coverImage = campaignState?.campaign?.coverImage ?? Bootstrap.gameStarter.coverImage; //go with the campaign cover image if available, otherwise whatever's in Bootstrap which could be a scenario cover image
 		partyState = PartyState.GetState( engine );
 		triggerState = engine.triggerManager.GetState();
 		objectiveState = engine.objectiveManager.GetState();
@@ -190,7 +192,7 @@ public class GameState
 				{
 					gameName = state.partyState.gameName,
 					gameDate = state.partyState.gameDate,
-					coverImage = state.partyState.coverImage,
+					coverImage = state.coverImage,
 					stateGUID = state.partyState.scenarioGUID,
 					scenarioFilename = state.partyState.scenarioFileName,
 					fileVersion = state.partyState.fileVersion,
@@ -211,6 +213,7 @@ public class GameState
 				items.Add( new StateItem()
 				{
 					gameName = state.campaignState.gameName,
+					coverImage = state.coverImage,
 					heroes = state.campaignState.heroes.Aggregate( ( acc, cur ) => acc + ", " + cur ),
 					heroIndexArray = state.campaignState.heroesIndex,
 					projectType = ProjectType.Campaign,
@@ -332,7 +335,6 @@ public class PartyState
 {
 	public string gameName { get; set; }
 	public string gameDate { get; set; }
-	public string coverImage { get; set; }
 	public int saveStateIndex { get; set; }
 	/// <summary>
 	/// file NAME only, not the path
@@ -359,7 +361,6 @@ public class PartyState
 		{
 			gameName = Bootstrap.gameStarter.gameName,
 			gameDate = DateTime.Today.ToShortDateString(),
-			coverImage = Bootstrap.gameStarter.coverImage,
 			saveStateIndex = Bootstrap.gameStarter.saveStateIndex,
 			scenarioFileName = Bootstrap.gameStarter.scenarioFileName,
 			scenarioGUID = engine.scenario.scenarioGUID,
@@ -382,7 +383,6 @@ public class PartyState
 	public void SetState()
 	{
 		Bootstrap.gameStarter.gameName = gameName;
-		Bootstrap.gameStarter.coverImage = coverImage;
 		Bootstrap.gameStarter.saveStateIndex = saveStateIndex;
 		Bootstrap.gameStarter.scenarioFileName = scenarioFileName;
 		Bootstrap.gameStarter.heroes = heroes;

@@ -2274,6 +2274,10 @@ MonoBehaviour:
   volume: {fileID: 1754111887}
   settings: {fileID: 960784775}
   gameTitle: {fileID: 556677288}
+  gameTitleFlash: {fileID: 850184342}
+  settingsButton: {fileID: 879306608}
+  bannerTop: {fileID: 1096483452}
+  bannerBottom: {fileID: 1887637146}
   scenarioOverlay: {fileID: 629598130}
   scenarioImageSize: {x: 1024, y: 512}
 --- !u!1 &272498360
@@ -14243,7 +14247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1503449622
 RectTransform:
   m_ObjectHideFlags: 0

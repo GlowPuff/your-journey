@@ -119,6 +119,7 @@ public class ProjectItem
 	public string campaignGUID { get; set; }
 	public string campaignStory { get; set; }
 	public string campaignDescription { get; set; }
+	public string coverImage { get; set; }
 }
 
 public class CampaignItem
@@ -129,12 +130,13 @@ public class CampaignItem
 	/// </summary>
 	public string fileName { get; set; }
 	//TODO collections in CampaignScreen?
-	//public List<int> collections { get; set; }
+	public List<int> collections { get; set; }
+	public string coverImage { get; set; }
 }
 
 public class StateItem
 {
-	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath, fileVersion;
+	public string gameName, scenarioFilename, gameDate, heroes, fullSavePath, fileVersion, coverImage;
 	public string[] heroArray;
 	public int[] heroIndexArray;
 	public Guid stateGUID;
@@ -151,6 +153,7 @@ public class TitleMetaData
 	public int[] selectedHeroesIndex;
 	public int saveStateIndex;
 	public string gameName;
+	public string coverImage;
 	public Difficulty difficulty;
 	public TitleScreen previousScreen;
 	public bool skippedToCampaignScreen = false;
@@ -177,6 +180,7 @@ public class GameStarter
 	public Difficulty difficulty = Difficulty.Normal;
 	public int loreStartValue;
 	public int xpStartValue;
+	public string coverImage;
 }
 
 public struct Vector

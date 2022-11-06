@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class GameState
 {
+	public string coverImage;
 	public CampaignState campaignState;
 	public PartyState partyState;
 	public TriggerState triggerState;
@@ -37,6 +38,7 @@ public class GameState
 	{
 		//TODO return a bool for success?
 		campaignState = CampaignState.GetState();
+		coverImage = campaignState?.campaign?.coverImage ?? Bootstrap.gameStarter.coverImage; //go with the campaign cover image if available, otherwise whatever's in Bootstrap which could be a scenario cover image
 		partyState = PartyState.GetState( engine );
 		triggerState = engine.triggerManager.GetState();
 		objectiveState = engine.objectiveManager.GetState();
@@ -190,6 +192,7 @@ public class GameState
 				{
 					gameName = state.partyState.gameName,
 					gameDate = state.partyState.gameDate,
+					coverImage = state.coverImage,
 					stateGUID = state.partyState.scenarioGUID,
 					scenarioFilename = state.partyState.scenarioFileName,
 					fileVersion = state.partyState.fileVersion,
@@ -210,6 +213,7 @@ public class GameState
 				items.Add( new StateItem()
 				{
 					gameName = state.campaignState.gameName,
+					coverImage = state.coverImage,
 					heroes = state.campaignState.heroes.Aggregate( ( acc, cur ) => acc + ", " + cur ),
 					heroIndexArray = state.campaignState.heroesIndex,
 					projectType = ProjectType.Campaign,
@@ -345,6 +349,8 @@ public class PartyState
 	public bool[] isDead { get; set; }
 	public int loreCount { get; set; }
 	public int xpCount { get; set; }
+	public int loreStartValue { get; set; }
+	public int xpStartValue { get; set; }
 	public int threatThreshold { get; set; }
 	public Queue<Threat> threatStack { get; set; }
 	public List<FogState> fogList { get; set; } = new List<FogState>();
@@ -361,6 +367,8 @@ public class PartyState
 			difficulty = Bootstrap.gameStarter.difficulty,
 			loreCount = Bootstrap.loreCount,
 			xpCount = Bootstrap.xpCount,
+			loreStartValue = Bootstrap.gameStarter.loreStartValue,
+			xpStartValue = Bootstrap.gameStarter.xpStartValue,
 			threatThreshold = (int)engine.endTurnButton.currentThreat,
 			threatStack = engine.endTurnButton.threatStack,
 			heroes = Bootstrap.gameStarter.heroes,
@@ -379,6 +387,8 @@ public class PartyState
 		Bootstrap.gameStarter.scenarioFileName = scenarioFileName;
 		Bootstrap.gameStarter.heroes = heroes;
 		Bootstrap.gameStarter.heroesIndex = heroesIndex;
+		Bootstrap.gameStarter.loreStartValue = loreStartValue;
+		Bootstrap.gameStarter.xpStartValue = xpStartValue;
 
 		Bootstrap.gameStarter.difficulty = difficulty;
 		Bootstrap.lastStandCounter = lastStandCounter;

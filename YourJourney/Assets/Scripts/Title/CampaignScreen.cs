@@ -17,11 +17,13 @@ public class CampaignScreen : MonoBehaviour
 	public GameObject replaybox;
 	public Text xpLoreText, currentScenarioText, replayText, replayStatusText;
 
+	TitleManager tm;
 	TitleMetaData titleMetaData;
 	Campaign campaign;
 	CampaignState campaignState;
 	List<FileItemButton> fileItemButtons = new List<FileItemButton>();
 	int selectedIndex = -1;
+	string coverImage = null;
 
 	//players can CONTINUE latest scenario or REPLAY any scenario, keeping only the highest xp/lore earned from it
 
@@ -39,6 +41,9 @@ public class CampaignScreen : MonoBehaviour
 		xpLoreText.text = lore + " / " + xp;
 		replayText.text = "";
 		currentScenarioText.text = campaignState.campaign.scenarioCollection[campaignState.currentScenarioIndex].scenarioName;
+
+		tm = FindObjectOfType<TitleManager>();
+		tm.LoadScenarioImage(campaignState.campaign.scenarioCollection[campaignState.currentScenarioIndex].coverImage);
 
 		bool finishedCampaign = !campaignState.scenarioStatus.Any( x => x == ScenarioStatus.NotPlayed );
 
@@ -131,6 +136,9 @@ public class CampaignScreen : MonoBehaviour
 
 		selectedIndex = index;
 
+		coverImage = campaign.scenarioCollection[selectedIndex].coverImage ?? campaign.coverImage; //scenario image, or campaign image as a fallback
+		tm.LoadScenarioImage(coverImage);
+
 		//if selected scenario has been played (fail or success) activated replay option
 		if ( campaignState.scenarioStatus[index] != ScenarioStatus.NotPlayed )
 		{
@@ -143,6 +151,18 @@ public class CampaignScreen : MonoBehaviour
 			replayText.text = "";
 			//show haven't played message
 		}
+	}
+
+	public void StartGame()
+    {
+		gameObject.SetActive(false); //hide the SpecialInstructions form but leave scenarioOverlay with coverImage showing
+		TitleManager tm = FindObjectOfType<TitleManager>();
+		tm.gameTitle.SetActive(false);
+		tm.gameTitleFlash.SetActive(false);
+		tm.settingsButton.SetActive(false);
+		tm.bannerTop.SetActive(false);
+		tm.bannerBottom.SetActive(false);
+		SceneManager.LoadSceneAsync("gameboard");
 	}
 
 	public void OnContinueCampaign()
@@ -159,6 +179,7 @@ public class CampaignScreen : MonoBehaviour
 		gameStarter.heroes = campaignState.heroes;
 		gameStarter.heroesIndex = campaignState.heroesIndex;
 		gameStarter.difficulty = campaignState.difficulty;
+		gameStarter.coverImage = coverImage; //refers to the scenario cover image
 
 		Bootstrap.campaignState = campaignState;
 		Bootstrap.gameStarter = gameStarter;
@@ -184,11 +205,7 @@ public class CampaignScreen : MonoBehaviour
 			}
 		}
 
-		finalFader.DOFade( 1, .5f ).OnComplete( () =>
-		{
-			gameObject.SetActive( false );
-			SceneManager.LoadScene( "gameboard" );
-		} );
+		StartGame();
 	}
 
 	public void OnReplayScenario()
@@ -204,6 +221,7 @@ public class CampaignScreen : MonoBehaviour
 		gameStarter.heroesIndex = campaignState.heroesIndex;
 		gameStarter.difficulty = campaignState.difficulty;
 		gameStarter.isNewGame = true;//start scenario fresh
+		gameStarter.coverImage = campaign.coverImage;
 
 		Bootstrap.campaignState = campaignState;
 		Bootstrap.gameStarter = gameStarter;
@@ -214,20 +232,12 @@ public class CampaignScreen : MonoBehaviour
 		{
 			storyBox.Show( scenario.specialInstructions, () =>
 			{
-				finalFader.DOFade( 1, .5f ).OnComplete( () =>
-				{
-					gameObject.SetActive( false );
-					SceneManager.LoadScene( "gameboard" );
-				} );
-			} );
+				StartGame();
+			});
 		}
 		else
 		{
-			finalFader.DOFade( 1, .5f ).OnComplete( () =>
-			{
-				gameObject.SetActive( false );
-				SceneManager.LoadScene( "gameboard" );
-			} );
+			StartGame();
 		}
 	}
 
@@ -246,21 +256,19 @@ public class CampaignScreen : MonoBehaviour
 		gameStarter.heroesIndex = campaignState.heroesIndex;
 		gameStarter.difficulty = campaignState.difficulty;
 		gameStarter.isNewGame = false;
+		gameStarter.coverImage = campaign.coverImage;
 
 		Bootstrap.campaignState = campaignState;
 		Bootstrap.gameStarter = gameStarter;
 
-		finalFader.DOFade( 1, .5f ).OnComplete( () =>
-		{
-			gameObject.SetActive( false );
-			SceneManager.LoadScene( "gameboard" );
-		} );
+		StartGame();
 	}
 
 	public void OnBack()
 	{
 		finalFader.DOFade( 1, .5f ).OnComplete( () =>
 		{
+			tm.ClearScenarioImage();
 			gameObject.SetActive( false );
 
 			if ( titleMetaData.skippedToCampaignScreen )

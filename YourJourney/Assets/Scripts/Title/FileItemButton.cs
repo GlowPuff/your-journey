@@ -1,11 +1,12 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FileItemButton : MonoBehaviour
 {
 	public Image image, icon;
-	public Text title;
+	public TextMeshProUGUI title;
 	public Text collections;
 	int index;
 	Action<int> callback;

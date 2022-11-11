@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public class CampaignScreen : MonoBehaviour
 	public GameObject fileItemButtonPrefab;
 	public RectTransform itemContainer;
 	public GameObject replaybox;
-	public Text xpLoreText, currentScenarioText, replayText, replayStatusText;
+	public TextMeshProUGUI xpLoreText, currentScenarioText, replayText, replayStatusText;
 
 	TitleManager tm;
 	TitleMetaData titleMetaData;

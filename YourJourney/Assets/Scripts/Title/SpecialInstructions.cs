@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class SpecialInstructions : MonoBehaviour
 	public SelectHeroes selectHeroes;
 	public Image finalFader;
 	public Button beginButton, cancelButton, backButton, increaseLoreButton, decreaseLoreButton, increaseXPButton, decreaseXPButton;
-	public Text loreText, xpText, instructions;
+	public TextMeshProUGUI loreText, xpText, instructions;
 	public AudioSource music;
 
 	RectTransform itemContainer;
@@ -20,7 +21,7 @@ public class SpecialInstructions : MonoBehaviour
 	{
 		titleMetaData = metaData;
 		gameObject.SetActive( true );
-		itemContainer = instructions.rectTransform;
+		//itemContainer = instructions.rectTransform;
 
 		loreText.text = "";
 		xpText.text = "";
@@ -63,12 +64,12 @@ public class SpecialInstructions : MonoBehaviour
 	{
 		instructions.text = t;
 
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = instructions.GetGenerationSettings( instructions.rectTransform.rect.size );
+		//TextGenerator textGen = new TextGenerator();
+		//TextGenerationSettings generationSettings = instructions.GetGenerationSettings( instructions.rectTransform.rect.size );
 
-		float height = textGen.GetPreferredHeight( t, generationSettings );
+		//float height = textGen.GetPreferredHeight( t, generationSettings );
 
-		itemContainer.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
+		//itemContainer.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
 	}
 
 	public void OnBegin()

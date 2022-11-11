@@ -1,13 +1,13 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class StoryBox : MonoBehaviour
 {
 	public CanvasGroup canvasGroup;
-	public Text storyText;
-	public RectTransform itemContainer;
+	public TextMeshProUGUI storyText;
+	//public RectTransform itemContainer;
 	//public Image fader;
 
 	RectTransform rect;
@@ -18,14 +18,14 @@ public class StoryBox : MonoBehaviour
 	private void Awake()
 	{
 		rect = canvasGroup.gameObject.GetComponent<RectTransform>();
-		ap = itemContainer.anchoredPosition;
+		//ap = itemContainer.anchoredPosition;
 		sp = canvasGroup.gameObject.transform.position;
 	}
 
 	public void Show( string t, Action a )
 	{
 		rect = canvasGroup.gameObject.GetComponent<RectTransform>();
-		ap = itemContainer.anchoredPosition;
+		//ap = itemContainer.anchoredPosition;
 		sp = canvasGroup.gameObject.transform.position;
 
 		gameObject.SetActive( true );
@@ -50,12 +50,12 @@ public class StoryBox : MonoBehaviour
 	{
 		storyText.text = t;
 
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = storyText.GetGenerationSettings( storyText.rectTransform.rect.size );
+		//TextGenerator textGen = new TextGenerator();
+		//TextGenerationSettings generationSettings = storyText.GetGenerationSettings( storyText.rectTransform.rect.size );
 
-		float height = textGen.GetPreferredHeight( t, generationSettings );
+		//float height = textGen.GetPreferredHeight( t, generationSettings );
 
-		itemContainer.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
+		//itemContainer.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
 	}
 
 

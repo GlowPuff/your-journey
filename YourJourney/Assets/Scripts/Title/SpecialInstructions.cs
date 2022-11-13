@@ -63,13 +63,6 @@ public class SpecialInstructions : MonoBehaviour
 	void SetText( string t )
 	{
 		instructions.text = t;
-
-		//TextGenerator textGen = new TextGenerator();
-		//TextGenerationSettings generationSettings = instructions.GetGenerationSettings( instructions.rectTransform.rect.size );
-
-		//float height = textGen.GetPreferredHeight( t, generationSettings );
-
-		//itemContainer.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
 	}
 
 	public void OnBegin()

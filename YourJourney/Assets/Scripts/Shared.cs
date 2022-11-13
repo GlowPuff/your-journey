@@ -41,12 +41,12 @@ public class AbilityUtility
 
 	public static string Text(Ability ability)
     {
-		return "<b>" + testChars[(int)ability] + "</b>";
+		return "<font=\"Icon\">" + testChars[(int)ability] + "</font>";
     }
 
 	public static string Text(Ability ability, int size)
 	{
-		return "<size=" + size + "><b>" + testChars[(int)ability] + "</b></size>";
+		return "<size=" + size + "><font=\"Icon\">" + testChars[(int)ability] + "</font></size>";
 	}
 
 	public static string ColoredText(Ability ability)

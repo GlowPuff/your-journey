@@ -49,13 +49,6 @@ public class StoryBox : MonoBehaviour
 	void SetText( string t )
 	{
 		storyText.text = t;
-
-		//TextGenerator textGen = new TextGenerator();
-		//TextGenerationSettings generationSettings = storyText.GetGenerationSettings( storyText.rectTransform.rect.size );
-
-		//float height = textGen.GetPreferredHeight( t, generationSettings );
-
-		//itemContainer.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
 	}
 
 

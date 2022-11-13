@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TMPro;
 
 public class DamagePanel : MonoBehaviour
 {
-	public Text mainText, abilityText, damageText, fearText;
+	public Text abilityText, damageText, fearText;
+	public TextMeshProUGUI mainText;
 	public Image abilityIcon;
 	public CanvasGroup overlay;
 	public GameObject damageIcon, fearIcon, damageRoot, finalstandRoot;
@@ -53,7 +55,7 @@ public class DamagePanel : MonoBehaviour
 		//First check if there are Monster Activations available...
 		ObservableCollection<MonsterActivations> activationsObserver = Engine.currentScenario.activationsObserver;
 		ObservableCollection<MonsterActivationItem> activationItems = new ObservableCollection<MonsterActivationItem>();
-		Debug.Log("ShowCombatCounter: activationsId=" + m.activationsId + " activationsObserver.Count=" + (activationsObserver == null ? "null" : activationsObserver.Count.ToString()));
+		//Debug.Log("ShowCombatCounter: activationsId=" + m.activationsId + " activationsObserver.Count=" + (activationsObserver == null ? "null" : activationsObserver.Count.ToString()));
 		if (m.activationsId >= 0 && activationsObserver != null && activationsObserver.Count > 0)
         {
 			activationItems = activationsObserver.Where(a => a.id == m.activationsId ).First().activations;
@@ -61,7 +63,7 @@ public class DamagePanel : MonoBehaviour
 
 		int groupIndex = 0;
 		MonsterActivationItem item = null;
-		Debug.Log("activationItems.Count=" + (activationItems == null ? "null" : activationItems.Count.ToString()));
+		//Debug.Log("activationItems.Count=" + (activationItems == null ? "null" : activationItems.Count.ToString()));
 		if(activationItems != null && activationItems.Count > 0)
         {
 			groupIndex = m.ActiveMonsterCount - 1; //subtract one to make it work as an array index
@@ -72,11 +74,11 @@ public class DamagePanel : MonoBehaviour
 			for (; groupIndex >= 0; groupIndex--)
 			{
 				validItems = activationItems.Where(a => a.valid[groupIndex]).ToList();
-				Debug.Log("validItems.Count=" + (validItems == null ? "null" : validItems.Count.ToString()));
+				//Debug.Log("validItems.Count=" + (validItems == null ? "null" : validItems.Count.ToString()));
 				if (validItems.Count > 0)
 				{
 					int randomIndex = UnityEngine.Random.Range(0, validItems.Count);
-					Debug.Log("randomIndex=" + randomIndex);
+					//Debug.Log("randomIndex=" + randomIndex);
 					item = validItems[randomIndex];
 					break;
 				}
@@ -85,7 +87,7 @@ public class DamagePanel : MonoBehaviour
 
 		if (item != null)
 		{
-			Debug.Log("item damage=" + item.damage.ToString() + " fear=" + item.fear.ToString() + " negate=" + ((Ability)item.negate));
+			//Debug.Log("item damage=" + item.damage.ToString() + " fear=" + item.fear.ToString() + " negate=" + ((Ability)item.negate));
 			sDamage = item.damage[groupIndex].ToString();
 			sFear = item.fear[groupIndex].ToString();
 			negatedBy = (Ability)item.negate;
@@ -115,7 +117,7 @@ public class DamagePanel : MonoBehaviour
 		buttonAction = action;
 
 		abilityText.text = "";
-		sNegatedBy = AbilityUtility.ColoredText(negatedBy, 42) + "  " + negatedBy.ToString() + " negates.";
+		sNegatedBy = AbilityUtility.ColoredText(negatedBy, 30) + "  " + negatedBy.ToString() + " negates.";
 
 		SetText(sAttack + "\r\n\r\n" + sNegatedBy + (sEffect == "" ? "" : "\r\n\r\n" + sEffect));
 
@@ -144,7 +146,7 @@ public class DamagePanel : MonoBehaviour
 		abilityText.text = "";
 
 		SetText( "A menacing Darkness spreads across the land, overwhelming the heroes.\r\n\r\nIf a Hero is on a Space with a Darkness Icon or Token, suffer Fear.\r\n\r\n" +
-			AbilityUtility.ColoredText(Ability.Spirit, 42) + " Spirit negates." );
+			AbilityUtility.ColoredText(Ability.Spirit, 30) + " Spirit negates." );
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
@@ -178,30 +180,33 @@ public class DamagePanel : MonoBehaviour
 			test = UnityEngine.Random.Range( 0, 2 );
 		else
 			test = UnityEngine.Random.Range( 2, 5 );
+
+		string abilityTest = "\r\n\r\nTest " +
+			AbilityUtility.ColoredText((Ability)test, 30) + " " +
+			((Ability)test).ToString() + "; " + amount + ".";
+
+
 		//Might, Agility, Wisdom, Spirit, Wit
 		if ( test == 0 )
 		{
-			SetText( "Strive for life with all your might!" );
+			SetText( "Strive for life with all your might!" + abilityTest);
 		}
 		else if ( test == 1 )
 		{
-			SetText( "Skillful maneuvering can lead to escape!" );
+			SetText( "Skillful maneuvering can lead to escape!" + abilityTest);
 		}
 		else if ( test == 2 )
 		{
-			SetText( "Put your knowledge of healing and survival to the test!" );
+			SetText( "Put your knowledge of healing and survival to the test!" + abilityTest);
 		}
 		else if ( test == 3 )
 		{
-			SetText( "You can still survive, fight the fear!" );
+			SetText( "You can still survive, fight the fear!" + abilityTest);
 		}
 		else if ( test == 4 )
 		{
-			SetText( "Quick thinking can save you!" );
+			SetText( "Quick thinking can save you!" + abilityTest);
 		}
-		abilityText.text = "Test " +
-			AbilityUtility.ColoredText((Ability)test, 42) + " " +
-			((Ability)test).ToString() + "; " + amount + ".";
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
@@ -222,11 +227,9 @@ public class DamagePanel : MonoBehaviour
 	void SetText( string t )
 	{
 		mainText.text = t;
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
-		float height = textGen.GetPreferredHeight( t, generationSettings );
-
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 80 + 80 );
+		Debug.Log("is text overflowing? " + mainText.isTextOverflowing);
+		Debug.Log("minHeight " + mainText.minHeight + ", preferred " + mainText.preferredHeight + ", max " + mainText.maxHeight + ", rendered " + mainText.renderedHeight + ", flexible " + mainText.flexibleHeight);
+		rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 30 + mainText.preferredHeight + 30);
 	}
 
 	public void OnContinue()

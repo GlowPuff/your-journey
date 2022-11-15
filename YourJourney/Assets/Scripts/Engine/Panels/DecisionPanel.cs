@@ -1,11 +1,11 @@
 ﻿using System;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DecisionPanel : MonoBehaviour
 {
-	public Text mainText, btn1Text, btn2Text, btn3Text, btn4Text, dummy;
+	public TextMeshProUGUI mainText, btn1Text, btn2Text, btn3Text, btn4Text, dummy;
 	public GameObject btn1, btn2, btn3, btn4;
 	public CanvasGroup overlay;
 	public RectTransform content;
@@ -67,26 +67,14 @@ public class DecisionPanel : MonoBehaviour
 	void SetText( string t )
 	{
 		mainText.text = t;
-		dummy.text = t;
+		dummy.text = t; 
 
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
-		float height = textGen.GetPreferredHeight( t, generationSettings );
+		float preferredHeight = dummy.preferredHeight; //Dummy text (which must be active) is used to find the correct preferredHeight so it can then be set on the mainText which is in a scroll view viewport
+		dummy.text = ""; //After we have the 
 
-		//Debug.Log( height );//lineheight=35
-		//Regex rx = new Regex( @"\r\n" );
-		//MatchCollection matches = rx.Matches( t );
-		//height -= matches.Count * 35;
+		var dialogHeight = Math.Min( 525, 30 + preferredHeight + 30 );
 
-		var windowH = Math.Min( 525, height + 80 );
-
-		if ( height + 80 > 525 )
-			mainText.alignment = TextAnchor.UpperCenter;
-		else
-			mainText.alignment = TextAnchor.MiddleCenter;
-
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, windowH );
-		content.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 0 );
+		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, dialogHeight);
 	}
 
 	void DisableButtons()

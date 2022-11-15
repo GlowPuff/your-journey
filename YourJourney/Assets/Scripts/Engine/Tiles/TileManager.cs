@@ -445,12 +445,12 @@ public class TileManager : MonoBehaviour
 				{
 					s += "the Battle Map Tile "
 						+ (t.Item2 == "A" ? " (Grass)" : " (Dirt)")
-						+ " <b>" + Collection.FromTileNumber(t.Item1).FontCharacter + "</b>"; //Add the Collection symbol.
+						+ " <font=\"Icon\">" + Collection.FromTileNumber(t.Item1).FontCharacter + "</font>"; //Add the Collection symbol.
 				}
 				else //HexTile
 				{
 					s += t.Item1 + " " + t.Item2
-						+ "Tile <b>" + Collection.FromTileNumber(t.Item1).FontCharacter + "</b>"; //Add the Collection symbol.
+						+ "Tile <font=\"Icon\">" + Collection.FromTileNumber(t.Item1).FontCharacter + "</font>"; //Add the Collection symbol.
 
 				}
 

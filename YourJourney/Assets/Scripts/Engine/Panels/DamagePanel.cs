@@ -10,9 +10,8 @@ using TMPro;
 
 public class DamagePanel : MonoBehaviour
 {
-	public Text abilityText, damageText, fearText;
-	public TextMeshProUGUI mainText;
-	public Image abilityIcon;
+	public Text damageText, fearText;
+	public TextMeshProUGUI mainText, dummy;
 	public CanvasGroup overlay;
 	public GameObject damageIcon, fearIcon, damageRoot, finalstandRoot;
 	public Sprite[] icons;
@@ -35,6 +34,8 @@ public class DamagePanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
+		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
+		dummy.alignment = TextAlignmentOptions.Top;
 	}
 
 	public void ShowCombatCounter( Monster m, Action action = null )
@@ -116,7 +117,6 @@ public class DamagePanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonAction = action;
 
-		abilityText.text = "";
 		sNegatedBy = AbilityUtility.ColoredText(negatedBy, 30) + "  " + negatedBy.ToString() + " negates.";
 
 		SetText(sAttack + "\r\n\r\n" + sNegatedBy + (sEffect == "" ? "" : "\r\n\r\n" + sEffect));
@@ -143,15 +143,12 @@ public class DamagePanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonAction = action;
 
-		abilityText.text = "";
-
 		SetText( "A menacing Darkness spreads across the land, overwhelming the heroes.\r\n\r\nIf a Hero is on a Space with a Darkness Icon or Token, suffer Fear.\r\n\r\n" +
 			AbilityUtility.ColoredText(Ability.Spirit, 30) + " Spirit negates." );
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
 
-		abilityIcon.gameObject.SetActive( false );
 		group.DOFade( 1, .5f );
 	}
 
@@ -227,9 +224,14 @@ public class DamagePanel : MonoBehaviour
 	void SetText( string t )
 	{
 		mainText.text = t;
-		Debug.Log("is text overflowing? " + mainText.isTextOverflowing);
-		Debug.Log("minHeight " + mainText.minHeight + ", preferred " + mainText.preferredHeight + ", max " + mainText.maxHeight + ", rendered " + mainText.renderedHeight + ", flexible " + mainText.flexibleHeight);
-		rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 30 + mainText.preferredHeight + 30);
+		dummy.text = t;
+
+		float preferredHeight = dummy.preferredHeight; //Dummy text (which must be active) is used to find the correct preferredHeight so it can then be set on the mainText which is in a scroll view viewport
+		dummy.text = ""; //After we have the height we clear dummy.text so it doesn't show up anymore
+
+		var dialogHeight = Math.Min(525, 30 + preferredHeight + 30);
+
+		rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dialogHeight);
 	}
 
 	public void OnContinue()
@@ -246,7 +248,7 @@ public class DamagePanel : MonoBehaviour
 	{
 		Hide();
 		//string t = fStand == FinalStand.Damage ? "DAMAGE" : "FEAR";
-		string t = fStand == FinalStand.Damage ? "<b>D</b>" : "<b>F</b>";
+		string t = fStand == FinalStand.Damage ? "<font=\"Icon\">D</font>" : "<font=\"Icon\">F</font>";
 		var tb = FindObjectOfType<InteractionManager>().GetNewTextPanel();
 		tb.ShowOkContinue( $"Discard all facedown {t} cards and gain 1 inspiration.", ButtonIcon.Continue, () =>
 		{

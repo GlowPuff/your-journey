@@ -8,7 +8,6 @@ public class DecisionPanel : MonoBehaviour
 	public TextMeshProUGUI mainText, btn1Text, btn2Text, btn3Text, btn4Text, dummy;
 	public GameObject btn1, btn2, btn3, btn4;
 	public CanvasGroup overlay;
-	public RectTransform content;
 
 	CanvasGroup group;
 
@@ -26,6 +25,8 @@ public class DecisionPanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
+		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
+		dummy.alignment = TextAlignmentOptions.Top;
 	}
 
 	public void Show( DecisionInteraction branchInteraction, Action<InteractionResult> actions = null )
@@ -70,7 +71,7 @@ public class DecisionPanel : MonoBehaviour
 		dummy.text = t; 
 
 		float preferredHeight = dummy.preferredHeight; //Dummy text (which must be active) is used to find the correct preferredHeight so it can then be set on the mainText which is in a scroll view viewport
-		dummy.text = ""; //After we have the 
+		dummy.text = ""; //After we have the height we clear dummy.text so it doesn't show up anymore
 
 		var dialogHeight = Math.Min( 525, 30 + preferredHeight + 30 );
 

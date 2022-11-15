@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UI;
+using TMPro;
 
 public class PhaseNotification : MonoBehaviour
 {
 	public GameObject rootObject;
 	public CanvasGroup cg;
-	public Text msgText;
+	public TextMeshProUGUI msgText;
 
 	public void Show( string msg )
 	{

@@ -1,7 +1,10 @@
 ﻿using DG.Tweening;
 using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
@@ -23,6 +26,8 @@ public class TitleManager : MonoBehaviour
 	public GameObject scenarioOverlay;
 	private Sprite scenarioSprite;
 	public Vector2 scenarioImageSize = new Vector2(1024, 512);
+	public GameObject scenarioOverlayText;
+	public TextMeshProUGUI loadingText;
 
 	public void ClearScenarioImage()
     {
@@ -47,6 +52,28 @@ public class TitleManager : MonoBehaviour
 		}
 	}
 
+	public void LoadScenario()
+    {
+		gameTitle.SetActive(false);
+		gameTitleFlash.SetActive(false);
+		settingsButton.SetActive(false);
+		bannerTop.SetActive(false);
+		bannerBottom.SetActive(false);
+		scenarioOverlayText.SetActive(true);
+		StartCoroutine(LoadScenarioAsync());
+	}
+
+	IEnumerator LoadScenarioAsync()
+    {
+		AsyncOperation operation = SceneManager.LoadSceneAsync("gameboard");
+
+		while(!operation.isDone)
+        {
+			//loadingText.text = "Loading Scenario... " + ((int)(operation.progress * 100)).ToString() + "%";
+			yield return null;
+        }
+	}
+
 	CanvasGroup newBcg, loadBcg;
 	bool skipped = false;
 
@@ -69,6 +96,7 @@ public class TitleManager : MonoBehaviour
 
 		newBcg = newButton.GetComponent<CanvasGroup>();
 		loadBcg = loadButton.GetComponent<CanvasGroup>();
+		loadingText = scenarioOverlayText.GetComponent<TextMeshProUGUI>();
 
 		selectJourney.AddScenarioPrefabs();
 

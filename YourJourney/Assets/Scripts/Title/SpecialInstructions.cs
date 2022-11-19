@@ -2,7 +2,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SpecialInstructions : MonoBehaviour
@@ -87,12 +86,7 @@ public class SpecialInstructions : MonoBehaviour
 		//gameObject.SetActive( false );
 		gameObject.SetActive( false ); //hide the SpecialInstructions form but leave scenarioOverlay with coverImage showing
 		TitleManager tm = FindObjectOfType<TitleManager>();
-		tm.gameTitle.SetActive(false);
-		tm.gameTitleFlash.SetActive(false);
-		tm.settingsButton.SetActive(false);
-		tm.bannerTop.SetActive(false);
-		tm.bannerBottom.SetActive(false);
-		SceneManager.LoadSceneAsync( "gameboard" );
+		tm.LoadScenario();
 	}
 
 	public void OnBack()

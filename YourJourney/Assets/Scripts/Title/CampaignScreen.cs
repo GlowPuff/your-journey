@@ -3,7 +3,6 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CampaignScreen : MonoBehaviour
@@ -158,12 +157,7 @@ public class CampaignScreen : MonoBehaviour
     {
 		gameObject.SetActive(false); //hide the SpecialInstructions form but leave scenarioOverlay with coverImage showing
 		TitleManager tm = FindObjectOfType<TitleManager>();
-		tm.gameTitle.SetActive(false);
-		tm.gameTitleFlash.SetActive(false);
-		tm.settingsButton.SetActive(false);
-		tm.bannerTop.SetActive(false);
-		tm.bannerBottom.SetActive(false);
-		SceneManager.LoadSceneAsync("gameboard");
+		tm.LoadScenario();
 	}
 
 	public void OnContinueCampaign()

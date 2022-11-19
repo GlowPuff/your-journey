@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using TMPro;
 
 public class SelectHeroes : MonoBehaviour
 {
@@ -13,9 +14,9 @@ public class SelectHeroes : MonoBehaviour
 	public Image finalFader;
 	public Button[] heroButtons;
 	public Button beginButton, backButton, leftScrollButton, rightScrollButton;
-	public Text[] heroNameText;
-	public Text[] heroCollectionText;
-	public Text diffText;
+	public TextMeshProUGUI[] heroNameText;
+	public TextMeshProUGUI[] heroCollectionText;
+	public TextMeshProUGUI diffText;
 
 	public Sprite heroImageBlank;
 	public Sprite[] heroImage;

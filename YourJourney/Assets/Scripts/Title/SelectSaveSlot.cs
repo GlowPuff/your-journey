@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public class SelectSaveSlot : MonoBehaviour
 	public ConfirmDelete confirmDelete;
 	public NameGameDialog nameDialog;
 	public Image finalFader;
-	public Text selectedName, selectedDate, warningMsg, headingText, nextText, loadedGameScenario, itemType;
+	public TextMeshProUGUI selectedName, selectedDate, warningMsg, headingText, nextText, loadedGameScenario, itemType;
 	public Button nextButton, cancelButton;
 	public Toggle toggle;
 	public GameObject warning, campaignSaveWarning;

@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: acbd90fce4c0e5049998c19b83819a0c
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Libertinus Serif
+  fontNames:
+  - Libertinus Serif
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
+  - {fileID: 12800000, guid: a90f8f82b5bd209409d9d8731c9f1d63, type: 3}
+  - {fileID: 12800000, guid: d7bc8236ada1f3c4da012be613eb3f63, type: 3}
+  - {fileID: 12800000, guid: f5e94cff2418eec43a682ec3511c0e65, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

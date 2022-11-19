@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class SelectJourney : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class SelectJourney : MonoBehaviour
 	public SelectSaveSlot selectSaveSlot;
 	public List<FileItemButton> fileItemButtons = new List<FileItemButton>();
 	public Image finalFader;
-	public Text nameText, collectionsText, versionText, fileText, appVersion, engineVersion;
+	public TextMeshProUGUI nameText, collectionsText, versionText, fileText, appVersion, engineVersion;
 	ProjectItem[] projectItems;
 	public GameObject fileItemPrefab, warningPanel;
 	public RectTransform itemContainer;

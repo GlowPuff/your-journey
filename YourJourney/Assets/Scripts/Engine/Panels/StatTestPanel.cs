@@ -1,17 +1,16 @@
 ﻿using System;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StatTestPanel : MonoBehaviour
 {
-	public Text mainText, abilityText, counterText, dummy;
-	public Image abilityIcon, abilityIcon2;
+	public TextMeshProUGUI mainText, abilityText, dummy;
+	public Text counterText;
 	public GameObject btn1, btn2, continueBtn;
 	public CanvasGroup overlay;
 	public GameObject progressRoot;
-	public Sprite[] icons;
-	public RectTransform content;
 
 	CanvasGroup group;
 	RectTransform rect;
@@ -30,6 +29,8 @@ public class StatTestPanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
+		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
+		dummy.alignment = TextAlignmentOptions.Top;
 	}
 
 	public void Show( StatTestInteraction testInteraction, Action<InteractionResult> actions )
@@ -100,32 +101,19 @@ public class StatTestPanel : MonoBehaviour
 
 	void SetText( string t )
 	{
-		mainText.alignment = TextAnchor.UpperCenter;
 		mainText.text = t;
 		dummy.text = t;
+
 		int hmax = 525;
-		if ( statTestInteraction.isCumulative && !statTestInteraction.passFail )
+		if (statTestInteraction.isCumulative && !statTestInteraction.passFail)
 			hmax = 410;
 
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = mainText.GetGenerationSettings( mainText.rectTransform.rect.size );
-		float height = textGen.GetPreferredHeight( t, generationSettings );
+		float preferredHeight = dummy.preferredHeight; //Dummy text (which must be active) is used to find the correct preferredHeight so it can then be set on the mainText which is in a scroll view viewport
+		dummy.text = ""; //After we have the height we clear dummy.text so it doesn't show up anymore
 
-		//Debug.Log( height );//lineheight=35
-		//Regex rx = new Regex( @"\r\n" );
-		//MatchCollection matches = rx.Matches( t );
-		//height -= matches.Count * 35;
+		var dialogHeight = Math.Min(hmax, 30 + preferredHeight + 90);
 
-		var windowH = Math.Min( hmax, height + 80 + 80 );
-
-		if ( height + 80 + 80 > hmax )
-			mainText.alignment = TextAnchor.UpperCenter;
-		else
-			mainText.alignment = TextAnchor.MiddleCenter;
-
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, windowH ); /*height + 80 + 80*/
-		content.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 80 );
-
+		rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dialogHeight);
 	}
 
 	public void OnAdd()

@@ -34,19 +34,19 @@ public enum TitleScreen { Title, SelectSlot, SelectJourney, SelectHeroes }
 public class AbilityUtility
 {
 	//This is used to return a bolded HTML string with optional size and color, to display an ability icon from a font.
-	//The LoTR-JiME-Icons font has been renamed as Harrington in the harringtonBold font. The <b></b> tags switch to this icon font and display the icon.
+	//The LoTR-JiME-Icons font has been renamed as Harrington in the harringtonBold font. The <font=\"Icon\"></font> tags switch to this icon font and display the icon.
 	// Might, Agility, Wisdom, Spirit, Wit, Wild
 	public static readonly string[] testColors = new string[] { "ff0000", "55cc00", "bb00bb", "0088ff", "ffff00", "ffffff" };
 	public static readonly string[] testChars = new string[] { "M", "A", "Z", "S", "W", "X" }; //In the LoTR-JiME-Icons font
 
 	public static string Text(Ability ability)
     {
-		return "<b>" + testChars[(int)ability] + "</b>";
+		return "<font=\"Icon\">" + testChars[(int)ability] + "</font>";
     }
 
 	public static string Text(Ability ability, int size)
 	{
-		return "<size=" + size + "><b>" + testChars[(int)ability] + "</b></size>";
+		return "<size=" + size + "><font=\"Icon\">" + testChars[(int)ability] + "</font></size>";
 	}
 
 	public static string ColoredText(Ability ability)

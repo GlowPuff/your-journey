@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ConfirmDelete : MonoBehaviour
 {
 	public CanvasGroup canvasGroup;
-	public Text gameName, filePath;
+	public TextMeshProUGUI gameName, filePath;
 
 	RectTransform rect;
 	Vector2 ap;

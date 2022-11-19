@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,7 @@ public class Engine : MonoBehaviour
 	public GameObject scenarioOverlay;
 	private Sprite scenarioSprite;
 	private Vector2 scenarioImageSize = new Vector2(1024, 512);
+	public TextMeshProUGUI scenarioOverlayText;
 
 	public bool debug = false;
 

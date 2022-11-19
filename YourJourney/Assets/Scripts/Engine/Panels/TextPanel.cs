@@ -3,15 +3,15 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 using System.Text.RegularExpressions;
+using TMPro;
 
 public class TextPanel : MonoBehaviour
 {
-	public Text mainText, btn1Text, btn2Text, btnSingleText, dummy;
+	public TextMeshProUGUI mainText, btn1Text, btn2Text, btnSingleText, dummy;
 	public GameObject btn1, btn2;
 	public GameObject buttonSingle;
 	public GameObject actionIcon;
 	public CanvasGroup overlay;
-	public RectTransform content;
 
 	CanvasGroup group;
 
@@ -30,6 +30,8 @@ public class TextPanel : MonoBehaviour
 		sp = transform.position;
 		ap = rect.anchoredPosition;
 		root = transform.parent;
+		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
+		dummy.alignment = TextAlignmentOptions.Top;
 	}
 
 	void Show( string t, string btn1, string btn2, ButtonIcon icon = ButtonIcon.None, Action<InteractionResult> actions = null )
@@ -142,28 +144,15 @@ public class TextPanel : MonoBehaviour
 
 	void SetText( string t )
 	{
-		mainText.alignment = TextAnchor.UpperCenter;
 		mainText.text = t;
 		dummy.text = t;
 
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = dummy.GetGenerationSettings( dummy.rectTransform.rect.size );
-		float height = textGen.GetPreferredHeight( t, generationSettings );
+		float preferredHeight = dummy.preferredHeight; //Dummy text (which must be active) is used to find the correct preferredHeight so it can then be set on the mainText which is in a scroll view viewport
+		dummy.text = ""; //After we have the height we clear dummy.text so it doesn't show up anymore
 
-		//Debug.Log( height );//lineheight=35
-		//Regex rx = new Regex( @"\r\n" );
-		//MatchCollection matches = rx.Matches( t );
-		//height -= matches.Count * 35;
+		var dialogHeight = Math.Min(525, 30 + preferredHeight + 30);
 
-		var windowH = Math.Min( 525, height + 80 );
-
-		if ( height + 80 > 525 )
-			mainText.alignment = TextAnchor.UpperCenter;
-		else
-			mainText.alignment = TextAnchor.MiddleCenter;
-
-		rect.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, windowH );
-		content.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
+		rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dialogHeight);
 	}
 
 	public void OnBtn1()

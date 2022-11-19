@@ -3,10 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using TMPro;
 
 public class ObjectiveManager : MonoBehaviour
 {
-	public Text objectiveText;
+	public TextMeshProUGUI objectiveText;
 
 	List<Objective> objectiveList;
 	[HideInInspector]

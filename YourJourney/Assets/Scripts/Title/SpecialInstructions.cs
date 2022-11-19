@@ -1,7 +1,7 @@
 ﻿using DG.Tweening;
 using System;
+using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SpecialInstructions : MonoBehaviour
@@ -9,7 +9,7 @@ public class SpecialInstructions : MonoBehaviour
 	public SelectHeroes selectHeroes;
 	public Image finalFader;
 	public Button beginButton, cancelButton, backButton, increaseLoreButton, decreaseLoreButton, increaseXPButton, decreaseXPButton;
-	public Text loreText, xpText, instructions;
+	public TextMeshProUGUI loreText, xpText, instructions;
 	public AudioSource music;
 
 	RectTransform itemContainer;
@@ -20,7 +20,7 @@ public class SpecialInstructions : MonoBehaviour
 	{
 		titleMetaData = metaData;
 		gameObject.SetActive( true );
-		itemContainer = instructions.rectTransform;
+		//itemContainer = instructions.rectTransform;
 
 		loreText.text = "";
 		xpText.text = "";
@@ -62,13 +62,6 @@ public class SpecialInstructions : MonoBehaviour
 	void SetText( string t )
 	{
 		instructions.text = t;
-
-		TextGenerator textGen = new TextGenerator();
-		TextGenerationSettings generationSettings = instructions.GetGenerationSettings( instructions.rectTransform.rect.size );
-
-		float height = textGen.GetPreferredHeight( t, generationSettings );
-
-		itemContainer.SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, height + 20 );
 	}
 
 	public void OnBegin()
@@ -93,12 +86,7 @@ public class SpecialInstructions : MonoBehaviour
 		//gameObject.SetActive( false );
 		gameObject.SetActive( false ); //hide the SpecialInstructions form but leave scenarioOverlay with coverImage showing
 		TitleManager tm = FindObjectOfType<TitleManager>();
-		tm.gameTitle.SetActive(false);
-		tm.gameTitleFlash.SetActive(false);
-		tm.settingsButton.SetActive(false);
-		tm.bannerTop.SetActive(false);
-		tm.bannerBottom.SetActive(false);
-		SceneManager.LoadSceneAsync( "gameboard" );
+		tm.LoadScenario();
 	}
 
 	public void OnBack()

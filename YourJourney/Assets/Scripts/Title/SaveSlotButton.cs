@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class SaveSlotButton : MonoBehaviour
 {
 	public int index;
 	public Image image;
-	public Text title, heroes;
+	public TextMeshProUGUI title, heroes;
 	public GameObject emptyText;
 	public Button delButton;
 

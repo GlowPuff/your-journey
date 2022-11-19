@@ -1,13 +1,12 @@
 ﻿using System;
-using System.IO;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class NameGameDialog : MonoBehaviour
 {
 	public CanvasGroup canvasGroup;
-	public Text gameName;
+	public TextMeshProUGUI gameName;
 
 	RectTransform rect;
 	Vector2 ap;

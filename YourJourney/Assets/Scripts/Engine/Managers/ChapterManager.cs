@@ -128,14 +128,15 @@ public class ChapterManager : MonoBehaviour
 
 	void FinishChapterTrigger( Chapter c, bool firstChapter )
 	{
+		Debug.Log("FinishChapterTrigger chapter " + c.dataName + " firstChapter? " + firstChapter);
 		string s = "Prepare the following tiles:\r\n\r\n";
 		foreach (BaseTile bt in c.tileObserver)
 		{
 			Debug.Log(bt.ToString());
 			if (bt.tileType == TileType.Hex)
 			{
-				s += bt.idNumber + " " + bt.tileSide
-					+ " <font=\"Icon\">" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</font>" //Add the Collection symbol.
+				s += bt.idNumber + bt.tileSide
+					+ "<font=\"Icon\">" + Collection.FromTileNumber(bt.idNumber).FontCharacter + "</font>" //Add the Collection symbol.
 					+ ", ";
 			}
 			else if (bt.tileType == TileType.Square)

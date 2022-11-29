@@ -7781,6 +7781,24 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: c55377bc69a850a4991009dafbc4151f, type: 3}
   - {fileID: 15366712624692153, guid: 413a25761ddb390418340b9fdf340e51, type: 3}
   - {fileID: 15366712624692153, guid: c8fd861c7466c6b438b9a387d47d0c81, type: 3}
+  - {fileID: 15366712624692153, guid: 1c1be7244791270459981a69a170d39d, type: 3}
+  - {fileID: 15366712624692153, guid: 01f040bb1d8572b4897488bceefff15a, type: 3}
+  - {fileID: 15366712624692153, guid: 128fe63d6c0c5e341b974997a681302c, type: 3}
+  - {fileID: 15366712624692153, guid: cd9e9d6996acdef45abdf09025e454e5, type: 3}
+  - {fileID: 15366712624692153, guid: 2cbad634aa1f48345844999b1f5ca11a, type: 3}
+  - {fileID: 15366712624692153, guid: 33d1dea4b7a3f1149b3f66843f4409cd, type: 3}
+  - {fileID: 15366712624692153, guid: 17ae7947adfcab947a37cd266869334c, type: 3}
+  - {fileID: 15366712624692153, guid: 9128e8b7a1ff7e240979f022bb1076af, type: 3}
+  - {fileID: 15366712624692153, guid: 2e232fbc134748a4fa8ecf9f0a0dc2dc, type: 3}
+  - {fileID: 15366712624692153, guid: 69aff4f18a4e77f43bb8caadfc80f2f8, type: 3}
+  - {fileID: 15366712624692153, guid: 52f73b782862cb5479017d2e3d3fce2c, type: 3}
+  - {fileID: 15366712624692153, guid: fdf67ee04a95d5d48b0192349c1361f7, type: 3}
+  - {fileID: 15366712624692153, guid: af5033cef1b00b745971729713c59a79, type: 3}
+  - {fileID: 15366712624692153, guid: e80d398fa4dd2704282d5ba63bd4d518, type: 3}
+  - {fileID: 15366712624692153, guid: e2254d37a4fd26b4bab60665cf1639a7, type: 3}
+  - {fileID: 15366712624692153, guid: cd090d712372cba4fb343a765853c143, type: 3}
+  - {fileID: 15366712624692153, guid: bc15949f954561d4ab2be603155856b0, type: 3}
+  - {fileID: 15366712624692153, guid: 29cc01cc4b101a74b9c4b3d5c39ffa5b, type: 3}
   - {fileID: 15366712624692153, guid: b8c83cf18025a1f4f8479eeee9286381, type: 3}
   - {fileID: 15366712624692153, guid: 5cf04fc342bde284fafc766903f3a931, type: 3}
   tilePrefabsB:
@@ -7826,6 +7844,24 @@ MonoBehaviour:
   - {fileID: 15366712624692153, guid: a8c23f44a8cb6d64484105d33aee2b10, type: 3}
   - {fileID: 15366712624692153, guid: 13791ee0c7759ae4db85ea722383ebd9, type: 3}
   - {fileID: 15366712624692153, guid: 9d9f72b488171ef42b628299f42b2259, type: 3}
+  - {fileID: 15366712624692153, guid: 0f2729c08e8536048a2881dd2bfcb4db, type: 3}
+  - {fileID: 15366712624692153, guid: bc348f9e70c331a43b28c21accf73046, type: 3}
+  - {fileID: 15366712624692153, guid: 81d2dfec76178d9479f785b330806bc7, type: 3}
+  - {fileID: 15366712624692153, guid: ccff89aab76ff85489b6a9ecfea946a9, type: 3}
+  - {fileID: 15366712624692153, guid: c2d798f3945e3e942a1d8b4257846133, type: 3}
+  - {fileID: 15366712624692153, guid: 164cfe64cfc5ac54c923a675c6df220f, type: 3}
+  - {fileID: 15366712624692153, guid: ef30383e37996b741b924dfd67f8f53e, type: 3}
+  - {fileID: 15366712624692153, guid: f18951565ef867f4380b46e75c2e6d84, type: 3}
+  - {fileID: 15366712624692153, guid: 22ad80540c663e441b35ac03bb31f544, type: 3}
+  - {fileID: 15366712624692153, guid: c42ea5033488eed4abcf186be09bb570, type: 3}
+  - {fileID: 15366712624692153, guid: 894894c3b8d1a3940b89091fa26cca2d, type: 3}
+  - {fileID: 15366712624692153, guid: 84bc473acc704eb488474166b880bc04, type: 3}
+  - {fileID: 15366712624692153, guid: a776d9dcd9c016e47967d72301e41b5e, type: 3}
+  - {fileID: 15366712624692153, guid: ef173040ebd58d24bacef9037c4a2d9c, type: 3}
+  - {fileID: 15366712624692153, guid: 5361ba504c8861a409db14e9a46d08c2, type: 3}
+  - {fileID: 15366712624692153, guid: 1919ddfcbbf870d4b9f55065b1b44c6f, type: 3}
+  - {fileID: 15366712624692153, guid: ce2beb698121903408295b283490e812, type: 3}
+  - {fileID: 15366712624692153, guid: 2f74dbbe26dc382459711b1ab83bbb20, type: 3}
   - {fileID: 15366712624692153, guid: edea89bc9ecc94f42b4f8e607331299b, type: 3}
   - {fileID: 15366712624692153, guid: a5fb2630af1d27c4484ae2321c2155e6, type: 3}
   searchTokenPrefab: {fileID: 988778545020331381, guid: 586effd6ec404024db3347f9a914e4e4,
@@ -7892,12 +7928,6 @@ MonoBehaviour:
     type: 3}
   partyPanel: {fileID: 365931356}
   settingsDialog: {fileID: 327555654}
-  scenarioBuilt: 0
-  scenarioTileGroupCount: 0
-  scenarioTileGroupBuilt: 0
-  scenarioTilePlacementCount: 0
-  scenarioTilePlacementPlaced: 0
-  scenarioBuildProgressUpdated: 0
 --- !u!114 &965560138
 MonoBehaviour:
   m_ObjectHideFlags: 0

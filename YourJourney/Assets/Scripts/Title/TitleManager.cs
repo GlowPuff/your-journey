@@ -39,7 +39,7 @@ public class TitleManager : MonoBehaviour
 		if (base64Image == null || base64Image.Length == 0)
 		{
 			scenarioOverlay.GetComponent<Image>().sprite = null;
-			scenarioOverlay.SetActive(false);
+			scenarioOverlay.SetActive(true);
 		}
 		else
 		{

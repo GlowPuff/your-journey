@@ -137,11 +137,49 @@ public class TileManager : MonoBehaviour
 			case 402:
 				return tilePrefabs[41];
 
+			//Spreading War Expansion Tiles
+			case 103:
+				return tilePrefabs[42];
+			case 104:
+				return tilePrefabs[43];
+			case 222:
+				return tilePrefabs[44];
+			case 223:
+				return tilePrefabs[45];
+			case 224:
+				return tilePrefabs[46];
+			case 225:
+				return tilePrefabs[47];
+			case 226:
+				return tilePrefabs[48];
+			case 227:
+				return tilePrefabs[49];
+			case 314:
+				return tilePrefabs[50];
+			case 315:
+				return tilePrefabs[51];
+			case 316:
+				return tilePrefabs[52];
+			case 317:
+				return tilePrefabs[53];
+			case 318:
+				return tilePrefabs[54];
+			case 319:
+				return tilePrefabs[55];
+			case 320:
+				return tilePrefabs[56];
+			case 403:
+				return tilePrefabs[57];
+			case 404:
+				return tilePrefabs[58];
+			case 500:
+				return tilePrefabs[59];
+
 			//Battle Tiles
 			case 998:
-				return tilePrefabs[42];
+				return tilePrefabs[60];
 			case 999:
-				return tilePrefabs[43];
+				return tilePrefabs[61];
 
 			//Default
 			default:
@@ -241,12 +279,49 @@ public class TileManager : MonoBehaviour
 			case 402:
 				return tilePrefabsB[41];
 
+			//Spreading War Expansion Tiles
+			case 103:
+				return tilePrefabsB[42];
+			case 104:
+				return tilePrefabsB[43];
+			case 222:
+				return tilePrefabsB[44];
+			case 223:
+				return tilePrefabsB[45];
+			case 224:
+				return tilePrefabsB[46];
+			case 225:
+				return tilePrefabsB[47];
+			case 226:
+				return tilePrefabsB[48];
+			case 227:
+				return tilePrefabsB[49];
+			case 314:
+				return tilePrefabsB[50];
+			case 315:
+				return tilePrefabsB[51];
+			case 316:
+				return tilePrefabsB[52];
+			case 317:
+				return tilePrefabsB[53];
+			case 318:
+				return tilePrefabsB[54];
+			case 319:
+				return tilePrefabsB[55];
+			case 320:
+				return tilePrefabsB[56];
+			case 403:
+				return tilePrefabsB[57];
+			case 404:
+				return tilePrefabsB[58];
+			case 500:
+				return tilePrefabsB[59];
+
 			//Battle Tiles
 			case 998:
-				return tilePrefabsB[42];
+				return tilePrefabsB[60];
 			case 999:
-				return tilePrefabsB[43];
-
+				return tilePrefabsB[61];
 
 			//Default
 			default:

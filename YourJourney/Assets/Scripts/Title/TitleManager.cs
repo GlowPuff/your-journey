@@ -41,7 +41,7 @@ public class TitleManager : MonoBehaviour
 			scenarioOverlay.GetComponent<Image>().sprite = null;
 			Image image = scenarioOverlay.GetComponent<Image>();
 			image.color = Color.black;
-			scenarioOverlay.SetActive(true);
+			scenarioOverlay.SetActive(false);
 		}
 		else
 		{
@@ -58,6 +58,7 @@ public class TitleManager : MonoBehaviour
 
 	public void LoadScenario()
     {
+		scenarioOverlay.SetActive(true);
 		gameTitle.SetActive(false);
 		gameTitleFlash.SetActive(false);
 		settingsButton.SetActive(false);

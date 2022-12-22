@@ -39,6 +39,8 @@ public class TitleManager : MonoBehaviour
 		if (base64Image == null || base64Image.Length == 0)
 		{
 			scenarioOverlay.GetComponent<Image>().sprite = null;
+			Image image = scenarioOverlay.GetComponent<Image>();
+			image.color = Color.black;
 			scenarioOverlay.SetActive(true);
 		}
 		else
@@ -48,6 +50,8 @@ public class TitleManager : MonoBehaviour
 			texture.LoadImage(bytes);
 			scenarioSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(texture.width / 2, texture.height / 2));
 			scenarioOverlay.GetComponent<Image>().sprite = scenarioSprite;
+			Image image = scenarioOverlay.GetComponent<Image>();
+			image.color = Color.white;
 			scenarioOverlay.SetActive(true);
 		}
 	}

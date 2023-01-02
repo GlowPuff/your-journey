@@ -1,4 +1,4 @@
-# Your Journey - v0.21
+# Your Journey - v0.21 - Windows and Mac
 The companion playback app for the Journeys in Middle Earth Scenario Editor, forked from [GlowPuff's original project](https://github.com/GlowPuff/your-journey) with new tiles from [Celstra](https://github.com/Celstra/JiMEditor).
 
 #### Download the latest release
@@ -6,8 +6,8 @@ The companion playback app for the Journeys in Middle Earth Scenario Editor, for
 
 ([View GlowPuff's original releases](https://github.com/GlowPuff/your-journey/releases))
 
-#### Installation instructions
-1. Unzip the YourJourney_v0.21.zip file somewhere and run "Your Journey.exe".
+#### Installation instructions - Windows
+1. Unzip the YourJourney_Win_v0.21.zip file somewhere and run "Your Journey.exe".
 2. Put your .jime scenario files (like [The Watch at Weathertop](https://drive.google.com/file/d/1Rr2HZlZ-ba17b714xOql2_Dgg5pnyWIg/view?usp=sharing) by [Noldorion](https://boardgamegeek.com/user/Noldorion)) in the "Your Journey" folder in your Documents folder (Windows users).
 3. Hit the "New Game" button at the title.
 4. Create a save slot on the next screen (just start typing when it asks for a name, then press enter).
@@ -16,8 +16,19 @@ The companion playback app for the Journeys in Middle Earth Scenario Editor, for
 7. Change the difficulty level by clicking on the "Normal" button.
 8. Click the "Begin Journey" button to start playing!
 
+#### Installation instructions - Mac
+1. Download YourJourney_Mac_v0.21.zip file somewhere and run "YourJourney_v0.21". If it tells you it can't run the software because it can't verify there aren't any viruses, try again and tell it to Open anyways.
+2. Put your .jime scenario files (like [The Watch at Weathertop](https://drive.google.com/file/d/1Rr2HZlZ-ba17b714xOql2_Dgg5pnyWIg/view?usp=sharing) by [Noldorion](https://boardgamegeek.com/user/Noldorion)) in the "Your Journey" folder in your User folder (Mac users), e.g. /Users/<your-user-name-here>/Your Journey/Weathertop.jime.
+3. Hit the "New Game" button at the title.
+4. Create a save slot on the next screen (just start typing when it asks for a name, then press enter).
+5. Load your level on the next screen.
+6. Choose your characters by clicking on the top half; change their names by clicking on the bottom half, typing, and pressing enter.
+7. Change the difficulty level by clicking on the "Normal" button.
+8. Click the "Begin Journey" button to start playing!
+
+
 ## LIMITATIONS:
-* The corruption is not implemented.
+* The corruption mechanic is not implemented.
 * You have to manage your inventory and skill cards yourself, based on the Lore and XP you can see on the Party Panel.
 
 ## The Scenario Editor

@@ -18,7 +18,7 @@ The companion playback app for the Journeys in Middle Earth Scenario Editor, for
 
 #### Installation instructions - Mac
 1. Download YourJourney_Mac_v0.21.zip file somewhere and run "YourJourney_v0.21". If it tells you it can't run the software because it can't verify there aren't any viruses, try again and tell it to Open anyways.
-2. Put your .jime scenario files (like [The Watch at Weathertop](https://drive.google.com/file/d/1Rr2HZlZ-ba17b714xOql2_Dgg5pnyWIg/view?usp=sharing) by [Noldorion](https://boardgamegeek.com/user/Noldorion)) in the "Your Journey" folder in your User folder (Mac users), e.g. /Users/<your-user-name-here>/Your Journey/Weathertop.jime.
+2. Put your .jime scenario files (like [The Watch at Weathertop](https://drive.google.com/file/d/1Rr2HZlZ-ba17b714xOql2_Dgg5pnyWIg/view?usp=sharing) by [Noldorion](https://boardgamegeek.com/user/Noldorion)) in the "Your Journey" folder in your User folder (Mac users), e.g. /Users/(your-user-name)/Your Journey/Weathertop.jime.
 3. Hit the "New Game" button at the title.
 4. Create a save slot on the next screen (just start typing when it asks for a name, then press enter).
 5. Load your level on the next screen.

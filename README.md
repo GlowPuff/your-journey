@@ -42,4 +42,4 @@ The editor is available in [a separate repository](https://github.com/TrnsltLife
 The official forum post for this project: [BGG Forum Post](https://boardgamegeek.com/thread/2488415/custom-scenario-editor-and-companion-app-create-yo)
 
 ## YourJourneyScenarios repository
-I created a repository to store any scenarios people might wish to share, as well as some test scenarios: [YourJourneyScenarios](https://github.com/TrnsltLife/YourJourneyScenarios). Make sure to read the README for the rather complicated instructions for downloading the scenarios at this point.
+I created a repository to store any scenarios people might wish to share, as well as some test scenarios: [YourJourneyScenarios](https://github.com/TrnsltLife/YourJourneyScenarios). Make sure to read the README for instructions on downloading and installing the scenarios.

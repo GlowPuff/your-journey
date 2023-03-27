@@ -199,7 +199,7 @@ public class TriggerManager : MonoBehaviour
 			}
 			yield return WaitUntilFinished();
 
-			if ( trigger.dataName == endTriggerGUID )
+			if ( trigger.dataName == endTriggerGUID && endTriggerGUID?.Length > 0)
 			{
 				Debug.Log( "Triggering End Scenario" );
 				engine.EndScenario( trigger.triggerName );

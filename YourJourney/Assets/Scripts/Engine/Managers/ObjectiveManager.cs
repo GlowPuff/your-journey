@@ -105,7 +105,7 @@ public class ObjectiveManager : MonoBehaviour
 	{
 		if ( currentObjective == null )
 			return false;
-		Debug.Log( "TryCompleteObjective: " + name );
+		Debug.Log( "TryCompleteObjective: " + triggername);
 
 		//objective is complete, remove it and fire any on complete trigger
 		//TODO - show completion textbox?  show lore earned?
@@ -120,7 +120,7 @@ public class ObjectiveManager : MonoBehaviour
 			return true;
 		}
 
-		Debug.Log( "TryCompleteObjective NOT FOUND: " + name );
+		Debug.Log( "TryCompleteObjective NOT FOUND: " + triggername);
 		return false;
 	}
 

@@ -276,8 +276,10 @@ public class ShadowPhaseManager : MonoBehaviour
 		//2*hero count + # unexplored tiles + 1 per threat token
 		int hc = 2 * Bootstrap.gameStarter.heroes.Length;
 		int ut = 0;
-		if ( Bootstrap.gameStarter.difficulty != Difficulty.Adventure )
-			FindObjectOfType<TileManager>().UnexploredTileCount();
+		if (Bootstrap.gameStarter.difficulty != Difficulty.Adventure)
+		{
+			ut = FindObjectOfType<TileManager>().UnexploredTileCount();
+		}
 		int tt = FindObjectOfType<TileManager>().ThreatTokenCount();
 		Debug.Log( "***hero threat: " + hc );
 		Debug.Log( "***unexplored threat: " + ut );

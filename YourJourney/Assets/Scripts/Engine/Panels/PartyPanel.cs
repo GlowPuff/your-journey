@@ -14,12 +14,17 @@ public class PartyPanel : MonoBehaviour
 	Vector3 sp;
 	Vector2 ap;
 
-	void Awake()
+	private void CalculatePanelPosition()
 	{
 		rect = GetComponent<RectTransform>();
 		group = GetComponent<CanvasGroup>();
 		sp = transform.position;
 		ap = rect.anchoredPosition;
+	}
+
+	void Awake()
+	{
+		CalculatePanelPosition();
 		testColors = new Color[5];
 		//mit/agi/wis/spi/wit
 		testColors[0] = Color.red;
@@ -31,6 +36,7 @@ public class PartyPanel : MonoBehaviour
 
 	public void Show()
 	{
+		CalculatePanelPosition();
 		if ( FindObjectOfType<ShadowPhaseManager>().doingShadowPhase
 	|| FindObjectOfType<ProvokeMessage>().provokeMode )
 			return;

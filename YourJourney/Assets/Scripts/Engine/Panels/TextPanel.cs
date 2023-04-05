@@ -22,13 +22,18 @@ public class TextPanel : MonoBehaviour
 	Action<InteractionResult> buttonActions;
 	Transform root;
 
-	void Awake()
+	private void CalculatePanelPosition()
 	{
 		rect = GetComponent<RectTransform>();
 		group = GetComponent<CanvasGroup>();
-		gameObject.SetActive( false );
+		gameObject.SetActive(false);
 		sp = transform.position;
 		ap = rect.anchoredPosition;
+	}
+
+	void Awake()
+	{
+		CalculatePanelPosition();
 		root = transform.parent;
 		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
 		dummy.alignment = TextAlignmentOptions.Top;
@@ -36,6 +41,7 @@ public class TextPanel : MonoBehaviour
 
 	void Show( string t, string btn1, string btn2, ButtonIcon icon = ButtonIcon.None, Action<InteractionResult> actions = null )
 	{
+		CalculatePanelPosition();
 		FindObjectOfType<TileManager>().ToggleInput( true );
 
 		this.btn1.SetActive( true );

@@ -21,13 +21,18 @@ public class StatTestPanel : MonoBehaviour
 	int value;
 	StatTestInteraction statTestInteraction;
 
-	private void Awake()
+	private void CalculatePanelPosition()
 	{
 		rect = GetComponent<RectTransform>();
 		group = GetComponent<CanvasGroup>();
-		gameObject.SetActive( false );
+		gameObject.SetActive(false);
 		sp = transform.position;
 		ap = rect.anchoredPosition;
+	}
+
+	private void Awake()
+	{
+		CalculatePanelPosition();
 		root = transform.parent;
 		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
 		dummy.alignment = TextAlignmentOptions.Top;
@@ -35,6 +40,7 @@ public class StatTestPanel : MonoBehaviour
 
 	public void Show( StatTestInteraction testInteraction, Action<InteractionResult> actions )
 	{
+		CalculatePanelPosition();
 		FindObjectOfType<TileManager>().ToggleInput( true );
 
 		statTestInteraction = testInteraction;

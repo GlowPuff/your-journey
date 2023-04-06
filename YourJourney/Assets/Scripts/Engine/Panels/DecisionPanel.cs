@@ -17,13 +17,18 @@ public class DecisionPanel : MonoBehaviour
 	Action<InteractionResult> buttonActions;
 	Transform root;
 
-	private void Awake()
+	private void CalculatePanelPosition()
 	{
 		rect = GetComponent<RectTransform>();
 		group = GetComponent<CanvasGroup>();
-		gameObject.SetActive( false );
+		gameObject.SetActive(false);
 		sp = transform.position;
 		ap = rect.anchoredPosition;
+	}
+
+	private void Awake()
+	{
+		CalculatePanelPosition();
 		root = transform.parent;
 		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
 		dummy.alignment = TextAlignmentOptions.Top;
@@ -31,6 +36,7 @@ public class DecisionPanel : MonoBehaviour
 
 	public void Show( DecisionInteraction branchInteraction, Action<InteractionResult> actions = null )
 	{
+		CalculatePanelPosition();
 		FindObjectOfType<TileManager>().ToggleInput( true );
 
 		btn1.SetActive( true );

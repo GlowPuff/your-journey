@@ -26,13 +26,18 @@ public class DamagePanel : MonoBehaviour
 	bool done = false;
 	FinalStand fStand;
 
-	void Awake()
+	private void CalculatePanelPosition()
 	{
 		rect = GetComponent<RectTransform>();
 		group = GetComponent<CanvasGroup>();
-		gameObject.SetActive( false );
+		gameObject.SetActive(false);
 		sp = transform.position;
 		ap = rect.anchoredPosition;
+	}
+
+	void Awake()
+	{
+		CalculatePanelPosition();
 		root = transform.parent;
 		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
 		dummy.alignment = TextAlignmentOptions.Top;
@@ -40,6 +45,7 @@ public class DamagePanel : MonoBehaviour
 
 	public void ShowCombatCounter( Monster m, Action action = null )
 	{
+		CalculatePanelPosition();
 		done = false;
 		FindObjectOfType<TileManager>().ToggleInput( true );
 
@@ -129,6 +135,7 @@ public class DamagePanel : MonoBehaviour
 
 	public void ShowShadowFear( Action action )
 	{
+		CalculatePanelPosition();
 		FindObjectOfType<TileManager>().ToggleInput( true );
 
 		damageIcon.SetActive( false );
@@ -154,6 +161,7 @@ public class DamagePanel : MonoBehaviour
 
 	public void ShowFinalStand( int amount, FinalStand finalStand, Action<bool> action )
 	{
+		CalculatePanelPosition();
 		finalstandRoot.SetActive( true );
 		damageRoot.SetActive( false );
 

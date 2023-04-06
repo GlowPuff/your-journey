@@ -20,13 +20,18 @@ public class DialogPanel : MonoBehaviour
 
 	DialogInteraction dialogInteraction;
 
-	private void Awake()
+	private void CalculatePanelPosition()
 	{
 		rect = GetComponent<RectTransform>();
 		group = GetComponent<CanvasGroup>();
 		//gameObject.SetActive( false );
 		sp = transform.position;
 		ap = rect.anchoredPosition;
+	}
+
+	private void Awake()
+	{
+		CalculatePanelPosition();
 		root = transform.parent;
 		mainText.alignment = TextAlignmentOptions.Top; //We set this here instead of the editor to make it easier to see mainText and dummy are lined up with each other in the editor
 		dummy.alignment = TextAlignmentOptions.Top;
@@ -34,6 +39,7 @@ public class DialogPanel : MonoBehaviour
 
 	public void Show( DialogInteraction di, Action<InteractionResult> actions = null )
 	{
+		CalculatePanelPosition();
 		gameObject.SetActive( true );
 		FindObjectOfType<TileManager>().ToggleInput( true );
 

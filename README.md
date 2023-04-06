@@ -1,13 +1,13 @@
-# Your Journey - v0.21 - Windows and Mac
+# Your Journey - v0.22 - Windows and Mac
 The companion playback app for the Journeys in Middle Earth Scenario Editor, forked from [GlowPuff's original project](https://github.com/GlowPuff/your-journey) with new tiles from [Celstra](https://github.com/Celstra/JiMEditor).
 
 #### Download the latest release
-[Download the Newest Release!](https://github.com/TrnsltLife/your-journey/releases/tag/v0.21) Featuring tiles from Shadowed Paths, enemies from all the expansions, more character portraits, and additional enhancements!
+[Download the Newest Release!](https://github.com/TrnsltLife/your-journey/releases/tag/v0.22) Featuring tiles from Shadowed Paths, enemies from all the expansions, more character portraits, and additional enhancements!
 
 ([View GlowPuff's original releases](https://github.com/GlowPuff/your-journey/releases))
 
 #### Installation instructions - Windows
-1. Unzip the YourJourney_Win_v0.21.zip file somewhere and run "Your Journey.exe".
+1. Unzip the YourJourney_Win_v0.22.zip file somewhere and run "Your Journey.exe".
 2. Put your .jime scenario files (like [The Watch at Weathertop](https://drive.google.com/file/d/1Rr2HZlZ-ba17b714xOql2_Dgg5pnyWIg/view?usp=sharing) by [Noldorion](https://boardgamegeek.com/user/Noldorion)) in the "Your Journey" folder in your Documents folder (Windows users).
 3. Hit the "New Game" button at the title.
 4. Create a save slot on the next screen (just start typing when it asks for a name, then press enter).
@@ -17,7 +17,7 @@ The companion playback app for the Journeys in Middle Earth Scenario Editor, for
 8. Click the "Begin Journey" button to start playing!
 
 #### Installation instructions - Mac
-1. Download YourJourney_Mac_v0.21.zip file somewhere and run "YourJourney_v0.21". If it tells you it can't run the software because it can't verify there aren't any viruses, try again and tell it to Open anyways.
+1. Download YourJourney_Mac_v0.22.zip file somewhere and run "YourJourney_v0.22". If it tells you it can't run the software because it can't verify there aren't any viruses, try again and tell it to Open anyways.
 2. Put your .jime scenario files (like [The Watch at Weathertop](https://drive.google.com/file/d/1Rr2HZlZ-ba17b714xOql2_Dgg5pnyWIg/view?usp=sharing) by [Noldorion](https://boardgamegeek.com/user/Noldorion)) in the "Your Journey" folder in your User folder (Mac users), e.g. /Users/(your-user-name)/Your Journey/Weathertop.jime.
 3. Hit the "New Game" button at the title.
 4. Create a save slot on the next screen (just start typing when it asks for a name, then press enter).

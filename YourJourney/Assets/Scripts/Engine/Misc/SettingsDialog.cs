@@ -14,24 +14,32 @@ public class SettingsDialog : MonoBehaviour
 	public AudioSource musicSource;
 	public Text buttonText;
 	public TMP_Dropdown resolutionDropdown;
+	public TMP_Dropdown skinpackDropdown;
 
 	RectTransform rect;
 	Vector2 ap;
 	Vector3 sp;
 	Action quitAction;
+	Action<string> skinUpdateAction;
 	Resolution[] resolutions;
 	List<TMP_Dropdown.OptionData> resolutionList;
+
+	List<string> skinpackList;
+	List<TMP_Dropdown.OptionData> skinpackDropdownList;
+	public static string defaultSkinpack = "*Default*";
+
 
 	void Awake()
 	{
 		CalculateDialogPosition();
 	}
 
-	public void Show( string bText, Action action = null )
+	public void Show( string bText, Action action = null, Action<string> skinUpdateAction = null )
 	{
 		CalculateDialogPosition();
 
 		quitAction = action;
+		this.skinUpdateAction = skinUpdateAction;
 		buttonText.text = bText;
 		settingsCanvasGroup.alpha = 0;
 		settingsCanvasGroup.gameObject.SetActive( true );
@@ -39,7 +47,6 @@ public class SettingsDialog : MonoBehaviour
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		settingsCanvasGroup.gameObject.transform.DOMoveY( sp.y, .75f );
-
 
 		//populate checkboxes
 		var settings = Bootstrap.LoadSettings();
@@ -66,18 +73,37 @@ public class SettingsDialog : MonoBehaviour
 		resolutionDropdown.ClearOptions();
 		resolutionDropdown.AddOptions(resolutionList);
 		resolutionDropdown.SetValueWithoutNotify(selectedIndex);
+
+		//populate skinpack dropdown
+		string savedSkinpack = settings.Item7;
+		skinpackList = SkinsManager.LoadSkinpackDirectories();
+		skinpackDropdownList = new List<TMP_Dropdown.OptionData>();
+		int selectedSkinpackIndex = 0;
+		skinpackDropdownList.Add(new TMP_Dropdown.OptionData(defaultSkinpack));
+		foreach (var skinpack in skinpackList)
+        {
+			skinpackDropdownList.Add(new TMP_Dropdown.OptionData(skinpack));
+			if(skinpack == savedSkinpack)
+            {
+				selectedSkinpackIndex = skinpackDropdownList.Count - 1;
+            }
+        }
+		skinpackDropdown.ClearOptions();
+		skinpackDropdown.AddOptions(skinpackDropdownList);
+		skinpackDropdown.SetValueWithoutNotify(selectedSkinpackIndex);
 	}
 
 	public void OnClose()
 	{
 		//save settings
-		Bootstrap.SaveSettings( new System.Tuple<int, int, int, int, int, int>(
+		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int, string>(
 			musicToggle.isOn ? 1 : 0,
 			vignetteToggle.isOn ? 1 : 0,
 			colorToggle.isOn ? 1 : 0,
 			GetSelectedResolution().width,
 			GetSelectedResolution().height,
-			fullscreenToggle.isOn ? 1 : 0) );
+			fullscreenToggle.isOn ? 1 : 0,
+			GetSelectedSkinpack()));
 
 		settingsCanvasGroup.DOFade( 0, .25f ).OnComplete( () =>
 		{
@@ -88,13 +114,14 @@ public class SettingsDialog : MonoBehaviour
 	public void OnQuit()
 	{
 		//save settings
-		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int>(
+		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int, string>(
 			musicToggle.isOn ? 1 : 0,
 			vignetteToggle.isOn ? 1 : 0,
 			colorToggle.isOn ? 1 : 0,
 			GetSelectedResolution().width,
 			GetSelectedResolution().height,
-			fullscreenToggle.isOn ? 1 : 0) );
+			fullscreenToggle.isOn ? 1 : 0,
+			GetSelectedSkinpack()));
 
 		if ( quitAction != null )
 		{
@@ -142,6 +169,17 @@ public class SettingsDialog : MonoBehaviour
 		CalculateDialogPosition();
 	}
 
+	public void OnSkinpack()
+    {
+		Debug.Log("SettingsDialog.OnSkinpack()");
+		string skinpack = GetSelectedSkinpack();
+		if(skinUpdateAction != null)
+        {
+			Debug.Log("skinUpdateAction()");
+			skinUpdateAction(skinpack);
+        }
+    }
+
 	private Resolution GetSelectedResolution()
     {
 		int index = resolutionDropdown.GetComponent<TMP_Dropdown>().value;
@@ -150,6 +188,12 @@ public class SettingsDialog : MonoBehaviour
 		res.width = Int32.Parse(resString[0]);
 		res.height = Int32.Parse (resString[1]);
 		return res;
+	}
+
+	private string GetSelectedSkinpack()
+    {
+		int index = skinpackDropdown.GetComponent<TMP_Dropdown>().value;
+		return skinpackDropdown.options[index].text;
 	}
 
 	private void CalculateDialogPosition()

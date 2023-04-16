@@ -174,7 +174,9 @@ public class Monster
 		int mId, mHealth = 0, mArmor = 0, mSorcery = 0, mMoveA = 0, mMoveB = 0, mGroupLimit = 0, mFigureLimit = 0, mDamage = 0, mSpeed = 0;
 		int[] mCost = new int[] { 1000, 0, 0 };
 		bool mRanged = false, mFearsome = false;
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
 		string mEnumName, mDataName = "";
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
 		string[] mMoveSpecial, mTag, mSpecial = new string[0];
 
 		switch (mType)

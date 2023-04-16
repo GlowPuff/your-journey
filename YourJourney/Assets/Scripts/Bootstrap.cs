@@ -141,7 +141,12 @@ public class Bootstrap
 		return PlayerPrefs.GetString( "Hero" + index, "Hero" + index );
 	}
 
-	public static Tuple<int, int, int, int, int, int> LoadSettings()
+	public static string GetSkinpack()
+    {
+		return PlayerPrefs.GetString("skinpack", SettingsDialog.defaultSkinpack);
+    }
+
+	public static Tuple<int, int, int, int, int, int, string> LoadSettings()
 	{
 		int music = PlayerPrefs.GetInt( "music", 1 );
 		int vignette = PlayerPrefs.GetInt( "vignette", 1 );
@@ -149,11 +154,12 @@ public class Bootstrap
 		int width = PlayerPrefs.GetInt("width", Screen.currentResolution.width);
 		int height = PlayerPrefs.GetInt("height", Screen.currentResolution.height);
 		int fullscreen = PlayerPrefs.GetInt("fullscreen", 1);
+		string skinpack = PlayerPrefs.GetString("skinpack", SettingsDialog.defaultSkinpack);
 
-		return new Tuple<int, int, int, int, int, int>( music, vignette, color, width, height, fullscreen );
+		return new Tuple<int, int, int, int, int, int, string>( music, vignette, color, width, height, fullscreen, skinpack );
 	}
 
-	public static void SaveSettings( Tuple<int, int, int, int, int, int> prefs )
+	public static void SaveSettings( Tuple<int, int, int, int, int, int, string> prefs )
 	{
 		PlayerPrefs.SetInt( "music", prefs.Item1 );
 		PlayerPrefs.SetInt( "vignette", prefs.Item2 );
@@ -161,5 +167,6 @@ public class Bootstrap
 		PlayerPrefs.SetInt( "width", prefs.Item4 );
 		PlayerPrefs.SetInt ("height", prefs.Item5 );
 		PlayerPrefs.SetInt("fullscreen", prefs.Item6);
+		PlayerPrefs.SetString("skinpack", prefs.Item7);
 	}
 }

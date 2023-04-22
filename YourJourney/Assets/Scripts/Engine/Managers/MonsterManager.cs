@@ -32,6 +32,15 @@ public class MonsterManager : MonoBehaviour
 		LoadBanners();
 	}
 
+	public void UpdateSkins()
+	{
+		foreach (Transform child in buttonAttach)
+		{
+			var mb = child.GetComponent<MonsterButton>();
+			mb.UpdateSkin();
+		}
+	}
+
 	/// <summary>
 	/// Add from saved game
 	/// </summary>
@@ -196,14 +205,14 @@ public class MonsterManager : MonoBehaviour
 		}
 	}
 
-	public bool ShowCombatPanel( Monster m )
+	public bool ShowCombatPanel( Monster m, int skinVariant = 0 )
 	{
 		foreach ( Transform child in buttonAttach )
 		{
 			child.GetComponent<MonsterButton>().ToggleSelect( false );
 		}
 		//selectedMonster = m;
-		return combatPanel.Show( m );
+		return combatPanel.Show( m, skinVariant );
 	}
 
 	public void UnselectAll()

@@ -36,8 +36,26 @@ public class CombatPanel : MonoBehaviour
 		pierceSelected = lethalSelected = stunSelected = smiteSelected = sunderSelected = cleaveSelected = false;
 	}
 
-	public bool Show( Monster monster )
+	/*
+	public void UpdateSkins()
+    {
+		for(int i = 0; i<monsterImages.Length; i++)
+        {
+			UpdateSkin(i);
+		}
+	}
+	*/
+
+	public void UpdateSkin(int monsterIndex, int skinVariant = 0)
+    {
+		monsterImages[monsterIndex].GetComponent<Image>().overrideSprite = SkinsManager.SkinVariant(monsterIndex, skinVariant); //Set monster skin override based on current value in SkinsManager.monsterSkins array
+	}
+
+	public bool Show( Monster monster, int skinVariant = 0 )
 	{
+		Debug.Log("CombatPanel.Show(" + monster.dataName + ")");
+		UpdateSkin((int)monster.monsterType, skinVariant);
+
 		//remove any spawn markers, since player will have seen them by now
 		var objs = FindObjectsOfType<SpawnMarker>();
 		foreach ( var ob in objs )
@@ -47,8 +65,10 @@ public class CombatPanel : MonoBehaviour
 		}
 
 		//set the appropriate monster image
-		for ( int i = 0; i < monsterImages.Length; i++ )
-			monsterImages[i].SetActive( false );
+		for (int i = 0; i < monsterImages.Length; i++)
+		{
+			monsterImages[i].SetActive(false);
+		}
 		monsterImages[(int)monster.monsterType].SetActive( true );
 
 		if ( monsterGUID == monster.GUID && gameObject.activeSelf )

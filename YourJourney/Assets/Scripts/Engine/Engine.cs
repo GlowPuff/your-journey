@@ -82,6 +82,12 @@ public class Engine : MonoBehaviour
 			return;
 		}
 
+
+		//Load Skins
+		SkinsManager.LoadSkins(Bootstrap.GetSkinpack());
+		OnSkinpackUpdate(Bootstrap.GetSkinpack());
+
+
 		//first objective/interaction/trigger are DUMMIES (None), remove them
 		scenario.objectiveObserver.RemoveAt( 0 );
 		scenario.interactionObserver.RemoveAt( 0 );
@@ -377,7 +383,7 @@ public class Engine : MonoBehaviour
 
 	public void OnShowSettings()
 	{
-		settingsDialog.Show( "Quit to Title", OnQuit );
+		settingsDialog.Show( "Quit to Title", OnQuit, OnSkinpackUpdate );
 	}
 
 	public void OnQuit()
@@ -392,6 +398,20 @@ public class Engine : MonoBehaviour
 			SceneManager.LoadScene( "title" );
 		} );
 	}
+
+	public void OnSkinpackUpdate(string skinpackName)
+    {
+		Debug.Log("Engine.OnSkinpackUpdate(" + skinpackName + ")");
+		SkinsManager.LoadSkins( skinpackName );
+
+		//Update any existing CombatPanel -- actually currently the Settings Dialog can't be used while the Combat Panel is open so we don't need to do this
+		//CombatPanel combatPanel = FindObjectOfType<CombatPanel>();
+		//if(combatPanel != null) { combatPanel.UpdateSkins(); }
+
+		//Update all the MonsterButtons
+		MonsterManager monsterManager = FindObjectOfType<MonsterManager>();
+		monsterManager.UpdateSkins();
+    }
 
 	public void RemoveFog( string chName )
 	{

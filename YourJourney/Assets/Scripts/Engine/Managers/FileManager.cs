@@ -84,15 +84,24 @@ public class FileManager
 		xpStartValue = source.xpStartValue;
 	}
 
+	public static string BasePath(bool createIfNotExists)
+    {
+		string mydocs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+		string basePath = Path.Combine(mydocs, "Your Journey");
+		if (createIfNotExists && !Directory.Exists(basePath))
+		{
+			Directory.CreateDirectory(basePath);
+		}
+
+		return basePath;
+	}
+
 	/// <summary>
 	/// Supply the FULL PATH with the filename
 	/// </summary>
 	public static Scenario LoadScenario( string filename )
 	{
-		string mydocs = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
-		string basePath = Path.Combine( mydocs, "Your Journey" );
-		if ( !Directory.Exists( basePath ) )
-			Directory.CreateDirectory( basePath );
+		string basePath = BasePath(true);
 
 		try
 		{
@@ -130,10 +139,7 @@ public class FileManager
 	/// </summary>
 	public static IEnumerable<ProjectItem> GetProjects()
 	{
-		string mydocs = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
-		string basePath = Path.Combine( mydocs, "Your Journey" );
-		if ( !Directory.Exists( basePath ) )
-			Directory.CreateDirectory( basePath );
+		string basePath = BasePath(true);
 		//string basePath = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "Projects" );
 		List<ProjectItem> items = new List<ProjectItem>();
 		DirectoryInfo di = new DirectoryInfo( basePath );
@@ -162,20 +168,11 @@ public class FileManager
 	/// </summary>
 	public static IEnumerable<ProjectItem> GetCampaigns()
 	{
-		string basePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ), "Your Journey" );
-
-		//make sure the project folder exists
-		if ( !Directory.Exists( basePath ) )
-		{
-			var dinfo = Directory.CreateDirectory( basePath );
-			if ( dinfo == null )
-			{
-				return null;
-			}
-		}
+		string basePath = BasePath(true);
 
 		List<ProjectItem> items = new List<ProjectItem>();
 		DirectoryInfo di = new DirectoryInfo( basePath );
+		if(di == null) { return null; }
 		FileInfo[] files = di.GetFiles().Where( file => file.Extension == ".jime" ).ToArray();
 		//find campaigns
 		foreach ( DirectoryInfo dInfo in di.GetDirectories() )
@@ -223,14 +220,14 @@ public class FileManager
 
 	public static Campaign LoadCampaign( string campaignGUID )
 	{
-		if ( campaignGUID == "Saves" )
+		if ( campaignGUID == "Saves" || campaignGUID == "Skins")
 			return null;
 
-		string basePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ), "Your Journey", campaignGUID );
+		string campaignPath = Path.Combine(BasePath(false), campaignGUID);
 		string json = "";
 		try
 		{
-			using ( StreamReader sr = new StreamReader( Path.Combine( basePath, campaignGUID + ".json" ) ) )
+			using ( StreamReader sr = new StreamReader( Path.Combine(campaignPath, campaignGUID + ".json" ) ) )
 			{
 				json = sr.ReadToEnd();
 			}
@@ -260,9 +257,7 @@ public class FileManager
 	/// </summary>
 	public static void UnpackCampaigns()
 	{
-		string basePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ), "Your Journey" );
-		if ( !Directory.Exists( basePath ) )
-			Directory.CreateDirectory( basePath );
+		string basePath = BasePath(true);
 
 		DirectoryInfo di = new DirectoryInfo( basePath );
 		//zip files only
@@ -315,16 +310,16 @@ public class FileManager
 	public static string GetFullPath( string filename )
 	{
 		string mydocs = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
-		string basePath = Path.Combine( mydocs, "Your Journey", filename );
+		string filePath = Path.Combine( BasePath(false), filename );
 
-		return basePath;
+		return filePath;
 	}
 
 	public static string GetFullPathWithCampaign( string filename, string campaignGUID )
 	{
 		string mydocs = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
-		string basePath = Path.Combine( mydocs, "Your Journey", campaignGUID, filename );
+		string filePath = Path.Combine( BasePath(false), campaignGUID, filename );
 
-		return basePath;
+		return filePath;
 	}
 }

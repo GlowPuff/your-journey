@@ -56,12 +56,12 @@ public class Monster
 	[JsonIgnore]
 	public ThreatInteraction interaction;//the interaction that spawned this
 
-	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Hungry Warg", "Hill Troll", "Wight",
-											"Atarin", "Gulgotar", "Coalfang",
-											"Giant Spider", "Pit Goblin", "Orc Taskmaster", "Shadowman", "Nameless Thing", "Cave Troll", "Balrog", "Spawn of Ungoliant",
-											"Supplicant of Morgoth", "Ursa", "Ollie",
-											"Fell Beast", "Warg Rider", "Siege Engine", "War Oliphaunt", "Soldier", "Uruk Warrior",
-											"Lord Angon", "Witch-king of Angmar", "Eadris"
+	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Hungry Varg", "Hill Troll", "Wight",
+											"Atari", "Gargletarg", "Chartooth",
+											"Giant Spider", "Pit Goblin", "Orc Taskmaster", "Shadowman", "Anonymous Thing", "Cave Troll", "Balerock", "Spawn of Ugly-Giant",
+											"Supplicant of More-Goth", "Ursa", "Ollie",
+											"Foul Beast", "Varg Rider", "Siege Engine", "War Elephant", "Soldier", "High-Orc Warrior",
+											"Lord Javelin", "Lich-king of Anger", "Endris"
 	};
 
 	public int[] currentHealth { get; set; } = new int[3];
@@ -174,7 +174,9 @@ public class Monster
 		int mId, mHealth = 0, mArmor = 0, mSorcery = 0, mMoveA = 0, mMoveB = 0, mGroupLimit = 0, mFigureLimit = 0, mDamage = 0, mSpeed = 0;
 		int[] mCost = new int[] { 1000, 0, 0 };
 		bool mRanged = false, mFearsome = false;
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
 		string mEnumName, mDataName = "";
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
 		string[] mMoveSpecial, mTag, mSpecial = new string[0];
 
 		switch (mType)
@@ -260,10 +262,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.HungryWarg:
+			case MonsterType.HungryVarg:
 				mId = 4;
-				mEnumName = "HungryWarg";
-				mDataName = "Hungry Warg";
+				mEnumName = "HungryVarg";
+				mDataName = "Hungry Varg";
 				mHealth = 8;
 				mArmor = 1;
 				mSorcery = 0;
@@ -322,10 +324,10 @@ public class Monster
 				break;
 
 			//Villains of Eriador
-			case MonsterType.Atarin:
+			case MonsterType.Atari:
 				mId = 7;
-				mEnumName = "Atarin";
-				mDataName = "Atarin";
+				mEnumName = "Atari";
+				mDataName = "Atari";
 				mHealth = 8;
 				mArmor = 1;
 				mSorcery = 1;
@@ -342,10 +344,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.Gulgotar:
+			case MonsterType.Gargletarg:
 				mId = 8;
-				mEnumName = "Gulgotar";
-				mDataName = "Gulgotar";
+				mEnumName = "Gargletarg";
+				mDataName = "Gargletarg";
 				mHealth = 8;
 				mArmor = 2;
 				mSorcery = 0;
@@ -362,10 +364,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.Coalfang:
+			case MonsterType.Chartooth:
 				mId = 9;
-				mEnumName = "Coalfang";
-				mDataName = "Coalfang";
+				mEnumName = "Chartooth";
+				mDataName = "Chartooth";
 				mHealth = 8;
 				mArmor = 1;
 				mSorcery = 0;
@@ -464,10 +466,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.NamelessThing:
+			case MonsterType.AnonymousThing:
 				mId = 14;
-				mEnumName = "NamelessThing";
-				mDataName = "Nameless Thing";
+				mEnumName = "AnonymousThing";
+				mDataName = "Anonymous Thing";
 				mHealth = 20;
 				mArmor = 0;
 				mSorcery = 0;
@@ -504,10 +506,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.Balrog:
+			case MonsterType.Balerock:
 				mId = 16;
-				mEnumName = "Balrog";
-				mDataName = "Balrog";
+				mEnumName = "Balerock";
+				mDataName = "Balerock";
 				mHealth = 18;
 				mArmor = 2;
 				mSorcery = 2;
@@ -524,10 +526,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { "Cleave" };
 				break;
-			case MonsterType.SpawnOfUngoliant:
+			case MonsterType.SpawnOfUglyGiant:
 				mId = 17;
-				mEnumName = "SpawnOfUngoliant";
-				mDataName = "Spawn of Ungoliant";
+				mEnumName = "SpawnOfUglyGiant";
+				mDataName = "Spawn of Ugly-Giant";
 				mHealth = 18;
 				mArmor = 2;
 				mSorcery = 0;
@@ -546,10 +548,10 @@ public class Monster
 				break;
 
 			//Dwellers in Darkness
-			case MonsterType.SupplicantOfMorgoth:
+			case MonsterType.SupplicantOfMoreGoth:
 				mId = 18;
-				mEnumName = "SupplicantOfMorgoth";
-				mDataName = "Supplicant of Morgoth";
+				mEnumName = "SupplicantOfMoreGoth";
+				mDataName = "Supplicant of More-Goth";
 				mHealth = 9;
 				mArmor = 2;
 				mSorcery = 0;
@@ -608,10 +610,10 @@ public class Monster
 				break;
 
 			//Spreading War
-			case MonsterType.FellBeast:
+			case MonsterType.FoulBeast:
 				mId = 21;
-				mEnumName = "FellBeast";
-				mDataName = "Fell Beast";
+				mEnumName = "FoulBeast";
+				mDataName = "Foul Beast";
 				mHealth = 8;
 				mArmor = 0;
 				mSorcery = 2;
@@ -628,10 +630,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.WargRider:
+			case MonsterType.VargRider:
 				mId = 22;
-				mEnumName = "WargRider";
-				mDataName = "Warg Rider";
+				mEnumName = "VargRider";
+				mDataName = "Varg Rider";
 				mHealth = 10;
 				mArmor = 1;
 				mSorcery = 0;
@@ -668,10 +670,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.WarOliphaunt:
+			case MonsterType.WarElephant:
 				mId = 24;
-				mEnumName = "WarOliphaunt";
-				mDataName = "War Oliphaunt";
+				mEnumName = "WarElephant";
+				mDataName = "War Elephant";
 				mHealth = 10;
 				mArmor = 4;
 				mSorcery = 0;
@@ -708,10 +710,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.UrukWarrior:
+			case MonsterType.HighOrcWarrior:
 				mId = 26;
-				mEnumName = "UrukWarrior";
-				mDataName = "Uruk Warrior";
+				mEnumName = "HighOrcWarrior";
+				mDataName = "High-Orc Warrior";
 				mHealth = 7;
 				mArmor = 2;
 				mSorcery = 0;
@@ -730,10 +732,10 @@ public class Monster
 				break;
 
 			//Scourges of the Wastes
-			case MonsterType.LordAngon:
+			case MonsterType.LordJavelin:
 				mId = 27;
-				mEnumName = "LordAngon";
-				mDataName = "Lord Angon";
+				mEnumName = "LordJavelin";
+				mDataName = "Lord Javelin";
 				mHealth = 12;
 				mArmor = 2;
 				mSorcery = 2;
@@ -744,16 +746,16 @@ public class Monster
 				mGroupLimit = 1;
 				mFigureLimit = 1;
 				mCost = new int[] { 1000, 0, 0 };
-				mTag = new string[] { "Humanoid", "Poweful" };
+				mTag = new string[] { "Humanoid", "Powerful" };
 				mSpeed = 2;
 				mDamage = 3;
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.WitchKingOfAngmar:
+			case MonsterType.LichKingOfAnger:
 				mId = 28;
-				mEnumName = "WitchKingOfAngmar";
-				mDataName = "Witch-king of Angmar";
+				mEnumName = "LichKingOfAnger";
+				mDataName = "Lich-king of Anger";
 				mHealth = 20;
 				mArmor = 4;
 				mSorcery = 4;
@@ -770,10 +772,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.Eadris:
+			case MonsterType.Endris:
 				mId = 29;
-				mEnumName = "Eadris";
-				mDataName = "Eadris";
+				mEnumName = "Endris";
+				mDataName = "Endris";
 				mHealth = 10;
 				mArmor = 1;
 				mSorcery = 0;

@@ -13,12 +13,12 @@ public class SkinsManager
 	//monsterSkinFileNames:
 	//The index in this array corresponds to the index in MonsterButton.monsters and CombatPanel.
 	//The string values indicate the filename for the corresponding monster image
-	public static string[] monsterSkinFileNames = new string[] { "ruffian", "goblin-scout", "orc-hunter", "orc-marauder", "hungry-warg", "hill-troll", "wight",
-		"atarin", "gulgotar", "coalfang",
-		"giant-spider", "pit-goblin", "orc-taskmaster", "shadowman", "nameless-thing", "cave-troll", "balrog", "spawn-of-ungoliant",
-		"supplicant-of-morgoth", "ursa", "ollie",
-		"fell-beast", "warg-rider", "siege-engine", "war-oliphaunt", "soldier", "uruk-warrior",
-		"lord-angon", "witch-king", "eadris" };
+	public static string[] monsterSkinFileNames = new string[] { "ruffian", "goblin-scout", "orc-hunter", "orc-marauder", "hungry-varg", "hill-troll", "wight",
+		"atari", "gargletarg", "chartooth",
+		"giant-spider", "pit-goblin", "orc-taskmaster", "shadowman", "anonymous-thing", "cave-troll", "balerock", "spawn-of-ugly-giant",
+		"supplicant-of-more-goth", "ursa", "ollie",
+		"foul-beast", "varg-rider", "siege-engine", "war-elephant", "soldier", "high-orc-warrior",
+		"lord-javelin", "lich-king", "endris" };
 
 	//The monsterSkins array has one index for each monster type; the array value is a list of sprites, one for each matching image for that monster type in the directory, e.g. giant-spider-0, giant-spider-1, giant-spider-2
 	public static List<Sprite>[] monsterSkins = new List<Sprite>[monsterCount]; 

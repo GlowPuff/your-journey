@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public enum ScenarioType { Journey, Battle }
 public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional, Dialog, Replace, Reward }
-public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, HungryWarg, HillTroll, Wight, 
-						Atarin, Gulgotar, Coalfang,
-						GiantSpider, PitGoblin, OrcTaskmaster, Shadowman, NamelessThing, CaveTroll, Balrog, SpawnOfUngoliant,
-						SupplicantOfMorgoth, Ursa, Ollie,
-						FellBeast, WargRider, SiegeEngine, WarOliphaunt, Soldier, UrukWarrior,
-						LordAngon, WitchKingOfAngmar, Eadris }
+public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, HungryVarg, HillTroll, Wight, 
+						Atari, Gargletarg, Chartooth,
+						GiantSpider, PitGoblin, OrcTaskmaster, Shadowman, AnonymousThing, CaveTroll, Balerock, SpawnOfUglyGiant,
+						SupplicantOfMoreGoth, Ursa, Ollie,
+						FoulBeast, VargRider, SiegeEngine, WarElephant, Soldier, HighOrcWarrior,
+						LordJavelin, LichKingOfAnger, Endris }
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle, Square }
 public enum ProjectType { Standalone, Campaign }

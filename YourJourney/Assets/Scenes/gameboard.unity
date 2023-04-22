@@ -1169,7 +1169,7 @@ GameObject:
   - component: {fileID: 79067975}
   - component: {fileID: 79067974}
   m_Layer: 5
-  m_Name: war-oliphaunt
+  m_Name: war-elephant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1872,7 +1872,7 @@ GameObject:
   - component: {fileID: 227297026}
   - component: {fileID: 227297025}
   m_Layer: 5
-  m_Name: spawn-of-ungoliant
+  m_Name: spawn-of-ugly-giant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2147,7 +2147,7 @@ GameObject:
   - component: {fileID: 255979023}
   - component: {fileID: 255979022}
   m_Layer: 5
-  m_Name: supplicant-of-morgoth
+  m_Name: supplicant-of-more-goth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2300,7 +2300,7 @@ GameObject:
   - component: {fileID: 283319815}
   - component: {fileID: 283319814}
   m_Layer: 5
-  m_Name: balrog
+  m_Name: balerock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2975,7 +2975,7 @@ GameObject:
   - component: {fileID: 343840091}
   - component: {fileID: 343840090}
   m_Layer: 5
-  m_Name: warg-rider
+  m_Name: varg-rider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3431,7 +3431,7 @@ GameObject:
   - component: {fileID: 418536047}
   - component: {fileID: 418536046}
   m_Layer: 5
-  m_Name: warg
+  m_Name: varg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6648,7 +6648,7 @@ GameObject:
   - component: {fileID: 865920650}
   - component: {fileID: 865920649}
   m_Layer: 5
-  m_Name: fell-beast
+  m_Name: foul-beast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8195,7 +8195,7 @@ GameObject:
   - component: {fileID: 967517093}
   - component: {fileID: 967517092}
   m_Layer: 5
-  m_Name: eadris
+  m_Name: endris
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10288,7 +10288,7 @@ GameObject:
   - component: {fileID: 1243317087}
   - component: {fileID: 1243317086}
   m_Layer: 5
-  m_Name: coalfang
+  m_Name: chartooth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11853,7 +11853,7 @@ GameObject:
   - component: {fileID: 1391348279}
   - component: {fileID: 1391348278}
   m_Layer: 5
-  m_Name: uruk-warrior
+  m_Name: high-orc-warrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13443,7 +13443,7 @@ GameObject:
   - component: {fileID: 1609069040}
   - component: {fileID: 1609069039}
   m_Layer: 5
-  m_Name: gulgotar
+  m_Name: gargletarg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14566,7 +14566,7 @@ GameObject:
   - component: {fileID: 1675831849}
   - component: {fileID: 1675831848}
   m_Layer: 5
-  m_Name: lord-angon
+  m_Name: lord-javelin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15844,7 +15844,7 @@ GameObject:
   - component: {fileID: 1874826977}
   - component: {fileID: 1874826976}
   m_Layer: 5
-  m_Name: witch-king
+  m_Name: lich-king
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16895,7 +16895,7 @@ GameObject:
   - component: {fileID: 2005846807}
   - component: {fileID: 2005846806}
   m_Layer: 5
-  m_Name: atarin
+  m_Name: atari
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17923,7 +17923,7 @@ GameObject:
   - component: {fileID: 2118328256}
   - component: {fileID: 2118328255}
   m_Layer: 5
-  m_Name: nameless-thing
+  m_Name: anonymous-thing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

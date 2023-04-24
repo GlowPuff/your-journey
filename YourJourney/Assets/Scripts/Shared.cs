@@ -88,6 +88,7 @@ public interface IInteraction
 	bool isTokenInteraction { get; set; }
 	string triggerName { get; set; }
 	string triggerAfterName { get; set; }
+	string tokenInteractionText { get; set; }
 	TextBookData textBookData { get; set; }
 	TextBookData eventBookData { get; set; }
 	TokenType tokenType { get; set; }

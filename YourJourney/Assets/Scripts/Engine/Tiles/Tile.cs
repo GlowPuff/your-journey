@@ -676,6 +676,10 @@ public class Tile : MonoBehaviour
 			//Set the ->> Interaction button to the type of Terrain(Boulder / Bush / FirePit / etc.)
 			objectEventToken = metaData.terrainType.ToString();
         }
+		if(!String.IsNullOrWhiteSpace(metaData.tokenInteractionText))
+        {
+			objectEventToken = metaData.tokenInteractionText;
+        }
 
 		Tile tile = objectHit.parent.GetComponent<Tile>();
 
@@ -702,6 +706,10 @@ public class Tile : MonoBehaviour
 				{
 					//Set the ->> Interaction button to the type of Terrain(Boulder / Bush / FirePit / etc.)
 					objectEventToken = metaData.terrainType.ToString();
+				}
+				if (!String.IsNullOrWhiteSpace(metaData.tokenInteractionText))
+				{
+					objectEventToken = metaData.tokenInteractionText;
 				}
 
 				//make it persistent
@@ -820,6 +828,7 @@ public class Tile : MonoBehaviour
 		newMD.triggerName = tokenState.metaData.triggerName;
 		newMD.interactionName = tokenState.metaData.interactionName;
 		newMD.triggeredByName = tokenState.metaData.triggeredByName;
+		newMD.tokenInteractionText = tokenState.metaData.tokenInteractionText;
 		newMD.tokenType = tokenState.metaData.tokenType;
 		newMD.personType = tokenState.metaData.personType;
 		newMD.terrainType = tokenState.metaData.terrainType;

@@ -5956,6 +5956,8 @@ MonoBehaviour:
   scenarioImageSize: {x: 1024, y: 512}
   scenarioOverlayText: {fileID: 1521752782}
   loadingText: {fileID: 0}
+  newButtonText: {fileID: 1066797208}
+  loadButtonText: {fileID: 111008355}
 --- !u!1 &270939961
 GameObject:
   m_ObjectHideFlags: 0

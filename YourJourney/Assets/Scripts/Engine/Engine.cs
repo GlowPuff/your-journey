@@ -87,6 +87,10 @@ public class Engine : MonoBehaviour
 		SkinsManager.LoadSkins(Bootstrap.GetSkinpack());
 		OnSkinpackUpdate(Bootstrap.GetSkinpack());
 
+		//Load Translations
+		LanguageManager.LoadLanguage(Bootstrap.GetLanguage());
+		OnLanguageUpdate(Bootstrap.GetLanguage());
+
 
 		//first objective/interaction/trigger are DUMMIES (None), remove them
 		scenario.objectiveObserver.RemoveAt( 0 );
@@ -383,7 +387,7 @@ public class Engine : MonoBehaviour
 
 	public void OnShowSettings()
 	{
-		settingsDialog.Show( "Quit to Title", OnQuit, OnSkinpackUpdate );
+		settingsDialog.Show( "Quit to Title", OnLanguageUpdate, OnQuit, OnSkinpackUpdate );
 	}
 
 	public void OnQuit()
@@ -412,6 +416,14 @@ public class Engine : MonoBehaviour
 		MonsterManager monsterManager = FindObjectOfType<MonsterManager>();
 		monsterManager.UpdateSkins();
     }
+
+	public void OnLanguageUpdate(string languageName)
+	{
+		Debug.Log("Engine.OnLanguageUpdate(" + languageName + ")");
+		LanguageManager.LoadLanguage(languageName);
+		LanguageManager.currentLanguage = languageName;
+		//TODO Update the UI with the new strings somehow
+	}
 
 	public void RemoveFog( string chName )
 	{

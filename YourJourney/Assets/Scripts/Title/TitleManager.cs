@@ -28,6 +28,8 @@ public class TitleManager : MonoBehaviour
 	public Vector2 scenarioImageSize = new Vector2(1024, 512);
 	public GameObject scenarioOverlayText;
 	public TextMeshProUGUI loadingText;
+	public TextMeshProUGUI newButtonText;
+	public TextMeshProUGUI loadButtonText;
 
 	public void ClearScenarioImage()
     {
@@ -91,6 +93,12 @@ public class TitleManager : MonoBehaviour
 	private void Start()
 	{
 		var settings = Bootstrap.LoadSettings();
+
+		LanguageManager.LoadLanguageFiles();
+		LanguageManager.LoadLanguage(LanguageManager.currentLanguage);
+
+		UpdateTranslations();
+
 		Vignette v;
 		ColorGrading cg;
 		if ( volume.profile.TryGetSettings( out v ) )
@@ -135,6 +143,8 @@ public class TitleManager : MonoBehaviour
 
 	public void ResetScreen()
 	{
+		UpdateTranslations();
+
 		finalFader.DOFade( 0, .5f );
 
 		newBcg.DOFade( 1, .25f );
@@ -148,6 +158,12 @@ public class TitleManager : MonoBehaviour
 		loadButton.transform.DOLocalMoveX( -700, .75f );
 		newButton.interactable = true;
 		loadButton.interactable = true;
+	}
+
+	public void UpdateTranslations()
+    {
+		newButtonText.text = "<font=\"Icon\">s</font> " + LanguageManager.Translate("title.button.NewGame");
+		loadButtonText.text = "<font=\"Icon\">L</font> " + LanguageManager.Translate("title.button.LoadGame");
 	}
 
 	public void NewGame()
@@ -184,7 +200,16 @@ public class TitleManager : MonoBehaviour
 
 	public void OnSettings()
 	{
-		settings.Show( "Quit App" );
+		settings.Show( "Quit App", OnLanguageUpdate );
+	}
+
+	public void OnLanguageUpdate(string languageName)
+	{
+		Debug.Log("Engine.OnLanguageUpdate(" + languageName + ")");
+		LanguageManager.LoadLanguage(languageName);
+		LanguageManager.currentLanguage = languageName;
+		UpdateTranslations();
+		//TODO Update the UI with the new strings somehow
 	}
 
 	void SkipIntro()

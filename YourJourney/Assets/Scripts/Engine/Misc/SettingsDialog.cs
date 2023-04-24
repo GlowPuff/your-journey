@@ -15,18 +15,25 @@ public class SettingsDialog : MonoBehaviour
 	public Text buttonText;
 	public TMP_Dropdown resolutionDropdown;
 	public TMP_Dropdown skinpackDropdown;
+	public TMP_Dropdown languageDropdown;
 
 	RectTransform rect;
 	Vector2 ap;
 	Vector3 sp;
 	Action quitAction;
 	Action<string> skinUpdateAction;
+	Action<string> languageUpdateAction;
 	Resolution[] resolutions;
 	List<TMP_Dropdown.OptionData> resolutionList;
 
 	List<string> skinpackList;
 	List<TMP_Dropdown.OptionData> skinpackDropdownList;
+
+	List<string> languageList;
+	List<TMP_Dropdown.OptionData> languageDropdownList;
+
 	public static string defaultSkinpack = "*Default*";
+	public static string defaultLanguage = "English";
 
 
 	void Awake()
@@ -34,12 +41,13 @@ public class SettingsDialog : MonoBehaviour
 		CalculateDialogPosition();
 	}
 
-	public void Show( string bText, Action action = null, Action<string> skinUpdateAction = null )
+	public void Show( string bText, Action<string> languageUpdateAction, Action action = null, Action<string> skinUpdateAction = null )
 	{
 		CalculateDialogPosition();
 
 		quitAction = action;
 		this.skinUpdateAction = skinUpdateAction;
+		this.languageUpdateAction = languageUpdateAction;
 		buttonText.text = bText;
 		settingsCanvasGroup.alpha = 0;
 		settingsCanvasGroup.gameObject.SetActive( true );
@@ -91,19 +99,38 @@ public class SettingsDialog : MonoBehaviour
 		skinpackDropdown.ClearOptions();
 		skinpackDropdown.AddOptions(skinpackDropdownList);
 		skinpackDropdown.SetValueWithoutNotify(selectedSkinpackIndex);
+
+		//populate language dropdown
+		string savedLanguage = settings.Rest.Item1;
+		languageList = LanguageManager.LoadLanguageFiles();
+		languageDropdownList = new List<TMP_Dropdown.OptionData>();
+		int selectedLanguageIndex = 0;
+		languageDropdownList.Add(new TMP_Dropdown.OptionData(defaultLanguage));
+		foreach (var language in languageList)
+		{
+			languageDropdownList.Add(new TMP_Dropdown.OptionData(LanguageManager.LanguageNameFromFilename(language)));
+			if (language == savedLanguage)
+			{
+				selectedLanguageIndex = languageDropdownList.Count - 1;
+			}
+		}
+		languageDropdown.ClearOptions();
+		languageDropdown.AddOptions(languageDropdownList);
+		languageDropdown.SetValueWithoutNotify(selectedLanguageIndex);
 	}
 
 	public void OnClose()
 	{
 		//save settings
-		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int, string>(
+		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int, string, Tuple<string>>(
 			musicToggle.isOn ? 1 : 0,
 			vignetteToggle.isOn ? 1 : 0,
 			colorToggle.isOn ? 1 : 0,
 			GetSelectedResolution().width,
 			GetSelectedResolution().height,
 			fullscreenToggle.isOn ? 1 : 0,
-			GetSelectedSkinpack()));
+			GetSelectedSkinpack(),
+			new Tuple<string>(GetSelectedLanguage())));
 
 		settingsCanvasGroup.DOFade( 0, .25f ).OnComplete( () =>
 		{
@@ -114,14 +141,16 @@ public class SettingsDialog : MonoBehaviour
 	public void OnQuit()
 	{
 		//save settings
-		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int, string>(
+		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int, string, Tuple<string>>(
 			musicToggle.isOn ? 1 : 0,
 			vignetteToggle.isOn ? 1 : 0,
 			colorToggle.isOn ? 1 : 0,
 			GetSelectedResolution().width,
 			GetSelectedResolution().height,
 			fullscreenToggle.isOn ? 1 : 0,
-			GetSelectedSkinpack()));
+			GetSelectedSkinpack(),
+			new Tuple<string>(GetSelectedLanguage())
+			));
 
 		if ( quitAction != null )
 		{
@@ -180,6 +209,17 @@ public class SettingsDialog : MonoBehaviour
         }
     }
 
+	public void OnLanguage()
+	{
+		Debug.Log("SettingsDialog.OnLanguage()");
+		string language = GetSelectedLanguage();
+		if (languageUpdateAction != null)
+		{
+			Debug.Log("languageUpdateAction()");
+			languageUpdateAction(language);
+		}
+	}
+
 	private Resolution GetSelectedResolution()
     {
 		int index = resolutionDropdown.GetComponent<TMP_Dropdown>().value;
@@ -194,6 +234,12 @@ public class SettingsDialog : MonoBehaviour
     {
 		int index = skinpackDropdown.GetComponent<TMP_Dropdown>().value;
 		return skinpackDropdown.options[index].text;
+	}
+
+	private string GetSelectedLanguage()
+	{
+		int index = languageDropdown.GetComponent<TMP_Dropdown>().value;
+		return languageDropdown.options[index].text;
 	}
 
 	private void CalculateDialogPosition()

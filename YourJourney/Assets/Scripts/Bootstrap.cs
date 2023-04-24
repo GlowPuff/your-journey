@@ -146,7 +146,12 @@ public class Bootstrap
 		return PlayerPrefs.GetString("skinpack", SettingsDialog.defaultSkinpack);
     }
 
-	public static Tuple<int, int, int, int, int, int, string> LoadSettings()
+	public static string GetLanguage()
+    {
+		return PlayerPrefs.GetString("language", SettingsDialog.defaultLanguage);
+    }
+
+	public static Tuple<int, int, int, int, int, int, string, Tuple<string>> LoadSettings()
 	{
 		int music = PlayerPrefs.GetInt( "music", 1 );
 		int vignette = PlayerPrefs.GetInt( "vignette", 1 );
@@ -155,11 +160,14 @@ public class Bootstrap
 		int height = PlayerPrefs.GetInt("height", Screen.currentResolution.height);
 		int fullscreen = PlayerPrefs.GetInt("fullscreen", 1);
 		string skinpack = PlayerPrefs.GetString("skinpack", SettingsDialog.defaultSkinpack);
+		string language = PlayerPrefs.GetString("language", SettingsDialog.defaultLanguage);
 
-		return new Tuple<int, int, int, int, int, int, string>( music, vignette, color, width, height, fullscreen, skinpack );
+		LanguageManager.currentLanguage = language;
+
+		return new Tuple<int, int, int, int, int, int, string, Tuple<string>>( music, vignette, color, width, height, fullscreen, skinpack, new Tuple<string>(language) );
 	}
 
-	public static void SaveSettings( Tuple<int, int, int, int, int, int, string> prefs )
+	public static void SaveSettings( Tuple<int, int, int, int, int, int, string, Tuple<string>> prefs )
 	{
 		PlayerPrefs.SetInt( "music", prefs.Item1 );
 		PlayerPrefs.SetInt( "vignette", prefs.Item2 );
@@ -168,5 +176,6 @@ public class Bootstrap
 		PlayerPrefs.SetInt ("height", prefs.Item5 );
 		PlayerPrefs.SetInt("fullscreen", prefs.Item6);
 		PlayerPrefs.SetString("skinpack", prefs.Item7);
+		PlayerPrefs.SetString("language", prefs.Rest.Item1);
 	}
 }

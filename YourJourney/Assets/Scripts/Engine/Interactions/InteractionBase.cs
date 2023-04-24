@@ -13,6 +13,7 @@ public abstract class InteractionBase : IInteraction
 	public TerrainType terrainType { get; set; }
 	public TextBookData textBookData { get; set; }
 	public TextBookData eventBookData { get; set; }
+	public string tokenInteractionText { get; set; }
 	public int loreReward { get; set; }
 	abstract public InteractionType interactionType { get; set; }
 	public int xpReward { get; set; }

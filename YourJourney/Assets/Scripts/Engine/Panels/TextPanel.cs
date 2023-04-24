@@ -7,7 +7,7 @@ using TMPro;
 
 public class TextPanel : MonoBehaviour
 {
-	public TextMeshProUGUI mainText, btn1Text, btn2Text, btnSingleText, dummy;
+	public TextMeshProUGUI mainText, btn1Text, btn2Text, btn2ActionText, btnSingleText, dummy;
 	public GameObject btn1, btn2;
 	public GameObject buttonSingle;
 	public GameObject actionIcon;
@@ -58,10 +58,14 @@ public class TextPanel : MonoBehaviour
 		buttonActions = actions;
 
 		actionIcon.SetActive( false );
+		btn2ActionText.text = "";
 		switch ( icon )
 		{
+			//If a ButtonIcon is enabled, disable the full-width btn2Text object and enable the indented btn2ActionText while also setting its text value
 			case ButtonIcon.Action:
 				actionIcon.SetActive( true );
+				btn2Text.text = "";
+				btn2ActionText.text = btn2;
 				break;
 		}
 		SetText( t );

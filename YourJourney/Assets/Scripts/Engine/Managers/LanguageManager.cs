@@ -14,6 +14,8 @@ public class LanguageManager
 
 	public static string currentLanguage = "English";
 
+	public static List<Action> translationUpdateSubscribers = new List<Action>();
+
 	public static List<String> LoadLanguageFiles()
 	{
 		languageFiles.Clear();
@@ -73,5 +75,24 @@ public class LanguageManager
 			return defval;
 		}
 		return key;
+    }
+
+	public static void AddSubscriber(Action onUpdateTranslation)
+    {
+		translationUpdateSubscribers.Add(onUpdateTranslation);
+    }
+
+	public static void RemoveSubscriber(Action onUpateTranslation)
+    {
+		translationUpdateSubscribers.Remove(onUpateTranslation);
+    }
+
+	public static void CallSubscribers()
+    {
+		Debug.Log("LanguageManager.CallSubscribers: " + translationUpdateSubscribers.Count);
+		foreach(Action onUpdateTranslation in translationUpdateSubscribers)
+        {
+			onUpdateTranslation();
+        }
     }
 }

@@ -980,6 +980,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.Language
   DefaultText: 'Language:'
+  Values: []
 --- !u!1 &3661632917306999825
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,6 +1428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.Skinpack
   DefaultText: 'Skinpack:'
+  Values: []
 --- !u!1 &3863608218547043306
 GameObject:
   m_ObjectHideFlags: 0
@@ -2036,6 +2038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.Music
   DefaultText: Music
+  Values: []
 --- !u!1 &4502062439328697223
 GameObject:
   m_ObjectHideFlags: 0
@@ -2257,6 +2260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.QuitApp
   DefaultText: Quit App
+  Values: []
 --- !u!1 &4502062439735490432
 GameObject:
   m_ObjectHideFlags: 0
@@ -3103,6 +3107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.Vignette
   DefaultText: Vignette
+  Values: []
 --- !u!1 &4502062440586778819
 GameObject:
   m_ObjectHideFlags: 0
@@ -3195,6 +3200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.ColorGrading
   DefaultText: Color Grading
+  Values: []
 --- !u!1 &4502062440589073922
 GameObject:
   m_ObjectHideFlags: 0
@@ -4204,6 +4210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.Resolution
   DefaultText: 'Resolution:'
+  Values: []
 --- !u!1 &6585441219335880668
 GameObject:
   m_ObjectHideFlags: 0
@@ -4296,6 +4303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.FullScreen
   DefaultText: Full Screen
+  Values: []
 --- !u!1 &6641195479943794887
 GameObject:
   m_ObjectHideFlags: 0
@@ -5190,6 +5198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: settings.OK
   DefaultText: OK
+  Values: []
 --- !u!1 &7756944804003595253
 GameObject:
   m_ObjectHideFlags: 0

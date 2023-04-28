@@ -9,7 +9,8 @@ public class TextTranslation : MonoBehaviour
     Text TextObject;
 	public string TextKey;
     public string DefaultText;
-    public List<string> Values;
+    List<string> Values;
+    bool translationEnabled = true;
 
 	void Start()
     {
@@ -18,6 +19,9 @@ public class TextTranslation : MonoBehaviour
         OnUpdateTranslation();
         LanguageManager.AddSubscriber(OnUpdateTranslation);
     }
+
+    public void TranslationEnabled(bool enabled) { translationEnabled = enabled; }
+    public bool IsTranslationEnabled() { return translationEnabled; }
 
     public void Change(string key)
     {
@@ -40,7 +44,10 @@ public class TextTranslation : MonoBehaviour
 
     public void OnUpdateTranslation()
     {
-        Debug.Log("OnUpdateTranslation for " + TextKey + " / " + DefaultText + " with TextObject class " + TextObject?.GetType());
+        Debug.Log("OnUpdateTranslation for " + TextKey + " / " + DefaultText + " with TextObject class " + TextObject?.GetType() + " enabled: " + enabled);
+
+        if (!translationEnabled) { return; }
+
         if (!string.IsNullOrWhiteSpace(TextKey))
         {
             TextKey = TextKey.Trim();

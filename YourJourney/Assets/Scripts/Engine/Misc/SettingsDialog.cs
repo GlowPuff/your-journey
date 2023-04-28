@@ -41,14 +41,15 @@ public class SettingsDialog : MonoBehaviour
 		CalculateDialogPosition();
 	}
 
-	public void Show( string bText, Action<string> languageUpdateAction, Action action = null, Action<string> skinUpdateAction = null )
+	public void Show( string bTextKey, Action<string> languageUpdateAction, Action action = null, Action<string> skinUpdateAction = null )
 	{
 		CalculateDialogPosition();
 
 		quitAction = action;
 		this.skinUpdateAction = skinUpdateAction;
 		this.languageUpdateAction = languageUpdateAction;
-		buttonText.text = bText;
+		//buttonText.text = bText;
+		buttonText.GetComponent<TextTranslation>()?.Change(bTextKey);
 		settingsCanvasGroup.alpha = 0;
 		settingsCanvasGroup.gameObject.SetActive( true );
 		settingsCanvasGroup.DOFade( 1, .5f );
@@ -102,14 +103,17 @@ public class SettingsDialog : MonoBehaviour
 
 		//populate language dropdown
 		string savedLanguage = settings.Rest.Item1;
+		Debug.Log("Saved language is: " + savedLanguage);
 		languageList = LanguageManager.LoadLanguageFiles();
 		languageDropdownList = new List<TMP_Dropdown.OptionData>();
 		int selectedLanguageIndex = 0;
 		languageDropdownList.Add(new TMP_Dropdown.OptionData(defaultLanguage));
 		foreach (var language in languageList)
 		{
-			languageDropdownList.Add(new TMP_Dropdown.OptionData(LanguageManager.LanguageNameFromFilename(language)));
-			if (language == savedLanguage)
+			string languageName = LanguageManager.LanguageNameFromFilename(language);
+			languageDropdownList.Add(new TMP_Dropdown.OptionData(languageName));
+			Debug.Log("Compare " + languageName + " to " + savedLanguage + " with List.Count " + languageDropdownList.Count);
+			if (languageName == savedLanguage)
 			{
 				selectedLanguageIndex = languageDropdownList.Count - 1;
 			}
@@ -140,6 +144,7 @@ public class SettingsDialog : MonoBehaviour
 
 	public void OnQuit()
 	{
+		Debug.Log("OnQuit");
 		//save settings
 		Bootstrap.SaveSettings( new Tuple<int, int, int, int, int, int, string, Tuple<string>>(
 			musicToggle.isOn ? 1 : 0,
@@ -152,16 +157,20 @@ public class SettingsDialog : MonoBehaviour
 			new Tuple<string>(GetSelectedLanguage())
 			));
 
-		if ( quitAction != null )
+		if (quitAction != null)
 		{
-			settingsCanvasGroup.DOFade( 0, .25f ).OnComplete( () =>
+			Debug.Log("Quit Action");
+			settingsCanvasGroup.DOFade(0, .25f).OnComplete(() =>
 			{
-				settingsCanvasGroup.gameObject.SetActive( false );
+				settingsCanvasGroup.gameObject.SetActive(false);
 				quitAction();
-			} );
+			});
 		}
 		else
+		{
+			Debug.Log("Quit App");
 			Application.Quit();
+		}
 	}
 
 	public void OnMusic()

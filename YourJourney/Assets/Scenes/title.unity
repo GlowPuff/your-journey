@@ -901,6 +901,7 @@ GameObject:
   - component: {fileID: 48825005}
   - component: {fileID: 48825007}
   - component: {fileID: 48825006}
+  - component: {fileID: 48825008}
   m_Layer: 5
   m_Name: Text (1)
   m_TagString: Untagged
@@ -1046,6 +1047,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 48825004}
   m_CullTransparentMesh: 0
+--- !u!114 &48825008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48825004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: name.button.Cancel
+  DefaultText: Cancel
 --- !u!1 &50258631
 GameObject:
   m_ObjectHideFlags: 0
@@ -1197,6 +1212,7 @@ GameObject:
   - component: {fileID: 57283279}
   - component: {fileID: 57283278}
   - component: {fileID: 57283277}
+  - component: {fileID: 57283280}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1356,6 +1372,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 57283275}
   m_CullTransparentMesh: 0
+--- !u!114 &57283280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57283275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: 
+  DefaultText: 
 --- !u!1 &58601902
 GameObject:
   m_ObjectHideFlags: 0
@@ -2952,7 +2982,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: title.button.LoadGame
   DefaultText: Load Game
-  Values: []
 --- !u!1 &116861649
 GameObject:
   m_ObjectHideFlags: 0
@@ -3850,6 +3879,7 @@ GameObject:
   - component: {fileID: 158942202}
   - component: {fileID: 158942204}
   - component: {fileID: 158942203}
+  - component: {fileID: 158942205}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -3995,6 +4025,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158942201}
   m_CullTransparentMesh: 0
+--- !u!114 &158942205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158942201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: heroes.button.Back
+  DefaultText: Back
 --- !u!1 &159034637
 GameObject:
   m_ObjectHideFlags: 0
@@ -4086,9 +4130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.Empty
+  TextKey: file.text.Empty
   DefaultText: Empty
-  Values: []
 --- !u!114 &160005891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4635,13 +4678,14 @@ GameObject:
   - component: {fileID: 190977408}
   - component: {fileID: 190977410}
   - component: {fileID: 190977409}
+  - component: {fileID: 190977411}
   m_Layer: 5
   m_Name: heading Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &190977408
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4679,7 +4723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Select A Hero
+  m_text: Select a Hero
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 83f1416e1c582244ca5ab8fe2242c105, type: 2}
   m_sharedMaterial: {fileID: 4057571633301905265, guid: 83f1416e1c582244ca5ab8fe2242c105,
@@ -4780,6 +4824,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190977407}
   m_CullTransparentMesh: 0
+--- !u!114 &190977411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190977407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: heroes.title.SelectHero
+  DefaultText: Select your Heroes
 --- !u!1 &195240940
 GameObject:
   m_ObjectHideFlags: 0
@@ -4791,6 +4849,7 @@ GameObject:
   - component: {fileID: 195240941}
   - component: {fileID: 195240943}
   - component: {fileID: 195240942}
+  - component: {fileID: 195240944}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -4936,6 +4995,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195240940}
   m_CullTransparentMesh: 0
+--- !u!114 &195240944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195240940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.text.Failure
+  DefaultText: Failure
 --- !u!1 &200581355
 GameObject:
   m_ObjectHideFlags: 0
@@ -5116,9 +5189,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.Empty
+  TextKey: file.text.Empty
   DefaultText: Empty
-  Values: []
 --- !u!114 &220229687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7222,7 +7294,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: journey.text.Campaign
   DefaultText: Campaign
-  Values: []
 --- !u!1 &337223876
 GameObject:
   m_ObjectHideFlags: 0
@@ -7297,6 +7368,7 @@ MonoBehaviour:
   currentScenarioText: {fileID: 1276922950}
   replayText: {fileID: 1194300803}
   replayStatusText: {fileID: 520123977}
+  replayStatusTextTranslation: {fileID: 0}
 --- !u!1 &344040774
 GameObject:
   m_ObjectHideFlags: 0
@@ -7612,6 +7684,7 @@ GameObject:
   - component: {fileID: 365615860}
   - component: {fileID: 365615862}
   - component: {fileID: 365615861}
+  - component: {fileID: 365615863}
   m_Layer: 5
   m_Name: Text (1)
   m_TagString: Untagged
@@ -7657,7 +7730,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: No
+  m_text: Cancel
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fe49cdaac5e26f949b78d270249d4a4b, type: 2}
   m_sharedMaterial: {fileID: 113743910546708543, guid: fe49cdaac5e26f949b78d270249d4a4b,
@@ -7758,6 +7831,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 365615859}
   m_CullTransparentMesh: 0
+--- !u!114 &365615863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365615859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: delete.button.Cancel
+  DefaultText: Cancel
 --- !u!1 &375187778 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2279751518182597946, guid: 904f891115a9a284ca7f0379cfc6992c,
@@ -7776,9 +7863,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.Empty
+  TextKey: file.text.Empty
   DefaultText: Empty
-  Values: []
 --- !u!114 &375187780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8029,6 +8115,7 @@ GameObject:
   - component: {fileID: 377841607}
   - component: {fileID: 377841609}
   - component: {fileID: 377841608}
+  - component: {fileID: 377841610}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -8174,6 +8261,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 377841606}
   m_CullTransparentMesh: 0
+--- !u!114 &377841610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377841606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.button.CloseStory
+  DefaultText: Continue
 --- !u!1 &381756601
 GameObject:
   m_ObjectHideFlags: 0
@@ -9743,6 +9844,7 @@ GameObject:
   - component: {fileID: 464387447}
   - component: {fileID: 464387449}
   - component: {fileID: 464387450}
+  - component: {fileID: 464387448}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -9769,6 +9871,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -70, y: 207}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &464387448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464387446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: story.text.StartingLore
+  DefaultText: 'Starting Lore:'
 --- !u!222 &464387449
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10551,6 +10667,7 @@ GameObject:
   - component: {fileID: 502465498}
   - component: {fileID: 502465499}
   - component: {fileID: 502465500}
+  - component: {fileID: 502465501}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -10696,6 +10813,20 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &502465501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502465497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: 
+  DefaultText: 
 --- !u!1 &503813820
 GameObject:
   m_ObjectHideFlags: 0
@@ -10836,6 +10967,7 @@ GameObject:
   - component: {fileID: 509255423}
   - component: {fileID: 509255425}
   - component: {fileID: 509255424}
+  - component: {fileID: 509255426}
   m_Layer: 5
   m_Name: Text (1)
   m_TagString: Untagged
@@ -10881,7 +11013,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Yes
+  m_text: Delete
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fe49cdaac5e26f949b78d270249d4a4b, type: 2}
   m_sharedMaterial: {fileID: 113743910546708543, guid: fe49cdaac5e26f949b78d270249d4a4b,
@@ -10982,6 +11114,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 509255422}
   m_CullTransparentMesh: 0
+--- !u!114 &509255426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509255422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: delete.button.Delete
+  DefaultText: Delete
 --- !u!1 &509750218
 GameObject:
   m_ObjectHideFlags: 0
@@ -11487,9 +11633,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.CampaignMessage
+  TextKey: file.text.CampaignMessage
   DefaultText: Campaigns must be saved to a slot
-  Values: []
 --- !u!1 &518047440
 GameObject:
   m_ObjectHideFlags: 0
@@ -11686,6 +11831,7 @@ GameObject:
   - component: {fileID: 520123979}
   - component: {fileID: 520123978}
   - component: {fileID: 520123977}
+  - component: {fileID: 520123980}
   m_Layer: 5
   m_Name: replay status
   m_TagString: Untagged
@@ -11833,6 +11979,20 @@ RectTransform:
   m_AnchoredPosition: {x: -315, y: -180}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &520123980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520123976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: 
+  DefaultText: 
 --- !u!1 &522100116
 GameObject:
   m_ObjectHideFlags: 0
@@ -13705,6 +13865,7 @@ GameObject:
   - component: {fileID: 595154635}
   - component: {fileID: 595154637}
   - component: {fileID: 595154636}
+  - component: {fileID: 595154638}
   m_Layer: 5
   m_Name: heading Text
   m_TagString: Untagged
@@ -13850,6 +14011,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 595154634}
   m_CullTransparentMesh: 0
+--- !u!114 &595154638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595154634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.title.CampaignStatus
+  DefaultText: Campaign Status
 --- !u!1 &596887457
 GameObject:
   m_ObjectHideFlags: 0
@@ -14342,9 +14517,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.Empty
+  TextKey: file.text.Empty
   DefaultText: Empty
-  Values: []
 --- !u!114 &622475403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14721,9 +14895,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: journey.text.Back
+  TextKey: journey.button.Back
   DefaultText: Back
-  Values: []
 --- !u!1 &630679492
 GameObject:
   m_ObjectHideFlags: 0
@@ -15234,6 +15407,7 @@ GameObject:
   - component: {fileID: 640692409}
   - component: {fileID: 640692411}
   - component: {fileID: 640692410}
+  - component: {fileID: 640692412}
   m_Layer: 5
   m_Name: msg (1)
   m_TagString: Untagged
@@ -15379,6 +15553,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640692408}
   m_CullTransparentMesh: 0
+--- !u!114 &640692412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640692408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: name.text.Instructions
+  DefaultText: Just start typing. Press Enter to confirm.
 --- !u!1 &641570719
 GameObject:
   m_ObjectHideFlags: 0
@@ -15519,6 +15707,7 @@ GameObject:
   - component: {fileID: 642469203}
   - component: {fileID: 642469205}
   - component: {fileID: 642469204}
+  - component: {fileID: 642469206}
   m_Layer: 5
   m_Name: lore xp label
   m_TagString: Untagged
@@ -15664,6 +15853,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642469202}
   m_CullTransparentMesh: 0
+--- !u!114 &642469206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642469202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.text.LoreXP
+  DefaultText: Lore / XP
 --- !u!1 &645804606
 GameObject:
   m_ObjectHideFlags: 0
@@ -16627,9 +16830,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.button.Cancel
+  TextKey: file.button.Cancel
   DefaultText: Cancel
-  Values: []
 --- !u!1 &734279715
 GameObject:
   m_ObjectHideFlags: 0
@@ -17228,6 +17430,7 @@ GameObject:
   - component: {fileID: 786167116}
   - component: {fileID: 786167118}
   - component: {fileID: 786167117}
+  - component: {fileID: 786167119}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -17373,6 +17576,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 786167115}
   m_CullTransparentMesh: 0
+--- !u!114 &786167119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786167115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.text.Success
+  DefaultText: Success
 --- !u!1 &797536931
 GameObject:
   m_ObjectHideFlags: 0
@@ -18065,6 +18282,7 @@ GameObject:
   - component: {fileID: 824775861}
   - component: {fileID: 824775863}
   - component: {fileID: 824775862}
+  - component: {fileID: 824775864}
   m_Layer: 5
   m_Name: heading Text (2)
   m_TagString: Untagged
@@ -18210,6 +18428,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 824775860}
   m_CullTransparentMesh: 0
+--- !u!114 &824775864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824775860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: story.title.SpecialInstructions
+  DefaultText: Special Instructions
 --- !u!1 &835958008
 GameObject:
   m_ObjectHideFlags: 0
@@ -18406,6 +18638,7 @@ GameObject:
   - component: {fileID: 835969015}
   - component: {fileID: 835969017}
   - component: {fileID: 835969016}
+  - component: {fileID: 835969018}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -18551,6 +18784,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835969014}
   m_CullTransparentMesh: 0
+--- !u!114 &835969018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835969014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: story.button.BeginJourney
+  DefaultText: Begin Journey
 --- !u!1 &839717047
 GameObject:
   m_ObjectHideFlags: 0
@@ -18948,6 +19195,7 @@ GameObject:
   - component: {fileID: 843852584}
   - component: {fileID: 843852586}
   - component: {fileID: 843852585}
+  - component: {fileID: 843852587}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -19093,6 +19341,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 843852583}
   m_CullTransparentMesh: 0
+--- !u!114 &843852587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843852583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: heroes.button.Next
+  DefaultText: Next
 --- !u!1 &850184342
 GameObject:
   m_ObjectHideFlags: 0
@@ -19212,6 +19474,7 @@ GameObject:
   - component: {fileID: 850198344}
   - component: {fileID: 850198346}
   - component: {fileID: 850198345}
+  - component: {fileID: 850198347}
   m_Layer: 5
   m_Name: status label
   m_TagString: Untagged
@@ -19357,6 +19620,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 850198343}
   m_CullTransparentMesh: 0
+--- !u!114 &850198347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850198343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.text.CurrentScenario
+  DefaultText: Current Scenario
 --- !u!114 &863390285 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9029356739068702662, guid: 904f891115a9a284ca7f0379cfc6992c,
@@ -21949,7 +22226,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: journey.text.AppVersion
   DefaultText: 'App Version:'
-  Values: []
 --- !u!1 &1003851010
 GameObject:
   m_ObjectHideFlags: 0
@@ -23952,7 +24228,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: title.button.NewGame
   DefaultText: New Game
-  Values: []
 --- !u!1 &1070353743
 GameObject:
   m_ObjectHideFlags: 0
@@ -26277,7 +26552,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: 
   DefaultText: 
-  Values: []
 --- !u!1 &1175816751
 GameObject:
   m_ObjectHideFlags: 0
@@ -26510,6 +26784,7 @@ GameObject:
   - component: {fileID: 1194300802}
   - component: {fileID: 1194300804}
   - component: {fileID: 1194300803}
+  - component: {fileID: 1194300805}
   m_Layer: 5
   m_Name: replay Text
   m_TagString: Untagged
@@ -26655,6 +26930,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194300801}
   m_CullTransparentMesh: 0
+--- !u!114 &1194300805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194300801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.text.ReplaySelectedScenario
+  DefaultText: Replay Selected Scenario?
 --- !u!1 &1200886647
 GameObject:
   m_ObjectHideFlags: 0
@@ -29093,7 +29382,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: journey.text.Scenario
   DefaultText: Scenario
-  Values: []
 --- !u!1 &1309747479
 GameObject:
   m_ObjectHideFlags: 0
@@ -29798,6 +30086,7 @@ GameObject:
   - component: {fileID: 1336388935}
   - component: {fileID: 1336388937}
   - component: {fileID: 1336388936}
+  - component: {fileID: 1336388938}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -29943,6 +30232,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1336388934}
   m_CullTransparentMesh: 0
+--- !u!114 &1336388938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336388934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.button.Back
+  DefaultText: Back
 --- !u!1 &1337948231
 GameObject:
   m_ObjectHideFlags: 0
@@ -30104,6 +30407,7 @@ GameObject:
   - component: {fileID: 1358407741}
   - component: {fileID: 1358407743}
   - component: {fileID: 1358407742}
+  - component: {fileID: 1358407744}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -30249,6 +30553,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1358407740}
   m_CullTransparentMesh: 0
+--- !u!114 &1358407744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358407740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: story.button.ExitToTitle
+  DefaultText: Exit to Title
 --- !u!1 &1359122727
 GameObject:
   m_ObjectHideFlags: 0
@@ -30421,7 +30739,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: 
   DefaultText: 
-  Values: []
 --- !u!1 &1373862092
 GameObject:
   m_ObjectHideFlags: 0
@@ -31027,6 +31344,7 @@ GameObject:
   - component: {fileID: 1402172073}
   - component: {fileID: 1402172075}
   - component: {fileID: 1402172074}
+  - component: {fileID: 1402172076}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -31174,6 +31492,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1402172072}
   m_CullTransparentMesh: 0
+--- !u!114 &1402172076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402172072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.button.ContinueCampaign
+  DefaultText: Continue\nCampaign
 --- !u!1 &1416224874
 GameObject:
   m_ObjectHideFlags: 0
@@ -31185,6 +31517,7 @@ GameObject:
   - component: {fileID: 1416224875}
   - component: {fileID: 1416224877}
   - component: {fileID: 1416224876}
+  - component: {fileID: 1416224878}
   m_Layer: 5
   m_Name: difficulty Text
   m_TagString: Untagged
@@ -31208,7 +31541,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 554.5, y: -384}
+  m_AnchoredPosition: {x: 544, y: -384}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1416224876
@@ -31265,16 +31598,16 @@ MonoBehaviour:
   m_fontSizeMin: 10
   m_fontSizeMax: 40
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_textAlignment: 516
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 1
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 3
+  m_overflowMode: 0
   m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
@@ -31330,6 +31663,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416224874}
   m_CullTransparentMesh: 0
+--- !u!114 &1416224878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416224874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: heroes.text.Difficulty
+  DefaultText: 'Difficulty:'
 --- !u!1001 &1419288049
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31952,7 +32299,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: journey.button.Next
   DefaultText: Next
-  Values: []
 --- !u!1 &1446546303
 GameObject:
   m_ObjectHideFlags: 0
@@ -32065,6 +32411,7 @@ MonoBehaviour:
   - {fileID: 89121571}
   - {fileID: 2099481179}
   diffText: {fileID: 502465500}
+  diffTextTranslation: {fileID: 0}
   heroImageBlank: {fileID: 21300000, guid: d0ede514237426f4d9cc867fef148258, type: 3}
   heroImage:
   - {fileID: 21300000, guid: c70349ff9dec61c4d9167f75a4b7686c, type: 3}
@@ -32516,7 +32863,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: 
   DefaultText: 
-  Values: []
 --- !u!1 &1461506696
 GameObject:
   m_ObjectHideFlags: 0
@@ -34238,9 +34584,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.Don'tSave
+  TextKey: file.text.Don'tSave
   DefaultText: Don't Save
-  Values: []
 --- !u!1 &1514268027
 GameObject:
   m_ObjectHideFlags: 0
@@ -34252,6 +34597,7 @@ GameObject:
   - component: {fileID: 1514268028}
   - component: {fileID: 1514268030}
   - component: {fileID: 1514268029}
+  - component: {fileID: 1514268031}
   m_Layer: 5
   m_Name: Text (1)
   m_TagString: Untagged
@@ -34398,6 +34744,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1514268027}
   m_CullTransparentMesh: 0
+--- !u!114 &1514268031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514268027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: name.button.Confirm
+  DefaultText: Confirm
 --- !u!1001 &1514963380
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34980,6 +35340,7 @@ GameObject:
   - component: {fileID: 1519597062}
   - component: {fileID: 1519597064}
   - component: {fileID: 1519597063}
+  - component: {fileID: 1519597065}
   m_Layer: 5
   m_Name: name instructions
   m_TagString: Untagged
@@ -35003,7 +35364,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 500, y: 230}
+  m_AnchoredPosition: {x: 530, y: 230}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1519597063
@@ -35024,10 +35385,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Select a Hero''s name and start typing to change it.
+  m_text: 'Select a Hero''s name. Start typing to change it.
 
-    Press Return
-    to confirm, Escape to cancel.'
+    Press Return to
+    confirm, Escape to cancel.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9bdbc38f329f78e438d6e4cf6e4caab7, type: 2}
   m_sharedMaterial: {fileID: 1729330054117016761, guid: 9bdbc38f329f78e438d6e4cf6e4caab7,
@@ -35097,10 +35458,10 @@ MonoBehaviour:
   m_margin: {x: -393.1803, y: -31.726858, z: -322.54318, w: -26.114038}
   m_textInfo:
     textComponent: {fileID: 1519597063}
-    characterCount: 94
+    characterCount: 91
     spriteCount: 0
-    spaceCount: 16
-    wordCount: 17
+    spaceCount: 15
+    wordCount: 16
     linkCount: 0
     lineCount: 2
     pageCount: 1
@@ -35128,6 +35489,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519597061}
   m_CullTransparentMesh: 0
+--- !u!114 &1519597065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519597061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: heroes.text.Instructions
+  DefaultText: Select a Hero's name. Start typing to change it.\nPress Return to
+    confirm, Escape to cancel.
 --- !u!1 &1521752782
 GameObject:
   m_ObjectHideFlags: 0
@@ -35299,7 +35675,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: title.text.LoadingScenario
   DefaultText: Loading Scenario...
-  Values: []
 --- !u!1 &1527011029
 GameObject:
   m_ObjectHideFlags: 0
@@ -36192,7 +36567,7 @@ GameObject:
   - component: {fileID: 1561326796}
   - component: {fileID: 1561326795}
   m_Layer: 5
-  m_Name: cancel Button (2)
+  m_Name: quit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36679,9 +37054,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.Empty
+  TextKey: file.text.Empty
   DefaultText: Empty
-  Values: []
 --- !u!114 &1579025138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36804,6 +37178,7 @@ GameObject:
   - component: {fileID: 1582793952}
   - component: {fileID: 1582793954}
   - component: {fileID: 1582793953}
+  - component: {fileID: 1582793955}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -36949,6 +37324,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1582793951}
   m_CullTransparentMesh: 0
+--- !u!114 &1582793955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1582793951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.button.Replay
+  DefaultText: Replay
 --- !u!1 &1583269566
 GameObject:
   m_ObjectHideFlags: 0
@@ -37656,7 +38045,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: journey.text.ScenarioFormat
   DefaultText: 'Scenario Format Version:'
-  Values: []
 --- !u!1 &1618308002
 GameObject:
   m_ObjectHideFlags: 0
@@ -38056,6 +38444,7 @@ GameObject:
   - component: {fileID: 1661620076}
   - component: {fileID: 1661620078}
   - component: {fileID: 1661620077}
+  - component: {fileID: 1661620079}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -38201,6 +38590,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661620075}
   m_CullTransparentMesh: 0
+--- !u!114 &1661620079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661620075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.button.CampaignStory
+  DefaultText: Campaign Story
 --- !u!1 &1672001860
 GameObject:
   m_ObjectHideFlags: 0
@@ -38376,7 +38779,6 @@ MonoBehaviour:
   TextKey: journey.text.VersionWarning
   DefaultText: WARNING\nThe selected Scenario format version differs from the app's
     version.
-  Values: []
 --- !u!1 &1676473058
 GameObject:
   m_ObjectHideFlags: 0
@@ -39618,6 +40020,7 @@ MonoBehaviour:
   currentScenarioText: {fileID: 0}
   replayText: {fileID: 0}
   replayStatusText: {fileID: 0}
+  replayStatusTextTranslation: {fileID: 0}
 --- !u!1 &1740575680
 GameObject:
   m_ObjectHideFlags: 0
@@ -41011,7 +41414,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: journey.title
   DefaultText: Select a Journey
-  Values: []
 --- !u!1 &1810594446
 GameObject:
   m_ObjectHideFlags: 0
@@ -41609,6 +42011,7 @@ GameObject:
   - component: {fileID: 1838002094}
   - component: {fileID: 1838002096}
   - component: {fileID: 1838002097}
+  - component: {fileID: 1838002095}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -41635,6 +42038,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -70, y: 207}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &1838002095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838002093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: story.text.StartingXP
+  DefaultText: 'Starting XP:'
 --- !u!222 &1838002096
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -42536,7 +42953,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextKey: 
   DefaultText: 
-  Values: []
 --- !u!1 &1868007159
 GameObject:
   m_ObjectHideFlags: 0
@@ -42698,6 +43114,7 @@ GameObject:
   - component: {fileID: 1891851067}
   - component: {fileID: 1891851069}
   - component: {fileID: 1891851068}
+  - component: {fileID: 1891851070}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -42845,6 +43262,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891851066}
   m_CullTransparentMesh: 0
+--- !u!114 &1891851070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891851066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: campaign.button.ContinueReplay
+  DefaultText: Continue\nReplay
 --- !u!1 &1919722184
 GameObject:
   m_ObjectHideFlags: 0
@@ -43575,6 +44006,7 @@ GameObject:
   - component: {fileID: 1941275170}
   - component: {fileID: 1941275172}
   - component: {fileID: 1941275171}
+  - component: {fileID: 1941275173}
   m_Layer: 5
   m_Name: msg
   m_TagString: Untagged
@@ -43721,6 +44153,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1941275169}
   m_CullTransparentMesh: 0
+--- !u!114 &1941275173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941275169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: delete.text.ConfirmDelete
+  DefaultText: Delete the selected Save?
 --- !u!1 &1944874629
 GameObject:
   m_ObjectHideFlags: 0
@@ -45297,9 +45743,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.button.Next
+  TextKey: file.button.Next
   DefaultText: Next
-  Values: []
 --- !u!1 &1999494424
 GameObject:
   m_ObjectHideFlags: 0
@@ -45615,6 +46060,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   diffText: {fileID: 0}
+  diffTextTranslation: {fileID: 0}
   heroImageBlank: {fileID: 21300000, guid: d0ede514237426f4d9cc867fef148258, type: 3}
   heroImage:
   - {fileID: 21300000, guid: c70349ff9dec61c4d9167f75a4b7686c, type: 3}
@@ -46473,6 +46919,7 @@ GameObject:
   - component: {fileID: 2077119859}
   - component: {fileID: 2077119861}
   - component: {fileID: 2077119860}
+  - component: {fileID: 2077119862}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -46618,6 +47065,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2077119858}
   m_CullTransparentMesh: 0
+--- !u!114 &2077119862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077119858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: story.button.Back
+  DefaultText: Back
 --- !u!1 &2099481176
 GameObject:
   m_ObjectHideFlags: 0
@@ -47147,9 +47608,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextKey: save.text.Empty
+  TextKey: file.text.Empty
   DefaultText: Empty
-  Values: []
 --- !u!114 &2120356926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47272,6 +47732,7 @@ GameObject:
   - component: {fileID: 2129638652}
   - component: {fileID: 2129638654}
   - component: {fileID: 2129638653}
+  - component: {fileID: 2129638655}
   m_Layer: 5
   m_Name: msg
   m_TagString: Untagged
@@ -47417,3 +47878,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129638651}
   m_CullTransparentMesh: 0
+--- !u!114 &2129638655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129638651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: name.text.NameSaveSlot
+  DefaultText: Name Your Save Game Slot

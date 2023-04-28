@@ -10,6 +10,7 @@ public class SpecialInstructions : MonoBehaviour
 	public Image finalFader;
 	public Button beginButton, cancelButton, backButton, increaseLoreButton, decreaseLoreButton, increaseXPButton, decreaseXPButton;
 	public TextMeshProUGUI loreText, xpText, instructions;
+	TextTranslation instructionsTranslation;
 	public AudioSource music;
 
 	RectTransform itemContainer;
@@ -25,6 +26,7 @@ public class SpecialInstructions : MonoBehaviour
 		loreText.text = "";
 		xpText.text = "";
 		instructions.text = "";
+		instructionsTranslation = instructions.GetComponent<TextTranslation>();
 
 		finalFader.DOFade( 0, .5f ).OnComplete( () =>
 		{
@@ -34,12 +36,21 @@ public class SpecialInstructions : MonoBehaviour
 			s = Bootstrap.LoadScenarioFromFilename( titleMetaData.projectItem.fileName );
 			if ( s != null )
 			{
-				if ( !string.IsNullOrEmpty( s.specialInstructions ) )
-					SetText( s.specialInstructions );
+				if (!string.IsNullOrEmpty(s.specialInstructions))
+				{
+					instructionsTranslation.TranslationEnabled(false); //Don't let text be overwritten by translation if the language changes
+					SetText(s.specialInstructions);
+				}
 				else
-					SetText( "There are no special instructions for this Scenario." );
+				{
+					//SetText("There are no special instructions for this Scenario.");
+					instructionsTranslation.TranslationEnabled(true);
+					instructionsTranslation.Change("story.text.NoStoryDescription");
+				}
+
 				loreText.text = s.loreStartValue.ToString();
 				xpText.text = s.xpStartValue.ToString();
+
 				if (s.projectType == ProjectType.Standalone)
 				{
 					//Set buttons visible
@@ -53,7 +64,9 @@ public class SpecialInstructions : MonoBehaviour
 			}
 			else
 			{
-				SetText( "There was a problem loading the Scenario." );
+				//SetText( "There was a problem loading the Scenario." );
+				instructionsTranslation.TranslationEnabled(true);
+				instructionsTranslation.Change("story.text.ErrorLoading");
 				beginButton.interactable = false;
 			}
 		} );

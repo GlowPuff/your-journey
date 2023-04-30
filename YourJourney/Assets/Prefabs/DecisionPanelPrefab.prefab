@@ -1211,7 +1211,6 @@ MonoBehaviour:
   btn3: {fileID: 3009013982135826035}
   btn4: {fileID: 4388797742719482429}
   overlay: {fileID: 3481645952642935975}
-  defaultFontSize: 40
 --- !u!225 &3481645953986259784
 CanvasGroup:
   m_ObjectHideFlags: 0

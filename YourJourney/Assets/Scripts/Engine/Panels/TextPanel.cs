@@ -4,6 +4,7 @@ using DG.Tweening;
 using System;
 using System.Text.RegularExpressions;
 using TMPro;
+using static LanguageManager;
 
 public class TextPanel : MonoBehaviour
 {
@@ -82,7 +83,7 @@ public class TextPanel : MonoBehaviour
 
 	public void ShowYesNo( string s, Action<InteractionResult> actions = null )
 	{
-		Show( s, "Yes", "No", ButtonIcon.None, actions );
+		Show( s, Translate("dialog.button.Yes"), Translate("dialog.button.No"), ButtonIcon.None, actions );
 	}
 
 	public void ShowOkContinue( string s, ButtonIcon icon, Action action = null )
@@ -98,7 +99,7 @@ public class TextPanel : MonoBehaviour
 		overlay.DOFade( 1, .5f );
 		gameObject.SetActive( true );
 
-		btnSingleText.text = icon.ToString();
+		btnSingleText.text = Translate("dialog.button." + icon.ToString(), icon.ToString());
 		btnSingleAction = action;
 		SetText( s );
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
@@ -112,7 +113,7 @@ public class TextPanel : MonoBehaviour
 	/// </summary>
 	public void ShowQueryInteraction( IInteraction it, string btnName, Action<InteractionResult> actions )
 	{
-		Show( it.textBookData.pages[0], "Cancel", btnName, ButtonIcon.Action, actions );
+		Show( it.textBookData.pages[0], Translate("dialog.button.Cancel"), btnName, ButtonIcon.Action, actions );
 	}
 
 	/// <summary>
@@ -120,7 +121,7 @@ public class TextPanel : MonoBehaviour
 	/// </summary>
 	public void ShowQueryExploration( Action<InteractionResult> actions )
 	{
-		Show( "Explore this tile?", "Yes", "No", ButtonIcon.None, actions );
+		Show( Translate("dialog.text.ExploreTile"), Translate("dialog.button.Yes"), Translate("dialog.button.No"), ButtonIcon.None, actions );
 	}
 
 	/// <summary>

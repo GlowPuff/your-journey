@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TMPro;
+using static LanguageManager;
 
 public class DamagePanel : MonoBehaviour
 {
@@ -123,7 +124,13 @@ public class DamagePanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonAction = action;
 
-		sNegatedBy = AbilityUtility.ColoredText(negatedBy, 30) + "  " + negatedBy.ToString() + " negates.";
+		//sNegatedBy = AbilityUtility.ColoredText(negatedBy, 30) + "  " + negatedBy.ToString() + " negates.";
+		sNegatedBy = Translate("damage.text.Negates",
+			new List<string> {
+				AbilityUtility.ColoredText(negatedBy, 30) + " " +
+				Translate("stat." + negatedBy.ToString(), negatedBy.ToString()) 
+			}
+		);
 
 		SetText(sAttack + "\r\n\r\n" + sNegatedBy + (sEffect == "" ? "" : "\r\n\r\n" + sEffect));
 
@@ -150,8 +157,19 @@ public class DamagePanel : MonoBehaviour
 		gameObject.SetActive( true );
 		buttonAction = action;
 
-		SetText( "A menacing Darkness spreads across the land, overwhelming the heroes.\r\n\r\nIf a Hero is on a Space with a Darkness Icon or Token, suffer Fear.\r\n\r\n" +
-			AbilityUtility.ColoredText(Ability.Spirit, 30) + " Spirit negates." );
+		//SetText( "A menacing Darkness spreads across the land, overwhelming the heroes.\r\n\r\nIf a Hero is on a Space with a Darkness Icon or Token, suffer Fear.\r\n\r\n" +
+		//	AbilityUtility.ColoredText(Ability.Spirit, 30) + " Spirit negates." );
+
+		SetText(
+			Translate("darkness.text.Flavor") + "\r\n\r\n" +
+			Translate("darkness.text.Fear") + "\r\n\r\n" +
+			Translate("darkness.text.Negates",
+				new List<string> {
+					AbilityUtility.ColoredText(Ability.Spirit, 30) + " " +
+					Translate("stat." + Ability.Spirit.ToString(), Ability.Spirit.ToString())
+				}
+			)
+		);
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
 		transform.DOMoveY( sp.y, .75f );
@@ -186,31 +204,40 @@ public class DamagePanel : MonoBehaviour
 		else
 			test = UnityEngine.Random.Range( 2, 5 );
 
-		string abilityTest = "\r\n\r\nTest " +
-			AbilityUtility.ColoredText((Ability)test, 30) + " " +
-			((Ability)test).ToString() + "; " + amount + ".";
+		//string abilityTest = "\r\n\r\nTest " +
+		//	AbilityUtility.ColoredText((Ability)test, 30) + " " +
+		//	((Ability)test).ToString() + "; " + amount + ".";
+
+		string abilityTest = "\r\n\r\n" +
+			Translate("stand.text.Test",
+				new List<string> {
+					AbilityUtility.ColoredText((Ability)test, 30) + " " +
+					Translate("stat." + ((Ability)test).ToString(), ((Ability)test).ToString()),
+					amount.ToString()
+				}
+			);
 
 
 		//Might, Agility, Wisdom, Spirit, Wit
 		if ( test == 0 )
 		{
-			SetText( "Strive for life with all your might!" + abilityTest);
+			SetText(Translate("stand.flavor.Might") + abilityTest);
 		}
 		else if ( test == 1 )
 		{
-			SetText( "Skillful maneuvering can lead to escape!" + abilityTest);
+			SetText(Translate("stand.flavor.Agility") + abilityTest);
 		}
 		else if ( test == 2 )
 		{
-			SetText( "Put your knowledge of healing and survival to the test!" + abilityTest);
+			SetText(Translate("stand.flavor.Wisdom") + abilityTest);
 		}
 		else if ( test == 3 )
 		{
-			SetText( "You can still survive, fight the fear!" + abilityTest);
+			SetText(Translate("stand.flavor.Spirit") + abilityTest);
 		}
 		else if ( test == 4 )
 		{
-			SetText( "Quick thinking can save you!" + abilityTest);
+			SetText(Translate("stand.flavor.Wit") + abilityTest);
 		}
 
 		rect.anchoredPosition = new Vector2( 0, ap.y - 25 );
@@ -256,9 +283,14 @@ public class DamagePanel : MonoBehaviour
 	{
 		Hide();
 		//string t = fStand == FinalStand.Damage ? "DAMAGE" : "FEAR";
-		string t = fStand == FinalStand.Damage ? "<font=\"Icon\">D</font>" : "<font=\"Icon\">F</font>";
+		string t = fStand == FinalStand.Damage 
+			? "<font=\"Icon\">D</font> " + Translate("damage." + FinalStand.Damage, FinalStand.Damage.ToString())
+			: "<font=\"Icon\">F</font> " + Translate("damage." + FinalStand.Fear, FinalStand.Fear.ToString());
 		var tb = FindObjectOfType<InteractionManager>().GetNewTextPanel();
-		tb.ShowOkContinue( $"Discard all facedown {t} cards and gain 1 inspiration.", ButtonIcon.Continue, () =>
+		tb.ShowOkContinue( 
+			//$"Discard all facedown {t} cards and gain 1 inspiration.", 
+			Translate("stand.text.Success", new List<string> { t }),
+			ButtonIcon.Continue, () =>
 		{
 			standAction( true );
 		} );
@@ -268,7 +300,10 @@ public class DamagePanel : MonoBehaviour
 	{
 		Hide();
 		var tb = FindObjectOfType<InteractionManager>().GetNewTextPanel();
-		tb.ShowOkContinue( "Your Hero has fallen! Remove your figure from the board. If any Heroes remain, complete the mission by the next Shadow Phase or fail.", ButtonIcon.Continue, () =>
+		tb.ShowOkContinue( 
+			//"Your Hero has fallen! Remove your figure from the board. If any Heroes remain, complete the mission by the next Shadow Phase or fail.",
+			Translate("stand.text.Failure"),
+			ButtonIcon.Continue, () =>
 		{
 			standAction( false );
 		} );

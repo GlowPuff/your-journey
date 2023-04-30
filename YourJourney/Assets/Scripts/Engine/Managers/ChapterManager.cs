@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static LanguageManager;
 
 public class ChapterManager : MonoBehaviour
 {
@@ -143,7 +144,7 @@ public class ChapterManager : MonoBehaviour
 	void FinishChapterTrigger( Chapter c, bool firstChapter )
 	{
 		Debug.Log("FinishChapterTrigger chapter " + c.dataName + " firstChapter? " + firstChapter);
-		string s = "Prepare the following tiles:\r\n\r\n";
+		string s = Translate("dialog.text.PrepareTiles") + "\r\n\r\n";
 		foreach (BaseTile bt in c.tileObserver)
 		{
 			Debug.Log(bt.ToString());
@@ -250,7 +251,7 @@ public class ChapterManager : MonoBehaviour
 						tg.isExplored = true;
 					}
 				} );
-				FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( "Place your Heroes in the indicated position.", ButtonIcon.Continue );
+				FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue(Translate("dialog.text.PlaceHeroes"), ButtonIcon.Continue );
 			}
 		} );
 	}

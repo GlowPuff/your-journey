@@ -1,11 +1,14 @@
 ﻿using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static LanguageManager;
 
 public class PartyPanel : MonoBehaviour
 {
 	public CanvasGroup overlay;
 	public Text loreText, xpText, diffText;
+	TextTranslation diffTextTranslation;
 	public HeroItem[] heroItems;
 
 	CanvasGroup group;
@@ -32,6 +35,8 @@ public class PartyPanel : MonoBehaviour
 		testColors[2] = Color.HSVToRGB( 300f / 360f, 1, .5f );
 		testColors[3] = Color.HSVToRGB( 207f / 360f, .61f, .71f );
 		testColors[4] = Color.yellow;
+		diffTextTranslation = diffText.GetComponent<TextTranslation>();
+		diffTextTranslation.Change("heroes.button." + Bootstrap.gameStarter.difficulty.ToString());
 	}
 
 	public void Show()
@@ -53,8 +58,8 @@ public class PartyPanel : MonoBehaviour
 		transform.DOMoveY( sp.y, .75f );
 
 		diffText.text = Bootstrap.gameStarter.difficulty.ToString();
-		loreText.text = "Lore: " + (Bootstrap.loreCount + Bootstrap.gameStarter.loreStartValue).ToString();
-		xpText.text = "XP: " + (Bootstrap.xpCount + Bootstrap.gameStarter.xpStartValue).ToString();
+		loreText.text = Translate("party.text.Lore", new List<string> { (Bootstrap.loreCount + Bootstrap.gameStarter.loreStartValue).ToString() });
+		xpText.text = Translate("party.text.XP", new List<string> { (Bootstrap.xpCount + Bootstrap.gameStarter.xpStartValue).ToString() });
 
 		foreach ( HeroItem go in heroItems )
 		{
@@ -99,7 +104,9 @@ public class PartyPanel : MonoBehaviour
 			Bootstrap.gameStarter.difficulty = Difficulty.Hard;
 		else if ( Bootstrap.gameStarter.difficulty == Difficulty.Hard )
 			Bootstrap.gameStarter.difficulty = Difficulty.Adventure;
-		diffText.text = Bootstrap.gameStarter.difficulty.ToString();
+		//diffText.text = Bootstrap.gameStarter.difficulty.ToString();
+		diffTextTranslation.Change("heroes.button." + Bootstrap.gameStarter.difficulty.ToString());
+
 		//set campaign state difficulty, if it exists
 		if ( Bootstrap.campaignState != null )
 			Bootstrap.campaignState.difficulty = Bootstrap.gameStarter.difficulty;

@@ -162,8 +162,6 @@ public class TitleManager : MonoBehaviour
 
 	public void UpdateTranslations()
     {
-		//newButtonText.text = "<font=\"Icon\">s</font> " + LanguageManager.Translate("title.button.NewGame");
-		//loadButtonText.text = "<font=\"Icon\">L</font> " + LanguageManager.Translate("title.button.LoadGame");
 		LanguageManager.CallSubscribers();
 	}
 

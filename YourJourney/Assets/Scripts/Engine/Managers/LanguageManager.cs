@@ -77,6 +77,26 @@ public class LanguageManager
 		return key;
     }
 
+	public static string Translate(string key, List<string> values)
+    {
+		string translation = Translate(key);
+		if (values != null && values.Count > 0)
+		{
+			translation = string.Format(translation, values.ToArray());
+		}
+		return translation;
+	}
+
+	public static string Translate(string key, string defval, List<string> values)
+	{
+		string translation = Translate(key, defval);
+		if (values != null && values.Count > 0)
+		{
+			translation = string.Format(translation, values.ToArray());
+		}
+		return translation;
+	}
+
 	public static void AddSubscriber(Action onUpdateTranslation)
     {
 		translationUpdateSubscribers.Add(onUpdateTranslation);

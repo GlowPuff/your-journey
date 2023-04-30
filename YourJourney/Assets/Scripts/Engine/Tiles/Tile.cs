@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using static LanguageManager;
 
 public class Tile : MonoBehaviour
 {
@@ -645,9 +646,9 @@ public class Tile : MonoBehaviour
 	void ShowExplorationText( Tile tile, System.Action action )
 	{
 		string flavor = tile.baseTile.flavorBookData.pages.Count > 0 ? tile.baseTile.flavorBookData.pages[0] : "";
-		string instructions = "Discard the exploration token.";
+		string instructions = Translate("dialog.text.DiscardExploration", "Discard the exploration token.");
 		if ( Bootstrap.gameStarter.difficulty != Difficulty.Hard )
-			instructions += " Gain 1 inspiration.";
+			instructions += " " + Translate("dialog.text.GainInspiration", "Gain 1 inspiration.");
 		if ( !string.IsNullOrEmpty( flavor ) )
 			flavor = flavor + "\r\n\r\n" + instructions;
 		else

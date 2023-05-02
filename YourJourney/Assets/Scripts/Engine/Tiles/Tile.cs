@@ -669,7 +669,7 @@ public class Tile : MonoBehaviour
 		string objectEventToken = metaData.tokenType.ToString();
 		if (metaData.tokenType == TokenType.Person)
 		{
-			//Set the ->> Interaction button to the type of Person (Human/Hobbit/Dwarf/Elf)
+			//Set the ->> Interaction button to the type of Person (Human/Halfpint/Dwarf/Elf)
 			objectEventToken = metaData.personType.ToString();
 		}
 		else if (metaData.tokenType == TokenType.Terrain)
@@ -700,7 +700,7 @@ public class Tile : MonoBehaviour
 				objectEventToken = delegateInteraction.tokenType.ToString();
 				if (metaData.tokenType == TokenType.Person)
 				{
-					//Set the ->> Interaction button to the type of Person (Human/Hobbit/Dwarf/Elf)
+					//Set the ->> Interaction button to the type of Person (Human/Halfpint/Dwarf/Elf)
 					objectEventToken = metaData.personType.ToString();
 				}
 				else if (metaData.tokenType == TokenType.Terrain)
@@ -758,7 +758,7 @@ public class Tile : MonoBehaviour
 				go = GameObject.Instantiate( tileManager.humanTokenPrefab, gameObject.transform );
 			else if ( tokenState.metaData.personType == PersonType.Elf )
 				go = GameObject.Instantiate( tileManager.elfTokenPrefab, gameObject.transform );
-			else if ( tokenState.metaData.personType == PersonType.Hobbit )
+			else if ( tokenState.metaData.personType == PersonType.Halfpint )
 				go = GameObject.Instantiate( tileManager.hobbitTokenPrefab, gameObject.transform );
 			else if ( tokenState.metaData.personType == PersonType.Dwarf )
 				go = GameObject.Instantiate( tileManager.dwarfTokenPrefab, gameObject.transform );

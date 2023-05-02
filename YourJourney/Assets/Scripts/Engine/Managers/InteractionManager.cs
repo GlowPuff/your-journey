@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using static LanguageManager;
 
 /// <summary>
 /// Keeps track of all Interactions in the game, creating specific interactions based on their type (Threat,Text etc), randomness, and whether they are token interactions
@@ -167,6 +168,8 @@ public class InteractionManager : MonoBehaviour
 	/// </summary>
 	public void QueryTokenInteraction( string name, string btnText, Action<InteractionResult> callback )
 	{
+		string translatedButtonText = Translate("interaction." + btnText, btnText);
+
 		//Debug.Log( "QueryTokenInteraction: " + name );
 		//remove any MARKERS
 		var objs = FindObjectsOfType<SpawnMarker>();
@@ -204,7 +207,7 @@ public class InteractionManager : MonoBehaviour
 					}
 					else
 					{
-						GetNewTextPanel().ShowQueryInteraction( it, btnText, ( res ) =>
+						GetNewTextPanel().ShowQueryInteraction( it, translatedButtonText, ( res ) =>
 						{
 							res.interaction = it;
 							callback?.Invoke( res );
@@ -213,7 +216,7 @@ public class InteractionManager : MonoBehaviour
 				}
 				else
 				{
-					GetNewTextPanel().ShowQueryInteraction( it, btnText, ( res ) =>
+					GetNewTextPanel().ShowQueryInteraction( it, translatedButtonText, ( res ) =>
 					{
 						res.interaction = it;
 
@@ -754,8 +757,11 @@ public class InteractionManager : MonoBehaviour
 			//add monster group to bar, one at a time
 			FindObjectOfType<MonsterManager>().AddMonsterGroup( m, it as ThreatInteraction );
 
+			string monsterName = Monster.MonsterNameObject(m, m.count);
+			string dialogText = Translate("dialog.text.PlaceMonsters", $"Place {m.count} {m.dataName}(s) in the indicated position.", new List<string>{ m.count.ToString(), monsterName });
+
 			TextPanel p = FindObjectOfType<InteractionManager>().GetNewTextPanel();
-			p.ShowOkContinue( $"Place {m.count} {m.dataName}(s) in the indicated position.", ButtonIcon.Continue, () => waiting = false );
+			p.ShowOkContinue( dialogText, ButtonIcon.Continue, () => waiting = false );
 			while ( waiting )
 				yield return null;
 		}

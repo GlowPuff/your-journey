@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Linq;
 using System;
+using static LanguageManager;
+using System.Collections.Generic;
 
 public class CombatPanel : MonoBehaviour
 {
@@ -225,14 +227,20 @@ public class CombatPanel : MonoBehaviour
 			}
 			else if ( sp.doingShadowPhase )//otherwise at least 1 killed, remove
 			{
-				im.GetNewTextPanel().ShowOkContinue( $"Remove {deadCount} {monster.dataName}(s) from the board.", ButtonIcon.Continue, null
+				string monsterName = Monster.MonsterNameObject(monster, monster.deadCount);
+				string monsterText = Translate("dialog.text.RemoveMonsters", $"Remove {monster.deadCount} {monster.dataName}(s) from the board.", new List<string> { monster.deadCount.ToString(), monsterName });
+
+				im.GetNewTextPanel().ShowOkContinue(monsterText, ButtonIcon.Continue, null
 					);
 			}
 			else if ( !sp.doingShadowPhase )//otherwise not in SP, continue
 			{
 				if ( monster.deathTally < monster.count )
 				{
-					im.GetNewTextPanel().ShowOkContinue( $"Remove {deadCount} {monster.dataName}(s) from the board.", ButtonIcon.Continue, () =>
+					string monsterName = Monster.MonsterNameObject(monster, monster.deadCount);
+					string monsterText = Translate("dialog.text.RemoveMonsters", $"Remove {monster.deadCount} {monster.dataName}(s) from the board.", new List<string> { monster.deadCount.ToString(), monsterName });
+
+					im.GetNewTextPanel().ShowOkContinue(monsterText, ButtonIcon.Continue, () =>
 					{
 						QueryCounterAttack( monster );
 					} );
@@ -254,7 +262,7 @@ public class CombatPanel : MonoBehaviour
 			return;
 		}
 
-		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowYesNo( "Can the enemy counterattack?", res =>
+		FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowYesNo( Translate("attack.text.EnemyCounterattack", "Can the enemy counterattack?") , res =>
 		{
 			if ( res.btn1 )
 			{

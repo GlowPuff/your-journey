@@ -17,7 +17,7 @@ public enum Ability { Might, Agility, Wisdom, Spirit, Wit, Wild, Random, None }
 public enum TerrainToken { None, Pit, Mist, Barrels, Table, FirePit, Statue }
 public enum ButtonIcon { None, Action, OK, Continue, Next }
 public enum TokenType { Search, Person, Threat, Darkness, DifficultGround, Fortified, Terrain, None }
-public enum PersonType { Human, Elf, Hobbit, Dwarf, None }
+public enum PersonType { Human, Elf, Halfpint, Dwarf, None }
 public enum TerrainType {
 	None, Barrels, Boulder, Bush, FirePit, Mist, Pit, Statue, Stream, Table, Wall, //Core Set
 	Elevation, Log, Rubble, Web, //Shadowed Paths

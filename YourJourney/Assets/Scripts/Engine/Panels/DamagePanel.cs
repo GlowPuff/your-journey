@@ -110,7 +110,18 @@ public class DamagePanel : MonoBehaviour
 			sDamage = damage.Item2.ToString();
 			negatedBy = m.negatedBy;
 			negatedBy = (Ability)GlowEngine.GenerateRandomNumbers(6)[0]; //Randomize the ability instead of taking it from the monster (which is always Might right now)
-			sAttack = $"A {m.dataName} attacks!";
+
+			//sAttack = $"A {m.dataName} attacks!";
+			int remaining = m.count - m.deathTally;
+			string monsterName = Monster.MonsterNameAttacker(m, remaining);
+			if(remaining == 1)
+            {
+				sAttack = Translate("attack.text.single", $"{monsterName} attacks!", new List<string> { monsterName });
+			}
+			else
+            {
+				sAttack = Translate("attack.text.plural", $"{monsterName} attack!", new List<string> { monsterName });
+			}
 			sEffect = "";
 		}
 

@@ -3,6 +3,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using static LanguageManager;
 
 public class MonsterManager : MonoBehaviour
 {
@@ -193,7 +194,12 @@ public class MonsterManager : MonoBehaviour
 			ThreatInteraction ti = m.interaction;
 			int foo = monsterList.Count( x => x.interaction.GUID == m.interaction.GUID );
 
-			FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( $"Remove the {m.dataName}(s) from the board.\r\n\r\nYou or a nearby Hero gain 1 Inspiration.", ButtonIcon.Continue, () =>
+			string monsterName = Monster.MonsterNameObject(m, m.deadCount);
+			//Debug.Log("Get name for " + m.dataName + "/" + m.enumName + "/" + m.count + "/" + m.deadCount + "/" + m.deathTally + " => " + monsterName);
+			string monsterText = Translate("dialog.text.RemoveMonsters", $"Remove {m.deadCount} {m.dataName}(s) from the board.", new List<string> { m.deadCount.ToString(), monsterName });
+			string inspirationText = Translate("dialog.text.YouNearbyInspiration", "You or a nearby Hero gain 1 Inspiration.");
+
+			FindObjectOfType<InteractionManager>().GetNewTextPanel().ShowOkContinue( monsterText + "\r\n\r\n" + inspirationText, ButtonIcon.Continue, () =>
 			{
 				if ( foo == 0 )
 				{

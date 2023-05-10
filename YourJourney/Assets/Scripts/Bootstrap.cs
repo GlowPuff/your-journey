@@ -162,7 +162,8 @@ public class Bootstrap
 		string skinpack = PlayerPrefs.GetString("skinpack", SettingsDialog.defaultSkinpack);
 		string language = PlayerPrefs.GetString("language", SettingsDialog.defaultLanguage);
 
-		LanguageManager.currentLanguage = language;
+		LanguageManager.DiscoverLanguageFiles();
+		LanguageManager.UpdateCurrentLanguage(language);
 
 		return new Tuple<int, int, int, int, int, int, string, Tuple<string>>( music, vignette, color, width, height, fullscreen, skinpack, new Tuple<string>(language) );
 	}

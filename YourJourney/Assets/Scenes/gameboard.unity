@@ -8015,6 +8015,8 @@ MonoBehaviour:
   errorText: {fileID: 1610728912}
   scenarioOverlay: {fileID: 311347008}
   scenarioOverlayText: {fileID: 1339681916}
+  monsterActivationJson: {fileID: 4900000, guid: 4816f46a0c8242c47b41ddb2ebaa7a5a,
+    type: 3}
   debug: 0
 --- !u!114 &965560139
 MonoBehaviour:

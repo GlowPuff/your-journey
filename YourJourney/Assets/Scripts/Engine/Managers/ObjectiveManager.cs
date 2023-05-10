@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System;
 using TMPro;
+using static LanguageManager;
 
 public class ObjectiveManager : MonoBehaviour
 {
@@ -115,7 +116,7 @@ public class ObjectiveManager : MonoBehaviour
 			FindObjectOfType<LorePanel>().AddReward( currentObjective.loreReward, currentObjective.xpReward, currentObjective.threatReward );
 			string t = currentObjective.nextTrigger;
 			currentObjective = null;
-			objectiveText.text = "No Objective";
+			objectiveText.text = Translate("objective.NoObjective", "No Objective");
 			FindObjectOfType<TriggerManager>().FireTrigger( t );
 			return true;
 		}
@@ -134,7 +135,7 @@ public class ObjectiveManager : MonoBehaviour
 		else
 		{
 			currentObjective = null;
-			objectiveText.text = "No Objective";
+			objectiveText.text = Translate("objective.NoObjective", "No Objective");
 		}
 	}
 

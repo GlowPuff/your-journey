@@ -5938,6 +5938,7 @@ GameObject:
   - component: {fileID: 266494895}
   - component: {fileID: 266494894}
   - component: {fileID: 266494898}
+  - component: {fileID: 266494899}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -6076,6 +6077,27 @@ MonoBehaviour:
   loadingText: {fileID: 0}
   newButtonText: {fileID: 1066797208}
   loadButtonText: {fileID: 111008355}
+--- !u!114 &266494899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266494893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35b123c41e511134c9872597d0c77364, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultLanguageFiles:
+  - languageCode: en
+    languageName: English
+    internalFile: {fileID: 4900000, guid: c1de8b434ae5c5d4382553aa9694dd71, type: 3}
+    externalFile: 
+  - languageCode: fr
+    languageName: "Fran\xE7ais"
+    internalFile: {fileID: 4900000, guid: 199f4af8e27da3d4f9b4cecce22736db, type: 3}
+    externalFile: 
 --- !u!1 &270939961
 GameObject:
   m_ObjectHideFlags: 0

@@ -66,7 +66,7 @@ public class DamagePanel : MonoBehaviour
 		//Debug.Log("ShowCombatCounter: activationsId=" + m.activationsId + " activationsObserver.Count=" + (activationsObserver == null ? "null" : activationsObserver.Count.ToString()));
 		if (m.activationsId >= 0 && activationsObserver != null && activationsObserver.Count > 0)
         {
-			activationItems = activationsObserver.Where(a => a.id == m.activationsId ).First().activations;
+			activationItems = activationsObserver.FirstOrDefault(a => a.id == m.activationsId)?.activations;
         }
 
 		int groupIndex = 0;
@@ -99,8 +99,12 @@ public class DamagePanel : MonoBehaviour
 			sDamage = item.damage[groupIndex].ToString();
 			sFear = item.fear[groupIndex].ToString();
 			negatedBy = (Ability)item.negate;
-			sAttack = item.text;
-			sEffect = item.effect;
+			if(negatedBy == Ability.Random) { negatedBy = (Ability)GlowEngine.GenerateRandomNumbers(6)[0]; }
+			string enemyKey = ((MonsterType)m.activationsId).ToString();
+			Debug.Log("Attack: " + "enemy.attack." + enemyKey + "." + item.id);
+			Debug.Log("Effect: " + "enemy.effect." + enemyKey + "." + item.id);
+			sAttack = Translate("enemy.attack." + enemyKey + "." + item.id, item.text);
+			sEffect = Translate("enemy.effect." + enemyKey + "." + item.id, item.effect);
 		}
 		else
 		{

@@ -16,8 +16,8 @@ public class TextTranslation : MonoBehaviour
     {
         TMPTextObject = GetComponent<TMP_Text>();
         TextObject = GetComponent<Text>();
-        OnUpdateTranslation();
         LanguageManager.AddSubscriber(OnUpdateTranslation);
+        OnUpdateTranslation();
     }
 
     public void TranslationEnabled(bool enabled) { translationEnabled = enabled; }
@@ -44,8 +44,6 @@ public class TextTranslation : MonoBehaviour
 
     public void OnUpdateTranslation()
     {
-        Debug.Log("OnUpdateTranslation for " + TextKey + " / " + DefaultText + " with TextObject class " + TextObject?.GetType() + " enabled: " + enabled);
-
         if (!translationEnabled) { return; }
 
         if (!string.IsNullOrWhiteSpace(TextKey))
@@ -71,11 +69,6 @@ public class TextTranslation : MonoBehaviour
     }
 
     void OnDestroy()
-    {
-        LanguageManager.RemoveSubscriber(OnUpdateTranslation);
-    }
-
-    void OnDisable()
     {
         LanguageManager.RemoveSubscriber(OnUpdateTranslation);
     }

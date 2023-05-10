@@ -194,7 +194,7 @@ public class SelectSaveSlot : MonoBehaviour
 			//check file version for standalone scenario
 			if ( selectedState.projectType == ProjectType.Standalone )
 			{
-				nextText.text = "Begin";
+				nextTextTranslation.Change("file.button.Begin");
 				Scenario s = Bootstrap.LoadScenarioFromFilename( selectedState.scenarioFilename );
 				if ( s != null )
 				{

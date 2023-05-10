@@ -29,7 +29,7 @@ public class SettingsDialog : MonoBehaviour
 	List<string> skinpackList;
 	List<TMP_Dropdown.OptionData> skinpackDropdownList;
 
-	List<string> languageList;
+	List<LanguageManager.TranslationFileEntry> languageList;
 	List<TMP_Dropdown.OptionData> languageDropdownList;
 
 	public static string defaultSkinpack = "*Default*";
@@ -104,13 +104,14 @@ public class SettingsDialog : MonoBehaviour
 		//populate language dropdown
 		string savedLanguage = settings.Rest.Item1;
 		Debug.Log("Saved language is: " + savedLanguage);
-		languageList = LanguageManager.LoadLanguageFiles();
+		languageList = LanguageManager.DiscoverLanguageFiles();
 		languageDropdownList = new List<TMP_Dropdown.OptionData>();
 		int selectedLanguageIndex = 0;
-		languageDropdownList.Add(new TMP_Dropdown.OptionData(defaultLanguage));
+		//languageDropdownList.Add(new TMP_Dropdown.OptionData(defaultLanguage));
 		foreach (var language in languageList)
 		{
-			string languageName = LanguageManager.LanguageNameFromFilename(language);
+			//string languageName = LanguageManager.LanguageNameFromFilename(language);
+			string languageName = language.languageName;
 			languageDropdownList.Add(new TMP_Dropdown.OptionData(languageName));
 			Debug.Log("Compare " + languageName + " to " + savedLanguage + " with List.Count " + languageDropdownList.Count);
 			if (languageName == savedLanguage)

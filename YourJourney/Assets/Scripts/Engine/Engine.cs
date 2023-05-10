@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
@@ -31,6 +32,7 @@ public class Engine : MonoBehaviour
 	private Sprite scenarioSprite;
 	private Vector2 scenarioImageSize = new Vector2(1024, 512);
 	public TextMeshProUGUI scenarioOverlayText;
+	public TextAsset monsterActivationJson;
 
 	public bool debug = false;
 
@@ -60,6 +62,7 @@ public class Engine : MonoBehaviour
 		else
 		{
 			scenario = Bootstrap.LoadScenario();
+			LoadDefaultMonsterActivations();
 		}
 
 		if ( scenario == null )
@@ -130,6 +133,15 @@ public class Engine : MonoBehaviour
 			scenarioOverlay.SetActive(true);
 		}
 	}
+
+	private void LoadDefaultMonsterActivations()
+    {
+		List<MonsterActivations> activations = JsonConvert.DeserializeObject<List<MonsterActivations>>(monsterActivationJson.text);
+		foreach (var activation in activations)
+		{
+			scenario.activationsObserver.Add(activation);
+		}
+    }
 
 	IEnumerator BeginGame()
 	{
@@ -387,7 +399,7 @@ public class Engine : MonoBehaviour
 
 	public void OnShowSettings()
 	{
-		settingsDialog.Show( "Quit to Title", OnLanguageUpdate, OnQuit, OnSkinpackUpdate );
+		settingsDialog.Show("settings.QuitToTitle", OnLanguageUpdate, OnQuit, OnSkinpackUpdate );
 	}
 
 	public void OnQuit()
@@ -421,8 +433,8 @@ public class Engine : MonoBehaviour
 	{
 		Debug.Log("Engine.OnLanguageUpdate(" + languageName + ")");
 		LanguageManager.LoadLanguage(languageName);
-		LanguageManager.currentLanguage = languageName;
-		//TODO Update the UI with the new strings somehow
+		LanguageManager.UpdateCurrentLanguage(languageName);
+		LanguageManager.CallSubscribers();
 	}
 
 	public void RemoveFog( string chName )

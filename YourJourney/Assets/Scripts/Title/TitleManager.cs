@@ -94,10 +94,8 @@ public class TitleManager : MonoBehaviour
 	{
 		var settings = Bootstrap.LoadSettings();
 
-		LanguageManager.LoadLanguageFiles();
 		LanguageManager.LoadLanguage(LanguageManager.currentLanguage);
-
-		UpdateTranslations();
+		LanguageManager.CallSubscribers();
 
 		Vignette v;
 		ColorGrading cg;
@@ -143,7 +141,7 @@ public class TitleManager : MonoBehaviour
 
 	public void ResetScreen()
 	{
-		UpdateTranslations();
+		LanguageManager.CallSubscribers();
 
 		finalFader.DOFade( 0, .5f );
 
@@ -158,11 +156,6 @@ public class TitleManager : MonoBehaviour
 		loadButton.transform.DOLocalMoveX( -700, .75f );
 		newButton.interactable = true;
 		loadButton.interactable = true;
-	}
-
-	public void UpdateTranslations()
-    {
-		LanguageManager.CallSubscribers();
 	}
 
 	public void NewGame()
@@ -204,11 +197,10 @@ public class TitleManager : MonoBehaviour
 
 	public void OnLanguageUpdate(string languageName)
 	{
-		Debug.Log("Engine.OnLanguageUpdate(" + languageName + ")");
+		//Debug.Log("Engine.OnLanguageUpdate(" + languageName + ")");
 		LanguageManager.LoadLanguage(languageName);
-		LanguageManager.currentLanguage = languageName;
-		UpdateTranslations();
-		//TODO Update the UI with the new strings somehow
+		LanguageManager.UpdateCurrentLanguage(languageName);
+		LanguageManager.CallSubscribers();
 	}
 
 	void SkipIntro()

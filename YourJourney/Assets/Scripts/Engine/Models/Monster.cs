@@ -60,10 +60,10 @@ public class Monster
 
 	public static string[] monsterNames = { "Ruffian", "Goblin Scout", "Orc Hunter", "Orc Marauder", "Hungry Varg", "Hill Troll", "Wight",
 											"Atari", "Gargletarg", "Chartooth",
-											"Giant Spider", "Pit Goblin", "Orc Taskmaster", "Shadowman", "Anonymous Thing", "Cave Troll", "Balerock", "Spawn of Ugly-Giant",
-											"Supplicant of More-Goth", "Ursa", "Ollie",
+											"Giant Spider", "Pit Goblin", "Orc Taskmaster", "Shadowman", "Anonymous Thing", "Cave Troll", "Balerock", "Spawn of Uglygiant",
+											"Supplicant of More-Goth", "Ursula", "Oliver",
 											"Foul Beast", "Varg Rider", "Siege Engine", "War Elephant", "Soldier", "High-Orc Warrior",
-											"Lord Javelin", "Lich-king of Anger", "Endris"
+											"Lord Javelin", "Lich-King", "Endris"
 	};
 
 	public int[] currentHealth { get; set; } = new int[3];
@@ -573,10 +573,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { "Cleave" };
 				break;
-			case MonsterType.SpawnOfUglyGiant:
+			case MonsterType.SpawnOfUglygiant:
 				mId = 17;
-				mEnumName = "SpawnOfUglyGiant";
-				mDataName = "Spawn of Ugly-Giant";
+				mEnumName = "SpawnOfUglygiant";
+				mDataName = "Spawn of Uglygiant";
 				mHealth = 18;
 				mArmor = 2;
 				mSorcery = 0;
@@ -615,10 +615,10 @@ public class Monster
 				mFearsome = true;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.Ursa:
+			case MonsterType.Ursula:
 				mId = 19;
-				mEnumName = "Ursa";
-				mDataName = "Ursa";
+				mEnumName = "Ursula";
+				mDataName = "Ursula";
 				mHealth = 16;
 				mArmor = 2;
 				mSorcery = 4;
@@ -635,10 +635,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.Ollie:
+			case MonsterType.Oliver:
 				mId = 20;
-				mEnumName = "Ollie";
-				mDataName = "Ollie";
+				mEnumName = "Oliver";
+				mDataName = "Oliver";
 				mHealth = 11;
 				mArmor = 0;
 				mSorcery = 1;
@@ -799,10 +799,10 @@ public class Monster
 				mFearsome = false;
 				mSpecial = new string[] { };
 				break;
-			case MonsterType.LichKingOfAnger:
+			case MonsterType.LichKing:
 				mId = 28;
-				mEnumName = "LichKingOfAnger";
-				mDataName = "Lich-king of Anger";
+				mEnumName = "LichKing";
+				mDataName = "Lich-King";
 				mHealth = 20;
 				mArmor = 4;
 				mSorcery = 4;

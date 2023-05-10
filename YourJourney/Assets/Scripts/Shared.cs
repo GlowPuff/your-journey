@@ -6,10 +6,10 @@ public enum ScenarioType { Journey, Battle }
 public enum InteractionType { Text, Threat, StatTest, Decision, Branch, Darkness, MultiEvent, Persistent, Conditional, Dialog, Replace, Reward }
 public enum MonsterType { Ruffian, GoblinScout, OrcHunter, OrcMarauder, HungryVarg, HillTroll, Wight, 
 						Atari, Gargletarg, Chartooth,
-						GiantSpider, PitGoblin, OrcTaskmaster, Shadowman, AnonymousThing, CaveTroll, Balerock, SpawnOfUglyGiant,
-						SupplicantOfMoreGoth, Ursa, Ollie,
+						GiantSpider, PitGoblin, OrcTaskmaster, Shadowman, AnonymousThing, CaveTroll, Balerock, SpawnOfUglygiant,
+						SupplicantOfMoreGoth, Ursula, Oliver,
 						FoulBeast, VargRider, SiegeEngine, WarElephant, Soldier, HighOrcWarrior,
-						LordJavelin, LichKingOfAnger, Endris }
+						LordJavelin, LichKing, Endris }
 public enum CombatModifier { None, Pierce, Smite, Sunder, Cleave, Lethal, Stun }
 public enum TileType { Hex, Battle, Square }
 public enum ProjectType { Standalone, Campaign }
@@ -36,7 +36,7 @@ public class AbilityUtility
 	//This is used to return a bolded HTML string with optional size and color, to display an ability icon from a font.
 	//The LoTR-JiME-Icons font has been renamed as Harrington in the harringtonBold font. The <font=\"Icon\"></font> tags switch to this icon font and display the icon.
 	// Might, Agility, Wisdom, Spirit, Wit, Wild
-	public static readonly string[] testColors = new string[] { "ff0000", "55cc00", "bb00bb", "0088ff", "ffff00", "ffffff" };
+	public static readonly string[] testColors = new string[] { "ff0000", "55cc00", "bb00bb", "0088ff", "ffff00", "ffffff", "ffffff", "cccccc" };
 	public static readonly string[] testChars = new string[] { "M", "A", "Z", "S", "W", "X" }; //In the LoTR-JiME-Icons font
 
 	public static string Text(Ability ability)

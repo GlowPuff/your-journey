@@ -6,64 +6,157 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LanguageManager
+public class LanguageManager : MonoBehaviour
 {
-	public static List<string> languageFiles = new List<string>(); //list of language files in the Languages folder
+	[System.Serializable]
+	public class TranslationFileEntry
+	{
+		public string languageCode;
+		public string languageName;
+		public TextAsset internalFile;
+		public string externalFile;
+	}
+
+	public List<TranslationFileEntry> defaultLanguageFiles;
+
+	public static List<TranslationFileEntry> staticLanguageFiles;
+
+	public static List<TranslationFileEntry> languageFiles = new List<TranslationFileEntry>(); //list of default language translations plus language files in the Languages folder
 
 	public static Dictionary<string, Dictionary<string, string>> translations = new Dictionary<string, Dictionary<string, string>>();
 
 	public static string currentLanguage = "English";
+	public static string currentLanguageCode = "en";
 
 	public static List<Action> translationUpdateSubscribers = new List<Action>();
 
-	public static List<String> LoadLanguageFiles()
+	public void Awake()
+    {
+		staticLanguageFiles = defaultLanguageFiles;
+    }
+
+	public static void UpdateCurrentLanguage(string languageName)
+    {
+		currentLanguage = languageName;
+		TranslationFileEntry entry = languageFiles.FirstOrDefault(it => it.languageName == languageName);
+		if (entry == null) { return; }
+		currentLanguageCode = entry.languageCode;
+		//Debug.Log("Current language switched to " + currentLanguage + " / " + currentLanguageCode);
+	}
+
+	public static List<TranslationFileEntry> DiscoverLanguageFiles()
 	{
 		languageFiles.Clear();
+
+		//First add all the default translation files
+		foreach(var file in staticLanguageFiles)
+        {
+			languageFiles.Add(file);
+        }
+
+		//Next look for all custom translations in the Langauges folder
 		string languagesPath = Path.Combine(FileManager.BasePath(true), "Languages");
 		if (!Directory.Exists(languagesPath))
 		{
 			Directory.CreateDirectory(languagesPath);
 		}
 
+		//Add the exteranl custom file to the existing default file, otherwise create a new entry for it
 		string[] files = Directory.GetFiles(languagesPath, "*.json");
 		for (int i = 0; i<files.Length; i++)
 		{
-			files[i] = new DirectoryInfo(files[i]).Name;
+			string fileName = new DirectoryInfo(files[i]).Name;
+			string[] langPair = FilenameWithoutExtension(fileName).Split(new char[]{'_'}, 2);
+			if(langPair != null && langPair.Length == 2)
+			{
+				string langName = langPair[0];
+				string langCode = langPair[1];
+				TranslationFileEntry entry = languageFiles.FirstOrDefault(it => it.languageCode == langCode);
+				if(entry != null)
+                {
+					entry.externalFile = fileName;
+					entry.languageName = langName;
+                }
+				else
+                {
+					entry = new TranslationFileEntry();
+					entry.externalFile = fileName;
+					entry.languageCode = langCode;
+					entry.languageName = langName;
+					languageFiles.Add(entry);
+                }
+			}
 		}
 
-		languageFiles.Clear();
-		languageFiles.AddRange(files);
+		//foreach(var file in languageFiles)
+        //{
+		//	Debug.Log(file.languageName + ":" + file.languageCode + ":" + (file.internalFile == null ? "null" : "exists") + ":" + file.externalFile);
+        //}
+
 		return languageFiles;
 	}
 
-	public static string LanguageNameFromFilename(string filename)
+	public static string FilenameWithoutExtension(string filename)
     {
 		return Path.GetFileNameWithoutExtension(filename);
     }
 
 	public static void LoadLanguage(string languageName)
 	{
-		Debug.Log("LoadLanguage: " + languageName);
-		string languagePath = Path.Combine(FileManager.BasePath(false), "Languages", languageName + ".json");
-		if(File.Exists(languagePath))
+		//Debug.Log("LoadLanguage: " + languageName);
+		TranslationFileEntry entry = languageFiles.FirstOrDefault(it => it.languageName == languageName);
+		//Debug.Log("LoadLanguage entry " + (entry == null ? "null" : entry.languageCode));
+		if(entry == null) { return; }
+
+		string languageCode = entry.languageCode;
+
+		translations.Remove(languageCode);
+
+		if(entry.internalFile != null)
         {
-			Debug.Log(languageName + ".json exists");
-			var json = File.ReadAllText(languagePath);
+			//Debug.Log("Internal file exists");
+			var json = entry.internalFile.text;
 			var keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-			foreach(KeyValuePair<string, string> pair in keyValuePairs)
-            {
-				Debug.Log(pair.Key + " => " + pair.Value);
-            }
-			translations.Remove(languageName);
-			translations.Add(languageName, keyValuePairs);
-        }
+			translations.Add(languageCode, keyValuePairs);
+		}
+
+		//Load the external file if it exists
+		if (entry.externalFile != null)
+		{
+			string languagePath = Path.Combine(FileManager.BasePath(false), "Languages", entry.externalFile);
+			//Debug.Log("Load external translations from: " + languagePath);
+			if (File.Exists(languagePath))
+			{
+				//Debug.Log(entry.externalFile + " exists");
+				var json = File.ReadAllText(languagePath);
+				var keyValuePairs = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+				//If a default translation exists, overwrite it with the external files values if they exist
+				if (translations.ContainsKey(languageCode))
+				{
+					Dictionary<string, string> dict = translations[languageCode];
+					foreach(var keyValue in keyValuePairs)
+                    {
+						if(dict.ContainsKey(keyValue.Key))
+                        {
+							dict.Remove(keyValue.Key);
+                        }
+						dict.Add(keyValue.Key, keyValue.Value);
+					}
+				}
+				//If no default translation exists, just add the keys from the external file
+				else
+				{
+					translations.Add(languageCode, keyValuePairs);
+				}
+			}
+		}
 	}
 
 	public static string Translate(string key, string defval=null)
     {
-		if(translations.ContainsKey(currentLanguage))
+		if(translations.ContainsKey(currentLanguageCode))
         {
-			var keyval = translations[currentLanguage];
+			var keyval = translations[currentLanguageCode];
 			if(keyval.ContainsKey(key))
             {
 				return keyval[key];
@@ -99,7 +192,10 @@ public class LanguageManager
 
 	public static void AddSubscriber(Action onUpdateTranslation)
     {
-		translationUpdateSubscribers.Add(onUpdateTranslation);
+		if (!translationUpdateSubscribers.Contains(onUpdateTranslation))
+		{
+			translationUpdateSubscribers.Add(onUpdateTranslation);
+		}
     }
 
 	public static void RemoveSubscriber(Action onUpateTranslation)
@@ -107,12 +203,19 @@ public class LanguageManager
 		translationUpdateSubscribers.Remove(onUpateTranslation);
     }
 
+	public static void ClearSubscribers()
+    {
+		translationUpdateSubscribers.Clear();
+    }
+
 	public static void CallSubscribers()
     {
-		Debug.Log("LanguageManager.CallSubscribers: " + translationUpdateSubscribers.Count);
 		foreach(Action onUpdateTranslation in translationUpdateSubscribers)
         {
-			onUpdateTranslation();
-        }
+			if(onUpdateTranslation != null)
+			{
+				onUpdateTranslation();
+			}
+		}
     }
 }

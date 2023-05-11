@@ -220,7 +220,7 @@ public class FileManager
 
 	public static Campaign LoadCampaign( string campaignGUID )
 	{
-		if ( campaignGUID == "Saves" || campaignGUID == "Skins")
+		if ( campaignGUID == "Saves" || campaignGUID == "Skins" || campaignGUID == "Languages")
 			return null;
 
 		string campaignPath = Path.Combine(BasePath(false), campaignGUID);

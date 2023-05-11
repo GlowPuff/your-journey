@@ -16,6 +16,7 @@ public class CampaignScreen : MonoBehaviour
 	public RectTransform itemContainer;
 	public GameObject replaybox;
 	public TextMeshProUGUI xpLoreText, currentScenarioText, replayText, replayStatusText;
+	public TextTranslation replayStatusTextTranslation;
 
 	TitleManager tm;
 	TitleMetaData titleMetaData;
@@ -61,6 +62,7 @@ public class CampaignScreen : MonoBehaviour
 		}
 		itemContainer.sizeDelta = new Vector2( 772, fileItemButtons.Count * 110 );
 
+		replayStatusTextTranslation = replayStatusText.GetComponent<TextTranslation>();
 		CheckCampaignStatus();
 
 		gameObject.SetActive( true );
@@ -85,13 +87,17 @@ public class CampaignScreen : MonoBehaviour
 			continueReplayButton.interactable = false;
 			continueButton.interactable = true;
 
-			replayStatusText.text = "No game is in progress.";
+			//replayStatusText.text = "No game is in progress.";
 			//check if campaign is finished
-			if ( !finishedCampaign )
-				replayStatusText.text += "  You may continue the Campaign from the current Scenario with the Continue Campaign button.";
+			if (!finishedCampaign)
+			{
+				replayStatusTextTranslation.Change("campaign.text.NoGameContinue");
+				//replayStatusText.text += "  You may continue the Campaign from the current Scenario with the Continue Campaign button.";
+			}
 			else
 			{
-				replayStatusText.text += "  The campaign has been finished.  Only Scenario Replays are available to play.";
+				replayStatusTextTranslation.Change("campaign.text.NoGameReplay");
+				//replayStatusText.text += "  The campaign has been finished.  Only Scenario Replays are available to play.";
 			}
 		}
 		else//2 or 3 - a game is in progress
@@ -99,22 +105,40 @@ public class CampaignScreen : MonoBehaviour
 			//3 - different scenario than latest
 			if ( gs.campaignState.scenarioPlayingIndex != campaignState.currentScenarioIndex )
 			{
-				replayStatusText.text = "A Replay is in progress.";
+				//replayStatusText.text = "A Replay is in progress.";
 				continueReplayButton.interactable = true;
-				if ( !finishedCampaign )
-					replayStatusText.text += "  You may continue the Replay or forfeit it and continue the Campaign from the current Scenario.";
+				if (!finishedCampaign)
+				{
+					replayStatusTextTranslation.Change("campaign.text.ReplayContinue");
+					//replayStatusText.text += "  You may continue the Replay or forfeit it and continue the Campaign from the current Scenario.";
+				}
 				else
-					replayStatusText.text += "  You may continue the Replay, but the Campaign has been finished.";
+				{
+					replayStatusTextTranslation.Change("campaign.text.ReplayFinished");
+					//replayStatusText.text += "  You may continue the Replay, but the Campaign has been finished.";
+				}
 			}
 			else//3 - state scenario is same as current scenario, could be a replay or current campaign play. Check its scenarioStatus
 			{
-				if ( gs.campaignState.scenarioStatus[gs.campaignState.scenarioPlayingIndex] == ScenarioStatus.NotPlayed )//2 - current campaign state
-					replayStatusText.text = "A game is in progress.  Continue it with the Continue Campaign button.";
+				if (gs.campaignState.scenarioStatus[gs.campaignState.scenarioPlayingIndex] == ScenarioStatus.NotPlayed)//2 - current campaign state
+				{
+					replayStatusTextTranslation.Change("campaign.text.GameInProgress");
+					//replayStatusText.text = "A game is in progress.  Continue it with the Continue Campaign button.";
+				}
 				else//3 - replay
 				{
-					replayStatusText.text = "A Replay is in progress.  Continue it with the Continue Replay button.";
-					if ( campaignState.scenarioStatus.Any( x => x == ScenarioStatus.NotPlayed ) )
-						replayStatusText.text += "  The campaign has been finished.";
+					//replayStatusText.text = "A Replay is in progress.  Continue it with the Continue Replay button.";
+					//if (campaignState.scenarioStatus.Any(x => x == ScenarioStatus.NotPlayed))
+					//	replayStatusText.text += "  The campaign has been finished.";
+
+					if (campaignState.scenarioStatus.Any(x => x == ScenarioStatus.NotPlayed))
+                    {
+						replayStatusTextTranslation.Change("campaign.text.ReplayInProgress");
+					}
+                    else 
+					{
+						replayStatusTextTranslation.Change("campaign.text.ReplayInProgressFinished");
+					}
 				}
 			}
 		}

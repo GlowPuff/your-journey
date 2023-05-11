@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using static LanguageManager;
 
 public class Tile : MonoBehaviour
 {
@@ -645,9 +646,9 @@ public class Tile : MonoBehaviour
 	void ShowExplorationText( Tile tile, System.Action action )
 	{
 		string flavor = tile.baseTile.flavorBookData.pages.Count > 0 ? tile.baseTile.flavorBookData.pages[0] : "";
-		string instructions = "Discard the exploration token.";
+		string instructions = Translate("dialog.text.DiscardExploration", "Discard the exploration token.");
 		if ( Bootstrap.gameStarter.difficulty != Difficulty.Hard )
-			instructions += " Gain 1 inspiration.";
+			instructions += " " + Translate("dialog.text.GainInspiration", "Gain 1 inspiration.");
 		if ( !string.IsNullOrEmpty( flavor ) )
 			flavor = flavor + "\r\n\r\n" + instructions;
 		else
@@ -668,7 +669,7 @@ public class Tile : MonoBehaviour
 		string objectEventToken = metaData.tokenType.ToString();
 		if (metaData.tokenType == TokenType.Person)
 		{
-			//Set the ->> Interaction button to the type of Person (Human/Hobbit/Dwarf/Elf)
+			//Set the ->> Interaction button to the type of Person (Human/Halfpint/Dwarf/Elf)
 			objectEventToken = metaData.personType.ToString();
 		}
 		else if (metaData.tokenType == TokenType.Terrain)
@@ -699,7 +700,7 @@ public class Tile : MonoBehaviour
 				objectEventToken = delegateInteraction.tokenType.ToString();
 				if (metaData.tokenType == TokenType.Person)
 				{
-					//Set the ->> Interaction button to the type of Person (Human/Hobbit/Dwarf/Elf)
+					//Set the ->> Interaction button to the type of Person (Human/Halfpint/Dwarf/Elf)
 					objectEventToken = metaData.personType.ToString();
 				}
 				else if (metaData.tokenType == TokenType.Terrain)
@@ -757,7 +758,7 @@ public class Tile : MonoBehaviour
 				go = GameObject.Instantiate( tileManager.humanTokenPrefab, gameObject.transform );
 			else if ( tokenState.metaData.personType == PersonType.Elf )
 				go = GameObject.Instantiate( tileManager.elfTokenPrefab, gameObject.transform );
-			else if ( tokenState.metaData.personType == PersonType.Hobbit )
+			else if ( tokenState.metaData.personType == PersonType.Halfpint )
 				go = GameObject.Instantiate( tileManager.hobbitTokenPrefab, gameObject.transform );
 			else if ( tokenState.metaData.personType == PersonType.Dwarf )
 				go = GameObject.Instantiate( tileManager.dwarfTokenPrefab, gameObject.transform );

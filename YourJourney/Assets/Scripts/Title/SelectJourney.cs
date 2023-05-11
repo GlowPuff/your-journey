@@ -12,6 +12,7 @@ public class SelectJourney : MonoBehaviour
 	public List<FileItemButton> fileItemButtons = new List<FileItemButton>();
 	public Image finalFader;
 	public TextMeshProUGUI nameText, collectionsText, versionText, fileText, appVersion, engineVersion;
+	TextTranslation appVersionTranslation, engineVersionTranslation, versionTextTranslation;
 	ProjectItem[] projectItems;
 	public GameObject fileItemPrefab, warningPanel;
 	public RectTransform itemContainer;
@@ -35,8 +36,14 @@ public class SelectJourney : MonoBehaviour
 		for ( int i = 0; i < fileItemButtons.Count; i++ )
 			fileItemButtons[i].ResetColor();
 
-		appVersion.text = "App Version: " + Bootstrap.AppVersion;
-		engineVersion.text = "Scenario Format Version: " + Bootstrap.FormatVersion;
+		appVersionTranslation = appVersion.gameObject.GetComponent<TextTranslation>();
+		appVersionTranslation.Change("journey.text.AppVersion", new List<string>{ Bootstrap.AppVersion });
+		engineVersionTranslation = engineVersion.gameObject.GetComponent<TextTranslation>();
+		engineVersionTranslation.Change("journey.text.FormatVersion", new List<string>{Bootstrap.FormatVersion});
+		versionTextTranslation = versionText.gameObject.GetComponent<TextTranslation>();
+
+		//appVersion.text = "App Version: " + Bootstrap.AppVersion;
+		//engineVersion.text = "Scenario Format Version: " + Bootstrap.FormatVersion;
 		nameText.text = "";
 		fileText.text = "";
 		versionText.text = "";
@@ -83,7 +90,8 @@ public class SelectJourney : MonoBehaviour
 			fileText.text = projectItems[index].campaignDescription;
 		collectionsText.text = string.Join(" ", projectItems[index].collections.Select(c => Collection.FromID(c).FontCharacter));
 		//projectItems[index].collections;
-		versionText.text = "File Version: " + projectItems[index].fileVersion;
+		//versionText.text = "File Version: " + projectItems[index].fileVersion;
+		versionTextTranslation.Change("journey.text.FileVersion", new List<string> { projectItems[index].fileVersion });
 
 		//check version
 		if ( projectItems[index].fileVersion != Bootstrap.FormatVersion )

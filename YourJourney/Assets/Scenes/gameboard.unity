@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 7399364}
   - component: {fileID: 7399366}
   - component: {fileID: 7399365}
+  - component: {fileID: 7399367}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -198,6 +199,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7399363}
   m_CullTransparentMesh: 0
+--- !u!114 &7399367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7399363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: dialog.text.Provoke
+  DefaultText: Select the Enemy Group that you provoked.
 --- !u!1 &7567833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2852,9 +2867,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: d7bc8236ada1f3c4da012be613eb3f63, type: 3}
     m_FontSize: 60
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 4
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 60
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -3869,7 +3884,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 473024774}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -5586,6 +5601,7 @@ GameObject:
   - component: {fileID: 715182533}
   - component: {fileID: 715182535}
   - component: {fileID: 715182534}
+  - component: {fileID: 715182536}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -5652,6 +5668,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715182532}
   m_CullTransparentMesh: 0
+--- !u!114 &715182536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715182532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: dialog.button.CancelProvoke
+  DefaultText: Cancel
 --- !u!1 &727030002
 GameObject:
   m_ObjectHideFlags: 0
@@ -5663,6 +5693,7 @@ GameObject:
   - component: {fileID: 727030003}
   - component: {fileID: 727030005}
   - component: {fileID: 727030004}
+  - component: {fileID: 727030006}
   m_Layer: 5
   m_Name: text
   m_TagString: Untagged
@@ -5711,9 +5742,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -5729,6 +5760,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 727030002}
   m_CullTransparentMesh: 0
+--- !u!114 &727030006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727030002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.button.Lethal
+  DefaultText: Lethal
 --- !u!1 &749214252
 GameObject:
   m_ObjectHideFlags: 0
@@ -6120,6 +6165,7 @@ GameObject:
   - component: {fileID: 768279976}
   - component: {fileID: 768279978}
   - component: {fileID: 768279977}
+  - component: {fileID: 768279979}
   m_Layer: 5
   m_Name: text
   m_TagString: Untagged
@@ -6168,9 +6214,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -6186,6 +6232,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768279975}
   m_CullTransparentMesh: 0
+--- !u!114 &768279979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768279975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.button.Pierce
+  DefaultText: Pierce
 --- !u!1 &797433838
 GameObject:
   m_ObjectHideFlags: 0
@@ -7955,6 +8015,8 @@ MonoBehaviour:
   errorText: {fileID: 1610728912}
   scenarioOverlay: {fileID: 311347008}
   scenarioOverlayText: {fileID: 1339681916}
+  monsterActivationJson: {fileID: 4900000, guid: 4816f46a0c8242c47b41ddb2ebaa7a5a,
+    type: 3}
   debug: 0
 --- !u!114 &965560139
 MonoBehaviour:
@@ -8434,6 +8496,7 @@ GameObject:
   - component: {fileID: 982606584}
   - component: {fileID: 982606586}
   - component: {fileID: 982606585}
+  - component: {fileID: 982606587}
   m_Layer: 5
   m_Name: text
   m_TagString: Untagged
@@ -8482,9 +8545,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -8500,6 +8563,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982606583}
   m_CullTransparentMesh: 0
+--- !u!114 &982606587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982606583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.button.Stun
+  DefaultText: Stun
 --- !u!1 &1005215288
 GameObject:
   m_ObjectHideFlags: 0
@@ -10360,6 +10437,7 @@ GameObject:
   - component: {fileID: 1250697841}
   - component: {fileID: 1250697843}
   - component: {fileID: 1250697842}
+  - component: {fileID: 1250697844}
   m_Layer: 5
   m_Name: large
   m_TagString: Untagged
@@ -10383,7 +10461,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: 180.7}
+  m_AnchoredPosition: {x: 200, y: 180.7}
   m_SizeDelta: {x: 180.75, y: 57.02}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1250697842
@@ -10408,9 +10486,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 40
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 4
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -10426,6 +10504,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1250697840}
   m_CullTransparentMesh: 0
+--- !u!114 &1250697844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250697840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.bonus.Large
+  DefaultText: Large
 --- !u!1 &1252187900
 GameObject:
   m_ObjectHideFlags: 0
@@ -10584,6 +10676,7 @@ GameObject:
   - component: {fileID: 1285359776}
   - component: {fileID: 1285359778}
   - component: {fileID: 1285359777}
+  - component: {fileID: 1285359779}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -10650,6 +10743,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285359775}
   m_CullTransparentMesh: 0
+--- !u!114 &1285359779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285359775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: 
+  DefaultText: 
 --- !u!1 &1300860512
 GameObject:
   m_ObjectHideFlags: 0
@@ -11228,6 +11335,7 @@ GameObject:
   - component: {fileID: 1339681915}
   - component: {fileID: 1339681917}
   - component: {fileID: 1339681916}
+  - component: {fileID: 1339681918}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -11373,6 +11481,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1339681914}
   m_CullTransparentMesh: 0
+--- !u!114 &1339681918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339681914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: title.text.LoadingScenario
+  DefaultText: Loading Scenario...
 --- !u!1 &1340510266
 GameObject:
   m_ObjectHideFlags: 0
@@ -11384,6 +11506,7 @@ GameObject:
   - component: {fileID: 1340510267}
   - component: {fileID: 1340510269}
   - component: {fileID: 1340510268}
+  - component: {fileID: 1340510270}
   m_Layer: 5
   m_Name: text
   m_TagString: Untagged
@@ -11432,9 +11555,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -11450,6 +11573,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340510266}
   m_CullTransparentMesh: 0
+--- !u!114 &1340510270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340510266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.button.Cleave
+  DefaultText: Cleave
 --- !u!1 &1343231666
 GameObject:
   m_ObjectHideFlags: 0
@@ -11682,6 +11819,7 @@ GameObject:
   - component: {fileID: 1369643928}
   - component: {fileID: 1369643930}
   - component: {fileID: 1369643929}
+  - component: {fileID: 1369643931}
   m_Layer: 5
   m_Name: Text (1)
   m_TagString: Untagged
@@ -11748,6 +11886,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369643927}
   m_CullTransparentMesh: 0
+--- !u!114 &1369643931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369643927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: party.button.Close
+  DefaultText: Close
 --- !u!1 &1384950314
 GameObject:
   m_ObjectHideFlags: 0
@@ -12328,6 +12480,7 @@ GameObject:
   - component: {fileID: 1424952015}
   - component: {fileID: 1424952017}
   - component: {fileID: 1424952016}
+  - component: {fileID: 1424952018}
   m_Layer: 5
   m_Name: text
   m_TagString: Untagged
@@ -12376,9 +12529,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -12394,6 +12547,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424952014}
   m_CullTransparentMesh: 0
+--- !u!114 &1424952018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424952014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.button.Smite
+  DefaultText: Smite
 --- !u!1 &1429571424
 GameObject:
   m_ObjectHideFlags: 0
@@ -12895,6 +13062,7 @@ GameObject:
   - component: {fileID: 1453458080}
   - component: {fileID: 1453458082}
   - component: {fileID: 1453458081}
+  - component: {fileID: 1453458083}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -12961,6 +13129,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453458079}
   m_CullTransparentMesh: 0
+--- !u!114 &1453458083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1453458079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.button.Apply
+  DefaultText: Apply
 --- !u!1 &1456957097
 GameObject:
   m_ObjectHideFlags: 0
@@ -15083,6 +15265,7 @@ GameObject:
   - component: {fileID: 1801327104}
   - component: {fileID: 1801327106}
   - component: {fileID: 1801327105}
+  - component: {fileID: 1801327107}
   m_Layer: 5
   m_Name: text
   m_TagString: Untagged
@@ -15131,9 +15314,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -15149,6 +15332,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1801327103}
   m_CullTransparentMesh: 0
+--- !u!114 &1801327107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801327103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.button.Sunder
+  DefaultText: Sunder
 --- !u!1 &1801973591
 GameObject:
   m_ObjectHideFlags: 0
@@ -15289,6 +15486,7 @@ GameObject:
   - component: {fileID: 1814463368}
   - component: {fileID: 1814463370}
   - component: {fileID: 1814463369}
+  - component: {fileID: 1814463371}
   m_Layer: 5
   m_Name: bloodthirsty
   m_TagString: Untagged
@@ -15337,9 +15535,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 40
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 4
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -15355,6 +15553,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1814463367}
   m_CullTransparentMesh: 0
+--- !u!114 &1814463371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814463367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.bonus.Bloodthirsty
+  DefaultText: Bloodthirsty
 --- !u!1 &1817721782
 GameObject:
   m_ObjectHideFlags: 0
@@ -16376,6 +16588,7 @@ GameObject:
   - component: {fileID: 1941512092}
   - component: {fileID: 1941512094}
   - component: {fileID: 1941512093}
+  - component: {fileID: 1941512095}
   m_Layer: 5
   m_Name: armored
   m_TagString: Untagged
@@ -16399,7 +16612,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 200, y: 180.7}
+  m_AnchoredPosition: {x: -200, y: 180.7}
   m_SizeDelta: {x: 180.75, y: 57.02}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1941512093
@@ -16424,9 +16637,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: e290c832c3e3e6944adfcaba6c1b0d9a, type: 3}
     m_FontSize: 40
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 4
-    m_MaxSize: 66
+    m_BestFit: 1
+    m_MinSize: 15
+    m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -16442,6 +16655,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1941512091}
   m_CullTransparentMesh: 0
+--- !u!114 &1941512095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941512091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca0829215dddce4e9a6dc6ee1ee228b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextKey: combat.bonus.Armored
+  DefaultText: Armored
 --- !u!1 &1943346869
 GameObject:
   m_ObjectHideFlags: 0

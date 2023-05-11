@@ -351,7 +351,7 @@ public class TileGroup
 					go = Object.Instantiate( tileManager.humanTokenPrefab, tile.transform );
 				else if ( igs[i].personType == PersonType.Elf )
 					go = Object.Instantiate( tileManager.elfTokenPrefab, tile.transform );
-				else if ( igs[i].personType == PersonType.Hobbit )
+				else if ( igs[i].personType == PersonType.Halfpint )
 					go = Object.Instantiate( tileManager.hobbitTokenPrefab, tile.transform );
 				else if ( igs[i].personType == PersonType.Dwarf )
 					go = Object.Instantiate( tileManager.dwarfTokenPrefab, tile.transform );
@@ -474,7 +474,7 @@ public class TileGroup
 					go = Object.Instantiate( tileManager.humanTokenPrefab, tile.transform );
 				else if ( t.personType == PersonType.Elf )
 					go = Object.Instantiate( tileManager.elfTokenPrefab, tile.transform );
-				else if ( t.personType == PersonType.Hobbit )
+				else if ( t.personType == PersonType.Halfpint )
 					go = Object.Instantiate( tileManager.hobbitTokenPrefab, tile.transform );
 				else if ( t.personType == PersonType.Dwarf )
 					go = Object.Instantiate( tileManager.dwarfTokenPrefab, tile.transform );
@@ -667,7 +667,7 @@ public class TileGroup
 				go = Object.Instantiate( tileManager.humanTokenPrefab, tile.transform );
 			else if ( sourceEvent.personType == PersonType.Elf )
 				go = Object.Instantiate( tileManager.elfTokenPrefab, tile.transform );
-			else if ( sourceEvent.personType == PersonType.Hobbit )
+			else if ( sourceEvent.personType == PersonType.Halfpint )
 				go = Object.Instantiate( tileManager.hobbitTokenPrefab, tile.transform );
 			else if ( sourceEvent.personType == PersonType.Dwarf )
 				go = Object.Instantiate( tileManager.dwarfTokenPrefab, tile.transform );

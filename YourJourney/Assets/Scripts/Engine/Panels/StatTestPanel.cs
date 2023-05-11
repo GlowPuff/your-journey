@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static LanguageManager;
 
 public class StatTestPanel : MonoBehaviour
 {
@@ -61,20 +63,34 @@ public class StatTestPanel : MonoBehaviour
 		if (testInteraction.isCumulative && !testInteraction.passFail)
 		{
 			abilityText.text = "Test " + AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
+			string ability1 = AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
 			if (!testInteraction.noAlternate)//use alternate test
 			{
-				abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+				//abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+				string ability2 = AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+				abilityText.text = Translate("test.text.TestStatOrStat", "Test {0} or {1}; {2}.", new List<string> { ability1, ability2 });
 			}
-			abilityText.text += ".";
+			else
+            {
+				abilityText.text = Translate("test.text.TestStat", "Test {0}; {1}.", new List<string> { ability1 } );
+            }
+			//abilityText.text += ".";
 		}
 		else
 		{
-			abilityText.text = "Test " + AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
+			//abilityText.text = "Test " + AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
+			string ability1 = AbilityUtility.ColoredText(testInteraction.testAttribute, 42) + " " + testInteraction.testAttribute.ToString();
 			if (!testInteraction.noAlternate)
 			{
-				abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+				//abilityText.text += " or " + AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+				string ability2 = AbilityUtility.ColoredText(testInteraction.altTestAttribute, 42) + " " + testInteraction.altTestAttribute.ToString();
+				abilityText.text = Translate("test.text.TestStatOrStatValue", "Test {0} or {1}; {2}.", new List<string> { ability1, ability2, testInteraction.successValue.ToString() });
 			}
-			abilityText.text += "; " + testInteraction.successValue + ".";
+			else
+			{
+				abilityText.text = Translate("test.text.TestStatValue", "Test {0}; {1}.", new List<string> { ability1, testInteraction.successValue.ToString() });
+			}
+			//abilityText.text += "; " + testInteraction.successValue + ".";
 		}
 
 

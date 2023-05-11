@@ -17,6 +17,7 @@ public class SelectHeroes : MonoBehaviour
 	public TextMeshProUGUI[] heroNameText;
 	public TextMeshProUGUI[] heroCollectionText;
 	public TextMeshProUGUI diffText;
+	public TextTranslation diffTextTranslation;
 
 	public Sprite heroImageBlank;
 	public Sprite[] heroImage;
@@ -44,11 +45,14 @@ public class SelectHeroes : MonoBehaviour
 		{
 			selectedHeroes = new bool[heroImage.Length].Fill(false);
 		}
-		diffText.text = "Normal";
+		//diffText.text = "Normal";
+		diffTextTranslation = diffText.GetComponent<TextTranslation>();
 		ResetHeros();
 
 		titleMetaData.difficulty = Difficulty.Normal;
-		diffText.text = titleMetaData.difficulty.ToString();
+		//diffText.text = titleMetaData.difficulty.ToString();
+		diffTextTranslation.Change("heroes.button." + titleMetaData.difficulty.ToString());
+
 
 		finalFader.DOFade( 0, .5f ).OnComplete( () =>
 		{
@@ -176,7 +180,8 @@ public class SelectHeroes : MonoBehaviour
 			titleMetaData.difficulty = Difficulty.Hard;
 		else if ( titleMetaData.difficulty == Difficulty.Hard )
 			titleMetaData.difficulty = Difficulty.Adventure;
-		diffText.text = titleMetaData.difficulty.ToString();
+		//diffText.text = titleMetaData.difficulty.ToString();
+		diffTextTranslation.Change("heroes.button." + titleMetaData.difficulty.ToString());
 	}
 
 	public void OnChangeNameClick( int index )

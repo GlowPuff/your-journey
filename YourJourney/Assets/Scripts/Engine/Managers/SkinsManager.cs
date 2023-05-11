@@ -15,8 +15,8 @@ public class SkinsManager
 	//The string values indicate the filename for the corresponding monster image
 	public static string[] monsterSkinFileNames = new string[] { "ruffian", "goblin-scout", "orc-hunter", "orc-marauder", "hungry-varg", "hill-troll", "wight",
 		"atari", "gargletarg", "chartooth",
-		"giant-spider", "pit-goblin", "orc-taskmaster", "shadowman", "anonymous-thing", "cave-troll", "balerock", "spawn-of-ugly-giant",
-		"supplicant-of-more-goth", "ursa", "ollie",
+		"giant-spider", "pit-goblin", "orc-taskmaster", "shadowman", "anonymous-thing", "cave-troll", "balerock", "spawn-of-uglygiant",
+		"supplicant-of-more-goth", "ursula", "oliver",
 		"foul-beast", "varg-rider", "siege-engine", "war-elephant", "soldier", "high-orc-warrior",
 		"lord-javelin", "lich-king", "endris" };
 

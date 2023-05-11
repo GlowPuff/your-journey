@@ -28,6 +28,8 @@ public class TitleManager : MonoBehaviour
 	public Vector2 scenarioImageSize = new Vector2(1024, 512);
 	public GameObject scenarioOverlayText;
 	public TextMeshProUGUI loadingText;
+	public TextMeshProUGUI newButtonText;
+	public TextMeshProUGUI loadButtonText;
 
 	public void ClearScenarioImage()
     {
@@ -91,6 +93,10 @@ public class TitleManager : MonoBehaviour
 	private void Start()
 	{
 		var settings = Bootstrap.LoadSettings();
+
+		LanguageManager.LoadLanguage(LanguageManager.currentLanguage);
+		LanguageManager.CallSubscribers();
+
 		Vignette v;
 		ColorGrading cg;
 		if ( volume.profile.TryGetSettings( out v ) )
@@ -135,6 +141,8 @@ public class TitleManager : MonoBehaviour
 
 	public void ResetScreen()
 	{
+		LanguageManager.CallSubscribers();
+
 		finalFader.DOFade( 0, .5f );
 
 		newBcg.DOFade( 1, .25f );
@@ -184,7 +192,15 @@ public class TitleManager : MonoBehaviour
 
 	public void OnSettings()
 	{
-		settings.Show( "Quit App" );
+		settings.Show( "settings.QuitApp", OnLanguageUpdate );
+	}
+
+	public void OnLanguageUpdate(string languageName)
+	{
+		//Debug.Log("Engine.OnLanguageUpdate(" + languageName + ")");
+		LanguageManager.LoadLanguage(languageName);
+		LanguageManager.UpdateCurrentLanguage(languageName);
+		LanguageManager.CallSubscribers();
 	}
 
 	void SkipIntro()

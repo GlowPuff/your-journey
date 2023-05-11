@@ -5,8 +5,28 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkinsManager
+public class SkinsManager : MonoBehaviour
 {
+	//The SkinsManager is added to the Scenes/gameboard/Engine object
+	[System.Serializable]
+	public class SkinpackEntry
+	{
+		public string name;
+		public List<SkinpackSpriteEntry> sprites;
+	}
+
+
+	[System.Serializable]
+	public class SkinpackSpriteEntry
+	{
+		public string name;
+		public Sprite sprite;
+	}
+
+	public List<SkinpackEntry> builtinSkinpacks;
+	public static List<SkinpackEntry> staticBuiltinSkinpacks;
+
+
 	public static int monsterCount = 30;
 	public static List<String> skinpackDirectories = new List<String>(); //list of directories that contain skin packs
 
@@ -19,6 +39,17 @@ public class SkinsManager
 		"supplicant-of-more-goth", "ursula", "oliver",
 		"foul-beast", "varg-rider", "siege-engine", "war-elephant", "soldier", "high-orc-warrior",
 		"lord-javelin", "lich-king", "endris" };
+
+
+	public void Awake()
+    {
+		Debug.Log("SkinsManager Awake!");
+		staticBuiltinSkinpacks = builtinSkinpacks;
+		foreach(var skinpack in staticBuiltinSkinpacks)
+        {
+			Debug.Log(skinpack.name + " " + skinpack.sprites.Count);
+        }
+    }
 
 	//The monsterSkins array has one index for each monster type; the array value is a list of sprites, one for each matching image for that monster type in the directory, e.g. giant-spider-0, giant-spider-1, giant-spider-2
 	public static List<Sprite>[] monsterSkins = new List<Sprite>[monsterCount]; 
@@ -80,6 +111,29 @@ public class SkinsManager
 	public static void LoadSkins(string skinpackName)
 	{
 		RestoreOriginalSkins();
+
+		//Built-in skinpack - see the Scenes/gameboard/Engine object
+		if (skinpackName.StartsWith("*"))
+        {
+			foreach(var builtin in staticBuiltinSkinpacks)
+            {
+				if(skinpackName == "*" + builtin.name + "*")
+                {
+					foreach(var skin in builtin.sprites)
+                    {
+						string name = skin.name;
+						int monsterIndex = FindMonsterIndexOrNegativeOne(name);
+						if(monsterIndex > -1)
+                        {
+							monsterSkins[monsterIndex].Add(skin.sprite);
+                        }
+                    }
+                }
+            }
+			return;
+        }
+
+		//Skinpack in an external directory
 		string skinpackPath = Path.Combine(FileManager.BasePath(false), "Skins", skinpackName);
 		if(Directory.Exists(skinpackPath))
         {

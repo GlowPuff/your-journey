@@ -7753,6 +7753,7 @@ GameObject:
   - component: {fileID: 965560144}
   - component: {fileID: 965560143}
   - component: {fileID: 965560145}
+  - component: {fileID: 965560146}
   m_Layer: 0
   m_Name: Engine
   m_TagString: Untagged
@@ -8116,6 +8117,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c95f411788f4e646974fb2f4dae2b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &965560146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965560135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b751395e118a8c448c080c7fa8ca2f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  builtinSkinpacks:
+  - name: Your Journey 2
+    sprites:
+    - name: giant-spider-1
+      sprite: {fileID: 21300000, guid: b6d3ff4725547af4fa25e4c387c9ffaa, type: 3}
+    - name: hungry-varg-1
+      sprite: {fileID: 21300000, guid: 531b7dae24dc2a54ea4cf15a83519486, type: 3}
+    - name: orc-hunter-1
+      sprite: {fileID: 21300000, guid: 98b77c7b77dc72a40adc4c743dfdfc2e, type: 3}
 --- !u!1 &966050120
 GameObject:
   m_ObjectHideFlags: 0

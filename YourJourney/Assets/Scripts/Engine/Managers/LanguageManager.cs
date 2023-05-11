@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class LanguageManager : MonoBehaviour
 {
+	//The SkinsManager is added to the Scenes/title/Canvas object
 	[System.Serializable]
 	public class TranslationFileEntry
 	{

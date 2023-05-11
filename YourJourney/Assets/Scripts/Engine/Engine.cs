@@ -87,6 +87,8 @@ public class Engine : MonoBehaviour
 
 
 		//Load Skins
+		var skinsManager = GetComponent<SkinsManager>();
+		skinsManager.Awake(); //not sure why this is needed but it is. Otherwise it hasn't awoken before the next call which then fails because of a null pointer.
 		SkinsManager.LoadSkins(Bootstrap.GetSkinpack());
 		OnSkinpackUpdate(Bootstrap.GetSkinpack());
 

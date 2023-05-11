@@ -32,7 +32,8 @@ public class SettingsDialog : MonoBehaviour
 	List<LanguageManager.TranslationFileEntry> languageList;
 	List<TMP_Dropdown.OptionData> languageDropdownList;
 
-	public static string defaultSkinpack = "*Default*";
+	public static string defaultSkinpack = "*Your Journey*";
+	public static string defaultSkinpack2 = "*Your Journey 2*";
 	public static string defaultLanguage = "English";
 
 
@@ -88,7 +89,13 @@ public class SettingsDialog : MonoBehaviour
 		skinpackList = SkinsManager.LoadSkinpackDirectories();
 		skinpackDropdownList = new List<TMP_Dropdown.OptionData>();
 		int selectedSkinpackIndex = 0;
+
 		skinpackDropdownList.Add(new TMP_Dropdown.OptionData(defaultSkinpack));
+		if(savedSkinpack == defaultSkinpack) { selectedSkinpackIndex = 0; }
+
+		skinpackDropdownList.Add(new TMP_Dropdown.OptionData(defaultSkinpack2));
+		if(savedSkinpack == defaultSkinpack2) { selectedSkinpackIndex = 1; }
+
 		foreach (var skinpack in skinpackList)
         {
 			skinpackDropdownList.Add(new TMP_Dropdown.OptionData(skinpack));

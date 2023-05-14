@@ -439,7 +439,13 @@
 		"collection":6,
 		"activations":
 		[
-			{"id":1, "negate":"Random", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Lord Javelin attacks!" }
+			{"id":1, "negate":"Agility", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Javelin lashes out with his mighty spear, using his superior reach and leverage to catch you off-balance. Reveal 1 fewer card.", "effect": "If you reveal at least 1 <font=\"Icon\">f</font> during this test, suffer 2 facedown <font=\"Icon\">D</font>." },
+			{"id":2, "negate":"None", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Javelin tests you with a series of quick jabs, learning where your defence is most ready.\n\nNegate using a stat shown on an equipped <font=\"Icon\">O</font> or <font=\"Icon\">T</font> item." },
+			{"id":3, "negate":"Might", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Lord Javelin knows when to apply his prodigious strength with a powerful, sweeping strike.", "effect": "If you have a <font=\"Icon\">T</font> item equipped, prevent 2 <font=\"Icon\">D</font>." },
+			{"id":4, "negate":"None", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Javelin's sweeping cape hides the tip of his spear from view. Moments later, you see it striking for your heart.\n\nNegate using a stat shown on an equipped <font=\"Icon\">O</font> or <font=\"Icon\">T</font> item." },
+			{"id":5, "negate":"Might", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Never have you faced an adversary both so cunning and so powerful. You feel Javelin's menace in every blow. Reveal 1 fewer card.", "effect":"If you reveal <font=\"Icon\">f</font> during this test, become terrified." },
+			{"id":6, "negate":"None", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Javelin swings his spear overhead, crashing down like a thunderbolt and sweeping aside all but the sturdiest defence.\n\nNegate using a stat shown on an equipped <font=\"Icon\">T</font> item." },
+			{"id":7, "negate":"Spirit", "valid":[true, false, false], "damage":[3, 0, 0], "fear":[1, 0, 0], "text":"Javelin circles patiently, just out of reach, waiting for the slightest lapse in your attention.", "effect":"After this attack, Lord Javelin moves 1 space away from the attacked hero." }
 		]
 	},
 	{
@@ -465,7 +471,13 @@
 		"collection":6,
 		"activations":
 		[
-			{"id":1, "negate":"Random", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[0, 0, 0], "text":"Endris attacks you!"}
+			{"id":1, "negate":"None", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[1, 0, 0], "text":"Endris' attacks are swift, but your weapon is like an extension of your arm.\n\nNegate using a stat shown on an equipped <font=\"Icon\">O</font> or <font=\"Icon\">T</font> item."},
+			{"id":2, "negate":"None", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[1, 0, 0], "text":"Endris seems to know exactly where to strike to hit your weakest point.\n\nYou cannot negate this attack. <font=\"Icon\">D</font> and <font=\"Icon\">F</font> can still be prevented as normal."},
+			{"id":3, "negate":"Agility", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[1, 0, 0], "text":"Endris tests your defences with an agile feint. Even after your brief interactions, she knows you too well.", "effect": "If you suffer any <font=\"Icon\">D</font> or <font=\"Icon\">F</font> from this attack, become despondent."},
+			{"id":4, "negate":"Wit", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[1, 0, 0], "text":"With a quick lunge, Endris snakes around your guard, pressing an attack from an unexpected angle.", "effect": "If you suffer any <font=\"Icon\">D</font> or <font=\"Icon\">F</font> from this attack, discard 1 prepared card."},
+			{"id":5, "negate":"Agility", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[1, 0, 0], "text":"Endris strikes like a stooping falcon, darting in with a few quick blows before she flies beyond your reach.", "effect": "After the attack, Endris moves 2 spaces away from the attacked hero."},
+			{"id":6, "negate":"Wit", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[1, 0, 0], "text":"Endris crouches low to attack, and casts a handful of gritty sand at your eyes. Reveal 1 fewer card.", "effect": "After the attack, Endris moves 1 space away from the attacked hero."},
+			{"id":7, "negate":"Wisdom", "valid":[true, false, false], "damage":[2, 0, 0], "fear":[1, 0, 0], "text":"Endris ducks and weaves with a dazzling display of honed finesse and martial prowess.", "effect": "If you suffer any <font=\"Icon\">D</font> from this attack, each other hero suffers 1 <font=\"Icon\">F</font>."}
 		]
 	}
 ]

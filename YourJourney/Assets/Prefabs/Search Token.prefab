@@ -4132,6 +4132,7 @@ MonoBehaviour:
   triggerName: 
   interactionName: 
   triggeredByName: 
+  tokenInteractionText: 
   tokenType: 0
   personType: 0
   terrainType: 0

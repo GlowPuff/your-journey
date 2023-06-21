@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class SkinsManager : MonoBehaviour
 {
-	//The SkinsManager is added to the Scenes/gameboard/Engine object
+	//The SkinsManager is added to the /Scenes/gameboard/Engine object
 	[System.Serializable]
 	public class SkinpackEntry
 	{
